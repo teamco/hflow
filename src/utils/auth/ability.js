@@ -23,12 +23,6 @@ export async function defineAbilityFor({ user, userId, business }) {
 
     } else {
 
-      can(['read'], 'businessPreparations');
-      can(['read'], 'startersAndDesserts');
-      can(['read'], 'dietary');
-      can(['read'], 'eventLocation');
-      can(['read'], 'eventType');
-      can(['read'], 'businessServices');
       can(['read'], 'businessUsers');
       can(['read'], 'businessUserRoles');
 
