@@ -1,0 +1,44 @@
+.siteTagPlus {
+  background: #1890ff !important;
+  color: #fff;
+  cursor: pointer !important;
+
+  &:hover {
+    background: #40a9ff;
+  }
+}
+
+.editTag {
+  user-select: none;
+  margin-bottom: 8px !important;
+}
+
+.tagInput {
+  width: 78px;
+  margin-right: 8px;
+  vertical-align: top;
+}
+
+.collapsePanel {
+  margin-bottom: 20px;
+
+  :global {
+    .ant-form-item-required {
+      &::before {
+        display: none !important;
+      }
+    }
+
+    .ant-collapse-header {
+      .ant-collapse-header-text {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+:global {
+  ::placeholder {
+    font-size: 12px;
+  }
+}

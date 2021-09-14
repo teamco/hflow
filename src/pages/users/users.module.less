@@ -1,0 +1,103 @@
+.users {
+  .gridImg {
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+    border-radius: 3px;
+
+    & + span {
+      line-height: 20px;
+    }
+  }
+
+  .currentUser {
+    background-color: gold;
+    padding: 3px 5px;
+    border-radius: 2px;
+  }
+
+  .signed {
+    .in {
+      color: #52c41a;
+    }
+
+    .out {
+
+    }
+
+    margin: 0 10px 0 5px;
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+}
+
+.profile {
+  margin-left: -30px;
+  display: flex;
+  margin-top: 20px;
+
+  .currentUser {
+    background-color: gold;
+    padding: 3px 5px;
+    border-radius: 2px;
+  }
+
+  img {
+    border-radius: 5px;
+    margin-right: 20px;
+    flex: 20%;
+    height: 80px;
+  }
+
+  & > div {
+
+  }
+}
+
+.profileExpand {
+  margin-left: 10px;
+
+  span[role='img'],
+  svg[role='img'] {
+    margin-right: 10px;
+  }
+
+  .verification {
+    cursor: pointer;
+    color: cornflowerblue;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.rules {
+  text-transform: lowercase;
+  font-variant: small-caps;
+}
+
+.provider {
+  text-transform: lowercase;
+  font-variant: small-caps;
+}
+
+.customAction {
+  span[aria-label="down"] {
+    svg {
+      width: 8px;
+      position: relative;
+      top: 2px;
+    }
+  }
+}
+
+.customActionMenu {
+  :global {
+    .ant-dropdown-menu-item {
+      padding: 0 12px !important;
+    }
+  }
+}
