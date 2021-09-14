@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'dva';
-import { withTranslation } from 'react-i18next';
+import React, {useEffect, useState} from 'react';
+import {connect} from 'dva';
+import {withTranslation} from 'react-i18next';
 import withFirebaseAuth from 'react-with-firebase-auth';
 import classnames from 'classnames';
-import { firebaseAppAuth, providers } from 'services/firebase.service';
-import { Button, Tooltip } from 'antd';
+import {
+  firebaseAppAuth,
+  providers
+} from 'services/firebase.service';
+import {Button, Tooltip} from 'antd';
 import {
   LoginOutlined,
   GoogleOutlined,
@@ -19,7 +22,7 @@ import SignInModal from 'components/Authentication/modals/signin.modal';
 import UpdateEmailModal from 'components/Authentication/modals/updateEmail.modal';
 
 import styles from 'components/Authentication/authentication.module.less';
-import { isLoading } from 'utils/state';
+import {isLoading} from 'utils/state';
 
 /** Create the FirebaseAuth component wrapper */
 const createComponentWithAuth = withFirebaseAuth({
@@ -34,156 +37,148 @@ const createComponentWithAuth = withFirebaseAuth({
  */
 const signIn = props => {
 
-    /* These props are provided by withFirebaseAuth HOC */
-    const {
-      signInWithEmailAndPassword,
-      signInWithGoogle,
-      signInWithFacebook,
-      // signInWithPhoneNumber,
-      // signInWithGithub,
-      signInWithTwitter,
-      // signInAnonymously,
-      signOut,
-      setError,
-      user,
-      error,
-      loading
-    } = props;
+  /* These props are provided by withFirebaseAuth HOC */
+  const {
+    signInWithEmailAndPassword,
+    signInWithGoogle,
+    signInWithFacebook,
+    // signInWithPhoneNumber,
+    // signInWithGithub,
+    signInWithTwitter,
+    // signInAnonymously,
+    signOut,
+    setError,
+    user,
+    error,
+    loading
+  } = props;
 
-    /**
-     * To apply the default browser preference instead of explicitly setting it.
-     * @link https://firebase.google.com/docs/auth/web/phone-auth
-     * @example
-     * firebase.auth().languageCode = 'it';
-     */
-    firebaseAppAuth.useDeviceLanguage();
+  const {
+    t,
+    className,
+    forceLogin = false,
+    closable = false,
+    authModel,
+    onUpdateEmail,
+    onSignIn,
+    onSignOutUser,
+    setForceSignInVisible,
+    signInVisible = false
+  } = props;
 
-    const {
-      t,
-      className,
-      forceLogin = false,
-      closable = false,
-      authModel,
-      onUpdateEmail,
-      onSignIn,
-      onSignOutUser,
-      setForceSignInVisible,
-      signInVisible = false
-    } = props;
+  const [isSignInVisible, setIsSignInVisible] = useState(signInVisible);
+  const [isRegisterVisible, setIsRegisterVisible] = useState(false);
+  const [isErrorVisible, setIsErrorVisible] = useState(false);
+  const [isNAEmailVisible, setIsNAEmailVisible] = useState(false);
 
-    const [isSignInVisible, setIsSignInVisible] = useState(signInVisible);
-    const [isRegisterVisible, setIsRegisterVisible] = useState(false);
-    const [isErrorVisible, setIsErrorVisible] = useState(false);
-    const [isNAEmailVisible, setIsNAEmailVisible] = useState(false);
-
-    useEffect(() => {
-      if (user) {
-        if (authModel.user) {
-          const { metadata, email } = authModel.user;
-          metadata.forceSignOut && onSignOutUser({ user });
-          !email && setIsNAEmailVisible(true);
-        } else if (forceLogin) {
-          onSignIn(user);
-        }
-      } else {
-        // TODO (teamco): Clear garbage.
-        // props.onSignOut(user);
-
-        if (forceLogin && signInVisible) {
-          setIsSignInVisible(true);
-        }
+  useEffect(() => {
+    if (user) {
+      if (authModel.user) {
+        const {metadata, email} = authModel.user;
+        metadata.forceSignOut && onSignOutUser({user});
+        !email && setIsNAEmailVisible(true);
+      } else if (forceLogin) {
+        onSignIn(user);
       }
+    } else {
+      // TODO (teamco): Clear garbage.
+      // props.onSignOut(user);
 
-      !signInVisible && setIsSignInVisible(false);
-
-    }, [user, authModel.user, signInVisible]);
-
-    let errorProps = {};
-
-    if (error) {
-      errorProps = {
-        title: t('error:errorNum', { number: 400 }),
-        error
-      };
-
-      if (isErrorVisible) {
-        // TODO (teamco): Do something.
-      } else {
-        setIsErrorVisible(true);
+      if (forceLogin && signInVisible) {
+        setIsSignInVisible(true);
       }
     }
 
-    /**
-     * @constant
-     */
-    const handleErrorCancel = () => {
-      setIsErrorVisible(false);
-      setError(null);
+    !signInVisible && setIsSignInVisible(false);
+
+  }, [user, authModel.user, signInVisible]);
+
+  let errorProps = {};
+
+  if (error) {
+    errorProps = {
+      title: t('error:errorNum', {number: 400}),
+      error
     };
 
-    /**
-     * @constant
-     */
-    const showSignIn = () => {
-      setIsSignInVisible(true);
-    };
+    if (isErrorVisible) {
+      // TODO (teamco): Do something.
+    } else {
+      setIsErrorVisible(true);
+    }
+  }
 
-    /**
-     * @constant
-     * @param signInFn
-     */
-    const handleCancel = signInFn => {
-      if (typeof signInFn === 'function') {
-        signInFn();
-      } else if (forceLogin && signInVisible) {
-        setIsSignInVisible(false);
-        setForceSignInVisible(false);
-      } else {
-        !signInVisible && setIsSignInVisible(false);
-      }
-    };
+  /**
+   * @constant
+   */
+  const handleErrorCancel = () => {
+    setIsErrorVisible(false);
+    setError(null);
+  };
 
-    /**
-     * @constant
-     */
-    const handleNAEmailCancel = () => {
-      setIsNAEmailVisible(false);
-    };
+  /**
+   * @constant
+   */
+  const showSignIn = () => {
+    setIsSignInVisible(true);
+  };
 
-    /**
-     * @constant
-     * @param {{na_email}} values
-     */
-    const handleNAEmailOk = values => {
-      setIsNAEmailVisible(false);
-      onUpdateEmail({ user, email: values.na_email });
-    };
+  /**
+   * @constant
+   * @param signInFn
+   */
+  const handleCancel = signInFn => {
+    if (typeof signInFn === 'function') {
+      signInFn();
+    } else if (forceLogin && signInVisible) {
+      setIsSignInVisible(false);
+      setForceSignInVisible(false);
+    } else {
+      !signInVisible && setIsSignInVisible(false);
+    }
+  };
 
-    /**
-     * @constant
-     * @private
-     */
-    const _signOut = () => {
-      props.onSignOut(user);
-    };
+  /**
+   * @constant
+   */
+  const handleNAEmailCancel = () => {
+    setIsNAEmailVisible(false);
+  };
 
-    /**
-     * @constant
-     * @param values
-     */
-    const onFinish = values => {
-      signInWithEmailAndPassword(values.email, values.password);
-    };
+  /**
+   * @constant
+   * @param {{na_email}} values
+   */
+  const handleNAEmailOk = values => {
+    setIsNAEmailVisible(false);
+    onUpdateEmail({user, email: values.na_email});
+  };
 
-    /**
-     * @constant
-     * @param provider
-     * @param icon
-     * @param signInFn
-     * @return {JSX.Element}
-     */
-    const authBtn = (provider, icon, signInFn) => (
-      <Tooltip title={t('auth:signInWith', { provider })}>
+  /**
+   * @constant
+   * @private
+   */
+  const _signOut = () => {
+    props.onSignOut(user);
+  };
+
+  /**
+   * @constant
+   * @param values
+   */
+  const onFinish = values => {
+    signInWithEmailAndPassword(values.email, values.password);
+  };
+
+  /**
+   * @constant
+   * @param provider
+   * @param icon
+   * @param signInFn
+   * @return {JSX.Element}
+   */
+  const authBtn = (provider, icon, signInFn) => (
+      <Tooltip title={t('auth:signInWith', {provider})}>
         <Button loading={isLoading(loading)}
                 className={styles.authBtn}
                 onClick={() => handleCancel(signInFn)}
@@ -192,145 +187,143 @@ const signIn = props => {
           {provider}
         </Button>
       </Tooltip>
-    );
+  );
 
-    /**
-     * @constant
-     * @type {JSX.Element}
-     * @private
-     */
-    // const _phoneBtn = authBtn(
-    //   t('auth:phone'),
-    //   <PhoneOutlined />,
-    //   signInWithPhoneNumber
-    // );
+  /**
+   * @constant
+   * @type {JSX.Element}
+   * @private
+   */
+  // const _phoneBtn = authBtn(
+  //   t('auth:phone'),
+  //   <PhoneOutlined />,
+  //   signInWithPhoneNumber
+  // );
 
-    /**
-     * @constant
-     * @type {JSX.Element}
-     * @private
-     */
-    const _googleBtn = authBtn(
+  /**
+   * @constant
+   * @type {JSX.Element}
+   * @private
+   */
+  const _googleBtn = authBtn(
       'Google',
-      <GoogleOutlined />,
+      <GoogleOutlined/>,
       signInWithGoogle
-    );
+  );
 
-    /**
-     * @constant
-     * @type {JSX.Element}
-     * @private
-     */
-    const _facebookBtn = authBtn(
+  /**
+   * @constant
+   * @type {JSX.Element}
+   * @private
+   */
+  const _facebookBtn = authBtn(
       'Facebook',
-      <FacebookOutlined />,
+      <FacebookOutlined/>,
       signInWithFacebook
-    );
+  );
 
-    /**
-     * @constant
-     * @type {JSX.Element}
-     * @private
-     */
-    const _twitterBtn = authBtn(
+  /**
+   * @constant
+   * @type {JSX.Element}
+   * @private
+   */
+  const _twitterBtn = authBtn(
       'Twitter',
-      <TwitterOutlined />,
+      <TwitterOutlined/>,
       signInWithTwitter
-    );
+  );
 
-    /**
-     * @constant
-     * @type {JSX.Element}
-     * @private
-     */
-    const _signOutBtn = (
+  /**
+   * @constant
+   * @type {JSX.Element}
+   * @private
+   */
+  const _signOutBtn = (
       <Button type={'primary'}
               loading={isLoading(loading)}
               onClick={_signOut}
-              icon={<LogoutOutlined />}
+              icon={<LogoutOutlined/>}
               size={'small'}>
         {t('auth:signOut')}
       </Button>
-    );
+  );
 
-    const signUpProps = {
-      MIN_PASSWORD_LENGTH: authModel.MIN_PASSWORD_LENGTH,
-      isRegisterVisible,
-      setIsRegisterVisible,
-      setIsSignInVisible,
-      signInVisible
-    };
+  const signUpProps = {
+    MIN_PASSWORD_LENGTH: authModel.MIN_PASSWORD_LENGTH,
+    isRegisterVisible,
+    setIsRegisterVisible,
+    setIsSignInVisible,
+    signInVisible
+  };
 
-    const signInProps = {
-      t,
-      isSignInVisible,
-      signInVisible,
-      closable,
-      handleCancel,
-      authModel,
-      onFinish,
-      loading,
-      setIsSignInVisible,
-      setIsRegisterVisible,
-      buttons: {
-        _googleBtn,
-        _facebookBtn,
-        _twitterBtn
-      }
-    };
+  const signInProps = {
+    t,
+    isSignInVisible,
+    signInVisible,
+    closable,
+    handleCancel,
+    authModel,
+    onFinish,
+    loading,
+    setIsSignInVisible,
+    setIsRegisterVisible,
+    buttons: {
+      _googleBtn,
+      _twitterBtn
+    }
+  };
 
-    const updateEmailProps = {
-      t,
-      isNAEmailVisible,
-      handleNAEmailCancel,
-      handleNAEmailOk,
-      loading
-    };
+  const updateEmailProps = {
+    t,
+    isNAEmailVisible,
+    handleNAEmailCancel,
+    handleNAEmailOk,
+    loading
+  };
 
-    return (
+  return (
       <div className={classnames(styles.authWrapper, className)}>
         {user && authModel.user ? _signOutBtn : (
-          <>
-            {!signInVisible && (
-              <Button type={'primary'}
-                      size={'small'}
-                      icon={<LoginOutlined />}
-                      onClick={showSignIn}>
-                {t('auth:signIn')}
-              </Button>
-            )}
-          </>
+            <>
+              {!signInVisible && (
+                  <Button type={'primary'}
+                          size={'small'}
+                          icon={<LoginOutlined/>}
+                          onClick={showSignIn}>
+                    {t('auth:signIn')}
+                  </Button>
+              )}
+            </>
         )}
         <SignUp {...signUpProps} />
         <ErrorModal errorProps={errorProps}
                     isErrorVisible={isErrorVisible}
-                    handleErrorCancel={handleErrorCancel} />
+                    handleErrorCancel={handleErrorCancel}/>
         <SignInModal {...signInProps} />
         <UpdateEmailModal {...updateEmailProps} />
       </div>
-    );
-  }
-;
+  );
+};
 
 export default connect(
-  ({ authModel }) => {
-    return { authModel };
-  },
-  (dispatch) => (
-    {
-      dispatch,
-      onSignIn(user) {
-        dispatch({ type: 'authModel/signIn', payload: { user } });
-      },
-      onSignOut(user) {
-        dispatch({ type: 'authModel/signOut', payload: { user } });
-      },
-      onSignOutUser({ user }) {
-        dispatch({ type: 'userModel/signOutUser', payload: { user } });
-      },
-      onUpdateEmail({ user, email }) {
-        dispatch({ type: 'authModel/updateEmail', payload: { user, email } });
-      }
-    }
-  )
+    ({authModel}) => {
+      return {authModel};
+    },
+    (dispatch) => (
+        {
+          dispatch,
+          onSignIn(user) {
+            dispatch({type: 'authModel/signIn', payload: {user}});
+          },
+          onSignOut(user) {
+            dispatch({type: 'authModel/signOut', payload: {user}});
+          },
+          onSignOutUser({user}) {
+            dispatch({type: 'userModel/signOutUser', payload: {user}});
+          },
+          onUpdateEmail({user, email}) {
+            dispatch({type: 'authModel/updateEmail', payload: {user, email}});
+          }
+        }
+    )
 )(withTranslation()(createComponentWithAuth(signIn)));

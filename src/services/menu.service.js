@@ -29,45 +29,9 @@ export const menus = [
     icon: <TrademarkOutlined />,
     items: [
       {
-        key: 'business:preparations',
-        url: '/admin/business/preparations',
-        icon: <PieChartOutlined />
-      },
-      {
-        key: 'business:services',
-        url: '/admin/business/services',
-        icon: <CoffeeOutlined />
-      },
-      {
         key: 'business:userRoles',
         url: '/admin/business/userRoles',
         icon: <SolutionOutlined />
-      }
-    ]
-  },
-  {
-    key: 'menu:businessWizard',
-    icon: <BlockOutlined />,
-    items: [
-      {
-        key: 'business:dietary',
-        url: '/admin/business/wizard/dietary',
-        icon: <FontAwesomeIcon icon={faDiagnoses}/>
-      },
-      {
-        key: 'business:eventLocation',
-        url: '/admin/business/wizard/eventLocation',
-        icon: <FontAwesomeIcon icon={faSearchLocation}/>
-      },
-      {
-        key: 'business:eventType',
-        url: '/admin/business/wizard/eventType',
-        icon: <FontAwesomeIcon icon={faCalendarCheck}/>
-      },
-      {
-        key: 'business:startersAndDesserts',
-        url: '/admin/business/wizard/startersAndDesserts',
-        icon: <FontAwesomeIcon icon={faBirthdayCake}/>
       }
     ]
   },

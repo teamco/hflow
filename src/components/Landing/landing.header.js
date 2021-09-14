@@ -3,7 +3,6 @@ import { withTranslation } from 'react-i18next';
 import { history } from 'umi';
 import { Col, Divider, Dropdown, Menu, Row } from 'antd';
 import classnames from 'classnames';
-import Flag from 'react-world-flags';
 
 import {
   CommentOutlined,
@@ -122,12 +121,6 @@ const landingHeader = props => {
             <Col className={styles.headerText}>
               <CommentOutlined />
               <span>{t('landing:help')}</span>
-            </Col>
-            <Col className={styles.countryIcon}>
-              <div>
-                <Flag code={country}
-                      className={styles.flag} />
-              </div>
             </Col>
             <Col className={styles.headerText}>
               <Divider type={'vertical'} />

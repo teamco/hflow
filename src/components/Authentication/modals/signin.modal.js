@@ -10,7 +10,6 @@ import { emailPartial } from 'components/partials/email.partial';
 
 import styles from 'components/Authentication/authentication.module.less';
 
-import icon from 'pages/landing/images/icon.png';
 import { isLoading } from 'utils/state';
 
 /**
@@ -40,10 +39,7 @@ const SignInModal = props => {
 
   const modalHeader = (
     <div className={styles.modalHeader}>
-      <div className={styles.icon}>
-        <img src={icon} alt={t('auth:signInTitle')} />
-      </div>
-      {/*<h4>{t('auth:signInTitle')}</h4>*/}
+      <h4>{t('auth:signInTitle')}</h4>
       <h6>{t('auth:signInDesc')}</h6>
     </div>
   );

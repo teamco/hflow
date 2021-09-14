@@ -27,12 +27,6 @@ import { monitorHistory } from 'utils/history';
 import { errorSaveMsg } from 'utils/message';
 import { setAs } from 'utils/object';
 
-/**
- * @constant
- * @type {{getAllCountries, getCountry}}
- */
-import ct from 'countries-and-timezones';
-
 const DEFAULT_STATE = {
   availableCountries: ['CA'],
   selectedCountry: 'Canada',
@@ -99,11 +93,11 @@ export default dvaModelExtend(commonModel, {
       const { availableCountries } = yield select(state => state.businessModel);
       let countries = [];
 
-      if (availableCountries === 'ALL') {
-        countries = Object.values(ct.getAllCountries());
-      } else {
-        countries = availableCountries.map(country => ct.getCountry(country));
-      }
+      // if (availableCountries === 'ALL') {
+      //   countries = Object.values(ct.getAllCountries());
+      // } else {
+      //   countries = availableCountries.map(country => ct.getCountry(country));
+      // }
 
       yield put({
         type: 'updateState',

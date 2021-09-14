@@ -2,7 +2,6 @@ import { getEntityFormIdx } from 'services/common.service';
 import { message } from 'antd';
 import { history } from 'umi';
 import { merge } from 'lodash';
-import queryString from 'query-string';
 
 const DEFAULT_FORM = [
   {

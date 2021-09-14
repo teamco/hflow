@@ -1,6 +1,5 @@
 import React from 'react';
 import { DatePicker, Input } from 'antd';
-import countryCodes from 'country-codes-list';
 
 import { emailProps } from 'components/partials/email.partial';
 import FormComponents from 'components/Form';
@@ -9,18 +8,6 @@ import Phone from 'components/Form/phone';
 
 const { GenericPanel } = FormComponents;
 const { TextArea } = Input;
-
-/**
- * @constant
- * @param formRef
- * @return {{currencyNameEn, flag, tinType, officialLanguageNameEn, countryNameEn,
- *   countryCallingCode, countryCode, tinName, officialLanguageCode,
- *   countryNameLocal, officialLanguageNameLocal, region, currencyCode}}
- */
-export const getSelectedCountry = formRef => {
-  const country = formRef.getFieldValue('country');
-  return countryCodes.findOne('countryNameEn', country) || {};
-};
 
 /**
  * @export
@@ -63,8 +50,7 @@ export const BusinessInfo = ({
         <Phone t={t}
                label={t('business:phone')}
                formRef={formRef}
-               required={true}
-               countryData={getSelectedCountry(formRef)} />
+               required={true} />
         <Input type={'text'}
                label={t('business:website')}
                name={'website'}
