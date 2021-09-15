@@ -19,6 +19,10 @@
     "noEmail": "Email address is required",
     "na": "None"
   },
+  "user": {
+    "logs": "User Logs",
+    "errors": "User Errors"
+  },
   "auth": {
     "signInWith": "Sign in with {{provider}}",
     "signInAnonymous": "Sign in Anonymously",

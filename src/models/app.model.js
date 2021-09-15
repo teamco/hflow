@@ -9,7 +9,7 @@ import { commonModel } from 'models/common.model';
 import { menus } from 'services/menu.service';
 
 const appMeta = {
-  name: 'Event Meal',
+  name: '__TITLE__',
   charSet: 'utf-8'
 };
 

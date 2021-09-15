@@ -1,10 +1,10 @@
-import { message } from 'antd';
+import {message} from 'antd';
 import _ from 'lodash';
 import gravatar from 'gravatar';
 
 import i18n from 'utils/i18n';
-import { fbReadBy, fbReadAll, firebaseAppAuth, fbUpdate, getRef } from 'services/firebase.service';
-import { errorSaveMsg } from 'utils/message';
+import {fbReadBy, fbReadAll, firebaseAppAuth, fbUpdate, getRef} from 'services/firebase.service';
+import {errorSaveMsg} from 'utils/message';
 
 /**
  * @export
@@ -13,7 +13,7 @@ import { errorSaveMsg } from 'utils/message';
  * @param protocol
  * @return {*}
  */
-export const gravatarUrl = ({ email, options = {}, protocol = 'http' }) => {
+export const gravatarUrl = ({email, options = {}, protocol = 'http'}) => {
   return gravatar.url(email, options, protocol);
 };
 
@@ -24,7 +24,7 @@ export const gravatarUrl = ({ email, options = {}, protocol = 'http' }) => {
  * @param protocol
  * @return {string}
  */
-export const gravatarProfile = ({ email, options = {}, protocol = 'http' }) => {
+export const gravatarProfile = ({email, options = {}, protocol = 'http'}) => {
   return gravatar.profile_url(email, options, protocol);
 };
 
@@ -33,7 +33,7 @@ export const gravatarProfile = ({ email, options = {}, protocol = 'http' }) => {
  * @param user
  * @return {{docId, data}}
  */
-export const getUsers = async ({ user }) => {
+export const getUsers = async ({user}) => {
   let data = [];
 
   if (!user) {
@@ -45,24 +45,24 @@ export const getUsers = async ({ user }) => {
    * @type {{forEach}}
    */
   const users = isAdmin(user.roles) ?
-    await fbReadAll({ collection: 'users' }) :
-    await fbReadBy({
-      collection: 'users',
-      field: 'uid',
-      value: user.uid
-    });
+      await fbReadAll({collection: 'users'}) :
+      await fbReadBy({
+        collection: 'users',
+        field: 'uid',
+        value: user.uid
+      });
 
   users.forEach(doc => {
     const _data = doc.data();
-    data.push(_.merge(_data, { id: doc.id }));
+    data.push(_.merge(_data, {id: doc.id}));
   });
 
   for (const _user of data) {
-    const _data = { id: _user.id };
-    _user.roles = await getUserRoles({ user: { data: _data } });
+    const _data = {id: _user.id};
+    _user.roles = await getUserRoles({user: {data: _data}});
   }
 
-  return { data };
+  return {data};
 };
 
 /**
@@ -71,27 +71,27 @@ export const getUsers = async ({ user }) => {
  * @param [email]
  * @param [emailVerified]
  * @param [metadata]
- * @return {{docId, data}}
+ * @return {Promise<{data: {}, docId: *}>}
  */
-export const findUser = async ({ uid, email, emailVerified, metadata }) => {
-  let data = {},
-    docId = undefined;
+export const findUser = async ({uid, email, emailVerified, metadata}) => {
+  let data = {};
+  let docId = undefined;
 
   /**
    * @constant
    * @type {{forEach}}
    */
-  const users = await fbReadBy({ collection: 'users', field: 'uid', value: uid });
+  const users = await fbReadBy({collection: 'users', field: 'uid', value: uid});
 
   users?.forEach(doc => {
     const _data = doc.data();
     if (_data.uid === uid) {
       docId = doc.id;
-      data = _.merge(_data, { email, emailVerified, metadata });
+      data = _.merge(_data, {email, emailVerified, metadata});
     }
   });
 
-  data.roles = users && await getUserRoles({ user: { data } });
+  data.roles = users && await getUserRoles({user: {data}});
 
   return {
     docId,
@@ -111,7 +111,7 @@ export const getAllUserRoles = async () => {
    * @constant
    * @type {{forEach}}
    */
-  const roles = await fbReadAll({ collection: 'roleTypes' });
+  const roles = await fbReadAll({collection: 'roleTypes'});
   roles.forEach(doc => {
     const _data = doc.data();
     data.push({
@@ -129,13 +129,13 @@ export const getAllUserRoles = async () => {
  * @param email
  * @return {Promise<{docId, data: {metadata}}|void>}
  */
-export const forceSignOutUser = async ({ uid, email }) => {
+export const forceSignOutUser = async ({uid, email}) => {
 
   /**
    * @constant
    * @type {{docId, data: {metadata}}}
    */
-  const user = await findUser({ uid });
+  const user = await findUser({uid});
 
   if (!user) {
     return errorSaveMsg(true, email);
@@ -150,7 +150,7 @@ export const forceSignOutUser = async ({ uid, email }) => {
     }
   };
 
-  await fbUpdate({ collection: 'users', docId: user.docId, data: { metadata } });
+  await fbUpdate({collection: 'users', docId: user.docId, data: {metadata}});
 
   return user;
 };
@@ -161,9 +161,9 @@ export const forceSignOutUser = async ({ uid, email }) => {
  * @param user
  * @return {Promise<[]>}
  */
-export const getUserRoles = async ({ user = { data: {} } }) => {
+export const getUserRoles = async ({user = {data: {}}}) => {
   const data = [];
-  const userRef = getRef({ collection: 'users', doc: user.data?.id });
+  const userRef = getRef({collection: 'users', doc: user.data?.id});
 
   /** @type {{forEach}} */
   const userRoles = await fbReadBy({
@@ -222,7 +222,7 @@ export const handleUserSessionTimeout = () => {
  * @param user
  * @return {Boolean|Promise<void>}
  */
-export const sendVerificationEmail = async ({ user }) => {
+export const sendVerificationEmail = async ({user}) => {
   const currentUser = firebaseAppAuth.currentUser;
 
   if (currentUser.uid === user.data().uid) {
@@ -248,7 +248,7 @@ export const sendVerificationEmail = async ({ user }) => {
  * @export
  * @param user
  */
-export const resetUserPassword = ({ user }) => {
+export const resetUserPassword = ({user}) => {
   return firebaseAppAuth.sendPasswordResetEmail(user.email).then(async () => {
     // Email sent.
     await message.success(i18n.t('msg:successPasswordResetEmail'));
@@ -278,7 +278,7 @@ export const deleteFbUser = () => {
  * @export
  * @param email
  */
-export const updateFbUserEmail = ({ email }) => {
+export const updateFbUserEmail = ({email}) => {
   const currentUser = firebaseAppAuth.currentUser;
   currentUser.updateEmail(email).then(() => {
     // Update successful.
@@ -292,7 +292,7 @@ export const updateFbUserEmail = ({ email }) => {
  * @export
  * @param password
  */
-export const updateFbUserPassword = ({ password }) => {
+export const updateFbUserPassword = ({password}) => {
   const currentUser = firebaseAppAuth.currentUser;
   currentUser.updatePassword(password).then(() => {
     // Update successful.
@@ -306,7 +306,7 @@ export const updateFbUserPassword = ({ password }) => {
  * @export
  * @param profile
  */
-export const updateFbUserProfile = ({ profile = {} }) => {
+export const updateFbUserProfile = ({profile = {}}) => {
 
   /**
    * Get current FB user.
@@ -329,7 +329,7 @@ export const updateFbUserProfile = ({ profile = {} }) => {
  * @param {{url, userId}} setting
  * @param {string} email
  */
-export const sendAuthLink = async ({ setting, email }) => {
+export const sendAuthLink = async ({setting, email}) => {
 
   /**
    * @constant
