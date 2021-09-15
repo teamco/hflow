@@ -3,13 +3,13 @@
  * @type {{initializeApp, auth}}
  */
 import firebase from 'firebase/app';
-import { firebaseConfig } from 'services/config/firebase.config';
-import { message } from 'antd';
+import {firebaseConfig} from 'services/config/firebase.config';
+import {message} from 'antd';
 import capitalize from 'capitalize-first-letter';
 
 import 'firebase/auth';
 import 'firebase/firestore';
-import { errorSaveMsg, successSaveMsg } from 'utils/message';
+import {errorSaveMsg, successSaveMsg} from 'utils/message';
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
@@ -49,20 +49,23 @@ export const fbSignOut = async () => {
  * @export
  * @async
  * @param collection
- * @param data
+ * @param [data]
+ * @param {boolean} [notice]
  */
-export const fbAdd = async ({ collection, data = {} }) => {
+export const fbAdd = async ({collection, data = {}, notice = true}) => {
   return await db.collection(collection).add(data).then(async (docRef) => {
     const data = (await docRef.get()).data();
-    successSaveMsg(false, capitalize(collection));
+    notice && successSaveMsg(false, capitalize(collection));
 
     return {
       docId: docRef.id,
       data
     };
   }).catch(async error => {
-    await message.error(error.message);
-    errorSaveMsg(false, capitalize(collection));
+    if (notice) {
+      await message.error(error.message);
+      errorSaveMsg(false, capitalize(collection));
+    }
     console.error(`Create: ${collection}\n`, error);
     return {};
   });
@@ -72,16 +75,17 @@ export const fbAdd = async ({ collection, data = {} }) => {
  * @export
  * @param collection
  * @param doc
- * @param data
+ * @param [data]
+ * @param {boolean} [notice]
  * @return {Promise<{data: *, id: *}|void>}
  */
-export const fbWrite = async ({ collection, doc, data = {} }) => {
-  await getRef({ collection, doc }).set({ ...data }).catch(async error => {
-    await message.error(error.message);
+export const fbWrite = async ({collection, doc, data = {}, notice = true}) => {
+  await getRef({collection, doc}).set({...data}).catch(async error => {
+    notice && await message.error(error.message);
     console.error(`Write: ${collection}\n`, error);
   });
-  successSaveMsg(false, capitalize(collection));
-  return await fbFindById({ collection, data });
+  notice && successSaveMsg(false, capitalize(collection));
+  return await fbFindById({collection, data});
 };
 
 /**
@@ -89,10 +93,11 @@ export const fbWrite = async ({ collection, doc, data = {} }) => {
  * @export
  * @async
  * @param collection
+ * @param {boolean} [notice]
  */
-export const fbReadAll = async ({ collection }) => {
+export const fbReadAll = async ({collection, notice = true}) => {
   return await db.collection(collection).get().catch(async error => {
-    await message.error(error.message);
+    notice && await message.error(error.message);
     console.error(`All: ${collection}\n`, error);
     return [];
   });
@@ -104,12 +109,13 @@ export const fbReadAll = async ({ collection }) => {
  * @export
  * @param collection
  * @param field
- * @param operator
+ * @param [operator]
  * @param value
+ * @param {boolean} [notice]
  */
-export const fbReadBy = async ({ collection, field, operator = '==', value }) => {
+export const fbReadBy = async ({collection, field, operator = '==', value, notice = true}) => {
   return await db.collection(collection).where(field, operator, value).get().catch(async error => {
-    await message.error(error.message);
+    notice && await message.error(error.message);
     console.error(`Read: ${collection}\n`, error);
     return [];
   });
@@ -120,12 +126,13 @@ export const fbReadBy = async ({ collection, field, operator = '==', value }) =>
  * @param [collection]
  * @param [docRef]
  * @param [doc]
+ * @param {boolean} [notice]
  * @return {Promise<firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>>}
  */
-export const fbFindById = async ({ docRef, collection, doc }) => {
-  docRef = docRef || getRef({ collection, doc });
+export const fbFindById = async ({docRef, collection, doc, notice = true}) => {
+  docRef = docRef || getRef({collection, doc});
   return await docRef.get().catch(async error => {
-    await message.error(error.message);
+    notice && await message.error(error.message);
     console.error(`Find: ${collection}\n`, error);
     return {};
   });
@@ -137,7 +144,7 @@ export const fbFindById = async ({ docRef, collection, doc }) => {
  * @param doc
  * @return {firebase.firestore.DocumentReference<firebase.firestore.DocumentData>}
  */
-export const getRef = ({ collection, doc }) => db.collection(collection).doc(doc);
+export const getRef = ({collection, doc}) => db.collection(collection).doc(doc);
 
 /**
  * Update collection
@@ -146,14 +153,17 @@ export const getRef = ({ collection, doc }) => db.collection(collection).doc(doc
  * @param collection
  * @param docId
  * @param data
+ * @param {boolean} [notice]
  */
-export const fbUpdate = async ({ collection, docId, data }) => {
-  const docRef = getRef({ collection, doc: docId });
+export const fbUpdate = async ({collection, docId, data, notice = true}) => {
+  const docRef = getRef({collection, doc: docId});
   return await docRef.update(data).then(() => {
-    successSaveMsg(true, capitalize(collection));
+    notice && successSaveMsg(true, capitalize(collection));
   }).catch(async error => {
-    await message.error(error.message);
-    errorSaveMsg(true, capitalize(collection));
+    if (notice) {
+      await message.error(error.message);
+      errorSaveMsg(true, capitalize(collection));
+    }
     console.error(`Update: ${collection}\n`, error);
   });
 };

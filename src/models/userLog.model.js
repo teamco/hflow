@@ -61,9 +61,10 @@ export default dvaModelExtend(commonModel, {
       typeof duration !== 'undefined' && (data.duration = duration);
       typeof user?.email !== 'undefined' && (data.createdBy = user?.email);
 
-      const logExist = isLocalHost() ?
-        null :
-        yield call(fbAdd, { collection: 'userLogs', data });
+      const logExist =
+        //isLocalHost() ?
+        //null :
+        yield call(fbAdd, { collection: 'userLogs', data, notice: false });
 
       if (logExist?.docId) {
         // TODO (teamco): Do something
