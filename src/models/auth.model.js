@@ -60,7 +60,7 @@ export default dvaModelExtend(commonModel, {
       displayName = defineInstance(displayName, registerData?.displayName);
       photoURL = defineInstance(photoURL, registerData?.photoURL);
 
-      if ((isSignedOut || !metadata) && !Object.keys(registerData).length) {
+      if (isSignedOut && !Object.keys(registerData).length) {
         return yield put({type: 'updateState', payload: {isSignedOut: false}});
       }
 
@@ -100,16 +100,14 @@ export default dvaModelExtend(commonModel, {
       });
 
       if (_userExist?.docId) {
-        const user = {..._userExist.data, id: _userExist.docId};
+        const _user = {..._userExist.data, id: _userExist.docId};
 
-        // Update user.id
-        if (!_userExist?.data?.id) {
-          yield call(fbUpdate, {
-            collection: 'users',
-            docId: _userExist.docId,
-            data: {...user}
-          });
-        }
+        // Update user
+        yield call(fbUpdate, {
+          collection: 'users',
+          docId: _userExist.docId,
+          data: {..._user}
+        });
 
         // Finish business user registration
         if (registerData.isBusinessUser) {
@@ -123,12 +121,15 @@ export default dvaModelExtend(commonModel, {
         _userExist.data.roles = yield call(getUserRoles, {user: _userExist});
 
         // Define user abilities
-        const ability = yield call(defineAbilityFor, {user, userId: _userExist?.docId});
+        const ability = yield call(defineAbilityFor, {
+          user: _user,
+          userId: _userExist?.docId
+        });
 
         yield put({
           type: 'updateState',
           payload: {
-            user,
+            user: {..._user},
             registerData: {},
             refreshSignIn: true,
             isSignedOut: false,
