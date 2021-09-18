@@ -184,7 +184,7 @@ const login = (props) => {
         <SignUp {...signUpProps} />
         <ErrorModal errorProps={errorProps}
                     isErrorVisible={isErrorVisible}
-                    handleErrorCancel={handleErrorCancel}/>
+                    handleErrorCancel={handleErrorCancel} />
         <SignInModal {...signInProps} />
       </Page>
   );

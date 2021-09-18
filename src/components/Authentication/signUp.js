@@ -157,6 +157,7 @@ const signUp = props => {
                                })
                              ]}>
                     <Input.Password prefix={<LockTwoTone />}
+                                    autoComplete={'new-password'}
                                     placeholder={t('auth:password')} />
                   </Form.Item>
                 </Col>
@@ -180,6 +181,7 @@ const signUp = props => {
                                })
                              ]}>
                     <Input.Password prefix={<LockTwoTone />}
+                                    autoComplete={'new-password'}
                                     placeholder={t('auth:passwordConfirm')} />
                   </Form.Item>
                 </Col>

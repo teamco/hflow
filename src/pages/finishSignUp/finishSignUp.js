@@ -188,6 +188,7 @@ const finishSignUp = (props) => {
                             name={'password'}
                             label={t('auth:password')}
                             form={formRef}
+                            autoComplete={'new-password'}
                             extra={t('auth:passwordHelper', { length: MIN_PASSWORD_LENGTH })}
                             onChange={e => onUpdateMeter({ e, setMeterValue, setMeterText })}
                             config={{
@@ -207,6 +208,7 @@ const finishSignUp = (props) => {
                             name={'password_confirm'}
                             label={t('auth:passwordConfirm')}
                             form={formRef}
+                            autoComplete={'new-password'}
                             extra={t('auth:passwordHelper', { length: MIN_PASSWORD_LENGTH })}
                             onChange={e => onUpdateMeter({ e, setMeterValue, setMeterText })}
                             config={{
