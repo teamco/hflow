@@ -185,7 +185,7 @@ export const getUserRoles = async ({user = {data: {}}}) => {
   for (const role of data) {
     let idx = data.indexOf(role);
 
-    /** @type{{data}} */
+    /** @type {{data}} */
     const roleType = await role;
     data[idx] = roleType.data().type;
   }

@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { connect } from 'dva';
-import { useParams } from 'umi';
-import { withTranslation } from 'react-i18next';
+import React, {useEffect} from 'react';
+import {connect} from 'dva';
+import {useParams} from 'umi';
+import {withTranslation} from 'react-i18next';
 
 import Page from 'components/Page';
 import Users from 'pages/users';
@@ -26,39 +26,39 @@ const profile = (props) => {
   } = userModel;
 
   useEffect(() => {
-    onGetUser(selectedUser, params.user);
+    (params.user === authModel.user.id) && onGetUser(selectedUser, params.user);
   }, [authModel.user]);
 
-  const { ability } = authModel;
+  const {ability} = authModel;
   const component = 'profile';
   const disabled = !ability.can('update', component);
 
   return (
-    <Page className={userStyles.users}
-          component={component}
-          spinEffects={[
-            'userModel/getUser',
-            'businessModel/query'
-          ]}>
-      <Users selectedUser={selectedUser} />
-      <Businesses selectedUser={selectedUser}
-                  style={{ marginTop: 20 }} />
-    </Page>
+      <Page className={userStyles.users}
+            component={component}
+            spinEffects={[
+              'userModel/getUser',
+              'businessModel/query'
+            ]}>
+        <Users selectedUser={selectedUser}/>
+        <Businesses selectedUser={selectedUser}
+                    style={{marginTop: 20}}/>
+      </Page>
   );
 };
 
 export default connect(
-  ({ authModel, userModel, loading }) => {
-    return {
-      authModel,
-      userModel,
-      loading
-    };
-  },
-  (dispatch) => ({
-    dispatch,
-    onGetUser(selectedUser, userId) {
-      dispatch({ type: `userModel/getUser`, payload: { selectedUser, userId } });
-    }
-  })
+    ({authModel, userModel, loading}) => {
+      return {
+        authModel,
+        userModel,
+        loading
+      };
+    },
+    (dispatch) => ({
+      dispatch,
+      onGetUser(selectedUser, userId) {
+        dispatch({type: `userModel/getUser`, payload: {selectedUser, userId}});
+      }
+    })
 )(withTranslation()(profile));

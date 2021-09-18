@@ -30,6 +30,7 @@ export const emailPartial = ({ t, name, className, emailRef }) => {
                {...emailProps(t)}>
       <Input prefix={<MailTwoTone />}
              ref={emailRef}
+             autoComplete={'off'}
              placeholder={t('auth:email')} />
     </Form.Item>
   );

@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'dva';
-import { withTranslation } from 'react-i18next';
+import React, {useEffect, useState} from 'react';
+import {connect} from 'dva';
+import {withTranslation} from 'react-i18next';
 
-import { FacebookOutlined, GoogleOutlined, TwitterOutlined } from '@ant-design/icons';
-import { Button, Tooltip } from 'antd';
+import {FacebookOutlined, GoogleOutlined, TwitterOutlined} from '@ant-design/icons';
+import {Button, Tooltip} from 'antd';
 import ErrorModal from 'components/Authentication/modals/error.modal';
 import SignInModal from 'components/Authentication/modals/signin.modal';
 import SignUp from 'components/Authentication/signUp';
 import Page from 'components/Page';
 import withFirebaseAuth from 'react-with-firebase-auth';
 
-import { firebaseAppAuth, providers } from 'services/firebase.service';
+import {firebaseAppAuth, providers} from 'services/firebase.service';
 
 import Logo from 'components/Logo';
-import { isLoading } from 'utils/state';
+import {isLoading} from 'utils/state';
 
 /** Create the FirebaseAuth component wrapper */
 const createComponentWithAuth = withFirebaseAuth({
@@ -51,7 +51,7 @@ const login = (props) => {
   const [isErrorVisible, setIsErrorVisible] = useState(false);
 
   useEffect(() => {
-    if (user && !authModel.user) {
+    if (user && !authModel.user && !Object.keys(authModel.registerData).length) {
       props.onSignIn(user);
     }
   }, [user]);
@@ -60,7 +60,7 @@ const login = (props) => {
 
   if (error) {
     errorProps = {
-      title: t('error:errorNum', { number: 400 }),
+      title: t('error:errorNum', {number: 400}),
       error
     };
 
@@ -105,14 +105,14 @@ const login = (props) => {
    * @return {JSX.Element}
    */
   const authBtn = (provider, icon, signInFn) => (
-    <Tooltip title={t('auth:signInWith', { provider })}>
-      <Button loading={isLoading(loading)}
-              onClick={() => handleCancel(signInFn)}
-              icon={icon}
-              size={'small'}>
-        {provider}
-      </Button>
-    </Tooltip>
+      <Tooltip title={t('auth:signInWith', {provider})}>
+        <Button loading={isLoading(loading)}
+                onClick={() => handleCancel(signInFn)}
+                icon={icon}
+                size={'small'}>
+          {provider}
+        </Button>
+      </Tooltip>
   );
 
   /**
@@ -121,9 +121,9 @@ const login = (props) => {
    * @private
    */
   const _googleBtn = authBtn(
-    'Google',
-    <GoogleOutlined />,
-    signInWithGoogle
+      'Google',
+      <GoogleOutlined/>,
+      signInWithGoogle
   );
 
   /**
@@ -132,9 +132,9 @@ const login = (props) => {
    * @private
    */
   const _facebookBtn = authBtn(
-    'Facebook',
-    <FacebookOutlined />,
-    signInWithFacebook
+      'Facebook',
+      <FacebookOutlined/>,
+      signInWithFacebook
   );
 
   /**
@@ -143,9 +143,9 @@ const login = (props) => {
    * @private
    */
   const _twitterBtn = authBtn(
-    'Twitter',
-    <TwitterOutlined />,
-    signInWithTwitter
+      'Twitter',
+      <TwitterOutlined/>,
+      signInWithTwitter
   );
 
   const signUpProps = {
@@ -153,7 +153,8 @@ const login = (props) => {
     isRegisterVisible,
     setIsRegisterVisible,
     setIsSignInVisible,
-    signInVisible: true
+    signInVisible: true,
+    onSignIn: props.onSignIn
   };
 
   const signInProps = {
@@ -168,35 +169,32 @@ const login = (props) => {
     setIsRegisterVisible,
     buttons: {
       _googleBtn,
-      _facebookBtn,
       _twitterBtn
     }
   };
 
   const logoProps = {
     url: '/',
-    title: 'EventMeal'
-  }
+    title: '__TITLE_'
+  };
 
   return (
-    <Page component={'login'}>
-      <Logo {...logoProps} />
-      <SignUp {...signUpProps} />
-      <ErrorModal errorProps={errorProps}
-                  isErrorVisible={isErrorVisible}
-                  handleErrorCancel={handleErrorCancel} />
-      <SignInModal {...signInProps} />
-    </Page>
+      <Page component={'login'}>
+        <Logo {...logoProps} />
+        <SignUp {...signUpProps} />
+        <ErrorModal errorProps={errorProps}
+                    isErrorVisible={isErrorVisible}
+                    handleErrorCancel={handleErrorCancel}/>
+        <SignInModal {...signInProps} />
+      </Page>
   );
 };
 export default connect(
-  ({ authModel }) => {
-    return { authModel };
-  },
-  (dispatch) => ({
-    dispatch,
-    onSignIn(user) {
-      dispatch({ type: 'authModel/signIn', payload: { user } });
-    }
-  })
+    ({authModel}) => ({authModel}),
+    (dispatch) => ({
+      dispatch,
+      onSignIn(user) {
+        dispatch({type: 'authModel/signIn', payload: {user}});
+      }
+    })
 )(withTranslation()(createComponentWithAuth(login)));

@@ -253,7 +253,8 @@ const signIn = props => {
     isRegisterVisible,
     setIsRegisterVisible,
     setIsSignInVisible,
-    signInVisible
+    signInVisible,
+    onSignIn
   };
 
   const signInProps = {
@@ -306,24 +307,20 @@ const signIn = props => {
 };
 
 export default connect(
-    ({authModel}) => {
-      return {authModel};
-    },
-    (dispatch) => (
-        {
-          dispatch,
-          onSignIn(user) {
-            dispatch({type: 'authModel/signIn', payload: {user}});
-          },
-          onSignOut(user) {
-            dispatch({type: 'authModel/signOut', payload: {user}});
-          },
-          onSignOutUser({user}) {
-            dispatch({type: 'userModel/signOutUser', payload: {user}});
-          },
-          onUpdateEmail({user, email}) {
-            dispatch({type: 'authModel/updateEmail', payload: {user, email}});
-          }
-        }
-    )
+    ({authModel}) => ({authModel}),
+    (dispatch) => ({
+      dispatch,
+      onSignIn(user) {debugger
+        dispatch({type: 'authModel/signIn', payload: {user}});
+      },
+      onSignOut(user) {
+        dispatch({type: 'authModel/signOut', payload: {user}});
+      },
+      onSignOutUser({user}) {
+        dispatch({type: 'userModel/signOutUser', payload: {user}});
+      },
+      onUpdateEmail({user, email}) {
+        dispatch({type: 'authModel/updateEmail', payload: {user, email}});
+      }
+    })
 )(withTranslation()(createComponentWithAuth(signIn)));

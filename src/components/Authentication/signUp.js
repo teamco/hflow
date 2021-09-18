@@ -45,7 +45,7 @@ const signUp = props => {
     registerData,
     signInVisible,
     onRefresh,
-    onSignUp,
+    onSignIn,
     onRegisterData
   } = props;
 
@@ -53,8 +53,8 @@ const signUp = props => {
   const [meterText, setMeterText] = useState('');
 
   useEffect(() => {
-    if (user && registerData) {
-      onSignUp(user);
+    if (user && Object.keys(registerData).length) {
+      onSignIn(user);
       handleCancel();
     }
   }, [user]);
@@ -64,7 +64,7 @@ const signUp = props => {
   }
 
   const handleCancel = () => {
-    !signInVisible && setIsRegisterVisible(false);
+    setIsRegisterVisible(false);
   };
 
   /**
@@ -98,7 +98,6 @@ const signUp = props => {
                closable={!signInVisible}
                className={styles.authModal}
                centered
-               onCancel={handleCancel}
                maskStyle={signInVisible ? { backgroundColor: 'rgba(0, 0, 0, 0.45)' } : null}
                footer={null}>
           <Form name={'auth_signup'}
@@ -232,9 +231,6 @@ export default connect(
   ({ authModel }) => authModel,
   (dispatch) => ({
     dispatch,
-    onSignUp(user) {
-      dispatch({ type: 'authModel/signUp', payload: { user } });
-    },
     onRegisterData(registerData) {
       dispatch({ type: 'authModel/registerData', payload: { registerData } });
     },

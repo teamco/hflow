@@ -32,7 +32,6 @@ const SignInModal = props => {
     setIsRegisterVisible,
     buttons: {
       _googleBtn,
-      _facebookBtn,
       _twitterBtn
     }
   } = props;
@@ -69,6 +68,7 @@ const SignInModal = props => {
                      }
                    ]}>
           <Input.Password prefix={<LockTwoTone />}
+                          autoComplete={'new-password'}
                           placeholder={t('auth:password')} />
         </Form.Item>
         <Form.Item>
@@ -108,7 +108,6 @@ const SignInModal = props => {
           <Row gutter={[16, 16]}
                className={styles.loginBtns}>
             <Col span={8}>{_googleBtn}</Col>
-            <Col span={8}>{_facebookBtn}</Col>
             <Col span={8}>{_twitterBtn}</Col>
           </Row>
         </Form.Item>
