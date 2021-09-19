@@ -14,10 +14,10 @@ export const sortBy = (list = [], value) => {
  * @param value
  * @return {*}
  */
-export const sortByDate = (list, value) => {
-  return list.sort((a, b) => {
+export const sortByDate = (list = [], value) => {
+  return [...list].sort((a, b) => {
     const keyA = new Date(a[value]),
-      keyB = new Date(b[value]);
+        keyB = new Date(b[value]);
     return (keyA < keyB) ? -1 : (keyA > keyB) ? 1 : 0;
   });
 };
