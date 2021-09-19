@@ -19,10 +19,12 @@ export const BusinessAddress = props => {
     t,
     formRef,
     countries = [],
+    states = [],
     cities,
     setCities,
     citiesFilter,
-    setCitiesFilter
+    setCitiesFilter,
+    onHandleStates
   } = props;
 
   return (
@@ -33,14 +35,33 @@ export const BusinessAddress = props => {
           <Select name={'country'}
                   form={formRef}
                   label={t('address:country')}
+                  onSelect={value => {
+                    onHandleStates(value);
+                    formRef.setFieldsValue({state: null});
+                  }}
                   config={{rules: [{required: true}]}}>
             {sortBy(countries, 'name').map(country => (
                 <Option key={country?.id}
-                        value={country?.name}>
+                        value={country?.id}>
                   {country?.name}
                 </Option>
             ))}
           </Select>
+          {states.length ? (
+              <Select name={'state'}
+                      form={formRef}
+                      label={t('address:stateProvince')}
+                      config={{rules: [{required: true}]}}>
+                {sortBy(states, 'name').map(state => (
+                    <Option key={state?.short}
+                            value={state?.name}>
+                      {state?.name}
+                    </Option>
+                ))}
+              </Select>
+          ) : <></>}
+        </div>
+        <div>
           <Input type={'text'}
                  label={t('address:zip')}
                  name={'zip'}
@@ -52,6 +73,7 @@ export const BusinessAddress = props => {
                    });
                  }}
                  config={{rules: [{required: true}]}}/>
+          <></>
         </div>
         <div>
           <TextArea label={t('address')}

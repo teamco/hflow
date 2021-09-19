@@ -7,11 +7,11 @@ import i18n from 'utils/i18n';
 import moment from 'moment';
 import {history} from 'umi';
 
-/**
- * @constant
- * @type {{getAllCountries, getCountry}}
- */
+/** @type {{getAllCountries, getCountry}} */
 import ct from 'countries-and-timezones';
+
+/** @type {array} */
+import provinces from 'provinces';
 
 import {
   isBusiness,
@@ -41,6 +41,7 @@ const DEFAULT_STATE = {
   users: [],
   assignedUsers: [],
   countries: [],
+  states: [],
   businessUserRef: null
 };
 
@@ -93,6 +94,11 @@ export default dvaModelExtend(commonModel, {
 
     * allBusinesses(_, {call, put}) {
       const businesses = yield call(getAllBusinesses);
+    },
+
+    * handleStates({payload}, {put}) {
+      const states = provinces.filter(p => p.country === payload.country);
+      yield put({type: 'updateState', payload: {states}});
     },
 
     * businessAddress(_, {select, put}) {

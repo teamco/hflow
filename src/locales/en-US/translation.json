@@ -177,6 +177,7 @@
     "region": "Region",
     "territory": "Territory",
     "state": "State",
+    "stateProvince": "State / Province",
     "country": "Country",
     "city": "City",
     "code": "Code",

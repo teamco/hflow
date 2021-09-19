@@ -46,7 +46,8 @@ const businessEdit = (props) => {
         onActivateBusiness,
         onManageBusinessUsers,
         onFileRemove,
-        onFileChange
+        onFileChange,
+        onHandleStates
       } = props;
 
       /**
@@ -57,6 +58,7 @@ const businessEdit = (props) => {
       const {
         entityForm,
         countries,
+        states,
         selectedCountry,
         tags,
         fileList,
@@ -113,7 +115,9 @@ const businessEdit = (props) => {
       const addressProps = {
         t,
         formRef,
-        countries
+        countries,
+        states,
+        onHandleStates
       };
 
       const businessProps = {
@@ -315,6 +319,9 @@ export default connect(
       onEditBusiness(params) {
         dispatch({type: `userModel/validateUser`, payload: {userId: params.user}});
         dispatch({type: `businessModel/editBusiness`, payload: {params}});
+      },
+      onHandleStates(country) {
+        dispatch({type: `businessModel/handleStates`, payload: {country}});
       }
     })
 )(withTranslation()(businessEdit));
