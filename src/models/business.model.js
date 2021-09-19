@@ -34,7 +34,7 @@ import {errorSaveMsg} from 'utils/message';
 import {setAs} from 'utils/object';
 
 const DEFAULT_STATE = {
-  availableCountries: 'ALL',
+  availableCountries: 'ALL', // ['CA']
   selectedCountry: null,
   selectedBusiness: null,
   data: [],
