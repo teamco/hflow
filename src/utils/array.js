@@ -5,7 +5,7 @@
  * @return {*}
  */
 export const sortBy = (list = [], value) => {
-  return list.sort((a, b) => (a[value] > b[value]) ? 1 : (a[value] < b[value]) ? -1 : 0);
+  return [...list].sort((a, b) => (a[value] > b[value]) ? 1 : (a[value] < b[value]) ? -1 : 0);
 };
 
 /**

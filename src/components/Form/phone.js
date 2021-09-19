@@ -1,4 +1,4 @@
-import { getSuffix } from 'components/Form/index';
+import { getSuffix } from './index';
 import React, { useEffect } from 'react';
 import { Form, Input } from 'antd';
 
@@ -25,9 +25,7 @@ const phone = ({
 
   useEffect(() => {
     formRef.setFieldsValue({
-      phone: {
-        code: `+${countryData.countryCallingCode}`
-      }
+      phone: {code: `+${countryData.countryCallingCode}`}
     });
 
   }, [countryData]);

@@ -197,7 +197,7 @@
     "website": "Business Website",
     "max_entities": "Maximum {{entities}} that can be assigned",
     "delivery": "Delivery available",
-    "license": "Proof of license to operate as a food establishment",
+    "license": "Proof of license",
     "licenseExpiration": "License expiration date",
     "users": "Business users",
     "usersDetails": "Business user details",
