@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { isAdmin, isBusiness } from 'services/user.service';
 import { NavLink } from 'umi';
 import {
@@ -18,10 +18,10 @@ import {
 } from '@ant-design/icons';
 import { Modal, Popconfirm, Tooltip, Tag } from 'antd';
 import classnames from 'classnames';
+import { tsToLocaleDateTime } from 'utils/timestamp';
+
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
-import { getImageFromUrl } from 'utils/file';
-import { tsToLocaleDateTime } from 'utils/timestamp';
 
 /**
  * @export
@@ -77,6 +77,7 @@ export const metadata = ({
                 </span>
               </Tooltip>
               <img src={data.metadata.photoURL}
+                   referrerPolicy={'no-referrer'}
                    alt={name}
                    className={styles.gridImg} />
               <span className={currentUser?.uid === data.uid ? styles.currentUser : null}>
@@ -196,7 +197,9 @@ export const showProfileModal = (t, record) => {
     },
     content: (
       <div className={styles.profile}>
-        {/*<img src={metadata.photoURL} alt={record.displayName} />*/}
+        <img src={metadata.photoURL}
+             referrerPolicy={'no-referrer'}
+             alt={record.displayName} />
         <div style={{ flex: '40%' }}>
           <div><strong>{t('table:name')}</strong></div>
           <div><strong>{t('auth:email')}</strong></div>
