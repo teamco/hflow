@@ -4,6 +4,8 @@ import { withTranslation } from 'react-i18next';
 import { NavLink } from 'umi';
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc';
 
+import {routes} from '/routes';
+
 /**
  * This component is wrapped in withBreadcrumbs which automatically
  * generates breadcrumbs based on the current route.
@@ -14,11 +16,12 @@ import withBreadcrumbs from 'react-router-breadcrumbs-hoc';
  * @param breadcrumbs
  * @param meta
  * @param onUpdateDocumentMeta
- * @param rest
+ * @param props
  * @return {JSX.Element}
  * @constructor
  */
-const Breadcrumbs = ({ breadcrumbs, meta, onUpdateDocumentMeta, ...rest }) => {
+const Breadcrumbs = ({ breadcrumbs, meta, onUpdateDocumentMeta, ...props }) => {
+  const {t} = props;
   const title = breadcrumbs.map(({ breadcrumb }) => breadcrumb.props.children).join(' > ');
   useEffect(() => {
     onUpdateDocumentMeta({ title });
@@ -27,9 +30,9 @@ const Breadcrumbs = ({ breadcrumbs, meta, onUpdateDocumentMeta, ...rest }) => {
   return (
     <Breadcrumb className={'site-breadcrumbs'}>
       {breadcrumbs.map(({ match, breadcrumb }) => {
-        return (
+        return breadcrumb.props.children && (
             <Breadcrumb.Item key={match.url}>
-              <NavLink to={match.url}>{breadcrumb.props.children}</NavLink>
+              <NavLink to={match.url}>{t(breadcrumb.props.children)}</NavLink>
             </Breadcrumb.Item>
         )
       })}
@@ -37,4 +40,4 @@ const Breadcrumbs = ({ breadcrumbs, meta, onUpdateDocumentMeta, ...rest }) => {
   );
 };
 
-export default withBreadcrumbs()(withTranslation()(Breadcrumbs));
+export default withBreadcrumbs(routes)(withTranslation()(Breadcrumbs));

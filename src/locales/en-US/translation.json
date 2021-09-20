@@ -163,7 +163,15 @@
     "new": "New",
     "newTag": "New Tag"
   },
-  "route": {},
+  "route": {
+    "admin": "Admin",
+    "users": "Users",
+    "userRoles": "User Roles",
+    "userProfile": "Profile",
+    "businesses": "Businesses",
+    "business": "Business",
+    "businessUsers": "Assigned Users"
+  },
   "panel": {
     "configuration": "Configuration",
     "generalInfo": "General Information",

@@ -17,13 +17,13 @@ export const routes = [
           {
             exact: true,
             path: '/admin/finishSignUp/:user',
-            title: 'route:finishSignUp',
+            breadcrumb: 'route:finishSignUp',
             component: '@/pages/finishSignUp'
           },
           {
             exact: true,
             path: '/admin',
-            title: 'route:home',
+            breadcrumb: 'route:home',
             component: '@/pages/home',
             wrappers: [
               '@/wrappers/auth.wrapper'
@@ -33,7 +33,7 @@ export const routes = [
             exact: true,
             path: '/admin/users',
             component: '@/pages/users',
-            title: 'route:users',
+            breadcrumb: 'route:users',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]
@@ -42,7 +42,7 @@ export const routes = [
             exact: true,
             path: '/admin/users/:user',
             component: '@/pages/users/[user]/profile',
-            title: 'route:userProfile',
+            breadcrumb: 'route:userProfile',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]
@@ -51,7 +51,7 @@ export const routes = [
             exact: true,
             path: '/admin/users/:user/businesses',
             component: '@/pages/users/[user]/businesses',
-            title: 'route:businesses',
+            breadcrumb: 'route:businesses',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]
@@ -60,7 +60,7 @@ export const routes = [
             exact: true,
             path: '/admin/users/:user/businesses/:business',
             component: '@/pages/users/[user]/businesses/[business]/business.edit',
-            title: 'route:business',
+            breadcrumb: 'route:business',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]
@@ -69,7 +69,7 @@ export const routes = [
             exact: true,
             path: '/admin/users/:user/businesses/:business/users',
             component: '@/pages/users/[user]/businesses/[business]/users',
-            title: 'route:businessUsers',
+            breadcrumb: 'route:businessUsers',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]
@@ -78,7 +78,7 @@ export const routes = [
             exact: true,
             path: '/admin/userRoles',
             component: '@/pages/userRoles',
-            title: 'route:userRoles',
+            breadcrumb: 'route:userRoles',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]
@@ -87,14 +87,14 @@ export const routes = [
             exact: true,
             path: '/admin/logs',
             component: '@/pages/userLogs',
-            title: 'route:userLogs',
+            breadcrumb: 'route:userLogs',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]
           },
           {
             component: '@/pages/404',
-            title: 'route:page404'
+            breadcrumb: 'route:page404'
           }
         ]
       }
