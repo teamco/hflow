@@ -169,12 +169,12 @@ export default dvaModelExtend(commonModel, {
                 license: {
                   previewUrl: license,
                   fileList: [],
-                  fileName: `${getExtension(license)}-license`
+                  fileName: `license`
                 },
                 logo: {
                   previewUrl: logo,
                   fileList: [],
-                  fileName: `${getExtension(logo)}-logo`
+                  fileName: `logo`
                 }
               }
             }
@@ -195,6 +195,11 @@ export default dvaModelExtend(commonModel, {
           };
 
           _business.metadata = yield call(detailsInfo, {entity: _business, user});
+
+          yield put({
+            type: 'handleStates',
+            payload: {country: _business.country}
+          })
 
           yield put({
             type: 'toForm',
@@ -232,13 +237,7 @@ export default dvaModelExtend(commonModel, {
       });
 
       yield put({type: 'businessAddress'});
-
-      yield put({
-        type: 'updateState',
-        payload: {
-          isEdit: params.business !== 'new'
-        }
-      });
+      yield put({type: 'updateState', payload: {isEdit: params.business !== 'new'}});
     },
 
     * prepareToSave({payload, params}, {call, select, put}) {
@@ -296,7 +295,7 @@ export default dvaModelExtend(commonModel, {
           data = {
             ...data,
             metadata: {
-              createdAt: +(new Date),
+              createdAt: metadata.updatedAt,
               createdBy: user.uid,
               belongsToRef: getRef({collection: 'users', doc: user.id}),
               ...metadata

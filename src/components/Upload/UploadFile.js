@@ -10,7 +10,7 @@ import {Link} from 'umi';
 import ImgCrop from 'antd-img-crop';
 import classnames from 'classnames';
 
-import {download} from 'utils/file';
+import {download, getExtension} from 'utils/file';
 import {errorDownloadMsg} from 'utils/message';
 
 import './upload.less';
@@ -140,10 +140,10 @@ class UploadFile extends React.Component {
      * @return {string|*}
      */
     const getFileName = fileName => {
-      const isBase64 = fileProps?.previewUrl.match(/base64/);
+      const isBase64 = fileProps?.previewUrl?.match(/base64/);
 
       if (isBase64) {
-        const extension = fileProps?.previewUrl.split(';')[0].split('/')[1];
+        const extension = getExtension(fileProps?.previewUrl);
         return `${fileName}.${extension}`;
       }
 
@@ -190,16 +190,19 @@ class UploadFile extends React.Component {
 
     return (
         <div className={'site-upload-wrapper'}>
-          {fileProps?.previewUrl ? _isImage(fileProps?.fileList[0] || fileProps?.previewUrl) ? (
-              <div className={'site-upload-preview'}>
-                {fileInfo(<img src={fileProps?.previewUrl}
-                               alt={fileProps?.previewUrl}/>)}
-              </div>
-          ) : (
-              <div className={'site-upload-preview file-done'}>
-                {fileInfo(<FileDoneOutlined/>)}
-              </div>
-          ) : null}
+          <div>
+            {fileProps?.previewUrl ? _isImage(fileProps?.fileList[0] || fileProps?.previewUrl) ? (
+                <div className={'site-upload-preview'}>
+                  {fileInfo(<img src={fileProps?.previewUrl}
+                                 alt={fileProps?.previewUrl}/>)}
+                </div>
+            ) : (
+                <div className={'site-upload-preview file-done'}>
+                  {fileInfo(<FileDoneOutlined/>)}
+                </div>
+            ) : null}
+            {getFileName(fileProps?.fileName)}
+          </div>
           {_render}
         </div>
     );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Input, Select} from 'antd';
 
 import {sortBy} from 'utils/array';
@@ -26,6 +26,10 @@ export const BusinessAddress = props => {
     setCitiesFilter,
     onHandleStates
   } = props;
+
+  useEffect(() => {
+
+  }, []);
 
   return (
       <GenericPanel header={t('business:address')}
