@@ -1,8 +1,23 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Input, Select} from 'antd';
+import countryCodes from 'country-codes-list';
 
 import {sortBy} from 'utils/array';
+
 import FormComponents from 'components/Form';
+import Phone from 'components/Form/phone';
+
+/**
+ * @constant
+ * @param formRef
+ * @return {{currencyNameEn, flag, tinType, officialLanguageNameEn, countryNameEn,
+ *   countryCallingCode, countryCode, tinName, officialLanguageCode,
+ *   countryNameLocal, officialLanguageNameLocal, region, currencyCode}}
+ */
+const getSelectedCountry = formRef => {
+  const country = formRef.getFieldValue('country');
+  return countryCodes.findOne('countryCode', country) || {};
+};
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -27,14 +42,32 @@ export const BusinessAddress = props => {
     onHandleStates
   } = props;
 
-  useEffect(() => {
-
-  }, []);
-
   return (
       <GenericPanel header={t('business:address')}
                     name={'address'}
                     defaultActiveKey={['address']}>
+        <div>
+          <Phone t={t}
+                 label={t('business:phone')}
+                 formRef={formRef}
+                 countryData={getSelectedCountry(formRef)}
+                 required={true} />
+          <Input type={'text'}
+                 label={t('business:website')}
+                 name={'website'}
+                 form={formRef}
+                 config={{
+                   rules: [
+                     ({ getFieldValue }) => ({
+                       validator(_, value) {
+                         return !value || value.match(/^http/) ?
+                             Promise.resolve() :
+                             Promise.reject(t('business:formError', { type: t('business:website') }));
+                       }
+                     })
+                   ]
+                 }} />
+        </div>
         <div>
           <Select name={'country'}
                   form={formRef}
