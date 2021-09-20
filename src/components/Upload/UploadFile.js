@@ -1,20 +1,21 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
-import { Button, message, Tooltip, Upload } from 'antd';
+import {withTranslation} from 'react-i18next';
+import {Button, message, Tooltip, Upload} from 'antd';
 import {
   UploadOutlined,
   InboxOutlined,
   FileDoneOutlined
 } from '@ant-design/icons';
-import { Link } from 'umi';
+import {Link} from 'umi';
 import ImgCrop from 'antd-img-crop';
 import classnames from 'classnames';
-import { download } from 'utils/file';
-import { errorDownloadMsg } from 'utils/message';
+
+import {download} from 'utils/file';
+import {errorDownloadMsg} from 'utils/message';
 
 import './upload.less';
 
-const { Dragger } = Upload;
+const {Dragger} = Upload;
 
 class UploadFile extends React.Component {
   state = {
@@ -47,8 +48,8 @@ class UploadFile extends React.Component {
      */
     const _isImage = file => {
       return file.type ?
-        file.type.match(/image/) :
-        file.match(/data:image/);
+          file.type.match(/image/) :
+          file.match(/data:image/);
     };
 
     /**
@@ -77,10 +78,10 @@ class UploadFile extends React.Component {
       listType,
       beforeUpload(file) {
         if (allowed.indexOf(file.type) < 0) {
-          return message.error(t('form:uploadTypeError', { name: file.name }));
+          return message.error(t('form:uploadTypeError', {name: file.name}));
         }
         onFileRemove(file);
-        onFileChange({ file });
+        onFileChange({file});
         return false;
       },
       onRemove(file) {
@@ -96,39 +97,37 @@ class UploadFile extends React.Component {
       }
     };
 
-    type === 'image' && preview && (uploadProps = { ...uploadProps, ...{ onPreview } });
+    type === 'image' && preview && (uploadProps = {...uploadProps, ...{onPreview}});
 
-    const _card = (<div><UploadOutlined /> {t('form:selectFile')}</div>);
+    const _card = (<div><UploadOutlined/> {t('form:selectFile')}</div>);
     const _button = (
-      <Button type={'primary'}>
-        {_card}
-      </Button>
+        <Button type={'primary'}>
+          {_card}
+        </Button>
     );
 
     const _dragger = (
-      <Dragger {...uploadProps}>
-        <p className='ant-upload-drag-icon'>
-          <InboxOutlined />
-        </p>
-        <p className='ant-upload-text'>{t('form:uploadText')}</p>
-        <p className='ant-upload-hint'>{t('form:uploadHint')}</p>
-      </Dragger>
+        <Dragger {...uploadProps}>
+          <p className={'ant-upload-drag-icon'}><InboxOutlined/></p>
+          <p className={'ant-upload-text'}>{t('form:uploadText')}</p>
+          <p className={'ant-upload-hint'}>{t('form:uploadHint')}</p>
+        </Dragger>
     );
 
     const _upload = ui === 'dragger' ? _dragger : (
-      <Upload {...uploadProps}
-              className={classnames(className, 'site-upload')}>
-        {fileList.length < limit && listType === 'picture-card' ? _card : _button}
-      </Upload>
+        <Upload {...uploadProps}
+                className={classnames(className, 'site-upload')}>
+          {fileList.length < limit && listType === 'picture-card' ? _card : _button}
+        </Upload>
     );
 
     let _render = _upload;
 
     if (type === 'image') {
       _render = crop ? (
-        <ImgCrop rotate>
-          {_upload}
-        </ImgCrop>
+          <ImgCrop rotate>
+            {_upload}
+          </ImgCrop>
       ) : _upload;
     }
 
@@ -161,13 +160,13 @@ class UploadFile extends React.Component {
       // Prevent multiple clicks.
       this.state.ableToDownload &&
       download(url, _file).then(() => {
-        this.setState({ ableToDownload: true });
+        this.setState({ableToDownload: true});
       }).catch(error => {
         errorDownloadMsg(_file);
-        this.setState({ ableToDownload: true });
+        this.setState({ableToDownload: true});
       });
 
-      this.setState({ ableToDownload: false });
+      this.setState({ableToDownload: false});
     };
 
     /**
@@ -176,29 +175,30 @@ class UploadFile extends React.Component {
      * @return {JSX.Element}
      */
     const fileInfo = content => (
-      <div className={'file-info'}>
-        <Link to={'/downloadFile'}
-              onClick={onDownloadFile}>
-          <Tooltip title={t('actions:download')}>
-            {content}
-          </Tooltip>
-        </Link>
-      </div>
+        <div className={'file-info'}>
+          <Link to={'/downloadFile'}
+                onClick={onDownloadFile}>
+            <Tooltip title={t('actions:download')}>
+              {content}
+            </Tooltip>
+          </Link>
+        </div>
     );
 
     return (
-      <div className={'site-upload-wrapper'}>
-        {previewUrl ? _isImage(fileList[0] || previewUrl) ? (
-          <div className={'site-upload-preview'}>
-            {fileInfo(<img src={previewUrl} />)}
-          </div>
-        ) : (
-          <div className={'site-upload-preview file-done'}>
-            {fileInfo(<FileDoneOutlined />)}
-          </div>
-        ) : null}
-        {_render}
-      </div>
+        <div className={'site-upload-wrapper'}>
+          {previewUrl ? _isImage(fileList[0] || previewUrl) ? (
+              <div className={'site-upload-preview'}>
+                {fileInfo(<img src={previewUrl}
+                               alt={previewUrl}/>)}
+              </div>
+          ) : (
+              <div className={'site-upload-preview file-done'}>
+                {fileInfo(<FileDoneOutlined/>)}
+              </div>
+          ) : null}
+          {_render}
+        </div>
     );
   }
 }
