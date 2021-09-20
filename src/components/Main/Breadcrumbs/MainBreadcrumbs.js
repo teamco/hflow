@@ -22,14 +22,17 @@ const Breadcrumbs = ({ t, breadcrumbs, meta, onUpdateDocumentMeta }) => {
   useEffect(() => {
     onUpdateDocumentMeta({ title });
   }, [title !== meta.title]);
-
+  debugger
   return (
     <Breadcrumb className={'site-breadcrumbs'}>
-      {breadcrumbs.map(({ match, breadcrumb }) => (
-        <Breadcrumb.Item key={match.url}>
-          <NavLink to={match.url}>{breadcrumb.props.children}</NavLink>
-        </Breadcrumb.Item>
-      ))}
+      {breadcrumbs.map(({ match, breadcrumb }) => {
+        debugger
+        return (
+            <Breadcrumb.Item key={match.url}>
+              <NavLink to={match.url}>{breadcrumb.props.children}</NavLink>
+            </Breadcrumb.Item>
+        )
+      })}
     </Breadcrumb>
   );
 };
