@@ -52,6 +52,7 @@ const phone = ({
           <Input type={'text'}
                  style={{width: '19%'}}
                  readOnly={true}
+                 hidden={true}
                  onChange={updateCountryName}
                  placeholder={t('address:code')}/>
           {/*</Tooltip>*/}
@@ -91,7 +92,7 @@ const phone = ({
                      })
                    ]}>
           <Input type={'text'}
-                 style={{width: '44%'}}
+                 style={{width: '63%'}}
                  placeholder={t('address:phone')}
                  suffix={getSuffix(t, formRef, 'phone.number', t('address:phone'))}/>
         </Form.Item>

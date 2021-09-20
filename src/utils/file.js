@@ -1,4 +1,37 @@
-import { Loader } from 'resource-loader';
+import {Loader} from 'resource-loader';
+
+/**
+ * @export
+ * @param {string} base64
+ * @return {*}
+ */
+export const getExtension = base64 => {
+  const regexStr = base64.split(';')[0].match(/data:\w+\//);
+  if (regexStr) {
+    const regex = new RegExp(regexStr[0]);
+    return regexStr?.input?.replace(regex, '');
+  }
+}
+
+/**
+ * @export
+ * @param file
+ * @param entity
+ * @param {string} type
+ * @param {boolean} [isEdit]
+ * @return {*|Promise<*>}
+ */
+export const toFile = ({file, entity, type, isEdit = false}) => {
+  // File preparation before saving.
+  if (file) {
+    return toBase64({file});
+  } else if (isEdit && entity) {
+    return entity[type];
+  } else {
+    // TODO (teamco): handle file.
+    // return errorSaveMsg(isEdit, 'Business');
+  }
+};
 
 /**
  * @export
@@ -6,12 +39,12 @@ import { Loader } from 'resource-loader';
  * @param cb
  * @return {Promise<string>}
  */
-export const srcToBlob = async ({ src, cb }) => {
+export const srcToBlob = async ({src, cb}) => {
   const loader = new Loader();
   loader.add(src).use((resource, next) => {
     next();
   }).load((loader, resources) => {
-    const blob = new Blob([resources[src].data], { type: 'image/png' });
+    const blob = new Blob([resources[src].data], {type: 'image/png'});
     cb(URL.createObjectURL(blob));
   });
 };
@@ -47,13 +80,13 @@ export function getImageFromUrl(url, callback) {
 
     // Convert base64/URLEncoded data component to raw binary data held in a string.
     const byteString = dataURI.split(',')[0].indexOf('base64') >= 0 ?
-      atob(dataURI.split(',')[1]) :
-      unescape(dataURI.split(',')[1]);
+        atob(dataURI.split(',')[1]) :
+        unescape(dataURI.split(',')[1]);
 
     // separate out the mime component
     const mimeString = dataURI.split(',')[0].
-      split(':')[1].
-      split(';')[0];
+        split(':')[1].
+        split(';')[0];
 
     // write the bytes of the string to a typed array
     const ia = new Uint8Array(byteString.length);
@@ -61,7 +94,7 @@ export function getImageFromUrl(url, callback) {
       ia[i] = byteString.charCodeAt(i);
     }
 
-    return callback(new Blob([ia], { type: mimeString }));
+    return callback(new Blob([ia], {type: mimeString}));
   };
 
   img.src = url;
@@ -73,7 +106,7 @@ export function getImageFromUrl(url, callback) {
  * @param file
  * @return {Promise<unknown>}
  */
-export function toBase64({ file }) {
+export function toBase64({file}) {
   if (!file) {
     return null;
   }
@@ -108,7 +141,7 @@ export const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
     byteArrays.push(byteArray);
   }
 
-  return new Blob(byteArrays, { type: contentType });
+  return new Blob(byteArrays, {type: contentType});
 };
 
 /**

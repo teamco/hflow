@@ -28,13 +28,13 @@ import {
 
 import {detailsInfo} from 'services/cross.model.service';
 import {fbAdd, fbFindById, fbUpdate, getRef} from 'services/firebase.service';
-import {toBase64} from 'utils/file';
+import {getExtension, toBase64, toFile} from 'utils/file';
 import {monitorHistory} from 'utils/history';
 import {errorSaveMsg} from 'utils/message';
 import {setAs} from 'utils/object';
 
 const DEFAULT_STATE = {
-  availableCountries: 'ALL', // ['CA']
+  availableCountries: ['US', 'CA', 'IL'], //'ALL'
   selectedCountry: null,
   selectedBusiness: null,
   data: [],
@@ -159,14 +159,24 @@ export default dvaModelExtend(commonModel, {
 
         if (business.exists) {
           const selectedBusiness = {...business.data(), ...{id: business.id}};
-debugger
+          const {license, logo} = selectedBusiness;
+
           yield put({
             type: 'updateState',
             payload: {
               selectedBusiness,
-              fileList: [],
-              fileName: 'license',
-              previewUrl: selectedBusiness.license
+              uploadedFiles: {
+                license: {
+                  previewUrl: license,
+                  fileList: [],
+                  fileName: `${getExtension(license)}-license`
+                },
+                logo: {
+                  previewUrl: logo,
+                  fileList: [],
+                  fileName: `${getExtension(logo)}-logo`
+                }
+              }
             }
           });
 
@@ -233,8 +243,11 @@ debugger
 
     * prepareToSave({payload, params}, {call, select, put}) {
       const {user, ability} = yield select(state => state.authModel);
-      const {fileList, selectedBusiness, isEdit} = yield select(state => state.businessModel);
+      const {uploadedFiles, selectedBusiness, isEdit} = yield select(state => state.businessModel);
+
       let entity;
+      const logo = uploadedFiles.logo;
+      const license = uploadedFiles.license;
 
       if (user && ability.can('update', 'businesses')) {
         const metadata = {
@@ -248,15 +261,19 @@ debugger
         const ext = data.phone.ext ? `.${data.phone.ext}` : '';
         data.phone = `${data.phone.code}.${data.phone.area}.${data.phone.number}${ext}`;
 
-        // License preparation before saving.
-        if (fileList[0]) {
-          data.license = yield call(toBase64, {file: fileList[0]});
-        } else if (isEdit && selectedBusiness) {
-          data.license = selectedBusiness.license;
-        } else {
-          // TODO (AlexTkach): handle license file.
-          // return errorSaveMsg(isEdit, 'Business');
-        }
+        data.license = yield call(toFile, {
+          entity: selectedBusiness,
+          file: license?.fileList[0],
+          type: 'license',
+          isEdit
+        });
+
+        data.logo = yield call(toFile, {
+          entity: selectedBusiness,
+          file: logo?.fileList[0],
+          type: 'logo',
+          isEdit
+        });
 
         // Not mandatory fields preparation before saving.
         data.description = setAs(data.description);
@@ -264,7 +281,9 @@ debugger
         data.tags = setAs(data.tags, []);
         data.delivery = setAs(data.delivery, false);
 
+        data.logo = setAs(data.logo);
         data.license = setAs(data.license);
+
         data.licenseExpiration = setAs(data?.licenseExpiration?.format('YYYY-MM-DD'));
 
         if (isEdit) {
@@ -279,7 +298,7 @@ debugger
             metadata: {
               createdAt: +(new Date),
               createdBy: user.uid,
-              belongsToRef: getRef({collection: 'users', doc: params.user}),
+              belongsToRef: getRef({collection: 'users', doc: user.id}),
               ...metadata
             }
           };
@@ -287,14 +306,10 @@ debugger
           entity = yield call(fbAdd, {collection: 'businesses', data});
 
           if (entity?.docId) {
-            history.push(`/admin/users/${user.id}/businesses/${entity.docId}`);
 
-            yield put({
-              type: 'updateState',
-              payload: {
-                isEdit: true
-              }
-            });
+            history.push(`/admin/users/${user.id}/businesses/${entity.docId}`);
+            yield put({type: 'updateState', payload: {isEdit: true}});
+
           } else {
             errorSaveMsg(false, 'Business');
           }

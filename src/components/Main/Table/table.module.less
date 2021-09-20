@@ -13,6 +13,25 @@
   }
 }
 
+.tdName {
+  max-height: 20px;
+  overflow: hidden;
+  display: flex;
+
+  img {
+    width: 20px;
+    max-width: 20px;
+    margin-right: 5px;
+  }
+
+  span:last-child {
+    display: inline-block;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 :global {
   .react-json-view {
     background-color: rgba(39, 40, 34, 0.8) !important;

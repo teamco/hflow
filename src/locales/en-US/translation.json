@@ -198,8 +198,8 @@
     "email": "Business Email",
     "website": "Business Website",
     "max_entities": "Maximum {{entities}} that can be assigned",
-    "delivery": "Delivery available",
-    "license": "Proof of license",
+    "logo": "Business Logo",
+    "license": "Proof of License",
     "licenseExpiration": "License expiration date",
     "users": "Business users",
     "usersDetails": "Business user details",
@@ -210,10 +210,7 @@
     "userRoles": "Business User Roles",
     "roles": "Roles",
     "invitedByUser": "Invited by User",
-    "assignedTo": "Assigned to Business",
-    "newStyle": "Add new Style",
-    "newService": "Add new Service",
-    "newRole": "Add new Role"
+    "assignedTo": "Assigned to Business"
   },
   "landing": {
     "help": "Need Help?",

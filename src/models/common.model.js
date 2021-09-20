@@ -27,7 +27,6 @@ const commonModel = {
     isEdit: false,
     tags: [],
     uploadedFiles: {}
-
   },
   subscriptions: {},
 
