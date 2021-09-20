@@ -46,17 +46,18 @@ export default dvaModelExtend(commonModel, {
         }
       }
 
-      yield put({
-        type: 'updateState',
-        payload: { data }
-      });
+      yield put({type: 'updateState', payload: { data }});
     },
 
     * updateQuery({ payload }, { call, put, select }) {
       const { user } = yield select(state => state.authModel);
       const { _userExist } = payload;
       if (_userExist.docId) {
-        yield call(fbUpdate, { collection: 'users', docId: _userExist.docId, data: _userExist.data });
+        yield call(fbUpdate, {
+          collection: 'users',
+          docId: _userExist.docId,
+          data: _userExist.data
+        });
       }
 
       // Update current user.
@@ -75,10 +76,7 @@ export default dvaModelExtend(commonModel, {
 
       const { data } = yield call(forceSignOutUser, { uid, email });
 
-      yield put({
-        type: 'authModel/signOut',
-        payload: { user: data }
-      });
+      yield put({type: 'authModel/signOut', payload: { user: data }});
     },
 
     * delete({ payload }, { put }) {
