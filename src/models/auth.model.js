@@ -139,7 +139,7 @@ export default dvaModelExtend(commonModel, {
 
         yield call(handleUserSessionTimeout);
 
-        history.push(`/admin/users/${_userExist?.docId}`);
+        // history.push(`/admin/users/${_userExist?.docId}`);
 
       } else if (refreshSignIn) {
 

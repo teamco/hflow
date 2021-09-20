@@ -19,7 +19,7 @@ const { TextArea } = Input;
  */
 export const getSelectedCountry = formRef => {
   const country = formRef.getFieldValue('country');
-  return countryCodes.findOne('countryNameEn', country) || {};
+  return countryCodes.findOne('countryCode', country) || {};
 };
 
 /**
