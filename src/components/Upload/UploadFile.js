@@ -35,6 +35,7 @@ class UploadFile extends React.Component {
       allowed = ['image/png', 'image/jpeg'],
       onFileChange,
       onFileRemove,
+      disabled,
       className = '',
       uploadedFiles
     } = this.props;
@@ -77,6 +78,7 @@ class UploadFile extends React.Component {
 
     let uploadProps = {
       accept: allowed,
+      disabled,
       fileList: fileProps.fileList,
       listType,
       beforeUpload(file) {
@@ -161,10 +163,10 @@ class UploadFile extends React.Component {
       url = url || fileProps?.previewUrl;
 
       // Prevent multiple clicks.
-      this.state.ableToDownload &&
-      download(url, _file).then(() => {
+      this.state.ableToDownload && !disabled && download(url, _file).then(() => {
         this.setState({ableToDownload: true});
       }).catch(error => {
+        console.warn(error);
         errorDownloadMsg(_file);
         this.setState({ableToDownload: true});
       });
@@ -194,7 +196,7 @@ class UploadFile extends React.Component {
             {fileProps?.previewUrl ? _isImage(fileProps?.fileList[0] || fileProps?.previewUrl) ? (
                 <div className={'site-upload-preview'}>
                   {fileInfo(<img src={fileProps?.previewUrl}
-                                 alt={fileProps?.previewUrl}/>)}
+                                 alt={fileProps?.fileName}/>)}
                 </div>
             ) : (
                 <div className={'site-upload-preview file-done'}>
@@ -203,7 +205,7 @@ class UploadFile extends React.Component {
             ) : null}
             {getFileName(fileProps?.fileName)}
           </div>
-          {_render}
+          {!disabled && _render}
         </div>
     );
   }

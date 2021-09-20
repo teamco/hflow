@@ -20,6 +20,7 @@ import Main from 'components/Main';
 import {BusinessAddress} from 'pages/users/[user]/businesses/[business]/form/business.address';
 import {BusinessInfo} from 'pages/users/[user]/businesses/[business]/form/business.info';
 import {BusinessLicense} from 'pages/users/[user]/businesses/[business]/form/business.license';
+import {BusinessTags} from 'pages/users/[user]/businesses/[business]/form/business.tags';
 
 import SaveButton from 'components/Buttons/save.button';
 
@@ -93,6 +94,7 @@ const businessEdit = (props) => {
   const infoProps = {
     t,
     formRef,
+    disabled,
     uploadLogo: {
       field: 'logo',
       allowed: [
@@ -110,6 +112,7 @@ const businessEdit = (props) => {
   const licenseProps = {
     t,
     formRef,
+    disabled,
     uploadLicense: {
       field: 'license',
       allowed: [
@@ -129,15 +132,17 @@ const businessEdit = (props) => {
   const addressProps = {
     t,
     formRef,
+    disabled,
     countries,
     states,
     onHandleStates
   };
 
-  const businessProps = {
+  const tagsProps = {
     t,
     formRef,
     onUpdateTags,
+    disabled,
     tags
   };
 
@@ -252,6 +257,7 @@ const businessEdit = (props) => {
             <BusinessInfo {...infoProps} />
             <BusinessAddress {...addressProps} />
             <BusinessLicense {...licenseProps} />
+            <BusinessTags {...tagsProps} />
             <Info {...detailProps} />
           </Form>
         </div>

@@ -35,6 +35,7 @@ export const BusinessAddress = props => {
     formRef,
     countries = [],
     states = [],
+    disabled,
     cities,
     setCities,
     citiesFilter,
@@ -50,28 +51,31 @@ export const BusinessAddress = props => {
           <Phone t={t}
                  label={t('business:phone')}
                  formRef={formRef}
+                 disabled={disabled}
                  countryData={getSelectedCountry(formRef)}
-                 required={true} />
+                 required={true}/>
           <Input type={'text'}
                  label={t('business:website')}
                  name={'website'}
                  form={formRef}
+                 disabled={disabled}
                  config={{
                    rules: [
-                     ({ getFieldValue }) => ({
+                     ({getFieldValue}) => ({
                        validator(_, value) {
                          return !value || value.match(/^http/) ?
                              Promise.resolve() :
-                             Promise.reject(t('business:formError', { type: t('business:website') }));
+                             Promise.reject(t('business:formError', {type: t('business:website')}));
                        }
                      })
                    ]
-                 }} />
+                 }}/>
         </div>
         <div>
           <Select name={'country'}
                   form={formRef}
                   label={t('address:country')}
+                  disabled={disabled}
                   onSelect={value => {
                     onHandleStates(value);
                     formRef.setFieldsValue({state: null});
@@ -87,6 +91,7 @@ export const BusinessAddress = props => {
           {states.length ? (
               <Select name={'state'}
                       form={formRef}
+                      disabled={disabled}
                       label={t('address:stateProvince')}
                       config={{rules: [{required: true}]}}>
                 {sortBy(states, 'name').map(state => (
@@ -103,6 +108,7 @@ export const BusinessAddress = props => {
                  label={t('address:zip')}
                  name={'zip'}
                  form={formRef}
+                 disabled={disabled}
                  allowClear
                  onChange={() => {
                    formRef.setFieldsValue({
@@ -115,6 +121,7 @@ export const BusinessAddress = props => {
         <div>
           <TextArea label={t('address')}
                     name={'address'}
+                    disabled={disabled}
                     rows={4}
                     allowClear
                     form={formRef}

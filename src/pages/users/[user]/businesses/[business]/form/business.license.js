@@ -17,6 +17,7 @@ const { GenericPanel } = FormComponents;
 export const BusinessLicense = ({
   t,
   formRef,
+  disabled,
   uploadLicense
 }) => {
   return (
@@ -25,10 +26,12 @@ export const BusinessLicense = ({
       <div>
         <UploadFile label={t('business:subLicense')}
                     name={'license'}
+                    disabled={disabled}
                     {...uploadLicense}
                     form={formRef} />
         <DatePicker label={t('business:licenseExpiration')}
                     name={'licenseExpiration'}
+                    disabled={disabled}
                     form={formRef} />
       </div>
     </GenericPanel>

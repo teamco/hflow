@@ -13,6 +13,7 @@ import countryCodes from 'country-codes-list';
  * @param name
  * @param formRef
  * @param required
+ * @param {boolean} disabled
  * @param countryData
  * @return {JSX.Element}
  */
@@ -22,6 +23,7 @@ const phone = ({
   name = 'phone',
   formRef,
   required,
+  disabled,
   countryData
 }) => {
 
@@ -50,6 +52,7 @@ const phone = ({
           {/*         title={t('address:selectCountry')}*/}
           {/*         placement={'topLeft'}>*/}
           <Input type={'text'}
+                 disabled={disabled}
                  style={{width: '19%'}}
                  readOnly={true}
                  hidden={true}
@@ -73,6 +76,7 @@ const phone = ({
                      })
                    ]}>
           <Input type={'text'}
+                 disabled={disabled}
                  style={{width: '20%'}}
                  placeholder={t('address:area')}/>
         </Form.Item>
@@ -92,6 +96,7 @@ const phone = ({
                      })
                    ]}>
           <Input type={'text'}
+                 disabled={disabled}
                  style={{width: '63%'}}
                  placeholder={t('address:phone')}
                  suffix={getSuffix(t, formRef, 'phone.number', t('address:phone'))}/>
@@ -108,6 +113,7 @@ const phone = ({
                      })
                    ]}>
           <Input type={'text'}
+                 disabled={disabled}
                  style={{width: '17%'}}
                  placeholder={t('address:ext')}/>
         </Form.Item>
