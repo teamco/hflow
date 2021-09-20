@@ -110,7 +110,7 @@ export const getBusinessUsers = async ({ businessRef }) => {
  * @param {string} role
  * @return {boolean}
  */
-export const isOwner = (role) => role === 'Business owner';
+export const isOwner = (role) => role === 'Owner';
 
 /**
  * @export

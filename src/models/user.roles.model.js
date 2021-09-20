@@ -10,20 +10,22 @@ import { monitorHistory } from 'utils/history';
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'businessUserRolesModel',
+  namespace: 'userRolesModel',
   state: {},
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      monitorHistory({ history, dispatch }, 'businessUserRolesModel');
+      monitorHistory({ history, dispatch }, 'userRolesModel');
     },
     setup({ dispatch }) {
     }
   },
   effects: {
+
     * query({ payload }, { call, put, select }) {
       const { user } = yield select(state => state.authModel);
+      
       const entity = yield call(fbFindById, {
-        collection: 'mainBusiness',
+        collection: 'profileData',
         doc: 'userRoles'
       });
 
@@ -40,27 +42,24 @@ export default dvaModelExtend(commonModel, {
         yield put({
           type: 'toForm',
           payload: {
-            model: 'businessUserRolesModel',
+            model: 'userRolesModel',
             form: { ...data }
           }
         });
       }
 
-      yield put({
-        type: 'updateState',
-        payload: { isEdit: !!entity.exists }
-      });
+      yield put({type: 'updateState', payload: { isEdit: !!entity.exists }});
     },
 
     * prepareToSave({ payload }, { call, put, select }) {
       const { user, ability } = yield select(state => state.authModel);
 
       let entity = yield call(fbFindById, {
-        collection: 'mainBusiness',
+        collection: 'profileData',
         doc: 'userRoles'
       });
 
-      if (user && ability.can('update', 'businessUserRoles')) {
+      if (user && ability.can('update', 'userRoles')) {
         const metadata = {
           updatedAt: +(new Date),
           updatedBy: user.uid
@@ -68,16 +67,18 @@ export default dvaModelExtend(commonModel, {
 
         if (entity.exists) {
           yield call(fbUpdate, {
-            collection: 'mainBusiness',
+            collection: 'profileData',
             docId: 'userRoles',
             data: {
               metadata,
               ...payload
             }
           });
+
         } else {
+
           entity = yield call(fbWrite, {
-            collection: 'mainBusiness',
+            collection: 'profileData',
             doc: 'userRoles',
             data: {
               metadata: {

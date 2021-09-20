@@ -1,18 +1,13 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
   BugOutlined,
   InfoCircleOutlined,
   UserOutlined,
   TeamOutlined,
-  CoffeeOutlined,
-  PieChartOutlined,
   TrademarkOutlined,
-  SolutionOutlined,
-  BlockOutlined
+  SolutionOutlined
 } from '@ant-design/icons';
-import { faCalendarCheck } from '@fortawesome/free-regular-svg-icons';
-import { faBirthdayCake, faDiagnoses, faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * @export
@@ -20,19 +15,25 @@ import { faBirthdayCake, faDiagnoses, faSearchLocation } from '@fortawesome/free
  */
 export const menus = [
   {
-    key: 'menu:users',
-    url: '/admin/users',
-    icon: <UserOutlined />
+    key: 'menu:manageUsers',
+    icon: <UserOutlined/>,
+    items: [
+      {
+        key: 'menu:users',
+        url: '/admin/users',
+        icon: <UserOutlined/>
+      },
+      {
+        key: 'business:userRoles',
+        url: '/admin/userRoles',
+        icon: <SolutionOutlined/>
+      },
+    ]
   },
   {
     key: 'menu:business',
-    icon: <TrademarkOutlined />,
+    icon: <TrademarkOutlined/>,
     items: [
-      {
-        key: 'business:userRoles',
-        url: '/admin/business/userRoles',
-        icon: <SolutionOutlined />
-      }
     ]
   },
   {

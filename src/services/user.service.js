@@ -31,7 +31,7 @@ export const gravatarProfile = ({email, options = {}, protocol = 'http'}) => {
 /**
  * @export
  * @param user
- * @return {{docId, data}}
+ * @return {Promise<{data: *[]}|*[]>}
  */
 export const getUsers = async ({user}) => {
   let data = [];
@@ -383,6 +383,14 @@ export const sendAuthLink = async ({setting, email}) => {
  * @return {boolean}
  */
 export const isAdmin = (roles = []) => roles.indexOf('administrator') > -1;
+
+/**
+ * @export
+ * @param user
+ * @param id
+ * @return {boolean}
+ */
+export const isCurrent = (user, id) => user?.id === id;
 
 /**
  * @export

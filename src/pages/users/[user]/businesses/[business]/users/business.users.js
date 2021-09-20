@@ -39,7 +39,7 @@ const businessUsers = (props) => {
   const {
     t,
     businessModel,
-    businessUserRolesModel,
+    userRolesModel,
     loading,
     onQuery,
     onUpdateRole,
@@ -54,7 +54,7 @@ const businessUsers = (props) => {
 
   let {
     entityForm
-  } = businessUserRolesModel;
+  } = userRolesModel;
 
   /**
    * @type {{user, business}}
@@ -156,7 +156,7 @@ const businessUsers = (props) => {
           component={'businessUsers'}
           spinEffects={[
             'businessModel/usersQuery',
-            'businessUserRolesModel/query'
+            'userRolesModel/query'
           ]}>
       <PageHeader ghost={false}
                   subTitle={subTitle}
@@ -187,10 +187,10 @@ const businessUsers = (props) => {
 };
 
 export default connect(
-  ({ businessModel, businessUserRolesModel, loading }) => {
+  ({ businessModel, userRolesModel, loading }) => {
     return {
       businessModel,
-      businessUserRolesModel,
+      userRolesModel,
       loading
     };
   },
@@ -198,7 +198,7 @@ export default connect(
     dispatch,
     onQuery(params) {
       dispatch({ type: `businessModel/usersQuery`, payload: { ...params } });
-      dispatch({ type: `businessUserRolesModel/query` });
+      dispatch({ type: `userRolesModel/query` });
     },
     onUpdateRole(params, user, role) {
       dispatch({ type: `businessModel/updateUserRole`, payload: { params, user, role } });

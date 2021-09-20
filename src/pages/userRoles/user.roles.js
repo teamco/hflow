@@ -10,8 +10,10 @@ import Page from 'components/Page';
 import SaveButton from 'components/Buttons/save.button';
 import FormComponents from 'components/Form';
 import Main from 'components/Main';
-import styles from 'pages/business/userRoles/user.roles.module.less';
+
 import { fromForm } from 'utils/object';
+
+import styles from 'pages/userRoles/user.roles.module.less';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;
@@ -21,12 +23,12 @@ const { Info } = Main;
  * @param props
  * @return {JSX.Element}
  */
-const businessUserRoles = props => {
+const userRoles = props => {
   const [formRef] = Form.useForm();
 
   const {
     t,
-    businessUserRolesModel,
+    userRolesModel,
     authModel,
     loading,
     onQuery,
@@ -39,7 +41,7 @@ const businessUserRoles = props => {
     tags,
     isEdit,
     entityForm
-  } = businessUserRolesModel;
+  } = userRolesModel;
 
   useEffect(() => {
     onQuery();
@@ -79,11 +81,11 @@ const businessUserRoles = props => {
   };
 
   const { ability } = authModel;
-  const component = 'businessUserRoles';
+  const component = 'userRoles';
   const disabled = !ability.can('update', component);
 
   return (
-    <Page spinEffects={['businessUserRolesModel/query']}
+    <Page spinEffects={['userRolesModel/query']}
           component={component}>
       <div className={styles.preparationWrapper}>
         <PageHeader ghost={false}
@@ -93,7 +95,7 @@ const businessUserRoles = props => {
                                   isEdit={isEdit}
                                   disabled={disabled}
                                   formRef={formRef}
-                                  loading={loading.effects['businessUserRolesModel/prepareToSave']} />
+                                  loading={loading.effects['userRolesModel/prepareToSave']} />
                     ]}>
         </PageHeader>
         <Form layout={'vertical'}
@@ -122,39 +124,39 @@ const businessUserRoles = props => {
 };
 
 export default connect(
-  ({ authModel, businessUserRolesModel, loading }) => {
+  ({ authModel, userRolesModel, loading }) => {
     return {
       loading,
       authModel,
-      businessUserRolesModel
+      userRolesModel
     };
   },
   (dispatch) => ({
     dispatch,
     onQuery() {
-      dispatch({ type: `businessUserRolesModel/query` });
+      dispatch({ type: `userRolesModel/query` });
     },
     onFieldsChange(changedFields, allFields) {
       dispatch({
-        type: 'businessUserRolesModel/updateFields',
+        type: 'userRolesModel/updateFields',
         payload: {
           changedFields,
           allFields,
-          model: 'businessUserRolesModel'
+          model: 'userRolesModel'
         }
       });
     },
     onSave(payload) {
       dispatch({
-        type: 'businessUserRolesModel/prepareToSave',
+        type: 'userRolesModel/prepareToSave',
         payload
       });
     },
     onUpdateTags(tags) {
       dispatch({
-        type: 'businessUserRolesModel/updateTags',
+        type: 'userRolesModel/updateTags',
         payload: { tags }
       });
     }
   })
-)(withTranslation()(businessUserRoles));
+)(withTranslation()(userRoles));

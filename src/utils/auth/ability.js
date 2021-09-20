@@ -1,7 +1,7 @@
 import { AbilityBuilder, Ability } from '@casl/ability';
 import { isContributor, isModerator, isOwner, isReader } from 'services/business.service';
 import { fbFindById } from 'services/firebase.service';
-import { isAdmin } from 'services/user.service';
+import { isAdmin, isCurrent } from 'services/user.service';
 import i18n from 'utils/i18n';
 
 /**
@@ -24,9 +24,9 @@ export async function defineAbilityFor({ user, userId, business }) {
     } else {
 
       can(['read'], 'businessUsers');
-      can(['read'], 'businessUserRoles');
+      can(['read'], 'userRoles');
 
-      if (user.id === userId) {
+      if (isCurrent(user, userId)) {
 
         can(['read', 'update', 'sendVerificationEmail'], 'users');
         can(['read', 'update'], 'profile');

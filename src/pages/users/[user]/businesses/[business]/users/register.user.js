@@ -29,12 +29,12 @@ const registerUser = props => {
     setIsRegisterVisible,
     loading,
     authModel,
-    businessUserRolesModel,
+    userRolesModel,
     onRegisterBusinessUser,
     onQuery
   } = props;
 
-  const { tags = [] } = businessUserRolesModel;
+  const { tags = [] } = userRolesModel;
 
   /**
    * @type {{user, business}}
@@ -108,7 +108,7 @@ const registerUser = props => {
                         htmlType={'submit'}
                         block
                         disabled={disabled}
-                        loading={isLoading(loading.effects['businessUserRolesModel/query'])}
+                        loading={isLoading(loading.effects['userRolesModel/query'])}
                         icon={<FormOutlined />}
                         className={styles.loginBtn}>
                   {t('auth:register')}
@@ -123,17 +123,17 @@ const registerUser = props => {
 };
 
 export default connect(
-  ({ authModel, businessUserRolesModel, loading }) => {
+  ({ authModel, userRolesModel, loading }) => {
     return {
       authModel,
-      businessUserRolesModel,
+      userRolesModel,
       loading
     };
   },
   (dispatch) => ({
     dispatch,
     onQuery() {
-      dispatch({ type: `businessUserRolesModel/query` });
+      dispatch({ type: `userRolesModel/query` });
     },
     onRegisterBusinessUser(data) {
       dispatch({ type: 'businessModel/sendRegisterLinkBusinessUser', payload: { data } });

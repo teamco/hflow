@@ -107,8 +107,8 @@
   "menu": {
     "users": "Users",
     "userProfile": "User Profile",
+    "manageUsers": "Manage Users",
     "business": "Business",
-    "businessWizard": "Wizard",
     "systemLogs": "System Logs",
     "errorLogs": "Error Logs",
     "userLogs": "User Logs"
@@ -208,7 +208,7 @@
     "finishRegisterUser": "Finish your Registration",
     "assignedUsers": "Assigned users",
     "preparations": "Main Preparation Styles",
-    "userRoles": "Business User Roles",
+    "userRoles": "User Roles",
     "tags": "Business Tags",
     "roles": "Roles",
     "invitedByUser": "Invited by User",
