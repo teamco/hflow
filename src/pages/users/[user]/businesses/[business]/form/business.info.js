@@ -33,7 +33,8 @@ export const getSelectedCountry = formRef => {
 export const BusinessInfo = ({
   t,
   formRef,
-  upload
+  uploadLogo,
+  uploadLicense
 }) => {
   return (
     <GenericPanel header={t('business:info')}
@@ -57,7 +58,10 @@ export const BusinessInfo = ({
                   name={'description'}
                   rows={4}
                   form={formRef} />
-        <div />
+        <UploadFile label={t('business:logo')}
+                    name={'logo'}
+                    {...uploadLogo}
+                    form={formRef} />
       </div>
       <div>
         <Phone t={t}
@@ -84,7 +88,7 @@ export const BusinessInfo = ({
       <div>
         <UploadFile label={t('business:license')}
                     name={'license'}
-                    {...upload}
+                    {...uploadLicense}
                     form={formRef} />
         <DatePicker label={t('business:licenseExpiration')}
                     name={'licenseExpiration'}

@@ -135,10 +135,8 @@ export default dvaModelExtend(commonModel, {
           ...DEFAULT_STATE,
           ...{
             isEdit: false,
-            previewUrl: null,
             tags: [],
-            fileList: [],
-            fileName: null
+            uploadedFiles: {}
           }
         }
       });
@@ -161,7 +159,7 @@ export default dvaModelExtend(commonModel, {
 
         if (business.exists) {
           const selectedBusiness = {...business.data(), ...{id: business.id}};
-
+debugger
           yield put({
             type: 'updateState',
             payload: {

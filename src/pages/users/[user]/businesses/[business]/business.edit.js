@@ -60,11 +60,8 @@ const businessEdit = (props) => {
     countries,
     states,
     selectedCountry,
+    uploadedFiles,
     tags,
-    fileList,
-    fileName,
-    fileType,
-    previewUrl,
     isEdit
   } = businessModel;
 
@@ -94,7 +91,8 @@ const businessEdit = (props) => {
   const infoProps = {
     t,
     formRef,
-    upload: {
+    uploadLicense: {
+      field: 'license',
       allowed: [
         'application/pdf',
         'application/docx',
@@ -103,10 +101,19 @@ const businessEdit = (props) => {
       ],
       type: '*',
       ui: 'dragger',
-      fileName,
-      fileType,
-      fileList,
-      previewUrl,
+      uploadedFiles,
+      onFileRemove,
+      onFileChange
+    },
+    uploadLogo: {
+      field: 'logo',
+      allowed: [
+        'image/png',
+        'image/jpeg'
+      ],
+      type: '*',
+      ui: 'dragger',
+      uploadedFiles,
       onFileRemove,
       onFileChange
     }
@@ -288,10 +295,7 @@ export default connect(
       onFileRemove(payload) {
         dispatch({
           type: 'businessModel/handleRemoveFile',
-          payload: {
-            ...payload,
-            model: 'businessModel'
-          }
+          payload: {...payload, model: 'businessModel'}
         });
       },
       onDietaryQuery() {

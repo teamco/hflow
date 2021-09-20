@@ -25,8 +25,7 @@ class UploadFile extends React.Component {
   render() {
     const {
       t,
-      fileList = [],
-      fileName,
+      field,
       limit = 1,
       type = 'image',
       preview = true,
@@ -37,8 +36,12 @@ class UploadFile extends React.Component {
       onFileChange,
       onFileRemove,
       className = '',
-      previewUrl
+      uploadedFiles
     } = this.props;
+
+    const fileProps = uploadedFiles[field] || {
+      fileList: []
+    };
 
     /**
      * @constant
@@ -74,18 +77,18 @@ class UploadFile extends React.Component {
 
     let uploadProps = {
       accept: allowed,
-      fileList,
+      fileList: fileProps.fileList,
       listType,
       beforeUpload(file) {
         if (allowed.indexOf(file.type) < 0) {
           return message.error(t('form:uploadTypeError', {name: file.name}));
         }
-        onFileRemove(file);
-        onFileChange({file});
+        onFileRemove({file, field});
+        onFileChange({file, field});
         return false;
       },
       onRemove(file) {
-        onFileRemove(file);
+        onFileRemove({file, field});
       },
       progress: {
         strokeColor: {
@@ -117,7 +120,7 @@ class UploadFile extends React.Component {
     const _upload = ui === 'dragger' ? _dragger : (
         <Upload {...uploadProps}
                 className={classnames(className, 'site-upload')}>
-          {fileList.length < limit && listType === 'picture-card' ? _card : _button}
+          {fileProps.fileList?.length < limit && listType === 'picture-card' ? _card : _button}
         </Upload>
     );
 
@@ -137,10 +140,10 @@ class UploadFile extends React.Component {
      * @return {string|*}
      */
     const getFileName = fileName => {
-      const isBase64 = previewUrl.match(/base64/);
+      const isBase64 = fileProps?.previewUrl.match(/base64/);
 
       if (isBase64) {
-        const extension = previewUrl.split(';')[0].split('/')[1];
+        const extension = fileProps?.previewUrl.split(';')[0].split('/')[1];
         return `${fileName}.${extension}`;
       }
 
@@ -154,8 +157,8 @@ class UploadFile extends React.Component {
      */
     const onDownloadFile = (event, url) => {
       event.preventDefault();
-      const _file = getFileName(fileName);
-      url = url || previewUrl;
+      const _file = getFileName(fileProps?.fileName);
+      url = url || fileProps?.previewUrl;
 
       // Prevent multiple clicks.
       this.state.ableToDownload &&
@@ -187,10 +190,10 @@ class UploadFile extends React.Component {
 
     return (
         <div className={'site-upload-wrapper'}>
-          {previewUrl ? _isImage(fileList[0] || previewUrl) ? (
+          {fileProps?.previewUrl ? _isImage(fileProps?.fileList[0] || fileProps?.previewUrl) ? (
               <div className={'site-upload-preview'}>
-                {fileInfo(<img src={previewUrl}
-                               alt={previewUrl}/>)}
+                {fileInfo(<img src={fileProps?.previewUrl}
+                               alt={fileProps?.previewUrl}/>)}
               </div>
           ) : (
               <div className={'site-upload-preview file-done'}>
