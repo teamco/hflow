@@ -52,7 +52,7 @@ class AppLayout extends Component {
       <div className={'admin'}>
         <Helmet>
           <meta charSet={meta.charSet} />
-          <title>{`${meta.name} | ${meta.title}`}</title>
+          <title>{`${meta.name} ${meta.title}`}</title>
         </Helmet>
         <Suspense fallback={<Loader fullScreen spinning={loading.effects['appModel/query']} />}>
           {/* Have to refresh for production environment */}

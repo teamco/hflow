@@ -39,7 +39,7 @@ const LandingLayout = (props) => {
 
   let title = meta?.name;
   if (meta?.title) {
-    title = `${title} | ${meta?.title}`;
+    title = `${title} ${meta?.title}`;
   }
 
   return ability ? (
