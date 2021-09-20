@@ -76,8 +76,9 @@ export const metadata = ({
                   {signed.icon}
                 </span>
               </Tooltip>
-              {/*<img src={imageSrc[data.id] || data.metadata.photoURL}*/}
-              {/*     className={styles.gridImg} />*/}
+              <img src={data.metadata.photoURL}
+                   alt={name}
+                   className={styles.gridImg} />
               <span className={currentUser?.uid === data.uid ? styles.currentUser : null}>
                 {name}
               </span>
