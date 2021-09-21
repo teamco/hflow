@@ -147,6 +147,7 @@
     "assign": "Assign",
     "unassign": "Unassign",
     "manage": "Manage {{type}}",
+    "change": "Change",
     "ok": "Ok",
     "edit": "Edit {{type}}",
     "show": "Show {{type}}",

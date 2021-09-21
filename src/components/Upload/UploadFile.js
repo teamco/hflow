@@ -4,7 +4,8 @@ import {Button, message, Tooltip, Upload} from 'antd';
 import {
   UploadOutlined,
   InboxOutlined,
-  FileDoneOutlined
+  FileDoneOutlined,
+  FormOutlined
 } from '@ant-design/icons';
 import {Link} from 'umi';
 import ImgCrop from 'antd-img-crop';
@@ -19,7 +20,8 @@ const {Dragger} = Upload;
 
 class UploadFile extends React.Component {
   state = {
-    ableToDownload: true
+    ableToDownload: true,
+    showUpload: false
   };
 
   render() {
@@ -43,6 +45,8 @@ class UploadFile extends React.Component {
     const fileProps = uploadedFiles[field] || {
       fileList: []
     };
+
+    let hideStyle = null;
 
     /**
      * @constant
@@ -104,6 +108,14 @@ class UploadFile extends React.Component {
 
     type === 'image' && preview && (uploadProps = {...uploadProps, ...{onPreview}});
 
+    const isFileUploaded = fileProps?.fileList[0] || fileProps?.previewUrl;
+
+    if (!this.state.showUpload && isFileUploaded && !fileProps?.fileList[0]) {
+      hideStyle = {display: 'none'};
+    } else {
+      hideStyle = null;
+    }
+
     const _card = (<div><UploadOutlined/> {t('form:selectFile')}</div>);
     const _button = (
         <Button type={'primary'}>
@@ -112,7 +124,8 @@ class UploadFile extends React.Component {
     );
 
     const _dragger = (
-        <Dragger {...uploadProps}>
+        <Dragger {...uploadProps}
+                 style={hideStyle}>
           <p className={'ant-upload-drag-icon'}><InboxOutlined/></p>
           <p className={'ant-upload-text'}>{t('form:uploadText')}</p>
           <p className={'ant-upload-hint'}>{t('form:uploadHint')}</p>
@@ -121,6 +134,7 @@ class UploadFile extends React.Component {
 
     const _upload = ui === 'dragger' ? _dragger : (
         <Upload {...uploadProps}
+                style={hideStyle}
                 className={classnames(className, 'site-upload')}>
           {fileProps.fileList?.length < limit && listType === 'picture-card' ? _card : _button}
         </Upload>
@@ -183,9 +197,7 @@ class UploadFile extends React.Component {
         <div className={'file-info'}>
           <Link to={'/downloadFile'}
                 onClick={onDownloadFile}>
-            <Tooltip title={t('actions:download')}>
-              {content}
-            </Tooltip>
+            <Tooltip title={t('actions:download')}>{content}</Tooltip>
           </Link>
         </div>
     );
@@ -193,7 +205,7 @@ class UploadFile extends React.Component {
     return (
         <div className={'site-upload-wrapper'}>
           <div>
-            {fileProps?.previewUrl ? _isImage(fileProps?.fileList[0] || fileProps?.previewUrl) ? (
+            {fileProps?.previewUrl ? _isImage(isFileUploaded) ? (
                 <div className={'site-upload-preview'}>
                   {fileInfo(<img src={fileProps?.previewUrl}
                                  alt={fileProps?.fileName}/>)}
@@ -203,7 +215,18 @@ class UploadFile extends React.Component {
                   {fileInfo(<FileDoneOutlined/>)}
                 </div>
             ) : null}
-            {getFileName(fileProps?.fileName)}
+            <div className={'uploaded-file-name'}>{getFileName(fileProps?.fileName)}</div>
+            {(isFileUploaded && !fileProps?.fileList[0]) &&  (
+                <Button key={'change'}
+                        size={'small'}
+                        className={'site-upload-btn'}
+                        disabled={disabled || this.state.showUpload}
+                        icon={<FormOutlined/>}
+                        onClick={() => this.setState({showUpload: true})}
+                        type={'primary'}>
+                  {t('actions:change')}
+                </Button>
+            )}
           </div>
           {!disabled && _render}
         </div>
