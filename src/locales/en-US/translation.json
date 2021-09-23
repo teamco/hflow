@@ -108,6 +108,7 @@
     "users": "Users",
     "userProfile": "User Profile",
     "manageUsers": "Manage Users",
+    "manageRoles": "Manage Roles",
     "business": "Business",
     "systemLogs": "System Logs",
     "errorLogs": "Error Logs",
@@ -167,7 +168,7 @@
   "route": {
     "admin": "Admin",
     "users": "Users",
-    "userRoles": "User Roles",
+    "manageRoles": "Manage Roles",
     "userProfile": "Profile",
     "businesses": "Businesses",
     "business": "Business",
@@ -179,7 +180,9 @@
     "properties": "Properties",
     "address": "Address",
     "details": "Details",
-    "userRoles": "User Roles"
+    "manageRoles": "Roles",
+    "userRoles": "User Roles",
+    "businessRoles": "Business Roles"
   },
   "address": {
     "province": "Province",
@@ -217,7 +220,6 @@
     "finishRegisterUser": "Finish your Registration",
     "assignedUsers": "Assigned users",
     "preparations": "Main Preparation Styles",
-    "userRoles": "User Roles",
     "tags": "Business Tags",
     "roles": "Roles",
     "invitedByUser": "Invited by User",

@@ -1,7 +1,6 @@
 import { AbilityBuilder, Ability } from '@casl/ability';
-import { isContributor, isModerator, isOwner, isReader } from 'services/business.service';
 import { fbFindById } from 'services/firebase.service';
-import { isAdmin, isCurrent } from 'services/user.service';
+import { isAdmin, isCurrent, isContributor, isModerator, isOwner, isReader } from 'services/userRoles.service';
 import i18n from 'utils/i18n';
 
 /**
@@ -16,7 +15,7 @@ export async function defineAbilityFor({ user, userId, business }) {
   const selectedUser = userId && (await fbFindById({ collection: 'users', doc: userId })).data();
 
   if (user) {
-    if (isAdmin(user.roles)) {
+    if (!isAdmin(user.roles)) {
 
       // Read-write access to everything
       can('manage', 'all');
@@ -24,7 +23,7 @@ export async function defineAbilityFor({ user, userId, business }) {
     } else {
 
       can(['read'], 'businessUsers');
-      can(['read'], 'userRoles');
+      can(['read'], 'roles');
 
       if (isCurrent(user, userId)) {
 
@@ -35,7 +34,7 @@ export async function defineAbilityFor({ user, userId, business }) {
         can(['read', 'create', 'update'], 'businesses');
 
         // TODO (teamco): Create business user validations.
-        if (business && business.metadata.createdBy === user.uid) {
+        if (business?.metadata?.createdBy === user.uid) {
           can(['manage'], 'businessUsers');
         }
 

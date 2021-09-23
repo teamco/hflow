@@ -32,13 +32,14 @@ const userRoles = props => {
     authModel,
     loading,
     onQuery,
-    onFieldsChange,
-    onUpdateTags,
+    onUpdateUserRoles,
+    onUpdateBusinessRoles,
     onSave
   } = props;
 
   const {
-    tags,
+    userRoles,
+    businessRoles,
     isEdit,
     entityForm
   } = userRolesModel;
@@ -58,7 +59,7 @@ const userRoles = props => {
   const subTitle = (
     <>
       <PieChartOutlined style={{ marginRight: 10 }} />
-      {t('business:userRoles')}
+      {t('panel:manageRoles')}
     </>
   );
 
@@ -82,7 +83,7 @@ const userRoles = props => {
 
   const { ability } = authModel;
   const component = 'userRoles';
-  const disabled = !ability.can('update', component);
+  const disabled = ability.cannot('update', component);
 
   return (
     <Page spinEffects={['userRolesModel/query']}
@@ -102,18 +103,29 @@ const userRoles = props => {
               className={styles.form}
               form={formRef}
               fields={entityForm}
-              onFinish={onFinish}
-              onFieldsChange={onFieldsChange}>
+              onFinish={onFinish}>
           <GenericPanel header={t('panel:userRoles')}
                         name={'userRoles'}
                         defaultActiveKey={['userRoles']}>
             <div>
-              <EditableTags label={t('business:roles')}
+              <EditableTags label={false}
                             name={'tags'}
                             disabled={disabled}
-                            newTag={t('business:newRole')}
-                            onChange={onUpdateTags}
-                            tags={tags} />
+                            newTag={t('actions:new')}
+                            onChange={onUpdateUserRoles}
+                            tags={userRoles?.roles} />
+            </div>
+          </GenericPanel>
+          <GenericPanel header={t('panel:businessRoles')}
+                        name={'businessRoles'}
+                        defaultActiveKey={['businessRoles']}>
+            <div>
+              <EditableTags label={false}
+                            name={'tags'}
+                            disabled={disabled}
+                            newTag={t('actions:new')}
+                            onChange={onUpdateBusinessRoles}
+                            tags={businessRoles?.roles} />
             </div>
           </GenericPanel>
           <Info {...infoProps} />
@@ -136,26 +148,22 @@ export default connect(
     onQuery() {
       dispatch({ type: `userRolesModel/query` });
     },
-    onFieldsChange(changedFields, allFields) {
-      dispatch({
-        type: 'userRolesModel/updateFields',
-        payload: {
-          changedFields,
-          allFields,
-          model: 'userRolesModel'
-        }
-      });
-    },
     onSave(payload) {
       dispatch({
         type: 'userRolesModel/prepareToSave',
         payload
       });
     },
-    onUpdateTags(tags) {
+    onUpdateUserRoles(roles) {
       dispatch({
-        type: 'userRolesModel/updateTags',
-        payload: { tags }
+        type: 'userRolesModel/updateUserRoles',
+        payload: { roles }
+      });
+    },
+    onUpdateBusinessRoles(roles) {
+      dispatch({
+        type: 'userRolesModel/updateBusinessRoles',
+        payload: { roles }
       });
     }
   })

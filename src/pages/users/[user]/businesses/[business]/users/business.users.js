@@ -23,7 +23,7 @@ import { metadata } from 'pages/users/[user]/businesses/[business]/users/busines
 import { Can } from 'utils/auth/can';
 import { fromForm } from 'utils/object';
 import { tsToLocaleDateTime } from 'utils/timestamp';
-import { isContributor, isModerator, isOwner } from 'services/business.service';
+import { isContributor, isModerator, isOwner } from 'services/userRoles.service';
 
 import styles from 'pages/users/users.module.less';
 

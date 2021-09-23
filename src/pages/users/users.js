@@ -18,7 +18,7 @@ import Page from 'components/Page';
 import Main from 'components/Main';
 import EmailVerified from 'components/Profile/email.verified';
 
-import {isAdmin, isBusiness} from 'services/user.service';
+import {isAdmin} from 'services/userRoles.service';
 import {tsToLocaleDateTime} from 'utils/timestamp';
 import {metadata} from 'pages/users/users.metadata';
 
@@ -61,7 +61,7 @@ const users = (props) => {
     pagination: false,
     expandable: {
       expandedRowRender(record) {
-        const businessRole = isBusiness(record);
+        const businessRole = false; //isBusiness(record);
 
         return (
             <div className={styles.profileExpand}>

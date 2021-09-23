@@ -104,31 +104,3 @@ export const getBusinessUsers = async ({ businessRef }) => {
   users.forEach(doc => (data.push(doc.data())));
   return data;
 };
-
-/**
- * @export
- * @param {string} role
- * @return {boolean}
- */
-export const isOwner = (role) => role === 'Owner';
-
-/**
- * @export
- * @param {string} role
- * @return {boolean}
- */
-export const isModerator = (role) => role === 'Moderator';
-
-/**
- * @export
- * @param {string} role
- * @return {boolean}
- */
-export const isContributor = (role) => role === 'Contributor';
-
-/**
- * @export
- * @param {string} role
- * @return {boolean}
- */
-export const isReader = (role) => role === 'Reader';

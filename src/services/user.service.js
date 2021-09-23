@@ -5,6 +5,7 @@ import gravatar from 'gravatar';
 import i18n from 'utils/i18n';
 import {fbReadBy, fbReadAll, firebaseAppAuth, fbUpdate, getRef} from 'services/firebase.service';
 import {errorSaveMsg} from 'utils/message';
+import {isAdmin} from 'services/userRoles.service';
 
 /**
  * @export
@@ -376,25 +377,3 @@ export const sendAuthLink = async ({setting, email}) => {
   });
 
 };
-
-/**
- * @export
- * @param roles
- * @return {boolean}
- */
-export const isAdmin = (roles = []) => roles.indexOf('administrator') > -1;
-
-/**
- * @export
- * @param user
- * @param id
- * @return {boolean}
- */
-export const isCurrent = (user, id) => user?.id === id;
-
-/**
- * @export
- * @param {{business: {userRoles}}} record
- * @return {boolean}
- */
-export const isBusiness = (record) => record?.business?.userRoles;

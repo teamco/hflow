@@ -14,7 +14,6 @@ import ct from 'countries-and-timezones';
 import provinces from 'provinces';
 
 import {
-  isBusiness,
   sendAuthLink,
   sendVerificationEmail
 } from 'services/user.service';
@@ -76,7 +75,7 @@ export default dvaModelExtend(commonModel, {
 
       if (user.exists) {
         const _user = user.data();
-        const businessUser = isBusiness(_user);
+        const businessUser = false;//isBusiness(_user);
         let businesses = {data: []};
 
         if (businessUser) {

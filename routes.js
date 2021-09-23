@@ -76,9 +76,9 @@ export const routes = [
           },
           {
             exact: true,
-            path: '/admin/userRoles',
+            path: '/admin/manageRoles',
             component: '@/pages/userRoles',
-            breadcrumb: 'route:userRoles',
+            breadcrumb: 'route:manageRoles',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]

@@ -1,65 +1,105 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 
-import { commonModel } from 'models/common.model';
-import { detailsInfo } from 'services/cross.model.service';
-import { fbFindById, fbUpdate, fbWrite } from 'services/firebase.service';
-import { monitorHistory } from 'utils/history';
+import {commonModel} from 'models/common.model';
+import {detailsInfo} from 'services/cross.model.service';
+import {fbFindById, fbUpdate, fbWrite} from 'services/firebase.service';
+import {monitorHistory} from 'utils/history';
 
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
   namespace: 'userRolesModel',
-  state: {},
+  state: {
+    userRoles: {},
+    businessRoles: {}
+  },
   subscriptions: {
-    setupHistory({ history, dispatch }) {
-      monitorHistory({ history, dispatch }, 'userRolesModel');
+    setupHistory({history, dispatch}) {
+      monitorHistory({history, dispatch}, 'userRolesModel');
     },
-    setup({ dispatch }) {
+    setup({dispatch}) {
     }
   },
   effects: {
 
-    * query({ payload }, { call, put, select }) {
-      const { user } = yield select(state => state.authModel);
-      
-      const entity = yield call(fbFindById, {
-        collection: 'profileData',
-        doc: 'userRoles'
-      });
+    * query({payload}, {call, put, select}) {
+      const {user, ability} = yield select(state => state.authModel);
+      let userRoles = {};
+      let businessRoles = {};
 
-      if (user && entity.exists) {
-        const data = entity.data();
-
-        yield put({
-          type: 'updateTags',
-          payload: { tags: data.tags }
+      if (user && ability.can('read', 'roles')) {
+        const fbUserRoles = yield call(fbFindById, {
+          collection: 'roles',
+          doc: 'userRoles'
         });
 
-        data.metadata = yield call(detailsInfo, { entity: data, user });
+        const fbBusinessRoles = yield call(fbFindById, {
+          collection: 'roles',
+          doc: 'businessRoles'
+        });
+
+        let data = {};
+
+        if (fbUserRoles.exists) {
+          userRoles = fbUserRoles.data();
+          data = userRoles?.metadata ? userRoles : {};
+        }
+
+        if (fbBusinessRoles.exists) {
+          businessRoles = fbBusinessRoles.data();
+          data = businessRoles?.metadata ? businessRoles : {};
+        }
+
+        data.metadata = yield call(detailsInfo, {entity: data, user});
 
         yield put({
           type: 'toForm',
           payload: {
             model: 'userRolesModel',
-            form: { ...data }
+            form: {...data}
           }
+        });
+
+        yield put({
+          type: 'updateState',
+          payload: {isEdit: !!(fbUserRoles.exists || fbBusinessRoles.exist)}
         });
       }
 
-      yield put({type: 'updateState', payload: { isEdit: !!entity.exists }});
+      yield put({
+        type: 'updateState',
+        payload: {
+          userRoles,
+          businessRoles
+        }
+      });
     },
 
-    * prepareToSave({ payload }, { call, put, select }) {
-      const { user, ability } = yield select(state => state.authModel);
-
-      let entity = yield call(fbFindById, {
-        collection: 'profileData',
-        doc: 'userRoles'
+    * updateUserRoles({payload}, {put}) {
+      yield put({
+        type: 'updateState',
+        payload: {userRoles: payload.roles}
       });
+    },
 
-      if (user && ability.can('update', 'userRoles')) {
+    * updateBusinessRoles({payload}, {put}) {
+      yield put({
+        type: 'updateState',
+        payload: {businessRoles: payload.roles}
+      });
+    },
+
+    * save({payload}, {call, select}) {
+      const {user, ability} = yield select(state => state.authModel);
+      const state = yield select(state => state.userRolesModel);
+
+      const {doc} = payload;
+
+      if (user && ability.can('update', 'roles')) {
+        let entity = yield call(fbFindById, {collection: 'roles', doc});
+
         const metadata = {
           updatedAt: +(new Date),
           updatedBy: user.uid
@@ -67,32 +107,40 @@ export default dvaModelExtend(commonModel, {
 
         if (entity.exists) {
           yield call(fbUpdate, {
-            collection: 'profileData',
-            docId: 'userRoles',
+            collection: 'roles',
+            docId: doc,
             data: {
-              metadata,
-              ...payload
+              metadata: {
+                ...entity.data().metadata,
+                ...metadata
+              },
+              roles: [...state[doc]]
             }
           });
 
         } else {
 
           entity = yield call(fbWrite, {
-            collection: 'profileData',
-            doc: 'userRoles',
+            collection: 'roles',
+            doc,
             data: {
               metadata: {
-                createdAt: +(new Date),
+                createdAt: metadata.updatedAt,
                 createdBy: user.uid,
                 ...metadata
               },
-              ...payload
+              roles: [...state[doc]]
             }
           });
         }
       }
+    },
 
-      yield put({ type: 'query' });
+    * prepareToSave({payload}, {put}) {
+      yield put({type: 'save', payload: {doc: 'userRoles'}});
+      yield put({type: 'save', payload: {doc: 'businessRoles'}});
+
+      yield put({type: 'query'});
     }
   },
   reducers: {}

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {isAdmin, isBusiness} from 'services/user.service';
+import {isAdmin} from 'services/userRoles.service';
 import {NavLink} from 'umi';
 import {
   ApiTwoTone,
@@ -189,7 +189,7 @@ export const metadata = ({
  */
 export const showProfileModal = (t, record) => {
   const {metadata} = record;
-  const businessRole = isBusiness(record);
+  const businessRole = false; //isBusiness(record);
 
   Modal.info({
     title: false,

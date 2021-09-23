@@ -29,7 +29,8 @@ class EditableTags extends React.Component {
    * @function
    */
   showInput = () => {
-    this.setState({ inputVisible: true }, () => this.input.focus());
+    const isEnabled = !this.props.disabled;
+    this.setState({ inputVisible: isEnabled && true }, () => isEnabled && this.input.focus());
   };
 
   /**
@@ -163,8 +164,8 @@ class EditableTags extends React.Component {
                  onBlur={this.handleInputConfirm}
                  onPressEnter={this.handleInputConfirm} />
         )}
-        {!inputVisible && !disabled && (
-          <Tag className={styles.siteTagPlus}
+        {!inputVisible && (
+          <Tag className={disabled ? styles.siteTagDisabled : styles.siteTagPlus}
                onClick={this.showInput}>
             <PlusOutlined /> {newTag}
           </Tag>

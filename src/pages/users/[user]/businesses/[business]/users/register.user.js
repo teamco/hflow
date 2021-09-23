@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 
 import { emailPartial } from 'components/partials/email.partial';
-import { isOwner } from 'services/business.service';
+import { isOwner } from 'services/userRoles.service';
 
 import styles from 'components/Authentication/authentication.module.less';
 import { useFocus } from 'utils/dom';
