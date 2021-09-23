@@ -162,6 +162,7 @@
     "addNew": "Add new {{type}}",
     "back": "Back",
     "cancel": "Cancel",
+    "select": "Select",
     "new": "New",
     "newTag": "New Tag"
   },

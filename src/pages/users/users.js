@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'dva';
-import {Row, Col, PageHeader, Tag, message} from 'antd';
+import {Row, Col, PageHeader, Tag, message, Select} from 'antd';
 import {
   BoldOutlined,
   TeamOutlined,
@@ -24,6 +24,7 @@ import {metadata} from 'pages/users/users.metadata';
 
 import styles from 'pages/users/users.module.less';
 
+const {Option, OptGroup} = Select;
 const {Table} = Main;
 
 /**
@@ -36,8 +37,10 @@ const users = (props) => {
     t,
     authModel,
     userModel,
+    userRolesModel,
     loading,
     selectedUser,
+    onRolesQuery,
     onQuery,
     onSendVerification,
     onDeleteUser,
@@ -51,40 +54,97 @@ const users = (props) => {
     verificationSent
   } = userModel;
 
+  const {userRoles, businessRoles} = userRolesModel;
+
+  const [currentRules, setCurrentRules] = useState(selectedUser?.roles || []);
+
   data = selectedUser ? [selectedUser] : data;
 
   useEffect(() => {
     onQuery();
+    onRolesQuery();
   }, [authModel.user]);
+
+  useEffect(() => {
+    // onRolesQuery();
+  }, [userRoles, businessRoles]);
+
+  const handleRoleTags = (value) => {
+    setCurrentRules([...currentRules, value]);
+  };
+
+  /**
+   * @constant
+   * @param {array} current
+   * @param {array} [roles]
+   * @return {*[]}
+   */
+  const filterRoles = (current, roles = []) => {
+    return [...roles].sort().filter(role => !current.includes(role));
+  };
+
+  /**
+   * @constant
+   * @param record
+   * @return {*}
+   */
+  const handleRoles = (record) => {
+    if (isAdmin(authModel?.user?.roles)) {
+      return (
+          <>
+            <div>
+              <ControlTwoTone/>
+              <strong>{`${t('actions:assign')} ${t('auth:roles')}`}</strong>
+            </div>
+            <Select value={t('actions:select')}
+                    onSelect={handleRoleTags}
+                    size={'small'}
+                    style={{width: 200}}>
+              <OptGroup label={t('panel:userRoles')}>
+                {filterRoles(currentRules, userRoles?.roles).map((role, idx) => (
+                    <Option key={`ur.${idx}`} value={role}>{role}</Option>
+                ))}
+              </OptGroup>
+              <OptGroup label={t('panel:businessRoles')}>
+                {filterRoles(currentRules, businessRoles?.roles).map((role, idx) => (
+                    <Option key={`br.${idx}`} value={role}>{role}</Option>
+                ))}
+              </OptGroup>
+            </Select>
+          </>
+      );
+    }
+    return null;
+  };
 
   const tableProps = selectedUser ? {
     pagination: false,
     expandable: {
       expandedRowRender(record) {
         const businessRole = false; //isBusiness(record);
+        const rowProps = {gutter: {xs: 8, sm: 16, md: 24, lg: 32}};
+        const colProps = {sm: 12, md: 8, style: {marginTop: 10}};
 
         return (
             <div className={styles.profileExpand}>
-              <Row gutter={[16, 16]}>
-                <Col span={8}>
+              <Row {...rowProps}>
+                <Col {...colProps}>
                   <div>
                     <MailTwoTone/>
                     <strong>{t('auth:email')}</strong>
                   </div>
                   <div>{record.email || t('error:na')}</div>
                 </Col>
-                <Col span={8}>
+                <Col {...colProps}>
                   <div>
                     <CalendarTwoTone/>
                     <strong>{t('form:createdAt')}</strong>
                   </div>
                   <div>{tsToLocaleDateTime(+(new Date(record.metadata.creationTime)))}</div>
                 </Col>
-                <Col span={8}/>
               </Row>
-              <Row gutter={[16, 16]}
-                   style={{marginTop: 10}}>
-                <Col span={8}>
+              <Row {...rowProps}>
+                <Col {...colProps}>
                   <EmailVerified data={record}
                                  verification={{
                                    component,
@@ -92,22 +152,27 @@ const users = (props) => {
                                    onSendVerification
                                  }}/>
                 </Col>
-                <Col span={8}>
+                <Col {...colProps}>
                   <div>
                     <ControlTwoTone/>
                     <strong>{t('auth:roles')}</strong>
                   </div>
                   <div>
-                    <Tag className={styles.rules}
-                         icon={
-                           isAdmin(record.roles) ? (<TeamOutlined/>) :
-                               businessRole ? (<BoldOutlined/>) :
-                                   (<UserOutlined/>)}>
-                      {businessRole || (record.roles || [])[0] || 'consumer'}
-                    </Tag>
+                    {currentRules.map((role, idx) => (
+                        <Tag className={styles.rules}
+                             style={{marginBottom: 3}}
+                             key={`cr.${idx}`}
+                             icon={isAdmin([role]) ? (<TeamOutlined/>) :
+                                 businessRole ? (<BoldOutlined/>) :
+                                     (<UserOutlined/>)}>
+                          {role || 'consumer'}
+                        </Tag>
+                    ))}
                   </div>
                 </Col>
-                <Col span={8}/>
+                <Col {...colProps}>
+                  {handleRoles(record)}
+                </Col>
               </Row>
             </div>
         );
@@ -151,13 +216,17 @@ const users = (props) => {
 };
 
 export default connect(
-    ({authModel, userModel, loading}) => ({
+    ({authModel, userModel, userRolesModel, loading}) => ({
       authModel,
       userModel,
+      userRolesModel,
       loading
     }),
     (dispatch) => ({
       dispatch,
+      onRolesQuery() {
+        dispatch({type: `userRolesModel/query`});
+      },
       onQuery() {
         dispatch({type: `userModel/query`});
       },

@@ -83,7 +83,7 @@ export const metadata = ({
                          referrerPolicy={'no-referrer'}
                          alt={name}
                          className={styles.gridImg}/>
-                ) : (<MehTwoTone style={{marginRight: 5}} />)}
+                ) : (<MehTwoTone style={{marginRight: 10, width: 20}} />)}
                 <span className={currentUser?.uid === data.uid ? styles.currentUser : null}>
                   {name}
                 </span>
@@ -230,9 +230,10 @@ export const showProfileModal = (t, record) => {
               )}
             </div>
             <div style={{marginTop: '18px'}}>
-              <Tag color={metadata.signedIn ? 'green' : 'volcano'}
+              <Tag className={styles.rules}
+                    color={metadata.signedIn ? 'green' : 'volcano'}
                    icon={metadata.isLocked ? (<LockTwoTone/>) : (<UnlockTwoTone/>)}>
-                {metadata.providerId.toUpperCase()}
+                {metadata.providerId}
               </Tag>
             </div>
             <div style={{marginTop: '16px'}}>

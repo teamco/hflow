@@ -9,6 +9,7 @@ import Businesses from 'pages/users/[user]/businesses';
 
 import styles from 'pages/users/[user]/profile/profile.module.less';
 import userStyles from 'pages/users/users.module.less';
+import classnames from 'classnames';
 
 const profile = (props) => {
   const {
@@ -31,13 +32,14 @@ const profile = (props) => {
 
   const {ability} = authModel;
   const component = 'profile';
-  const disabled = !ability.can('update', component);
+  const disabled = ability.cannot('update', component);
 
   return (
-      <Page className={userStyles.users}
+      <Page className={classnames(userStyles.users, styles.profile)}
             component={component}
             spinEffects={[
               'userModel/getUser',
+              'userRolesModel/query',
               'businessModel/query'
             ]}>
         <Users selectedUser={selectedUser}/>

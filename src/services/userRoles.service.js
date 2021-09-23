@@ -7,6 +7,13 @@ export const isAdmin = (roles = []) => roles.indexOf('Administrator') > -1;
 
 /**
  * @export
+ * @param roles
+ * @return {boolean}
+ */
+export const isDeveloper = (roles = []) => roles.indexOf('Developer') > -1;
+
+/**
+ * @export
  * @param user
  * @param id
  * @return {boolean}
