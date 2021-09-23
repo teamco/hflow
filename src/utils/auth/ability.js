@@ -15,7 +15,7 @@ export async function defineAbilityFor({ user, userId, business }) {
   const selectedUser = userId && (await fbFindById({ collection: 'users', doc: userId })).data();
 
   if (user) {
-    if (!isAdmin(user.roles)) {
+    if (isAdmin(user.roles)) {
 
       // Read-write access to everything
       can('manage', 'all');

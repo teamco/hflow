@@ -30,6 +30,7 @@ export default dvaModelExtend(commonModel, {
       let businessRoles = {};
 
       if (user && ability.can('read', 'roles')) {
+
         const fbUserRoles = yield call(fbFindById, {
           collection: 'roles',
           doc: 'userRoles'

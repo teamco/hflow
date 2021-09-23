@@ -82,7 +82,7 @@ const userRoles = props => {
   };
 
   const { ability } = authModel;
-  const component = 'userRoles';
+  const component = 'roles';
   const disabled = ability.cannot('update', component);
 
   return (
