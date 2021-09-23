@@ -78,17 +78,19 @@ export default dvaModelExtend(commonModel, {
       });
     },
 
-    * updateUserRoles({payload}, {put}) {
+    * updateUserRoles({payload}, {put, select}) {
+      const {userRoles} = yield select(state => state.userRolesModel);
       yield put({
         type: 'updateState',
-        payload: {userRoles: payload.roles}
+        payload: {userRoles: {...userRoles, roles: payload.roles}}
       });
     },
 
-    * updateBusinessRoles({payload}, {put}) {
+    * updateBusinessRoles({payload}, {put, select}) {
+      const {businessRoles} = yield select(state => state.userRolesModel);
       yield put({
         type: 'updateState',
-        payload: {businessRoles: payload.roles}
+        payload: {businessRoles: {...businessRoles, roles: payload.roles}}
       });
     },
 
