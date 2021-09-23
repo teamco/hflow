@@ -58,11 +58,6 @@ export const getUsers = async ({user}) => {
     data.push(_.merge(_data, {id: doc.id}));
   });
 
-  for (const _user of data) {
-    const _data = {id: _user.id};
-    _user.roles = await getUserRoles({user: {data: _data}});
-  }
-
   return {data};
 };
 
@@ -92,12 +87,7 @@ export const findUser = async ({uid, email, emailVerified, metadata}) => {
     }
   });
 
-  data.roles = users && await getUserRoles({user: {data}});
-
-  return {
-    docId,
-    data
-  };
+  return {docId, data};
 };
 
 /**
@@ -154,44 +144,6 @@ export const forceSignOutUser = async ({uid, email}) => {
   await fbUpdate({collection: 'users', docId: user.docId, data: {metadata}});
 
   return user;
-};
-
-/**
- * @export
- * @async
- * @param user
- * @return {Promise<[]>}
- */
-export const getUserRoles = async ({user = {data: {}}}) => {
-  const data = [];
-  const userRef = getRef({collection: 'users', doc: user.data?.id});
-
-  /** @type {{forEach}} */
-  const userRoles = await fbReadBy({
-    collection: 'userRoles',
-    field: 'userRef',
-    value: userRef
-  });
-
-  userRoles?.forEach(doc => {
-
-    /**
-     * @type {{roleTypeRef}}
-     * @private
-     */
-    const _data = doc.data();
-    data.push(_data.roleTypeRef.get());
-  });
-
-  for (const role of data) {
-    let idx = data.indexOf(role);
-
-    /** @type {{data}} */
-    const roleType = await role;
-    data[idx] = roleType.data().type;
-  }
-
-  return data;
 };
 
 /**

@@ -117,7 +117,7 @@ export default dvaModelExtend(commonModel, {
                 ...entity.data().metadata,
                 ...metadata
               },
-              roles: [...state[doc]]
+              roles: [...state[doc].roles]
             }
           });
 
@@ -132,7 +132,7 @@ export default dvaModelExtend(commonModel, {
                 createdBy: user.uid,
                 ...metadata
               },
-              roles: [...state[doc]]
+              roles: [...state[doc].roles]
             }
           });
         }
@@ -142,8 +142,6 @@ export default dvaModelExtend(commonModel, {
     * prepareToSave({payload}, {put}) {
       yield put({type: 'save', payload: {doc: 'userRoles'}});
       yield put({type: 'save', payload: {doc: 'businessRoles'}});
-
-      yield put({type: 'query'});
     }
   },
   reducers: {}

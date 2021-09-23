@@ -1,12 +1,10 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
-import {history} from 'umi';
 
 import {commonModel} from 'models/common.model';
 import {fbAdd, fbSignOut, fbUpdate} from 'services/firebase.service';
 import {
   findUser,
-  getUserRoles,
   gravatarUrl,
   handleUserSessionTimeout,
   updateFbUserEmail
@@ -116,9 +114,6 @@ export default dvaModelExtend(commonModel, {
             payload: {user: _userExist}
           });
         }
-
-        // Set user roles
-        _userExist.data.roles = yield call(getUserRoles, {user: _userExist});
 
         // Define user abilities
         const ability = yield call(defineAbilityFor, {
