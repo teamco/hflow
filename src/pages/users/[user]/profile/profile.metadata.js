@@ -74,8 +74,10 @@ export const expendableProfile = (
     e.preventDefault();
     const _role = e.currentTarget.parentNode.innerText;
     const _currentRoles = [...currentRoles].filter(role => role.toLowerCase() !== _role.toLowerCase());
-    setCurrentRoles(_currentRoles);
-    setTouched(true);
+    if (_currentRoles.length) {
+      setCurrentRoles(_currentRoles);
+      setTouched(true);
+    }
   };
 
   /**
@@ -167,7 +169,7 @@ export const expendableProfile = (
                       <Tag className={styles.rules}
                            style={{marginBottom: 3}}
                            key={`cr.${idx}`}
-                           closable
+                           closable={currentRoles.length > 1}
                            onClose={onRemoveRule}
                            icon={getRoleIcon(role)}>
                         {role}
