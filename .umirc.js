@@ -8,6 +8,7 @@ export default defineConfig({
   alias,
   routes,
   proxy,
+  favicon: '/assets/favicon.png',
   dynamicImport: {
     loading: '@/components/Loader'
   },
