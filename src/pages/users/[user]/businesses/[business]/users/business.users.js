@@ -151,9 +151,11 @@ const businessUsers = (props) => {
       </>
   );
 
+  const component = 'businessUsers';
+
   return (
       <Page className={styles.users}
-            component={'businessUsers'}
+            component={component}
             spinEffects={[
               'businessModel/usersQuery',
               'userRolesModel/query'
@@ -161,15 +163,16 @@ const businessUsers = (props) => {
         <PageHeader ghost={false}
                     subTitle={subTitle}
                     extra={[
-                      <Button key={'add'}
-                              size={'small'}
-                              icon={<UserAddOutlined/>}
-                              onClick={() => {
-                                setIsRegisterVisible(true);
-                              }}
-                              type={'primary'}>
-                        {t('actions:addNew', {type: t('auth:user')})}
-                      </Button>
+                      <Can I={'assign'} a={component} key={'add'}>
+                        <Button size={'small'}
+                                icon={<UserAddOutlined />}
+                                onClick={() => {
+                                  setIsRegisterVisible(true);
+                                }}
+                                type={'primary'}>
+                          {t('actions:addNew', {type: t('auth:user')})}
+                        </Button>
+                      </Can>
                     ]}/>
         <Table data={assignedUsers}
                {...tableProps}

@@ -6,7 +6,7 @@ import {
   SaveOutlined
 } from '@ant-design/icons';
 import {withTranslation} from 'react-i18next';
-
+import {Can} from 'utils/auth/can';
 import i18n from 'utils/i18n';
 
 import Page from 'components/Page';
@@ -81,7 +81,7 @@ const users = (props) => {
 
   const {ability} = authModel;
   const component = 'users';
-  const disabled = !ability.can('update', component);
+  const disabled = ability.cannot('update', component);
 
   const tableProps = selectedUser ? {
     pagination: false,
@@ -129,15 +129,16 @@ const users = (props) => {
                     subTitle={subTitle}
                     extra={[
                       selectedUser && (
-                          <Button key={'save'}
-                                  size={'small'}
-                                  disabled={isDisabled()}
-                                  loading={isLoading(loading.effects['userModel/updateRoles'])}
-                                  icon={<SaveOutlined/>}
-                                  onClick={updateProfile}
-                                  type={'primary'}>
-                            {t('actions:update')}
-                          </Button>
+                          <Can I={'update'} a={component} key={'save'}>
+                            <Button size={'small'}
+                                    disabled={isDisabled()}
+                                    loading={isLoading(loading.effects['userModel/updateRoles'])}
+                                    icon={<SaveOutlined/>}
+                                    onClick={updateProfile}
+                                    type={'primary'}>
+                              {t('actions:update')}
+                            </Button>
+                          </Can>
                       )
                     ]}/>
         <Table data={data}
