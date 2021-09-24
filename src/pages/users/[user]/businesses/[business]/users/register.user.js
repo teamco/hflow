@@ -100,7 +100,7 @@ const registerUser = props => {
                          rules={[
                            {
                              required: true,
-                             message: t('form:required', {field: t('business:userRoles')})
+                             message: t('form:required', {field: t('panel:businessRoles')})
                            }
                          ]}>
                 <Select size={'large'}
