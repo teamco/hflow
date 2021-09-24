@@ -41,6 +41,7 @@ const registerUser = props => {
    */
   const params = useParams();
 
+  const [formRef] = Form.useForm();
   const [emailRef, setEmailFocus] = useFocus();
 
   useEffect(() => {
@@ -48,8 +49,18 @@ const registerUser = props => {
     isRegisterVisible && setEmailFocus();
   }, [isRegisterVisible]);
 
-  const handleCancel = () => {
+  /**
+   * @constant
+   * @param {boolean} [clean]
+   */
+  const handleCancel = (clean = false) => {
     setIsRegisterVisible(false);
+
+    // Clean form fields
+    clean && formRef.setFieldsValue({
+      email: null,
+      userRoles: []
+    });
   };
 
   /**
@@ -63,25 +74,26 @@ const registerUser = props => {
       ...params
     });
 
-    handleCancel();
+    handleCancel(true);
   };
 
   const {ability} = authModel;
   const disabled = ability.cannot('create', 'businessUsers');
 
-  const roles = [...businessRoles?.roles]?.sort().filter(role => !isOwner(role));
+  const roles = [...businessRoles?.roles || []]?.sort().filter(role => !isOwner(role));
 
   return businessRoles?.roles ? (
       <div className={styles.authWrapper}>
         <>
           <Modal title={t('business:registerUser')}
                  visible={isRegisterVisible}
-                 forceRender={true}
+                 maskClosable={false}
                  onCancel={handleCancel}
                  footer={null}>
             <Form name={'business_user'}
                   className={styles.loginForm}
                   size={'large'}
+                  form={formRef}
                   onFinish={onFinish}>
               {emailPartial({t, emailRef, name: 'email'})}
               <Form.Item name={'userRoles'}
@@ -92,6 +104,7 @@ const registerUser = props => {
                            }
                          ]}>
                 <Select size={'large'}
+                        mode={'multiple'}
                         placeholder={t('panel:businessRoles')}
                         style={{width: '100%'}}>
                   {roles.map((role, idx) => (
@@ -110,7 +123,7 @@ const registerUser = props => {
                           block
                           disabled={disabled}
                           loading={isLoading(loading.effects['userRolesModel/query'])}
-                          icon={<FormOutlined />}
+                          icon={<FormOutlined/>}
                           className={styles.loginBtns}>
                     {t('auth:register')}
                   </Button>
