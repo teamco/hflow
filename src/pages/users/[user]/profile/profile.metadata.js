@@ -19,6 +19,19 @@ import styles from 'pages/users/users.module.less';
 const {Option, OptGroup} = Select;
 
 /**
+ * @constant
+ * @param role
+ * @return {JSX.Element}
+ */
+export const getRoleIcon = role => {
+  return isAdmin([role]) ? (<TeamOutlined/>) :
+      isBusiness(role) ? (<BoldOutlined/>) :
+          isTest(role) ? (<ToolOutlined/>) :
+              isDeveloper(role) ? (<AndroidOutlined/>) :
+                  (<UserOutlined/>);
+};
+
+/**
  * @export
  * @param t
  * @param currentUserRoles
@@ -78,19 +91,6 @@ export const expendableProfile = (
       setCurrentRoles(_currentRoles);
       setTouched(true);
     }
-  };
-
-  /**
-   * @constant
-   * @param role
-   * @return {JSX.Element}
-   */
-  const getRoleIcon = role => {
-    return isAdmin([role]) ? (<TeamOutlined/>) :
-        isBusiness(role) ? (<BoldOutlined/>) :
-            isTest(role) ? (<ToolOutlined/>) :
-                isDeveloper(role) ? (<AndroidOutlined/>) :
-                    (<UserOutlined/>);
   };
 
   /**

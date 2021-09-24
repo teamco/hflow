@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import {isAdmin} from 'services/userRoles.service';
 import {NavLink} from 'umi';
 import {
   ApiTwoTone,
@@ -12,15 +11,14 @@ import {
   CheckCircleTwoTone,
   WarningTwoTone,
   ProfileTwoTone,
-  TeamOutlined,
-  BoldOutlined,
-  UserOutlined,
   MehTwoTone
 } from '@ant-design/icons';
 
 import {Modal, Popconfirm, Tooltip, Tag} from 'antd';
 import classnames from 'classnames';
 import {tsToLocaleDateTime} from 'utils/timestamp';
+
+import {getRoleIcon} from 'pages/users/[user]/profile/profile.metadata';
 
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
@@ -189,7 +187,6 @@ export const metadata = ({
  */
 export const showProfileModal = (t, record) => {
   const {metadata} = record;
-  const businessRole = false; //isBusiness(record);
 
   Modal.info({
     title: false,
@@ -237,13 +234,14 @@ export const showProfileModal = (t, record) => {
               </Tag>
             </div>
             <div style={{marginTop: '16px'}}>
-              <Tag className={styles.rules}
-                   icon={
-                     isAdmin(record.roles) ? (<TeamOutlined/>) :
-                         businessRole ? (<BoldOutlined/>) :
-                             (<UserOutlined/>)}>
-                {businessRole || (record.roles || [])[0] || 'consumer'}
-              </Tag>
+              {record.roles.map((role, idx) => (
+                  <Tag className={styles.rules}
+                       style={{marginBottom: 3}}
+                       key={`cr.${idx}`}
+                       icon={getRoleIcon(role)}>
+                    {role}
+                  </Tag>
+              ))}
             </div>
           </div>
         </div>
