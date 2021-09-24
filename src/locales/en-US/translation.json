@@ -132,7 +132,8 @@
     "errorSentPasswordResetEmail": "Failed to send Password Reset",
     "linkSent": "The link was successfully sent",
     "errorLinkSend": "Failed to send link",
-    "noData": "No Data"
+    "noData": "No Data",
+    "unsaved": "You have unsaved changes that will be lost"
   },
   "empty": {
     "title": "No data",

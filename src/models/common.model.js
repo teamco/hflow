@@ -25,6 +25,7 @@ const commonModel = {
     entityForm: DEFAULT_FORM,
     language: 'en-US',
     isEdit: false,
+    touched: false,
     tags: [],
     uploadedFiles: {}
   },
@@ -84,6 +85,7 @@ const commonModel = {
       yield put({
         type: 'updateState',
         payload: {
+          touched: true,
           entityForm: [..._entityForm]
         }
       });

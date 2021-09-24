@@ -14,6 +14,25 @@ export const isDeveloper = (roles = []) => roles.indexOf('Developer') > -1;
 
 /**
  * @export
+ * @param roles
+ * @return {boolean}
+ */
+export const isTest = (roles = []) => roles.indexOf('Test') > -1;
+
+/**
+ * @export
+ * @param {string} role
+ * @return {boolean}
+ */
+export const isBusiness = (role) => {
+  return isOwner(role) ||
+      isModerator(role) ||
+      isContributor(role) ||
+      isReader(role);
+};
+
+/**
+ * @export
  * @param user
  * @param id
  * @return {boolean}

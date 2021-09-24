@@ -198,7 +198,7 @@ export default dvaModelExtend(commonModel, {
           yield put({
             type: 'handleStates',
             payload: {country: _business.country}
-          })
+          });
 
           yield put({
             type: 'toForm',
@@ -289,6 +289,8 @@ export default dvaModelExtend(commonModel, {
               yield call(fbUpdate, {collection: 'businesses', docId: selectedBusiness.id, data}) :
               errorSaveMsg(true, 'Business');
 
+          yield put({type: 'updateState', payload: {touched: false}});
+
         } else {
 
           data = {
@@ -306,7 +308,14 @@ export default dvaModelExtend(commonModel, {
           if (entity?.docId) {
 
             history.push(`/admin/users/${user.id}/businesses/${entity.docId}`);
-            yield put({type: 'updateState', payload: {isEdit: true}});
+
+            yield put({
+              type: 'updateState',
+              payload: {
+                touched: false,
+                isEdit: true
+              }
+            });
 
           } else {
             errorSaveMsg(false, 'Business');

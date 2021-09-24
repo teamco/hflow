@@ -65,7 +65,8 @@ const businessEdit = (props) => {
     selectedCountry,
     uploadedFiles,
     tags,
-    isEdit
+    isEdit,
+    touched
   } = businessModel;
 
   const {ability} = authModel;
@@ -212,6 +213,7 @@ const businessEdit = (props) => {
   return (
       <Page className={userStyles.users}
             component={component}
+            touched={!disabled && touched}
             spinEffects={[
               'businessModel/editBusiness',
               'businessModel/prepareToSave'
