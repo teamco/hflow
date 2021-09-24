@@ -215,7 +215,11 @@ class UploadFile extends React.Component {
                   {fileInfo(<FileDoneOutlined/>)}
                 </div>
             ) : null}
-            <div className={'uploaded-file-name'}>{getFileName(fileProps?.fileName)}</div>
+            {isFileUploaded && (
+                <div className={'uploaded-file-name'}>
+                  {getFileName(fileProps?.fileName)}
+                </div>
+            )}
             {(isFileUploaded && !fileProps?.fileList[0]) &&  (
                 <Button key={'change'}
                         size={'small'}

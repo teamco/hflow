@@ -25,12 +25,15 @@ import {
   getBusinessUsers
 } from 'services/business.service';
 
-import {detailsInfo} from 'services/cross.model.service';
-import {fbAdd, fbFindById, fbUpdate, getRef} from 'services/firebase.service';
-import {getExtension, toBase64, toFile} from 'utils/file';
+import {toFile} from 'utils/file';
 import {monitorHistory} from 'utils/history';
 import {errorSaveMsg} from 'utils/message';
 import {setAs} from 'utils/object';
+
+import {detailsInfo} from 'services/cross.model.service';
+import {fbAdd, fbFindById, fbUpdate, getRef} from 'services/firebase.service';
+import {isAdmin} from 'services/userRoles.service';
+import {isNew} from 'services/common.service';
 
 const DEFAULT_STATE = {
   availableCountries: ['US', 'CA', 'IL'], //'ALL'
@@ -72,6 +75,8 @@ export default dvaModelExtend(commonModel, {
         collection: 'users',
         doc: userId
       });
+
+      // TODO (teamco): Fix business user.
 
       if (user.exists) {
         const _user = user.data();
@@ -125,8 +130,6 @@ export default dvaModelExtend(commonModel, {
       const {selectedUser} = yield select(state => state.userModel);
 
       yield put({type: 'cleanForm'});
-      yield put({type: 'businessServiceModel/query'});
-      yield put({type: 'businessPreparationModel/query'});
 
       yield put({
         type: 'updateState',
@@ -145,15 +148,21 @@ export default dvaModelExtend(commonModel, {
 
     * validateBusiness({payload}, {call, put, select}) {
       const {user, ability} = yield select(state => state.authModel);
-      const {businessId} = payload;
+      const {selectedUser} = yield select(state => state.userModel);
+      const {businessId, userId} = payload;
 
-      if (businessId === 'new') {
+      yield put({
+        type: 'userModel/validateUser',
+        payload: {selectedUser, userId}
+      });
+
+      if (isNew(businessId)) {
         // Do nothing.
       } else if (ability.can('read', 'businesses')) {
 
         const business = yield call(fbFindById, {
           collection: 'businesses',
-          doc: payload.businessId
+          doc: businessId
         });
 
         if (business.exists) {
@@ -242,15 +251,32 @@ export default dvaModelExtend(commonModel, {
     * prepareToSave({payload, params}, {call, select, put}) {
       const {user, ability} = yield select(state => state.authModel);
       const {uploadedFiles, selectedBusiness, isEdit} = yield select(state => state.businessModel);
+      const {selectedUser} = yield select(state => state.userModel);
 
       let entity;
       const logo = uploadedFiles.logo;
       const license = uploadedFiles.license;
 
+      const manageByAdmin = isAdmin(user.roles);
+
+      if (selectedUser.roles.includes('Owner')) {
+        // Do nothing.
+      } else {
+
+        // Create owner role.
+        yield put({
+          type: 'userModel/updateRoles',
+          payload: {
+            selectedUser,
+            roles: [...selectedUser.roles, 'Owner']
+          }
+        });
+      }
+
       if (user && ability.can('update', 'businesses')) {
         const metadata = {
           updatedAt: +(new Date),
-          updatedBy: user.uid
+          updatedBy: manageByAdmin ? selectedUser.uid : user.uid
         };
 
         let data = {...payload, metadata};
@@ -285,6 +311,7 @@ export default dvaModelExtend(commonModel, {
         data.licenseExpiration = setAs(data?.licenseExpiration?.format('YYYY-MM-DD'));
 
         if (isEdit) {
+
           selectedBusiness && params.business === selectedBusiness.id ?
               yield call(fbUpdate, {collection: 'businesses', docId: selectedBusiness.id, data}) :
               errorSaveMsg(true, 'Business');
@@ -297,8 +324,11 @@ export default dvaModelExtend(commonModel, {
             ...data,
             metadata: {
               createdAt: metadata.updatedAt,
-              createdBy: user.uid,
-              belongsToRef: getRef({collection: 'users', doc: user.id}),
+              createdBy: manageByAdmin ? selectedUser.uid : user.uid,
+              belongsToRef: getRef({
+                collection: 'users',
+                doc: manageByAdmin ? selectedUser.id : user.id
+              }),
               ...metadata
             }
           };
@@ -307,8 +337,6 @@ export default dvaModelExtend(commonModel, {
 
           if (entity?.docId) {
 
-            history.push(`/admin/users/${user.id}/businesses/${entity.docId}`);
-
             yield put({
               type: 'updateState',
               payload: {
@@ -316,6 +344,8 @@ export default dvaModelExtend(commonModel, {
                 isEdit: true
               }
             });
+
+            history.push(`/admin/users/${manageByAdmin ? selectedUser.id : user.id}/businesses/${entity.docId}`);
 
           } else {
             errorSaveMsg(false, 'Business');

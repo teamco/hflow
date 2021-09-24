@@ -1,13 +1,19 @@
 import React from 'react';
 import {NavLink, useParams} from 'umi';
+import classnames from 'classnames';
 import {Can} from 'utils/auth/can';
 import {Tooltip} from 'antd';
-import {UserAddOutlined, ProfileTwoTone, EyeTwoTone} from '@ant-design/icons';
+import {
+  UserAddOutlined,
+  ProfileTwoTone,
+  EyeTwoTone,
+ShopTwoTone
+} from '@ant-design/icons';
+
 import {tsToLocaleDateTime} from 'utils/timestamp';
 
-import tableStyles from 'components/Main/Table/table.module.less';
 import styles from 'pages/users/users.module.less';
-import classnames from 'classnames';
+import tableStyles from 'components/Main/Table/table.module.less';
 
 export const metadata = ({
   t,
@@ -35,7 +41,12 @@ export const metadata = ({
         render(name, data, idx) {
           return (
               <div className={classnames(styles.nowrap, tableStyles.tdName)}>
-                <span><img src={data.logo} alt={name}/></span>
+                <span>
+                  {data.logo ?
+                      <img src={data.logo} alt={name}/> :
+                      <ShopTwoTone />
+                  }
+                </span>
                 <span>
                   <Tooltip title={name}>{name}</Tooltip>
                 </span>

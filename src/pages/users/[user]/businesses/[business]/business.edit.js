@@ -24,9 +24,12 @@ import {BusinessTags} from 'pages/users/[user]/businesses/[business]/form/busine
 
 import SaveButton from 'components/Buttons/save.button';
 
-import styles from 'pages/users/[user]/businesses/businesses.module.less';
 import {fromForm} from 'utils/object';
 import {isLoading} from 'utils/state';
+import {isAdmin, isCurrent} from 'services/userRoles.service';
+import {isNew} from 'services/common.service';
+
+import styles from 'pages/users/[user]/businesses/businesses.module.less';
 
 const {Info} = Main;
 
@@ -72,11 +75,12 @@ const businessEdit = (props) => {
   const {ability} = authModel;
   const component = 'businesses';
   const disabled = ability.cannot('update', component);
-
   const update = ability.can('update', component);
 
   useEffect(() => {
-    if (update && (params.user === authModel.user.id)) {
+    if (update) {
+      onEditBusiness(params);
+    } else if (isNew(params.business)) {
       onEditBusiness(params);
     }
   }, [
@@ -230,7 +234,7 @@ const businessEdit = (props) => {
                         </Button>,
                         <SaveButton key={'save'}
                                     isEdit={isEdit}
-                                    disabled={disabled}
+                                    disabled={!touched || disabled}
                                     formRef={formRef}
                                     loading={
                                       loading.effects['businessModel/query'] ||

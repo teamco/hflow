@@ -51,3 +51,10 @@ export function getEntityFormIdx({ entityForm, key, namespace = '' }) {
 
   return idx;
 }
+
+/**
+ * @export
+ * @param {string} id
+ * @return {boolean}
+ */
+export const isNew = id => id === 'new';

@@ -76,11 +76,16 @@
 }
 
 .rules {
-  text-transform: lowercase;
-  font-variant: small-caps;
+  text-transform: lowercase !important;
+  font-variant: small-caps !important;
 
   span[role='img'] {
     margin-right: 0;
+  }
+
+  span[role='img']:last-child {
+    position: relative;
+    top: 1px;
   }
 }
 
