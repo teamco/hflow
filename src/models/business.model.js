@@ -428,6 +428,7 @@ export default dvaModelExtend(commonModel, {
           });
 
         } else {
+
           yield call(message.warning, i18n.t('error:userAssigned'));
           history.push(`/errors/404`);
         }

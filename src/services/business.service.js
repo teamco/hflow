@@ -71,7 +71,12 @@ export const findBusinessTempUser = async ({ email }) => {
    * @constant
    * @type {{forEach}}
    */
-  const users = await fbReadBy({ collection: 'tempBusinessUsers', field: 'email', value: email });
+  const users = await fbReadBy({
+    collection: 'tempBusinessUsers',
+    field: 'email',
+    value: email
+  });
+
   users.forEach(doc => {
     data = doc.data();
     docId = doc.id;
