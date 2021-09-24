@@ -7,6 +7,8 @@ import EditableTags from './EditableTags';
 import { Tooltip } from 'antd';
 import { CheckCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
 
+import styles from './form.module.less';
+
 /**
  * @export
  * @constant
@@ -57,6 +59,18 @@ export const getSuffix = (t, form, name, label) => {
   }
 
   return condition ? success : warning;
+};
+
+/**
+ * @export
+ * @constant
+ * @param name
+ * @param formRef
+ * @param setMandatory
+ */
+export const handleMandatoryTextarea = (name, formRef, setMandatory) => {
+  const value = formRef.getFieldValue(name) || '';
+  setMandatory(styles[value.length ? 'validated' : 'mandatory']);
 };
 
 export default {

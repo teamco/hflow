@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Input, Select} from 'antd';
 import countryCodes from 'country-codes-list';
 
 import {sortBy} from 'utils/array';
 
-import FormComponents from 'components/Form';
+import FormComponents, {handleMandatoryTextarea} from 'components/Form';
 import Phone from 'components/Form/phone';
 
 /**
@@ -42,6 +42,12 @@ export const BusinessAddress = props => {
     setCitiesFilter,
     onHandleStates
   } = props;
+
+  const [mandatory, setMandatory] = useState(null);
+
+  useEffect(() => {
+    handleMandatoryTextarea('address', formRef, setMandatory);
+  }, [formRef.getFieldValue('address')]);
 
   return (
       <GenericPanel header={t('business:address')}
@@ -125,6 +131,10 @@ export const BusinessAddress = props => {
                     rows={4}
                     allowClear
                     form={formRef}
+                    showCount
+                    maxLength={300}
+                    onChange={() => handleMandatoryTextarea('address', formRef, setMandatory)}
+                    className={mandatory}
                     config={{rules: [{required: true}]}}/>
           <></>
         </div>

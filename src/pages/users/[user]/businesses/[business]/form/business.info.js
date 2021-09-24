@@ -46,6 +46,8 @@ export const BusinessInfo = ({
                     label={t('form:description')}
                     name={'description'}
                     rows={4}
+                    showCount
+                    maxLength={300}
                     disabled={disabled}
                     form={formRef}/>
           <UploadFile label={t('business:logo')}

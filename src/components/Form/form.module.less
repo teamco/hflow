@@ -54,3 +54,43 @@
     font-size: 12px;
   }
 }
+
+.mandatory,
+.validated {
+  > span:first-child {
+    position: relative;
+
+    &::after {
+      content: "\26A0";
+      font-size: 15px;
+      color: rgb(250, 117, 123);
+      position: absolute;
+      right: 7px;
+      top: 3px;
+    }
+  }
+
+  :global {
+    .ant-input-clear-icon {
+      right: 20px;
+    }
+  }
+}
+
+.validated {
+  > span:first-child {
+    &::after {
+      content: "\2713";
+      color: rgb(105, 203, 63);
+      top: 8px;
+      border: 1px solid #69cb3f;
+      border-radius: 6px;
+      font-size: 8px;
+      width: 12px;
+      height: 12px;
+      line-height: 12px;
+      text-align: center;
+    }
+  }
+}
+
