@@ -1,20 +1,20 @@
-import React, { useEffect, useRef } from 'react';
-import { connect } from 'dva';
-import { useParams } from 'umi';
-import { withTranslation } from 'react-i18next';
-import { Form, Select, Button, Modal, Tooltip } from 'antd';
+import React, {useEffect} from 'react';
+import {connect} from 'dva';
+import {useParams} from 'umi';
+import {withTranslation} from 'react-i18next';
+import {Form, Select, Button, Modal, Tooltip} from 'antd';
 import {
   FormOutlined
 } from '@ant-design/icons';
 
-import { emailPartial } from 'components/partials/email.partial';
-import { isOwner } from 'services/userRoles.service';
+import {emailPartial} from 'components/partials/email.partial';
+import {isOwner} from 'services/userRoles.service';
+import {useFocus} from 'utils/dom';
+import {isLoading} from 'utils/state';
 
 import styles from 'components/Authentication/authentication.module.less';
-import { useFocus } from 'utils/dom';
-import { isLoading } from 'utils/state';
 
-const { Option } = Select;
+const {Option} = Select;
 
 /**
  * @export
@@ -34,7 +34,7 @@ const registerUser = props => {
     onQuery
   } = props;
 
-  const { tags = [] } = userRolesModel;
+  const {businessRoles = []} = userRolesModel;
 
   /**
    * @type {{user, business}}
@@ -66,77 +66,76 @@ const registerUser = props => {
     handleCancel();
   };
 
-  const { ability } = authModel;
+  const {ability} = authModel;
   const disabled = ability.cannot('create', 'businessUsers');
 
-  return (
-    <div className={styles.authWrapper}>
-      <>
-        <Modal title={t('business:registerUser')}
-               visible={isRegisterVisible}
-               forceRender={true}
-               onCancel={handleCancel}
-               footer={null}>
-          <Form name={'business_user'}
-                className={styles.loginForm}
-                size={'large'}
-                onFinish={onFinish}>
-            {emailPartial({ t, emailRef, name: 'email' })}
-            <Form.Item name={'userRoles'}
-                       rules={[
-                         {
-                           required: true,
-                           message: t('form:required', { field: t('business:userRoles') })
-                         }
-                       ]}>
-              <Select size={'large'}
-                      placeholder={t('business:userRoles')}
-                      style={{ width: '100%' }}>
-                {Array.from(tags).sort().map((role, idx) => (
-                  <Option key={idx}
-                          disabled={isOwner(role)}
-                          value={role}>
-                    {role}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item style={{ marginBottom: 0, marginTop: 20 }}>
-              <Tooltip title={t('auth:registerTitle')}>
-                <Button type={'primary'}
-                        size={'default'}
-                        htmlType={'submit'}
-                        block
-                        disabled={disabled}
-                        loading={isLoading(loading.effects['userRolesModel/query'])}
-                        icon={<FormOutlined />}
-                        className={styles.loginBtn}>
-                  {t('auth:register')}
-                </Button>
-              </Tooltip>
-            </Form.Item>
-          </Form>
-        </Modal>
-      </>
-    </div>
-  );
+  const roles = [...businessRoles?.roles]?.sort().filter(role => !isOwner(role));
+
+  return businessRoles?.roles ? (
+      <div className={styles.authWrapper}>
+        <>
+          <Modal title={t('business:registerUser')}
+                 visible={isRegisterVisible}
+                 forceRender={true}
+                 onCancel={handleCancel}
+                 footer={null}>
+            <Form name={'business_user'}
+                  className={styles.loginForm}
+                  size={'large'}
+                  onFinish={onFinish}>
+              {emailPartial({t, emailRef, name: 'email'})}
+              <Form.Item name={'userRoles'}
+                         rules={[
+                           {
+                             required: true,
+                             message: t('form:required', {field: t('business:userRoles')})
+                           }
+                         ]}>
+                <Select size={'large'}
+                        placeholder={t('panel:businessRoles')}
+                        style={{width: '100%'}}>
+                  {roles.map((role, idx) => (
+                      <Option key={idx}
+                              value={role}>
+                        {role}
+                      </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item style={{marginBottom: 0, marginTop: 20}}>
+                <Tooltip title={t('auth:registerTitle')}>
+                  <Button type={'primary'}
+                          size={'default'}
+                          htmlType={'submit'}
+                          block
+                          disabled={disabled}
+                          loading={isLoading(loading.effects['userRolesModel/query'])}
+                          icon={<FormOutlined />}
+                          className={styles.loginBtns}>
+                    {t('auth:register')}
+                  </Button>
+                </Tooltip>
+              </Form.Item>
+            </Form>
+          </Modal>
+        </>
+      </div>
+  ) : null;
 };
 
 export default connect(
-  ({ authModel, userRolesModel, loading }) => {
-    return {
+    ({authModel, userRolesModel, loading}) => ({
       authModel,
       userRolesModel,
       loading
-    };
-  },
-  (dispatch) => ({
-    dispatch,
-    onQuery() {
-      dispatch({ type: `userRolesModel/query` });
-    },
-    onRegisterBusinessUser(data) {
-      dispatch({ type: 'businessModel/sendRegisterLinkBusinessUser', payload: { data } });
-    }
-  })
+    }),
+    (dispatch) => ({
+      dispatch,
+      onQuery() {
+        dispatch({type: `userRolesModel/query`});
+      },
+      onRegisterBusinessUser(data) {
+        dispatch({type: 'businessModel/sendRegisterLinkBusinessUser', payload: {data}});
+      }
+    })
 )(withTranslation()(registerUser));
