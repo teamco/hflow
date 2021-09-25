@@ -57,7 +57,10 @@ const businesses = (props) => {
   return (
     <Page className={userStyles.users}
           component={component}
-          spinEffects={['businessModel/query']}>
+          spinEffects={[
+              'businessModel/query',
+              'businessModel/validateBusiness'
+          ]}>
       <div className={styles.businessWrapper}
            style={style}>
         <PageHeader ghost={false}
@@ -65,6 +68,7 @@ const businesses = (props) => {
                     extra={[
                       <Can I={'create'} a={component} key={'add'}>
                         <Button size={'small'}
+                                loading={loading.effects['businessModel/newBusiness']}
                                 disabled={disabled}
                                 icon={<AppstoreAddOutlined />}
                                 onClick={() => onNew(params.user)}
