@@ -126,23 +126,8 @@ export default dvaModelExtend(commonModel, {
       });
     },
 
-    * newBusiness({payload}, {put, select}) {
+    * newBusiness({payload}, {select}) {
       const {selectedUser} = yield select(state => state.userModel);
-
-      yield put({type: 'cleanForm'});
-
-      yield put({
-        type: 'updateState',
-        payload: {
-          ...DEFAULT_STATE,
-          ...{
-            isEdit: false,
-            tags: [],
-            uploadedFiles: {}
-          }
-        }
-      });
-
       history.push(`/admin/users/${selectedUser.id}/businesses/new`);
     },
 
@@ -157,7 +142,17 @@ export default dvaModelExtend(commonModel, {
       });
 
       if (isNew(businessId)) {
-        // Do nothing.
+        yield put({
+          type: 'updateState',
+          payload: {
+            ...DEFAULT_STATE,
+            ...{
+              isEdit: false,
+              tags: [],
+              uploadedFiles: {}
+            }
+          }
+        });
       } else if (ability.can('read', 'businesses')) {
 
         const business = yield call(fbFindById, {
