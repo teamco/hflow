@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Collapse, Form, Input} from 'antd';
+import {Collapse, Form} from 'antd';
 import {withTranslation} from 'react-i18next';
 import classnames from 'classnames';
 
@@ -7,10 +7,10 @@ import {getSuffix} from 'components/Form';
 import styles from 'components/Form/form.module.less';
 
 import Grid from 'components/Grid';
+import MandatoryTextarea from './MandatoryTextarea';
 
 const {AntHillRow} = Grid;
 const {Panel} = Collapse;
-const {TextArea} = Input;
 
 /**
  * @constant
@@ -83,11 +83,13 @@ class GenericPanel extends Component {
     const _formItem = (_rowChild, idx) => {
       return _getChildren(_rowChild.props.children || []).map((_child, _key) => {
         const {
+          form,
           label,
           name,
           span,
           placeholder,
           suffix,
+          suffixIcon,
           disabled,
           dependencies,
           config = {}
@@ -103,7 +105,7 @@ class GenericPanel extends Component {
             _handleProps(placeholder, t('form:placeholder', {field: label})) :
             null;
 
-        const _props = _cleanProps(_child, ['config', 'hasFeedback']);
+        const _props = _cleanProps(_child, ['config', 'hasFeedback', 'form']);
         let rest = {};
         valuePropName && (rest.valuePropName = valuePropName);
 
@@ -113,10 +115,14 @@ class GenericPanel extends Component {
         };
 
         if (_isRequired) {
-          const _suffix = getSuffix(t, _child.props.form, _child.props.name, label);
+          const _suffix = getSuffix(t, form, name, label);
 
-          if (_child.type === TextArea) {
+          if (_child.type === MandatoryTextarea) {
             // TODO (teamco): Do something
+            configProps.key = `${idx}-${_key}`;
+
+            return React.isValidElement(_child) ?
+                React.cloneElement(_child, {...configProps}) : null;
           }
 
           /**
@@ -124,15 +130,15 @@ class GenericPanel extends Component {
            * @link https://ant.design/components/select/
            */
           if (_child.type.Option) {
-            if (!_child.props.suffixIcon) {
+            if (!suffixIcon) {
               configProps.suffixIcon = _handleProps(suffix, _suffix);
             }
-          } else if (!_child.props.suffix) {
+          } else if (!suffix) {
             configProps.suffix = _handleProps(suffix, _suffix);
           }
         }
 
-        return (
+        return React.isValidElement(_child) ? (
             <Form.Item label={label}
                        name={name}
                        span={span}
@@ -143,7 +149,7 @@ class GenericPanel extends Component {
                        {...rest}>
               {React.cloneElement(_child, {...configProps})}
             </Form.Item>
-        );
+        ) : null;
       });
     };
 

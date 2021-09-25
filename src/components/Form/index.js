@@ -1,8 +1,10 @@
 import React from 'react';
 import { findObjectValue } from 'utils/object';
+
 import GenericPanel from './GenericPanel';
 import GenericTabs from './GenericTabs';
 import EditableTags from './EditableTags';
+import MandatoryTextarea from './MandatoryTextarea';
 
 import { Tooltip } from 'antd';
 import { CheckCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
@@ -61,20 +63,9 @@ export const getSuffix = (t, form, name, label) => {
   return condition ? success : warning;
 };
 
-/**
- * @export
- * @constant
- * @param name
- * @param formRef
- * @param setMandatory
- */
-export const handleMandatoryTextarea = (name, formRef, setMandatory) => {
-  const value = formRef.getFieldValue(name) || '';
-  setMandatory(styles[value.length ? 'validated' : 'mandatory']);
-};
-
 export default {
   GenericPanel,
   GenericTabs,
-  EditableTags
+  EditableTags,
+  MandatoryTextarea
 };
