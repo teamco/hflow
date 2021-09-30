@@ -1,7 +1,10 @@
 # hflow
 
-yarn install
-yarn start
-
-windows user only 
-disable preinstall step in package json
+* Install
+```bash
+$ yarn install
+```
+* Start
+```bash
+$ yarn start
+```

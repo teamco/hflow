@@ -3,10 +3,10 @@
   "name": "hflow",
   "version": "0.1",
   "scripts": {
-    "prestart": "npm run preinstall",
+    "prestart": "yarn preinstall",
     "start": "cross-env PORT=8003 umi dev",
     "build": "umi build",
-    "preinstall": "",
+    "preinstall": "node ./preinstall.js",
     "postinstall": "umi generate tmp",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage"

@@ -39,7 +39,6 @@ const DEFAULT_STATE = {
   availableCountries: ['US', 'CA', 'IL'], //'ALL'
   selectedCountry: null,
   selectedBusiness: null,
-  data: [],
   users: [],
   assignedUsers: [],
   countries: [],
@@ -52,7 +51,7 @@ const DEFAULT_STATE = {
  */
 export default dvaModelExtend(commonModel, {
   namespace: 'businessModel',
-  state: {...DEFAULT_STATE},
+  state: {...DEFAULT_STATE, data: []},
   subscriptions: {
     setupHistory({history, dispatch}) {
       monitorHistory({history, dispatch}, 'businessModel');
@@ -126,9 +125,22 @@ export default dvaModelExtend(commonModel, {
       });
     },
 
-    * newBusiness({payload}, {select}) {
+    * newBusiness({payload}, {put, select}) {
       const {selectedUser} = yield select(state => state.userModel);
+      yield put({type: 'cleanForm'});
+
       history.push(`/admin/users/${selectedUser.id}/businesses/new`);
+
+      yield put({
+        type: 'updateState',
+        payload: {
+          ...DEFAULT_STATE,
+          ...{
+            isEdit: false,
+            touched: false
+          }
+        }
+      });
     },
 
     * validateBusiness({payload}, {call, put, select}) {
@@ -142,17 +154,7 @@ export default dvaModelExtend(commonModel, {
       });
 
       if (isNew(businessId)) {
-        yield put({
-          type: 'updateState',
-          payload: {
-            ...DEFAULT_STATE,
-            ...{
-              isEdit: false,
-              tags: [],
-              uploadedFiles: {}
-            }
-          }
-        });
+        // TODO (teamco): Do something.
       } else if (ability.can('read', 'businesses')) {
 
         const business = yield call(fbFindById, {
