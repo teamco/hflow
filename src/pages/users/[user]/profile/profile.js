@@ -1,7 +1,5 @@
 import React, {useEffect} from 'react';
-import {connect} from 'dva';
 import {useParams} from 'umi';
-import {withTranslation} from 'react-i18next';
 
 import Page from 'components/Page';
 import Users from 'pages/users';
@@ -11,7 +9,7 @@ import styles from 'pages/users/[user]/profile/profile.module.less';
 import userStyles from 'pages/users/users.module.less';
 import classnames from 'classnames';
 
-const profile = (props) => {
+export const profile = (props) => {
   const {
     t,
     authModel,
@@ -48,19 +46,3 @@ const profile = (props) => {
       </Page>
   );
 };
-
-export default connect(
-    ({authModel, userModel, loading}) => {
-      return {
-        authModel,
-        userModel,
-        loading
-      };
-    },
-    (dispatch) => ({
-      dispatch,
-      onGetUser(selectedUser, userId) {
-        dispatch({type: `userModel/getUser`, payload: {selectedUser, userId}});
-      }
-    })
-)(withTranslation()(profile));

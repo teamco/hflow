@@ -1,11 +1,7 @@
 import ErrorModal from 'components/Authentication/modals/error.modal';
 import React, { useEffect, useState } from 'react';
-import { connect } from 'dva';
-import { withTranslation } from 'react-i18next';
-import withFirebaseAuth from 'react-with-firebase-auth';
-import { firebaseAppAuth, providers } from 'services/firebase.service';
 import { useParams } from 'umi';
-import { Button, Form, Input, message, PageHeader } from 'antd';
+import { Button, Form, Input, PageHeader } from 'antd';
 import {
   UserAddOutlined,
   LockTwoTone,
@@ -24,18 +20,12 @@ import stylesAuth from 'components/Authentication/authentication.module.less';
 
 const { GenericPanel } = FormComponents;
 
-/** Create the FirebaseAuth component wrapper */
-const createComponentWithAuth = withFirebaseAuth({
-  providers,
-  firebaseAppAuth
-});
-
 /**
  * @constant
  * @param props
  * @return {JSX.Element}
  */
-const finishSignUp = (props) => {
+export const finishSignUp = (props) => {
 
   /* These props are provided by withFirebaseAuth HOC */
   const {
@@ -239,22 +229,3 @@ const finishSignUp = (props) => {
     </Page>
   );
 };
-
-export default connect(
-  ({ authModel, businessModel, loading }) => {
-    return {
-      authModel,
-      businessModel,
-      loadingModel: loading
-    };
-  },
-  (dispatch) => ({
-    dispatch,
-    onPrepareRegistration(params) {
-      dispatch({ type: 'businessModel/prepareRegistration', payload: { ...params } });
-    },
-    onRegisterData(registerData) {
-      dispatch({ type: 'authModel/registerData', payload: { registerData } });
-    }
-  })
-)(withTranslation()(createComponentWithAuth(finishSignUp)));

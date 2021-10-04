@@ -1,3 +1,3 @@
-import landing from './landing';
+import landing from './landing.connect';
 
 export default landing;

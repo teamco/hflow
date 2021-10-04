@@ -1,6 +1,4 @@
 import React, {useEffect} from 'react';
-import {connect} from 'dva';
-import {withTranslation} from 'react-i18next';
 import ReactJson from 'react-json-view';
 
 import Page from 'components/Page';
@@ -13,7 +11,7 @@ import {UserSwitchOutlined} from '@ant-design/icons';
 
 const {Table} = Main;
 
-const userLogs = (props) => {
+export const userLogs = (props) => {
   const {
     t,
     authModel,
@@ -75,19 +73,3 @@ const userLogs = (props) => {
       </Page>
   );
 };
-
-export default connect(
-    ({authModel, userLogModel, loading}) => {
-      return {
-        authModel,
-        userLogModel,
-        loading
-      };
-    },
-    (dispatch) => ({
-      dispatch,
-      onQuery() {
-        dispatch({type: `userLogModel/query`});
-      }
-    })
-)(withTranslation()(userLogs));

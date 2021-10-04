@@ -1,3 +1,3 @@
-import userLogs from './userLogs';
+import userLogs from './userLogs.connect';
 
 export default userLogs;

@@ -4,9 +4,7 @@ import countryCodes from 'country-codes-list';
 
 import {sortBy} from 'utils/array';
 
-import FormComponents, {handleMandatoryTextarea} from 'components/Form';
-import MandatoryTextarea from 'components/Form/MandatoryTextarea';
-import Phone from 'components/Form/phone';
+import FormComponents from 'components/Form';
 
 /**
  * @constant
@@ -21,8 +19,7 @@ const getSelectedCountry = formRef => {
 };
 
 const {Option} = Select;
-const {TextArea} = Input;
-const {GenericPanel} = FormComponents;
+const {GenericPanel, MandatoryTextarea, Phone} = FormComponents;
 
 /**
  * @export

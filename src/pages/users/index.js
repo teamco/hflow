@@ -1,3 +1,3 @@
-import users from './users';
+import users from './users.connect';
 
 export default users;

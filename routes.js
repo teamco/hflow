@@ -59,7 +59,7 @@ export const routes = [
           {
             exact: true,
             path: '/admin/users/:user/businesses/:business',
-            component: '@/pages/users/[user]/businesses/[business]/business.edit',
+            component: '@/pages/users/[user]/businesses/[business]',
             breadcrumb: 'route:business',
             wrappers: [
               '@/wrappers/auth.wrapper'

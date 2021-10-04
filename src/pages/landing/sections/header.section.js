@@ -15,41 +15,15 @@ const headerSection = props => {
   const {
     t,
     user,
-    swipeProps,
     topUnder,
     onSignOut
   } = props;
-
-  const [wizardVisible, setWizardVisible] = useState(false);
-
-  /**
-   * @constant
-   * @param e
-   */
-  const handleWizard = e => {
-    e.preventDefault();
-    setWizardVisible(true);
-  };
-
-  /**
-   * @constant
-   * @param e
-   */
-  const handleWizardCancel = e => {
-    e.preventDefault();
-    setWizardVisible(false);
-  };
 
   const headerProps = {
     position: 'absolute',
     user,
     topUnder,
     onSignOut
-  };
-
-  const stepProps = {
-    wizardVisible,
-    handleWizardCancel
   };
 
   const [geolocation, setGeolocation] = useState(false);

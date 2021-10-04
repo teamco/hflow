@@ -1,7 +1,4 @@
 import React, { useEffect } from 'react';
-import { connect } from 'dva';
-
-import { withTranslation } from 'react-i18next';
 import { Layout, Spin } from 'antd';
 
 import HeaderSection from 'pages/landing/sections/header.section';
@@ -11,7 +8,7 @@ import styles from 'pages/landing/landing.module.less';
 
 const { Content } = Layout;
 
-const landing = (props) => {
+export const landing = (props) => {
   const {
     t,
     authModel,
@@ -22,11 +19,7 @@ const landing = (props) => {
   } = props;
 
   const {
-    topUnder,
-    swipeData,
-    discoveryData,
-    serviceData,
-    missionData
+    topUnder
   } = landingModel;
 
   const {
@@ -37,7 +30,6 @@ const landing = (props) => {
   }, []);
 
   const headerProps = {
-    swipeProps: swipeData,
     user,
     topUnder,
     onSignOut
@@ -56,19 +48,3 @@ const landing = (props) => {
     </Spin>
   );
 };
-
-export default connect(
-  ({ authModel, landingModel, loading }) => {
-    return {
-      authModel,
-      landingModel,
-      loading
-    };
-  },
-  (dispatch) => ({
-    dispatch,
-    onSignOut() {
-      dispatch({ type: 'authModel/signOut', payload: {} });
-    }
-  })
-)(withTranslation()(landing));

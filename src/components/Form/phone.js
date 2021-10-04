@@ -1,6 +1,6 @@
 import {getSuffix} from './index';
 import React, {useEffect} from 'react';
-import {Form, Input, Tooltip} from 'antd';
+import {Form, Input} from 'antd';
 
 import countryCodes from 'country-codes-list';
 

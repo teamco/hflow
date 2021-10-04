@@ -1,5 +1,6 @@
-import styles from 'pages/users/users.module.less';
 import React from 'react';
+
+import styles from 'pages/users/users.module.less';
 
 /**
  * @export

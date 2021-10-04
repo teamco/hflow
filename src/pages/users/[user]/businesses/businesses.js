@@ -1,9 +1,7 @@
 import Page from 'components/Page';
 import userStyles from 'pages/users/users.module.less';
 import React, { useEffect } from 'react';
-import { connect } from 'dva';
 import { useParams } from 'umi';
-import { withTranslation } from 'react-i18next';
 import { PageHeader, Button } from 'antd';
 import {
   AppstoreAddOutlined,
@@ -18,7 +16,7 @@ import { Can } from 'utils/auth/can';
 
 const { Table } = Main;
 
-const businesses = (props) => {
+export const businesses = (props) => {
   const params = useParams();
 
   const {
@@ -93,22 +91,3 @@ const businesses = (props) => {
     </Page>
   );
 };
-
-export default connect(
-  ({ authModel, businessModel, loading }) => {
-    return {
-      authModel,
-      businessModel,
-      loading
-    };
-  },
-  (dispatch) => ({
-    dispatch,
-    onNew(userId) {
-      dispatch({ type: `businessModel/newBusiness`, payload: { userId } });
-    },
-    onGetBusinesses(selectedUser, userId) {
-      dispatch({ type: `businessModel/query`, payload: { selectedUser, userId } });
-    }
-  })
-)(withTranslation()(businesses));

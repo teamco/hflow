@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react';
-import { connect } from 'dva';
-import { withTranslation } from 'react-i18next';
 import { Form, PageHeader } from 'antd';
 import {
   PieChartOutlined
@@ -13,7 +11,7 @@ import Main from 'components/Main';
 
 import { fromForm } from 'utils/object';
 
-import styles from 'pages/userRoles/user.roles.module.less';
+import styles from 'pages/userRoles/userRoles.module.less';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;
@@ -23,7 +21,7 @@ const { Info } = Main;
  * @param props
  * @return {JSX.Element}
  */
-const userRoles = props => {
+export const userRoles = props => {
   const [formRef] = Form.useForm();
 
   const {
@@ -134,37 +132,3 @@ const userRoles = props => {
     </Page>
   );
 };
-
-export default connect(
-  ({ authModel, userRolesModel, loading }) => {
-    return {
-      loading,
-      authModel,
-      userRolesModel
-    };
-  },
-  (dispatch) => ({
-    dispatch,
-    onQuery() {
-      dispatch({ type: `userRolesModel/query` });
-    },
-    onSave(payload) {
-      dispatch({
-        type: 'userRolesModel/prepareToSave',
-        payload
-      });
-    },
-    onUpdateUserRoles(roles) {
-      dispatch({
-        type: 'userRolesModel/updateUserRoles',
-        payload: { roles }
-      });
-    },
-    onUpdateBusinessRoles(roles) {
-      dispatch({
-        type: 'userRolesModel/updateBusinessRoles',
-        payload: { roles }
-      });
-    }
-  })
-)(withTranslation()(userRoles));

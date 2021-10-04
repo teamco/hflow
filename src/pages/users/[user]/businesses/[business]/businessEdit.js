@@ -1,9 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Page from 'components/Page';
 import userStyles from 'pages/users/users.module.less';
-import {connect} from 'dva';
-import {useParams, history, NavLink} from 'umi';
-import {withTranslation} from 'react-i18next';
+import {useParams, NavLink} from 'umi';
 import {Button, Form, PageHeader, Menu, Dropdown} from 'antd';
 import {
   TrademarkOutlined,
@@ -26,14 +24,13 @@ import SaveButton from 'components/Buttons/save.button';
 
 import {fromForm} from 'utils/object';
 import {isLoading} from 'utils/state';
-import {isAdmin, isCurrent} from 'services/userRoles.service';
 import {isNew} from 'services/common.service';
 
 import styles from 'pages/users/[user]/businesses/businesses.module.less';
 
 const {Info} = Main;
 
-const businessEdit = (props) => {
+export const businessEdit = (props) => {
   const [formRef] = Form.useForm();
 
   const {
@@ -270,81 +267,3 @@ const businessEdit = (props) => {
       </Page>
   );
 };
-
-export default connect(
-    ({
-      authModel,
-      businessServiceModel,
-      businessPreparationModel,
-      businessModel,
-      dietaryModel,
-      startersAndDessertsModel,
-      loading
-    }) => {
-      return {
-        authModel,
-        businessServiceModel,
-        businessPreparationModel,
-        businessModel,
-        dietaryModel,
-        startersAndDessertsModel,
-        loading
-      };
-    },
-    (dispatch) => ({
-      dispatch,
-      onFieldsChange(changedFields, allFields) {
-        dispatch({
-          type: 'businessModel/updateFields',
-          payload: {
-            changedFields,
-            allFields,
-            model: 'businessModel'
-          }
-        });
-      },
-      onFileChange(payload) {
-        dispatch({
-          type: 'businessModel/handleAddFile',
-          payload: {
-            ...payload,
-            model: 'businessModel'
-          }
-        });
-      },
-      onFileRemove(payload) {
-        dispatch({
-          type: 'businessModel/handleRemoveFile',
-          payload: {...payload, model: 'businessModel'}
-        });
-      },
-      onDietaryQuery() {
-        dispatch({type: 'dietaryModel/query'});
-      },
-      onStartersAndDessertsModelQuery() {
-        dispatch({type: 'startersAndDessertsModel/query'});
-      },
-      onPreparationQuery() {
-        dispatch({type: 'businessPreparationModel/query'});
-      },
-      onServiceQuery() {
-        dispatch({type: 'businessServiceModel/query'});
-      },
-      onSave(payload, params) {
-        dispatch({type: 'businessModel/prepareToSave', payload, params});
-      },
-      onClose(userId) {
-        history.push(`/admin/users/${userId}/businesses`);
-      },
-      onUpdateTags(tags) {
-        dispatch({type: 'businessModel/updateTags', payload: {tags}});
-      },
-      onEditBusiness(params) {
-        dispatch({type: `userModel/validateUser`, payload: {userId: params.user}});
-        dispatch({type: `businessModel/editBusiness`, payload: {params}});
-      },
-      onHandleStates(country) {
-        dispatch({type: `businessModel/handleStates`, payload: {country}});
-      }
-    })
-)(withTranslation()(businessEdit));

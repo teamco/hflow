@@ -1,3 +1,3 @@
-import businesses from './businesses';
+import businesses from './businesses.connect';
 
 export default businesses;

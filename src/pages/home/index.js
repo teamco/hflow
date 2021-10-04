@@ -1,3 +1,3 @@
-import home from './home'
+import home from './home.connect';
 
-export default home
+export default home;

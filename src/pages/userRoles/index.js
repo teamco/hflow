@@ -1,3 +1,3 @@
-import userRoles from './user.roles';
+import userRoles from './userRoles.connect';
 
 export default userRoles;

@@ -5,6 +5,7 @@ import GenericPanel from './GenericPanel';
 import GenericTabs from './GenericTabs';
 import EditableTags from './EditableTags';
 import MandatoryTextarea from './MandatoryTextarea';
+import Phone from './phone';
 
 import { Tooltip } from 'antd';
 import { CheckCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
@@ -67,5 +68,6 @@ export default {
   GenericPanel,
   GenericTabs,
   EditableTags,
+  Phone,
   MandatoryTextarea
 };
