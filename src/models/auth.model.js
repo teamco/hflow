@@ -104,7 +104,7 @@ export default dvaModelExtend(commonModel, {
         yield call(fbUpdate, {
           collection: 'users',
           docId: _userExist.docId,
-          data: {..._user}
+          data: _user?.roles ? {..._user} : {..._user, roles: []}
         });
 
         // Finish business user registration
