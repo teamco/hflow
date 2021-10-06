@@ -5,7 +5,7 @@ import {Button, Tooltip} from 'antd';
 
 import ErrorModal from 'components/Authentication/modals/error.modal';
 import SignInModal from 'components/Authentication/modals/signin.modal';
-import SignUp from 'components/Authentication/signUp';
+import SignUp from 'components/Authentication/signUp.connect';
 import Page from 'components/Page';
 import Logo from 'components/Logo';
 

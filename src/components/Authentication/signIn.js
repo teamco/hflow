@@ -1,12 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {connect} from 'dva';
-import {withTranslation} from 'react-i18next';
-import withFirebaseAuth from 'react-with-firebase-auth';
 import classnames from 'classnames';
-import {
-  firebaseAppAuth,
-  providers
-} from 'services/firebase.service';
+
 import {Button, Tooltip} from 'antd';
 import {
   LoginOutlined,
@@ -16,7 +10,7 @@ import {
   LogoutOutlined
 } from '@ant-design/icons';
 
-import SignUp from 'components/Authentication/signUp';
+import SignUp from 'components/Authentication/signUp.connect';
 import ErrorModal from 'components/Authentication/modals/error.modal';
 import SignInModal from 'components/Authentication/modals/signin.modal';
 import UpdateEmailModal from 'components/Authentication/modals/updateEmail.modal';
@@ -24,18 +18,12 @@ import UpdateEmailModal from 'components/Authentication/modals/updateEmail.modal
 import styles from 'components/Authentication/authentication.module.less';
 import {isLoading} from 'utils/state';
 
-/** Create the FirebaseAuth component wrapper */
-const createComponentWithAuth = withFirebaseAuth({
-  providers,
-  firebaseAppAuth
-});
-
 /**
  * @constant
  * @param props
  * @return {JSX.Element}
  */
-const signIn = props => {
+export const signIn = props => {
 
   /* These props are provided by withFirebaseAuth HOC */
   const {
@@ -305,22 +293,3 @@ const signIn = props => {
       </div>
   );
 };
-
-export default connect(
-    ({authModel}) => ({authModel}),
-    (dispatch) => ({
-      dispatch,
-      onSignIn(user) {debugger
-        dispatch({type: 'authModel/signIn', payload: {user}});
-      },
-      onSignOut(user) {
-        dispatch({type: 'authModel/signOut', payload: {user}});
-      },
-      onSignOutUser({user}) {
-        dispatch({type: 'userModel/signOutUser', payload: {user}});
-      },
-      onUpdateEmail({user, email}) {
-        dispatch({type: 'authModel/updateEmail', payload: {user, email}});
-      }
-    })
-)(withTranslation()(createComponentWithAuth(signIn)));

@@ -11,11 +11,9 @@ import {
   MoreOutlined
 } from '@ant-design/icons';
 
-import Authentication from 'components/Authentication';
+import SignIn from 'components/Authentication/signIn.connect';
 
 import styles from 'components/Landing/landing.module.less';
-
-const { SignIn } = Authentication;
 
 /**
  * @export
