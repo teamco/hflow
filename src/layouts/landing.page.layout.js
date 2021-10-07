@@ -1,17 +1,16 @@
-import React, { useEffect } from 'react';
-import { connect } from 'dva';
-import { withTranslation } from 'react-i18next';
+import React, {useEffect} from 'react';
+import {connect} from 'dva';
+import {withTranslation} from 'react-i18next';
 
-import { Layout, Spin } from 'antd';
+import {BackTop, Layout, Spin} from 'antd';
 
 import Footer from 'components/Footer';
-import ScrollToTop from 'components/ScrollToTop';
 import HeaderSection from 'pages/landing/sections/header.section';
 
 import styles from 'pages/landing/landing.module.less';
 import stylesPage from 'layouts/landing.page.layout.module.less';
 
-const { Content } = Layout;
+const {Content} = Layout;
 
 /**
  * @export
@@ -26,7 +25,8 @@ const landingPage = (props) => {
     authModel,
     loading,
     onSignOut,
-    children
+    children,
+    spinEffects = []
   } = props;
 
   useEffect(() => {
@@ -48,36 +48,45 @@ const landingPage = (props) => {
     onSignOut
   };
 
+  const spinning = Object.keys(loading.effects).
+      filter(effect =>
+          spinEffects.indexOf(effect) > -1 &&
+          loading.effects[effect]
+      );
+
+  const isSpinning = spinning.length ||
+      loading.effects['landingModel/query'];
+
   return (
-    <Spin spinning={loading.effects['landingModel/query']}>
-      <Layout className={styles.landing}>
-        <Content>
-          <div className={styles.page}>
-            <HeaderSection {...headerProps} />
-            <div className={stylesPage.pageContent}>
-              {children}
+      <Spin spinning={isSpinning}>
+        <Layout className={styles.landing}>
+          <Content>
+            <div className={styles.page}>
+              <HeaderSection {...headerProps} />
+              <div className={stylesPage.pageContent}>
+                {children}
+              </div>
             </div>
-          </div>
-        </Content>
-        <Footer />
-      </Layout>
-      <ScrollToTop topUnder={topUnder} />
-    </Spin>
+          </Content>
+          <Footer/>
+        </Layout>
+        <BackTop/>
+      </Spin>
   );
 };
 
 export default connect(
-  ({ landingModel, authModel, loading }) => {
-    return {
-      landingModel,
-      authModel,
-      loading
-    };
-  },
-  (dispatch) => ({
-    dispatch,
-    onSignOut() {
-      dispatch({ type: 'authModel/signOut', payload: {} });
-    }
-  })
+    ({landingModel, authModel, loading}) => {
+      return {
+        landingModel,
+        authModel,
+        loading
+      };
+    },
+    (dispatch) => ({
+      dispatch,
+      onSignOut() {
+        dispatch({type: 'authModel/signOut', payload: {}});
+      }
+    })
 )(withTranslation()(landingPage));

@@ -10,6 +10,12 @@ export const routes = [
         component: '@/pages/landing'
       },
       {
+        exact: true,
+        path: '/subscription',
+        breadcrumb: 'route:subscription',
+        component: '@/pages/subscription'
+      },
+      {
         exact: false,
         path: '/admin',
         component: '@/layouts/app.layout',

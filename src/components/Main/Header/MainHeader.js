@@ -1,9 +1,8 @@
 import React from 'react';
 import { Layout } from 'antd';
-import Authentication from 'components/Authentication';
+import SignIn from 'components/Authentication/signIn.connect';
 
 const { Header } = Layout;
-const { SignIn } = Authentication;
 
 export default class MainHeader extends React.Component {
 
