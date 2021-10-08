@@ -9,7 +9,7 @@ import {
 import Page from 'components/Page';
 import Main from 'components/Main';
 
-import RegisterUser from 'pages/users/[user]/businesses/[business]/users/register.user';
+import RegisterUser from 'pages/users/[user]/businesses/[business]/users/register';
 import {expandable, metadata} from 'pages/users/[user]/businesses/[business]/users/business.users.metadata';
 
 import {Can} from 'utils/auth/can';

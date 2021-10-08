@@ -1,7 +1,5 @@
 import React, {useEffect} from 'react';
-import {connect} from 'dva';
 import {useParams} from 'umi';
-import {withTranslation} from 'react-i18next';
 import {Form, Select, Button, Modal, Tooltip} from 'antd';
 import {
   FormOutlined
@@ -21,7 +19,7 @@ const {Option} = Select;
  * @param props
  * @return {JSX.Element}
  */
-const registerUser = props => {
+export const registerUser = props => {
 
   const {
     t,
@@ -135,20 +133,3 @@ const registerUser = props => {
       </div>
   ) : null;
 };
-
-export default connect(
-    ({authModel, userRolesModel, loading}) => ({
-      authModel,
-      userRolesModel,
-      loading
-    }),
-    (dispatch) => ({
-      dispatch,
-      onQuery() {
-        dispatch({type: `userRolesModel/query`});
-      },
-      onRegisterBusinessUser(data) {
-        dispatch({type: 'businessModel/sendRegisterLinkBusinessUser', payload: {data}});
-      }
-    })
-)(withTranslation()(registerUser));
