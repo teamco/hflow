@@ -1,3 +1,3 @@
-import businessUsers from './business.user.connect';
+import businessUsers from './business.users.connect';
 
 export default businessUsers;
