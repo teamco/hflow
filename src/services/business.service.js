@@ -109,3 +109,20 @@ export const getBusinessUsers = async ({ businessRef }) => {
   users.forEach(doc => (data.push(doc.data())));
   return data;
 };
+
+/**
+ * @content
+ * @param businessId
+ * @type {{data: tempBusinessUsers}}
+ */
+export const getTempBusinessUsers = async ({ businessId }) => {
+  let data = [];
+
+  const tempBusinessUsers = await fbReadBy({
+    collection: 'tempBusinessUsers',
+    field: 'metadata.businessRef',
+    value: `/business/${businessId}`
+  });
+  tempBusinessUsers.forEach(doc => (data.push(doc.data())));
+  return data;
+}
