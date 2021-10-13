@@ -14,21 +14,24 @@ const DEFAULT_FORM = [
   }
 ];
 
+const DEFAULT_STATE = {
+  referrer: document.referrer,
+  resetForm: false,
+  entityForm: DEFAULT_FORM,
+  language: 'en-US',
+  isEdit: false,
+  touched: false,
+  tags: [],
+  uploadedFiles: {}
+};
+
 /**
  * @constant
  * @export
  */
 const commonModel = {
-  state: {
-    referrer: document.referrer,
-    resetForm: false,
-    entityForm: DEFAULT_FORM,
-    language: 'en-US',
-    isEdit: false,
-    touched: false,
-    tags: [],
-    uploadedFiles: {}
-  },
+  state: {...DEFAULT_STATE},
+
   subscriptions: {},
 
   effects: {
@@ -43,7 +46,7 @@ const commonModel = {
     * cleanForm({payload}, {put}) {
       yield put({
         type: 'updateState',
-        payload: {entityForm: DEFAULT_FORM}
+        payload: {entityForm: DEFAULT_FORM, ...DEFAULT_STATE}
       });
     },
 
