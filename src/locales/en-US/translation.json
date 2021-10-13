@@ -71,7 +71,8 @@
     "lastSignInTime": "Last Sign In",
     "signOutConfirm": "Are you sure to sign out user {{instance}}?",
     "unlockConfirm": "Are you sure to unlock user {{instance}}?",
-    "errorLockedDelete": "Unable to delete {{instance}}, user is locked"
+    "errorLockedDelete": "Unable to delete {{instance}}, user is locked",
+    "pending": "Pending"
   },
   "logs": {
     "namespace": "Model",

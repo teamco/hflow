@@ -22,7 +22,7 @@ import {
   findBusinessTempUser, getAllBusinesses,
   getBusinessByRef,
   getBusinesses,
-  getBusinessUsers
+  getBusinessUsers, getTempBusinessUsers
 } from 'services/business.service';
 
 import {toFile} from 'utils/file';
@@ -481,10 +481,10 @@ export default dvaModelExtend(commonModel, {
     * usersQuery({payload}, {put, call}) {
       const businessRef = getRef({collection: 'businesses', doc: payload.business});
       const assignedUsers = yield call(getBusinessUsers, {businessRef});
-
+      const tempUsers = yield  call(getTempBusinessUsers, {businessRef});
       yield put({
         type: 'updateState',
-        payload: {assignedUsers}
+        payload: {assignedUsers: [...assignedUsers, ...tempUsers]}
       });
     },
 

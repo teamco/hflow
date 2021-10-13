@@ -24,7 +24,7 @@ import {
 } from 'antd';
 
 import classnames from 'classnames';
-import { tsToLocaleDateTime } from 'utils/timestamp';
+import {tsToLocaleDateTime} from 'utils/timestamp';
 import EmailVerified from 'components/Profile/email.verified';
 import {isContributor, isModerator, isOwner} from 'services/userRoles.service';
 import {Can} from 'utils/auth/can';
@@ -54,17 +54,17 @@ export const metadata = ({
 }) => {
 
   const menu = (record) => (
-    <Menu>
-      <Menu.Item key={'delete'}
-                 icon={<DeleteTwoTone className={tableStyles.action}
-                                      twoToneColor='#eb2f96' />}>
-        <Popconfirm title={t('msg:unassignConfirm', { instance: record.email })}
-                    placement={'topRight'}
-                    onConfirm={() => onUnassignUser(record)}>
-          {t('actions:unassign')}
-        </Popconfirm>
-      </Menu.Item>
-    </Menu>
+      <Menu>
+        <Menu.Item key={'delete'}
+                   icon={<DeleteTwoTone className={tableStyles.action}
+                                        twoToneColor="#eb2f96"/>}>
+          <Popconfirm title={t('msg:unassignConfirm', {instance: record.email})}
+                      placement={'topRight'}
+                      onConfirm={() => onUnassignUser(record)}>
+            {t('actions:unassign')}
+          </Popconfirm>
+        </Menu.Item>
+      </Menu>
   );
 
   return {
@@ -76,24 +76,25 @@ export const metadata = ({
         dataIndex: 'displayName',
         key: 'displayName',
         render(name, data) {
-          const isSignedIn = data.metadata.signedIn;
+          const isSignedIn = data.metadata?.signedIn;
+          const isPending = data.metadata?.pending;
           const color = isSignedIn ? '#52c41a' : '#999999';
           const signed = {
             title: t(isSignedIn ? 'auth:signedIn' : 'auth:signedOut'),
-            icon: isSignedIn ?
-              (<PlayCircleTwoTone twoToneColor={color} />) :
-              (<PauseCircleTwoTone twoToneColor={color} />)
+            icon: isSignedIn && isPending ?
+                (<PlayCircleTwoTone twoToneColor={color}/>) :
+                (<PauseCircleTwoTone twoToneColor={color}/>)
           };
 
           return (
-            <div className={styles.nowrap}>
-              <Tooltip title={signed.title}>
+              <div className={styles.nowrap}>
+                <Tooltip title={signed.title}>
                 <span className={classnames(styles.signed)}>
                   {signed.icon}
                 </span>
-              </Tooltip>
-              <span>{name}</span>
-            </div>
+                </Tooltip>
+                <span>{data.metadata?.pending ? t('auth:pending') : name}</span>
+              </div>
           );
         },
         filterable: many,
@@ -101,8 +102,13 @@ export const metadata = ({
       },
       {
         title: t('auth:roles'),
-        dataIndex: ['business', 'userRoles'],
-        key: 'roles'
+        dataIndex: ['userRoles'],
+        key: 'roles',
+        render(data) {
+          return (
+              <span>{data?.join(', ')}</span>
+          );
+        }
       },
       {
         title: t('auth:lastSignInTime'),
@@ -113,17 +119,17 @@ export const metadata = ({
       {
         title: t('table:action'),
         render: record => data.length ? (
-          <div className={styles.nowrap}>
-            <Dropdown overlay={menu(record)}
-                      overlayClassName={styles.customActionMenu}
-                      key={'custom'}>
-              <Button size={'small'}
-                      icon={<SettingOutlined />}
-                      className={styles.customAction}>
-                {t('actions:manage', { type: t('menu:users') })} <DownOutlined />
-              </Button>
-            </Dropdown>
-          </div>
+            <div className={styles.nowrap}>
+              <Dropdown overlay={menu(record)}
+                        overlayClassName={styles.customActionMenu}
+                        key={'custom'}>
+                <Button size={'small'}
+                        icon={<SettingOutlined/>}
+                        className={styles.customAction}>
+                  {t('actions:manage', {type: t('menu:users')})} <DownOutlined/>
+                </Button>
+              </Dropdown>
+            </div>
         ) : null
       }
     ],
@@ -162,7 +168,7 @@ export const expandable = (props) => {
                   <CalendarTwoTone/>
                   <strong>{t('form:createdAt')}</strong>
                 </div>
-                <div>{tsToLocaleDateTime(+(new Date(record.metadata.creationTime)))}</div>
+                <div>{tsToLocaleDateTime(+(new Date(record?.metadata?.creationTime)))}</div>
               </Col>
               <Col span={8}/>
             </Row>
@@ -209,5 +215,5 @@ export const expandable = (props) => {
       );
     },
     rowExpandable: record => true
-  }
-}
+  };
+};
