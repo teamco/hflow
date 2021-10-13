@@ -46,7 +46,7 @@ const commonModel = {
     * cleanForm({payload}, {put}) {
       yield put({
         type: 'updateState',
-        payload: {entityForm: DEFAULT_FORM, ...DEFAULT_STATE}
+        payload: {...DEFAULT_STATE}
       });
     },
 
