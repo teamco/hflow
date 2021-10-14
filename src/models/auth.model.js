@@ -100,15 +100,11 @@ export default dvaModelExtend(commonModel, {
         });
       }
 
-      if (_userExist?.error) {
-        return false;
-      }
-
       if (_userExist?.docId) {
         const _user = {..._userExist.data, id: _userExist.docId};
 
         // Update user
-        const _update = yield call(fbUpdate, {
+        yield call(fbUpdate, {
           collection: 'users',
           docId: _userExist.docId,
           data: {
@@ -116,10 +112,6 @@ export default dvaModelExtend(commonModel, {
             roles: [...(_user?.roles || [])]
           }
         });
-
-        if (_update?.error) {
-          return false;
-        }
 
         // Finish business user registration
         if (registerData.isBusinessUser) {
@@ -153,10 +145,6 @@ export default dvaModelExtend(commonModel, {
 
         // Create user
         _userExist = yield call(fbAdd, {collection: 'users', data: userProps});
-
-        if (_userExist?.error) {
-          return false;
-        }
 
         yield put({
           type: 'updateState',
