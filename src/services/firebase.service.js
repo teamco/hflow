@@ -67,7 +67,7 @@ export const fbAdd = async ({collection, data = {}, notice = true}) => {
       errorSaveMsg(false, capitalize(collection));
     }
     console.error(`Create: ${collection}\n`, error);
-    return {};
+    return {error};
   });
 };
 
@@ -80,12 +80,14 @@ export const fbAdd = async ({collection, data = {}, notice = true}) => {
  * @return {Promise<{data: *, id: *}|void>}
  */
 export const fbWrite = async ({collection, doc, data = {}, notice = true}) => {
-  await getRef({collection, doc}).set({...data}).catch(async error => {
+  return await getRef({collection, doc}).set({...data}).then(async () => {
+    notice && successSaveMsg(false, capitalize(collection));
+    return await fbFindById({collection, data});
+  }).catch(async error => {
     notice && await message.error(error.message);
     console.error(`Write: ${collection}\n`, error);
+    return {error};
   });
-  notice && successSaveMsg(false, capitalize(collection));
-  return await fbFindById({collection, data});
 };
 
 /**
@@ -99,7 +101,7 @@ export const fbReadAll = async ({collection, notice = true}) => {
   return await db.collection(collection).get().catch(async error => {
     notice && await message.error(error.message);
     console.error(`All: ${collection}\n`, error);
-    return [];
+    return {error};
   });
 };
 
@@ -134,7 +136,7 @@ export const fbFindById = async ({docRef, collection, doc, notice = true}) => {
   return await docRef.get().catch(async error => {
     notice && await message.error(error.message);
     console.error(`Find: ${collection}\n`, error);
-    return {};
+    return {error};
   });
 };
 
@@ -165,5 +167,6 @@ export const fbUpdate = async ({collection, docId, data, notice = true}) => {
       errorSaveMsg(true, capitalize(collection));
     }
     console.error(`Update: ${collection}\n`, error);
+    return {error};
   });
 };
