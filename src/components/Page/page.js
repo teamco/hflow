@@ -42,7 +42,7 @@ function Page({
                         return t('msg:unsaved');
                       }}/>
                   )}
-                  <div componentName={component}>
+                  <div component={component}>
                     {children}
                   </div>
                 </Can>

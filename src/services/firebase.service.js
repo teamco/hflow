@@ -117,7 +117,7 @@ export const fbReadBy = async ({collection, field, operator = '==', value, notic
   return await db.collection(collection).where(field, operator, value).get().catch(async error => {
     notice && await message.error(error.message);
     console.error(`Read: ${collection}\n`, error);
-    return [];
+    return {error};
   });
 };
 

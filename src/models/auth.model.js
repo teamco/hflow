@@ -45,13 +45,13 @@ export default dvaModelExtend(commonModel, {
       let {user = {}, _userExist} = payload || {};
 
       let {
-        uid,
+        uid = null,
         displayName,
         photoURL,
         email,
         emailVerified,
         isAnonymous,
-        metadata,
+        metadata = {},
         providerData = []
       } = user || {};
 
@@ -98,6 +98,10 @@ export default dvaModelExtend(commonModel, {
           emailVerified,
           metadata: {...userProps.metadata}
         });
+      }
+
+      if (_userExist?.error) {
+        return false;
       }
 
       if (_userExist?.docId) {

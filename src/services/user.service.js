@@ -75,19 +75,23 @@ export const findUser = async ({uid, email, emailVerified, metadata}) => {
 
   /**
    * @constant
-   * @type {{forEach}}
+   * @type {{forEach, error}}
    */
   const users = await fbReadBy({collection: 'users', field: 'uid', value: uid});
 
-  users?.forEach(doc => {
-    const _data = doc.data();
-    if (_data.uid === uid) {
-      docId = doc.id;
-      data = _.merge(_data, {email, emailVerified, metadata});
-    }
-  });
+  if (users?.error) {
+    return {docId, data, error: users?.error};
+  } else {
+    users?.forEach(doc => {
+      const _data = doc.data();
+      if (_data.uid === uid) {
+        docId = doc.id;
+        data = _.merge(_data, {email, emailVerified, metadata});
+      }
+    });
 
-  return {docId, data};
+    return {docId, data};
+  }
 };
 
 /**
