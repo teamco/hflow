@@ -7,7 +7,8 @@ import {
   DownOutlined,
   MailTwoTone,
   CalendarTwoTone,
-  ControlTwoTone
+  ControlTwoTone,
+  SyncOutlined
 } from '@ant-design/icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faBook, faDonate, faUserCog} from '@fortawesome/free-solid-svg-icons';
@@ -31,6 +32,7 @@ import {Can} from 'utils/auth/can';
 
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
+import {getRoleIcon} from '../../../profile/profile.metadata';
 
 const {Option} = Select;
 
@@ -76,12 +78,11 @@ export const metadata = ({
         dataIndex: 'displayName',
         key: 'displayName',
         render(name, data) {
-          const isSignedIn = data.metadata?.signedIn;
-          const isPending = data.metadata?.pending;
-          const color = isSignedIn ? '#52c41a' : '#999999';
+          const {pending, signedIn} = data?.metadata || {};
+          const color = signedIn ? '#52c41a' : '#999999';
           const signed = {
-            title: t(isSignedIn ? 'auth:signedIn' : 'auth:signedOut'),
-            icon: isSignedIn && isPending ?
+            title: t(signedIn ? 'auth:signedIn' : 'auth:signedOut'),
+            icon: signedIn ?
                 (<PlayCircleTwoTone twoToneColor={color}/>) :
                 (<PauseCircleTwoTone twoToneColor={color}/>)
           };
@@ -93,7 +94,15 @@ export const metadata = ({
                   {signed.icon}
                 </span>
                 </Tooltip>
-                <span>{data.metadata?.pending ? t('auth:pending') : name}</span>
+                <span>
+                  {pending ? (
+                          <Tag icon={<SyncOutlined spin/>}
+                               color={'processing'}>
+                            {t('auth:pending')}
+                          </Tag>
+                      ) :
+                      name}
+                </span>
               </div>
           );
         },
@@ -104,9 +113,19 @@ export const metadata = ({
         title: t('auth:roles'),
         dataIndex: ['userRoles'],
         key: 'roles',
-        render(data) {
+        render(currentRoles) {
           return (
-              <span>{data?.join(', ')}</span>
+              <div>
+                {currentRoles.map((role, idx) => (
+                    <Tag className={styles.rules}
+                         style={{marginBottom: 3}}
+                         key={`cr.${idx}`}
+                         closable={false}
+                         icon={getRoleIcon(role)}>
+                      {role}
+                    </Tag>
+                ))}
+              </div>
           );
         }
       },
@@ -114,7 +133,8 @@ export const metadata = ({
         title: t('auth:lastSignInTime'),
         dataIndex: 'metadata',
         key: 'lastSignInTime',
-        render: metadata => tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))
+        render: metadata => metadata?.pending ? t('error:na') :
+            tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))
       },
       {
         title: t('table:action'),
@@ -151,7 +171,9 @@ export const expandable = (props) => {
 
   return {
     expandedRowRender(record) {
-      const {userRoles} = record.business;
+      const {business = {}, metadata = {}} = record;
+      const {userRoles} = business;
+      const {pending, signedIn} = metadata;
 
       return (
           <div className={styles.profileExpand}>
@@ -168,7 +190,7 @@ export const expandable = (props) => {
                   <CalendarTwoTone/>
                   <strong>{t('form:createdAt')}</strong>
                 </div>
-                <div>{tsToLocaleDateTime(+(new Date(record?.metadata?.creationTime)))}</div>
+                <div>{pending ? t('error:na') : tsToLocaleDateTime(+(new Date(metadata?.creationTime)))}</div>
               </Col>
               <Col span={8}/>
             </Row>
