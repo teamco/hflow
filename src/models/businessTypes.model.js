@@ -23,7 +23,7 @@ export default dvaModelExtend(commonModel, {
 
     * query({payload}, {call, put, select}) {
       const {user, ability} = yield select(state => state.authModel);
-      let businessTypes = {};
+      let businessTypes = {types: []};
 
       if (user && ability.can('read', 'businessTypes')) {
 
@@ -51,14 +51,17 @@ export default dvaModelExtend(commonModel, {
 
         yield put({
           type: 'updateState',
-          payload: {isEdit: !!(fbTypes.exists)}
+          payload: {
+            tags: [...businessTypes?.types],
+            isEdit: !!(fbTypes.exists)
+          }
         });
       }
 
       yield put({type: 'updateState', payload: {businessTypes}});
     },
 
-    * save({payload}, {call, select}) {
+    * prepareToSave({payload}, {call, put, select}) {
       const {user, ability} = yield select(state => state.authModel);
       const {tags} = yield select(state => state.businessTypesModel);
 
@@ -97,12 +100,21 @@ export default dvaModelExtend(commonModel, {
               types: [...tags]
             }
           });
-        }
-      }
-    },
 
-    * prepareToSave({payload}, {put}) {
-      yield put({type: 'save', payload: {doc: 'businessTypes'}});
+          yield put({type: 'updateState', payload: {isEdit: true}});
+        }
+
+        let data = {};
+        data.metadata = yield call(detailsInfo, {entity, user});
+
+        yield put({
+          type: 'toForm',
+          payload: {
+            model: 'businessTypesModel',
+            form: {...data}
+          }
+        });
+      }
     }
   },
   reducers: {}

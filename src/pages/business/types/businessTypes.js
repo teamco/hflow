@@ -37,7 +37,8 @@ export const businessTypes = props => {
   const {
     isEdit,
     entityForm,
-    tags
+    tags,
+    touched
   } = businessTypesModel;
 
   useEffect(() => {
@@ -82,6 +83,7 @@ export const businessTypes = props => {
 
   return (
       <Page spinEffects={['businessTypesModel/query']}
+            touched={touched}
             component={component}>
         <div className={styles.preparationWrapper}>
           <PageHeader ghost={false}
@@ -89,7 +91,7 @@ export const businessTypes = props => {
                       extra={[
                         <SaveButton key={'save'}
                                     isEdit={isEdit}
-                                    disabled={disabled}
+                                    disabled={disabled || !touched}
                                     formRef={formRef}
                                     loading={loading.effects['businessTypesModel/prepareToSave']}/>
                       ]}>

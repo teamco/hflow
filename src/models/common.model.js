@@ -39,7 +39,10 @@ const commonModel = {
     * updateTags({payload}, {put}) {
       yield put({
         type: 'updateState',
-        payload: {tags: payload.tags}
+        payload: {
+          tags: payload.tags,
+          touched: true
+        }
       });
     },
 
