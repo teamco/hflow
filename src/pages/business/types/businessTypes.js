@@ -11,7 +11,7 @@ import Main from 'components/Main';
 
 import {fromForm} from 'utils/object';
 
-import styles from 'pages/userRoles/userRoles.module.less';
+import styles from 'pages/business/types/businessTypes.module.less';
 
 const {GenericPanel, EditableTags} = FormComponents;
 const {Info} = Main;
@@ -21,26 +21,23 @@ const {Info} = Main;
  * @param props
  * @return {JSX.Element}
  */
-export const userRoles = props => {
+export const businessTypes = props => {
   const [formRef] = Form.useForm();
 
   const {
     t,
-    userRolesModel,
+    businessTypesModel,
     authModel,
     loading,
     onQuery,
-    onUpdateUserRoles,
-    onUpdateBusinessRoles,
+    onUpdateTags,
     onSave
   } = props;
 
   const {
-    userRoles,
-    businessRoles,
     isEdit,
     entityForm
-  } = userRolesModel;
+  } = businessTypesModel;
 
   useEffect(() => {
     onQuery();
@@ -60,6 +57,8 @@ export const userRoles = props => {
         {t('panel:manageRoles')}
       </>
   );
+
+  const {tags} = entityForm;
 
   const {
     createdBy,
@@ -84,7 +83,7 @@ export const userRoles = props => {
   const disabled = ability.cannot('update', component);
 
   return (
-      <Page spinEffects={['userRolesModel/query']}
+      <Page spinEffects={['businessTypesModel/query']}
             component={component}>
         <div className={styles.preparationWrapper}>
           <PageHeader ghost={false}
@@ -94,7 +93,7 @@ export const userRoles = props => {
                                     isEdit={isEdit}
                                     disabled={disabled}
                                     formRef={formRef}
-                                    loading={loading.effects['userRolesModel/prepareToSave']}/>
+                                    loading={loading.effects['businessTypesModel/prepareToSave']}/>
                       ]}>
           </PageHeader>
           <Form layout={'vertical'}
@@ -102,28 +101,16 @@ export const userRoles = props => {
                 form={formRef}
                 fields={entityForm}
                 onFinish={onFinish}>
-            <GenericPanel header={t('panel:userRoles')}
-                          name={'userRoles'}
-                          defaultActiveKey={['userRoles']}>
+            <GenericPanel header={t('panel:businessTypes')}
+                          name={'businessTypes'}
+                          defaultActiveKey={['businessTypes']}>
               <div>
                 <EditableTags label={false}
                               name={'tags'}
                               disabled={disabled}
                               newTag={t('actions:new')}
-                              onChange={onUpdateUserRoles}
-                              tags={userRoles?.roles}/>
-              </div>
-            </GenericPanel>
-            <GenericPanel header={t('panel:businessRoles')}
-                          name={'businessRoles'}
-                          defaultActiveKey={['businessRoles']}>
-              <div>
-                <EditableTags label={false}
-                              name={'tags'}
-                              disabled={disabled}
-                              newTag={t('actions:new')}
-                              onChange={onUpdateBusinessRoles}
-                              tags={businessRoles?.roles}/>
+                              onChange={onUpdateTags}
+                              tags={tags}/>
               </div>
             </GenericPanel>
             <Info {...infoProps} />

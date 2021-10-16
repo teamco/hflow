@@ -91,18 +91,27 @@ export const routes = [
           },
           {
             exact: true,
+            path: '/admin/businessTypes',
+            component: '@/pages/business/types',
+            breadcrumb: 'route:businessTypes',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
             path: '/admin/logs',
             component: '@/pages/userLogs',
             breadcrumb: 'route:userLogs',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]
-          },
-          {
-            component: '@/pages/404',
-            breadcrumb: 'route:page404'
           }
         ]
+      },
+      {
+        component: '@/pages/404',
+        breadcrumb: 'route:page404'
       }
     ]
   }

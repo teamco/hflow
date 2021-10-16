@@ -1,12 +1,12 @@
 import React from 'react';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
   BugOutlined,
   InfoCircleOutlined,
   UserOutlined,
   TeamOutlined,
   TrademarkOutlined,
-  SolutionOutlined
+  SolutionOutlined,
+  FontSizeOutlined
 } from '@ant-design/icons';
 
 /**
@@ -34,6 +34,11 @@ export const menus = [
     key: 'menu:business',
     icon: <TrademarkOutlined />,
     items: [
+      {
+        key: 'menu:businessTypes',
+        url: '/admin/businessTypes',
+        icon: <FontSizeOutlined />
+      },
     ]
   },
   {

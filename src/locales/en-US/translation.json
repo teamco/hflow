@@ -110,6 +110,7 @@
     "userProfile": "User Profile",
     "manageUsers": "Manage Users",
     "manageRoles": "Manage Roles",
+    "businessTypes": "Business Types",
     "business": "Business",
     "systemLogs": "System Logs",
     "errorLogs": "Error Logs",
@@ -172,6 +173,7 @@
     "admin": "Admin",
     "users": "Users",
     "manageRoles": "Manage Roles",
+    "businessTypes": "Business Types",
     "userProfile": "Profile",
     "businesses": "Businesses",
     "business": "Business",
@@ -185,7 +187,8 @@
     "details": "Details",
     "manageRoles": "Roles",
     "userRoles": "User Roles",
-    "businessRoles": "Business Roles"
+    "businessRoles": "Business Roles",
+    "businessTypes": "Business Types"
   },
   "address": {
     "province": "Province",
