@@ -244,7 +244,26 @@ export default dvaModelExtend(commonModel, {
       });
 
       yield put({type: 'businessAddress'});
+      yield put({type: 'businessTypes'});
       yield put({type: 'updateState', payload: {isEdit: params.business !== 'new'}});
+    },
+
+    * businessTypes(_, {call, put}) {
+      const fbTypes = yield call(fbFindById, {
+        collection: 'businessConfig',
+        doc: 'types'
+      });
+
+      let businessTypes = {types: []};
+
+      if (fbTypes.exists) {
+        businessTypes = fbTypes.data();
+      }
+
+      yield put({
+        type: 'updateState',
+        payload: {businessTypes: [...businessTypes?.types]}
+      });
     },
 
     * prepareToSave({payload, params}, {call, select, put}) {

@@ -1,12 +1,14 @@
 import React from 'react';
-import {DatePicker, Input} from 'antd';
+import {Input, Select} from 'antd';
 
 import {emailProps} from 'components/partials/email.partial';
 import FormComponents from 'components/Form';
 import UploadFile from 'components/Upload';
+import {sortBy} from 'utils/array';
 
 const {GenericPanel} = FormComponents;
 const {TextArea} = Input;
+const {Option} = Select;
 
 /**
  * @export
@@ -20,6 +22,7 @@ const {TextArea} = Input;
 export const BusinessInfo = ({
   t,
   formRef,
+  businessTypes,
   disabled,
   uploadLogo
 }) => {
@@ -27,6 +30,21 @@ export const BusinessInfo = ({
       <GenericPanel header={t('business:info')}
                     name={'info'}
                     defaultActiveKey={['info']}>
+        <div>
+          <Select name={'businessType'}
+                  form={formRef}
+                  label={t('business:type')}
+                  disabled={disabled}
+                  config={{rules: [{required: true}]}}>
+            {sortBy(businessTypes, 'name').map((type, idx) => (
+                <Option key={idx}
+                        value={type}>
+                  {type}
+                </Option>
+            ))}
+          </Select>
+          <></>
+        </div>
         <div>
           <Input type={'text'}
                  label={t('business:name')}

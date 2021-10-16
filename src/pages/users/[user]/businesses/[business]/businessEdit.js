@@ -61,6 +61,7 @@ export const businessEdit = (props) => {
   const {
     entityForm,
     countries,
+    businessTypes,
     states,
     selectedCountry,
     uploadedFiles,
@@ -97,6 +98,7 @@ export const businessEdit = (props) => {
     t,
     formRef,
     disabled,
+    businessTypes,
     uploadLogo: {
       field: 'logo',
       allowed: [
