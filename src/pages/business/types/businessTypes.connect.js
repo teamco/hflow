@@ -19,11 +19,8 @@ export default connect(
       onUpdateTags(tags) {
         dispatch({type: 'businessTypesModel/updateTags', payload: {tags}});
       },
-      onSave(payload) {
-        dispatch({
-          type: 'businessTypesModel/prepareToSave',
-          payload
-        });
+      onSave() {
+        dispatch({type: 'businessTypesModel/prepareToSave'});
       }
     })
 )(withTranslation()(businessTypes));

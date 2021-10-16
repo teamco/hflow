@@ -145,7 +145,7 @@ export const forceSignOutUser = async ({uid, email}) => {
     }
   };
 
-  await fbUpdate({collection: 'users', docId: user.docId, data: {metadata}});
+  await fbUpdate({collection: 'users', doc: user.docId, data: {metadata}});
 
   return user;
 };

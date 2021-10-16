@@ -157,8 +157,8 @@ export const getRef = ({collection, doc}) => db.collection(collection).doc(doc);
  * @param data
  * @param {boolean} [notice]
  */
-export const fbUpdate = async ({collection, docId, data, notice = true}) => {
-  const docRef = getRef({collection, doc: docId});
+export const fbUpdate = async ({collection, doc, data, notice = true}) => {
+  const docRef = getRef({collection, doc});
   return await docRef.update(data).then(() => {
     notice && successSaveMsg(true, capitalize(collection));
   }).catch(async error => {

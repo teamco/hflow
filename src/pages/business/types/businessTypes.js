@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Form, PageHeader} from 'antd';
 import {
-  PieChartOutlined
+  FontSizeOutlined
 } from '@ant-design/icons';
 
 import Page from 'components/Page';
@@ -36,7 +36,8 @@ export const businessTypes = props => {
 
   const {
     isEdit,
-    entityForm
+    entityForm,
+    tags
   } = businessTypesModel;
 
   useEffect(() => {
@@ -45,20 +46,17 @@ export const businessTypes = props => {
 
   /**
    * @constant
-   * @param formValues
    */
-  const onFinish = formValues => {
-    onSave(formValues);
+  const onFinish = () => {
+    onSave();
   };
 
   const subTitle = (
       <>
-        <PieChartOutlined style={{marginRight: 10}}/>
-        {t('panel:manageRoles')}
+        <FontSizeOutlined style={{marginRight: 10}}/>
+        {t('panel:businessConfig')}
       </>
   );
-
-  const {tags} = entityForm;
 
   const {
     createdBy,

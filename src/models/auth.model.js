@@ -106,7 +106,7 @@ export default dvaModelExtend(commonModel, {
         // Update user
         yield call(fbUpdate, {
           collection: 'users',
-          docId: _userExist.docId,
+          doc: _userExist.docId,
           data: {
             ..._user,
             roles: [...(_user?.roles || [])]
@@ -205,7 +205,7 @@ export default dvaModelExtend(commonModel, {
 
       if (_userExist.docId) {
         // Update local user
-        yield call(fbUpdate, {collection: 'users', docId: _userExist.docId, data: _userExist.data});
+        yield call(fbUpdate, {collection: 'users', doc: _userExist.docId, data: _userExist.data});
         // Update fb user
         yield call(updateFbUserEmail, {email: payload.email});
 
@@ -259,7 +259,7 @@ export default dvaModelExtend(commonModel, {
       });
 
       if (_userExist.docId) {
-        yield call(fbUpdate, {collection: 'users', docId: _userExist.docId, data: _userExist.data});
+        yield call(fbUpdate, {collection: 'users', doc: _userExist.docId, data: _userExist.data});
 
         if (state.user?.uid === user.uid) {
           yield put({

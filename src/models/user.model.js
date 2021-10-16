@@ -55,7 +55,7 @@ export default dvaModelExtend(commonModel, {
       if (_userExist.docId) {
         yield call(fbUpdate, {
           collection: 'users',
-          docId: _userExist.docId,
+          doc: _userExist.docId,
           data: _userExist.data
         });
       }
@@ -181,7 +181,7 @@ export default dvaModelExtend(commonModel, {
         // Update user roles
         yield call(fbUpdate, {
           collection: 'users',
-          docId: selectedUser.id,
+          doc: selectedUser.id,
           data: {...selectedUser, roles}
         });
 

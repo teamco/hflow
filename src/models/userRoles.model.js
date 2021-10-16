@@ -111,7 +111,7 @@ export default dvaModelExtend(commonModel, {
         if (entity.exists) {
           yield call(fbUpdate, {
             collection: 'roles',
-            docId: doc,
+            doc: doc,
             data: {
               metadata: {
                 ...entity.data().metadata,

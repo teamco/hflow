@@ -188,7 +188,8 @@
     "manageRoles": "Roles",
     "userRoles": "User Roles",
     "businessRoles": "Business Roles",
-    "businessTypes": "Business Types"
+    "businessConfig": "Business Config",
+    "businessTypes": "Types"
   },
   "address": {
     "province": "Province",

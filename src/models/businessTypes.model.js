@@ -28,7 +28,7 @@ export default dvaModelExtend(commonModel, {
       if (user && ability.can('read', 'businessTypes')) {
 
         const fbTypes = yield call(fbFindById, {
-          collection: 'businessSetup',
+          collection: 'businessConfig',
           doc: 'types'
         });
 
@@ -60,12 +60,12 @@ export default dvaModelExtend(commonModel, {
 
     * save({payload}, {call, select}) {
       const {user, ability} = yield select(state => state.authModel);
-      const state = yield select(state => state.businessTypesModel);
+      const {tags} = yield select(state => state.businessTypesModel);
 
-      const {doc} = payload;
+      const _db = {collection: 'businessConfig', doc: 'types'};
 
-      if (user && ability.can('update', 'roles')) {
-        let entity = yield call(fbFindById, {collection: 'roles', doc});
+      if (user && ability.can('update', 'businessTypes')) {
+        let entity = yield call(fbFindById, _db);
 
         const metadata = {
           updatedAt: +(new Date),
@@ -74,29 +74,27 @@ export default dvaModelExtend(commonModel, {
 
         if (entity.exists) {
           yield call(fbUpdate, {
-            collection: 'roles',
-            docId: doc,
+            ..._db,
             data: {
               metadata: {
                 ...entity.data().metadata,
                 ...metadata
               },
-              roles: [...state[doc].roles]
+              types: [...tags]
             }
           });
 
         } else {
 
           entity = yield call(fbWrite, {
-            collection: 'roles',
-            doc,
+            ..._db,
             data: {
               metadata: {
                 createdAt: metadata.updatedAt,
                 createdBy: user.uid,
                 ...metadata
               },
-              roles: [...state[doc].roles]
+              types: [...tags]
             }
           });
         }

@@ -312,7 +312,7 @@ export default dvaModelExtend(commonModel, {
         if (isEdit) {
 
           selectedBusiness && params.business === selectedBusiness.id ?
-              yield call(fbUpdate, {collection: 'businesses', docId: selectedBusiness.id, data}) :
+              yield call(fbUpdate, {collection: 'businesses', doc: selectedBusiness.id, data}) :
               errorSaveMsg(true, 'Business');
 
           yield put({type: 'updateState', payload: {touched: false}});
@@ -455,13 +455,13 @@ export default dvaModelExtend(commonModel, {
 
         yield call(fbUpdate, {
           collection: 'users',
-          docId: user.docId,
+          doc: user.docId,
           data: {...data, id: user.docId}
         });
 
         yield call(fbUpdate, {
           collection: 'tempBusinessUsers',
-          docId: businessUserRef.id,
+          doc: businessUserRef.id,
           data: {
             ...data.business,
             metadata: {
@@ -495,7 +495,7 @@ export default dvaModelExtend(commonModel, {
 
       yield call(fbUpdate, {
         collection: 'users',
-        docId: user.id,
+        doc: user.id,
         data: {
           business: {
             ...user.business,
