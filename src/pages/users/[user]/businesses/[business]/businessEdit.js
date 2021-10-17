@@ -183,7 +183,7 @@ export const businessEdit = (props) => {
         <Menu.Item key={'users'}
                    loading={loading.effects['businessModel/manageBusinessUsers']}
                    disabled={!isEdit}
-                   icon={<UsergroupAddOutlined/>}>
+                   icon={<UsergroupAddOutlined />}>
           <NavLink to={`/admin/users/${params.user}/businesses/${params.business}/users`}>
             {t('actions:manage', {type: t('auth:users')})}
           </NavLink>
@@ -254,6 +254,7 @@ export const businessEdit = (props) => {
                 className={styles.form}
                 form={formRef}
                 fields={entityForm}
+                scrollToFirstError={true}
                 onFinish={onFinish}
                 initialValues={{
                   country: selectedCountry
