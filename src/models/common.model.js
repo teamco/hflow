@@ -91,7 +91,7 @@ const commonModel = {
         type: 'updateState',
         payload: {
           touched: true,
-           entityForm: [...allFields].map(field => ({name: field.name, value: field.value}))
+          entityForm: [...allFields].map(field => ({name: field.name, value: field.value}))
         }
       });
 
