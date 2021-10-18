@@ -84,17 +84,17 @@ const commonModel = {
       });
     },
 
-    * updateFields({payload}, {put, select}) {
-      const {entityForm} = yield select(state => state[payload.model]);
-      const _entityForm = [...entityForm];
+    * updateFields({payload}, {put}) {
+      const {allFields} = payload;
 
       yield put({
         type: 'updateState',
         payload: {
           touched: true,
-          entityForm: [..._entityForm]
+           entityForm: [...allFields].map(field => ({name: field.name, value: field.value}))
         }
       });
+
     },
 
     * handleAddFile({payload}, {put, select}) {
