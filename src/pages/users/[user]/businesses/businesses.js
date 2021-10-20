@@ -38,8 +38,8 @@ export const businesses = (props) => {
   } = businessModel;
 
   useEffect(() => {
-    onGetBusinesses(selectedUser, params.user);
-  }, [authModel.user]);
+    selectedUser && onGetBusinesses(selectedUser, params.user);
+  }, [authModel.user, selectedUser]);
 
   const subTitle = (
     <>

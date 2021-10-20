@@ -103,7 +103,8 @@
     "createdBy": "Created by",
     "updatedBy": "Updated by",
     "createdAt": "Created at",
-    "updatedAt": "Updated at"
+    "updatedAt": "Updated at",
+    "invitedAt": "Invited At"
   },
   "menu": {
     "users": "Users",

@@ -26,3 +26,14 @@ export const tsToTime = ts => {
 export const tsToLocaleDateTime = ts => {
   return `${tsToDate(ts)} ${tsToTime(ts)}`;
 };
+
+/**
+ * @export
+ * @param {number|string} ts
+ * @return {string}
+ */
+export const tsLocaleDateTime = date => {
+  const [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
+  return `${day} ${month} ${year}`;
+};
+

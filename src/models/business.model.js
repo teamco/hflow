@@ -66,7 +66,7 @@ export default dvaModelExtend(commonModel, {
 
     * query({payload}, {put, call}) {
       const {selectedUser, userId} = payload;
-
+      debugger;
       yield put({
         type: 'userModel/validateUser',
         payload: {selectedUser, userId}

@@ -25,7 +25,7 @@ import {
 } from 'antd';
 
 import classnames from 'classnames';
-import {tsToLocaleDateTime} from 'utils/timestamp';
+import {tsToLocaleDateTime, tsLocaleDateTime} from 'utils/timestamp';
 import EmailVerified from 'components/Profile/email.verified';
 import {isContributor, isModerator, isOwner} from 'services/userRoles.service';
 import {Can} from 'utils/auth/can';
@@ -173,7 +173,7 @@ export const expandable = (props) => {
     expandedRowRender(record) {
       const {business = {}, metadata = {}} = record;
       const {userRoles} = business;
-      const {pending, signedIn} = metadata;
+      const {pending, invitedAt, creationTime} = metadata;
 
       return (
           <div className={styles.profileExpand}>
@@ -190,7 +190,14 @@ export const expandable = (props) => {
                   <CalendarTwoTone/>
                   <strong>{t('form:createdAt')}</strong>
                 </div>
-                <div>{pending ? t('error:na') : tsToLocaleDateTime(+(new Date(metadata?.creationTime)))}</div>
+                <div>{pending ? t('error:na') : tsToLocaleDateTime(+(new Date(creationTime)))}</div>
+              </Col>
+              <Col span={8}>
+                <div>
+                  <CalendarTwoTone/>
+                  <strong>{t('form:invitedAt')}</strong>
+                </div>
+                <div>{pending ? tsLocaleDateTime(new Date(invitedAt)) : t('error:na')}</div>
               </Col>
               <Col span={8}/>
             </Row>
