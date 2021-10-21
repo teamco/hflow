@@ -94,7 +94,6 @@ const commonModel = {
           entityForm: [...allFields].map(field => ({name: field.name, value: field.value}))
         }
       });
-
     },
 
     * handleAddFile({payload}, {put, select}) {

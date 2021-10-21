@@ -25,7 +25,7 @@ import {
 } from 'antd';
 
 import classnames from 'classnames';
-import {tsToLocaleDateTime, tsLocaleDateTime} from 'utils/timestamp';
+import {tsToLocaleDateTime} from 'utils/timestamp';
 import EmailVerified from 'components/Profile/email.verified';
 import {isContributor, isModerator, isOwner} from 'services/userRoles.service';
 import {Can} from 'utils/auth/can';
@@ -197,7 +197,7 @@ export const expandable = (props) => {
                   <CalendarTwoTone/>
                   <strong>{t('form:invitedAt')}</strong>
                 </div>
-                <div>{pending ? tsLocaleDateTime(new Date(invitedAt)) : t('error:na')}</div>
+                <div>{pending ? tsToLocaleDateTime(invitedAt) : t('error:na')}</div>
               </Col>
               <Col span={8}/>
             </Row>
