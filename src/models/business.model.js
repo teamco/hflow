@@ -372,6 +372,18 @@ export default dvaModelExtend(commonModel, {
       }
     },
 
+    * sendRegisterLink({payload}, {call, select}) {
+      const {domain, port, protocol} = REMOTE_SERVER;
+      const {email, userId} = payload.data;
+      yield call(sendAuthLink, {
+        email,
+        setting: {
+          url: `${protocol}://${domain}:${port}`,
+          userId
+        }
+      });
+    },
+
     * sendRegisterLinkBusinessUser({payload}, {call, put, select}) {
       const {user, ability} = yield select(state => state.authModel);
       const {email, userRoles, business} = payload.data;
@@ -397,15 +409,7 @@ export default dvaModelExtend(commonModel, {
         _tempExist = yield call(fbAdd, {collection: 'tempBusinessUsers', data});
 
         if (_tempExist?.docId) {
-          const {domain, port, protocol} = REMOTE_SERVER;
-
-          yield call(sendAuthLink, {
-            email,
-            setting: {
-              url: `${protocol}://${domain}:${port}`,
-              userId: _tempExist.docId
-            }
-          });
+          yield put({type: 'sendRegisterLink', payload: {email, userId: _tempExist.docId}});
         }
       }
     },

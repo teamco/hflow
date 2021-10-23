@@ -39,8 +39,9 @@ export default connect(
         if (user.email) {
           dispatch({type: `userModel/sendVerification`, payload: {user}});
         } else {
-          message.warning(i18n.t('msg:errorSentEmail')).then();
-          message.warning(i18n.t('error:noEmail')).then();
+          message.warning(i18n.t('msg:errorSentEmail')).then(() => {
+            message.warning(i18n.t('error:noEmail')).then();
+          });
         }
       }
     })

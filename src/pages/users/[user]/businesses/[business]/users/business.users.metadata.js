@@ -32,7 +32,7 @@ import {Can} from 'utils/auth/can';
 
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
-import {getRoleIcon} from '../../../profile/profile.metadata';
+import {getRoleIcon} from 'pages/users/[user]/profile/profile.metadata';
 
 const {Option} = Select;
 
@@ -165,8 +165,12 @@ export const metadata = ({
 export const expandable = (props) => {
   const {
     t,
+    component,
+    verificationSent,
     businessRoles,
-    onUpdateRole
+    onUpdateRole,
+    onSendVerification,
+    onResendRegisterLink
   } = props;
 
   return {
@@ -192,20 +196,31 @@ export const expandable = (props) => {
                 </div>
                 <div>{pending ? t('error:na') : tsToLocaleDateTime(+(new Date(creationTime)))}</div>
               </Col>
-              <Col span={8}>
-                <div>
-                  <CalendarTwoTone/>
-                  <strong>{t('form:invitedAt')}</strong>
-                </div>
-                <div>{pending ? tsToLocaleDateTime(invitedAt) : t('error:na')}</div>
-              </Col>
-              <Col span={8}/>
+              {pending ? (
+                  <Col span={8}>
+                    <div>
+                      <CalendarTwoTone/>
+                      <strong>{t('form:invitedAt')}</strong>
+                    </div>
+                    <div>
+                      {tsToLocaleDateTime(invitedAt)}
+                      <div className={styles.verification}
+                           onClick={() => onResendRegisterLink(record)}>
+                        {t('auth:reSendRegisterLink')}
+                      </div>
+                    </div>
+                  </Col>
+              ) : null}
             </Row>
             <Row gutter={[16, 16]}
                  style={{marginTop: 10}}>
               <Col span={8}>
                 <EmailVerified data={record}
-                               verification={{component: 'users'}}/>
+                               verification={{
+                                 component,
+                                 verificationSent,
+                                 onSendVerification
+                               }}/>
               </Col>
               <Col span={8}>
                 <div>

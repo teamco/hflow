@@ -29,12 +29,19 @@ export const businessUsers = (props) => {
     t,
     businessModel,
     userRolesModel,
+    userModel,
+    onSendVerification,
+    onResendRegisterLink,
     loading,
     onQuery,
     onUpdateRole,
     onAssignUser,
     onUnassignUser
   } = props;
+
+  let {
+    verificationSent
+  } = userModel;
 
   let {
     users = [],
@@ -58,11 +65,17 @@ export const businessUsers = (props) => {
 
   const businessRoles = fromForm(entityForm, 'tags') || [];
 
+  const component = 'businessUsers';
+
   const tableProps = {
     expandable: expandable({
       t,
       businessRoles,
-      onUpdateRole
+      onUpdateRole,
+      component,
+      verificationSent,
+      onSendVerification,
+      onResendRegisterLink
     })
   };
 
@@ -77,8 +90,6 @@ export const businessUsers = (props) => {
         {t('actions:manage', {type: t('business:users')})}
       </>
   );
-
-  const component = 'businessUsers';
 
   return (
       <Page className={styles.users}

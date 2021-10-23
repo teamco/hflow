@@ -3,7 +3,7 @@ import _ from 'lodash';
 import gravatar from 'gravatar';
 
 import i18n from 'utils/i18n';
-import {fbReadBy, fbReadAll, firebaseAppAuth, fbUpdate, getRef} from 'services/firebase.service';
+import {fbReadBy, fbReadAll, firebaseAppAuth, fbUpdate} from 'services/firebase.service';
 import {errorSaveMsg} from 'utils/message';
 import {isAdmin} from 'services/userRoles.service';
 
@@ -75,7 +75,7 @@ export const findUser = async ({uid, email, emailVerified, metadata}) => {
 
   /**
    * @constant
-   * @type {{forEach, error}}
+   * @type {{error}|firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>}
    */
   const users = await fbReadBy({collection: 'users', field: 'uid', value: uid});
 
@@ -185,17 +185,14 @@ export const sendVerificationEmail = async ({user}) => {
   if (currentUser.uid === user.data().uid) {
     return await currentUser.sendEmailVerification().then(async () => {
       await message.success(i18n.t('msg:successSentVerificationEmail'));
-      await message.warning(i18n.t('msg:pendingEmailVerification'));
-      return true;
+      return message.warning(i18n.t('msg:pendingEmailVerification'));
     }).catch(async error => {
       // An error happened.
       await message.error(error.message);
-      await message.error(i18n.t('msg:errorSentVerificationEmail'));
-      return false;
+      return message.error(i18n.t('msg:errorSentVerificationEmail'));
     });
   } else {
-    await message.warning(i18n.t('msg:errorSentVerificationEmail'));
-    return false;
+    return message.warning(i18n.t('msg:errorSentVerificationEmail'));
   }
 };
 
@@ -208,13 +205,11 @@ export const sendVerificationEmail = async ({user}) => {
 export const resetUserPassword = ({user}) => {
   return firebaseAppAuth.sendPasswordResetEmail(user.email).then(async () => {
     // Email sent.
-    await message.success(i18n.t('msg:successPasswordResetEmail'));
-    return true;
+    return message.success(i18n.t('msg:successPasswordResetEmail'));
   }).catch(async error => {
     // An error happened.
     await message.error(error.message);
-    await message.error(i18n.t('msg:errorSentPasswordResetEmail'));
-    return false;
+    return message.error(i18n.t('msg:errorSentPasswordResetEmail'));
   });
 };
 
@@ -324,12 +319,10 @@ export const sendAuthLink = async ({setting, email}) => {
   return await firebaseAppAuth.sendSignInLinkToEmail(email, actionCodeSettings).then(async () => {
     // The link was successfully sent. Inform the user.
     // Save the email locally so you don't need to ask the user for it again
-    await message.success(i18n.t('msg:linkSent'));
-    return true;
+    return message.success(i18n.t('msg:linkSent'));
   }).catch(async error => {
     await message.error(i18n.t('msg:errorLinkSend'));
-    await message.error(error.message);
-    return false;
+    return message.error(error.message);
   });
 
 };
