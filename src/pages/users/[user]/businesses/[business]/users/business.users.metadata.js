@@ -191,13 +191,15 @@ export const expandable = (props) => {
                 </div>
                 <div>{record.email || t('error:na')}</div>
               </Col>
-              <Col span={8}>
-                <div>
-                  <CalendarTwoTone/>
-                  <strong>{t('form:createdAt')}</strong>
-                </div>
-                <div>{pending ? t('error:na') : tsToLocaleDateTime(+(new Date(creationTime)))}</div>
-              </Col>
+              {pending ? null : (
+                  <Col span={8}>
+                    <div>
+                      <CalendarTwoTone/>
+                      <strong>{t('form:createdAt')}</strong>
+                    </div>
+                    <div>{tsToLocaleDateTime(+(new Date(creationTime)))}</div>
+                  </Col>
+              )}
               {pending ? (
                   <Col span={8}>
                     <div>
@@ -221,46 +223,16 @@ export const expandable = (props) => {
             </Row>
             <Row gutter={[16, 16]}
                  style={{marginTop: 10}}>
-              <Col span={8}>
-                <EmailVerified data={record}
-                               verification={{
-                                 component,
-                                 verificationSent,
-                                 onSendVerification
-                               }}/>
-              </Col>
-              <Col span={8}>
-                <div>
-                  <ControlTwoTone/>
-                  <strong>{t('auth:roles')}</strong>
-                </div>
-                <div>
-                  <Can I={'update'} a={'businessUserRole'}>
-                    <Select defaultValue={userRoles}
-                            onChange={role => onUpdateRole(params, record, role)}
-                            style={{width: 150}}
-                            size={'small'}>
-                      {businessRoles.map(role => (
-                          <Option key={role}
-                                  disabled={isOwner(role)}
-                                  value={role}>
-                            {role}
-                          </Option>
-                      ))}
-                    </Select>
-                  </Can>
-                  <Can not I={'update'} a={'businessUserRole'}>
-                    <Tag className={styles.rules}
-                         icon={
-                           isModerator(userRoles) ? (<FontAwesomeIcon icon={faUserCog}/>) :
-                               isContributor(userRoles) ? (<FontAwesomeIcon icon={faDonate}/>) :
-                                   (<FontAwesomeIcon icon={faBook}/>)}>
-                      {userRoles}
-                    </Tag>
-                  </Can>
-                </div>
-              </Col>
-              <Col span={8}/>
+              {pending ? null : (
+                  <Col span={8}>
+                    <EmailVerified data={record}
+                                   verification={{
+                                     component,
+                                     verificationSent,
+                                     onSendVerification
+                                   }}/>
+                  </Col>
+              )}
             </Row>
           </div>
       );
