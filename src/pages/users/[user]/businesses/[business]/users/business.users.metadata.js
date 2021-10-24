@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   DeleteTwoTone,
   PauseCircleTwoTone,
@@ -173,6 +173,8 @@ export const expandable = (props) => {
     onResendRegisterLink
   } = props;
 
+  const [showSendInvitation, setShowSendInvitation] = useState(true);
+
   return {
     expandedRowRender(record) {
       const {business = {}, metadata = {}} = record;
@@ -204,10 +206,15 @@ export const expandable = (props) => {
                     </div>
                     <div>
                       {tsToLocaleDateTime(invitedAt)}
-                      <div className={styles.verification}
-                           onClick={() => onResendRegisterLink(record)}>
-                        {t('auth:reSendRegisterLink')}
-                      </div>
+                      {showSendInvitation && (
+                          <div className={styles.verification}
+                               onClick={() => {
+                                 onResendRegisterLink(record);
+                                 setShowSendInvitation(false);
+                               }}>
+                            {t('auth:reSendRegisterLink')}
+                          </div>
+                      )}
                     </div>
                   </Col>
               ) : null}

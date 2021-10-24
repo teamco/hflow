@@ -208,15 +208,13 @@ export default dvaModelExtend(commonModel, {
             payload: {country: _business.country}
           });
 
-          yield put({
+          return yield put({
             type: 'toForm',
             payload: {
               model: 'businessModel',
               form: {..._business}
             }
           });
-
-          return false;
         }
 
         yield put({
@@ -372,16 +370,38 @@ export default dvaModelExtend(commonModel, {
       }
     },
 
-    * sendRegisterLink({payload}, {call, select}) {
+    * sendRegisterLink({payload}, {call}) {
       const {domain, port, protocol} = REMOTE_SERVER;
-      const {email, userId} = payload.data;
-      yield call(sendAuthLink, {
-        email,
-        setting: {
-          url: `${protocol}://${domain}:${port}`,
-          userId
-        }
-      });
+      let {email, userId} = payload.data;
+
+      if (!userId) {
+        const _tempExist = yield call(findBusinessTempUser, {email});
+        userId = _tempExist?.docId;
+
+        // Update user
+        yield call(fbUpdate, {
+          collection: 'tempBusinessUsers',
+          doc: userId,
+          data: {
+            ..._tempExist.data,
+            metadata: {
+              ..._tempExist.data.metadata,
+              invitedAt: +(new Date)
+            }
+          }
+        });
+      }
+
+      if (userId) {
+
+        yield call(sendAuthLink, {
+          email,
+          setting: {
+            url: `${protocol}://${domain}:${port}`,
+            userId
+          }
+        });
+      }
     },
 
     * sendRegisterLinkBusinessUser({payload}, {call, put, select}) {
@@ -392,8 +412,7 @@ export default dvaModelExtend(commonModel, {
         let _tempExist = yield call(findBusinessTempUser, {email});
 
         if (_tempExist.docId) {
-          message.warning(i18n.t('error:userExist')).then();
-          return false;
+          return yield call(message.warning, i18n.t('error:userExist'));
         }
 
         const data = {
@@ -401,6 +420,7 @@ export default dvaModelExtend(commonModel, {
           userRoles,
           metadata: {
             pending: true,
+            invitedAt: +(new Date),
             creatorRef: getRef({collection: 'users', doc: user.id}),
             businessRef: getRef({collection: 'businesses', doc: business})
           }
@@ -507,6 +527,7 @@ export default dvaModelExtend(commonModel, {
       const businessRef = getRef({collection: 'businesses', doc: payload.business});
       const assignedUsers = yield call(getBusinessUsers, {businessRef});
       const tempUsers = yield  call(getTempBusinessUsers, {businessRef});
+
       yield put({
         type: 'updateState',
         payload: {assignedUsers: [...assignedUsers, ...tempUsers]}
