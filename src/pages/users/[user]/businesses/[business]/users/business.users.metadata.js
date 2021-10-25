@@ -221,9 +221,9 @@ export const expandable = (props) => {
                   </Col>
               ) : null}
             </Row>
-            <Row gutter={[16, 16]}
-                 style={{marginTop: 10}}>
-              {pending ? null : (
+            {pending ? null : (
+                <Row gutter={[16, 16]}
+                     style={{marginTop: 10}}>
                   <Col span={8}>
                     <EmailVerified data={record}
                                    verification={{
@@ -232,8 +232,8 @@ export const expandable = (props) => {
                                      onSendVerification
                                    }}/>
                   </Col>
-              )}
-            </Row>
+                </Row>
+            )}
           </div>
       );
     },

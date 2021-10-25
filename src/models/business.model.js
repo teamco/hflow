@@ -372,27 +372,20 @@ export default dvaModelExtend(commonModel, {
 
     * sendRegisterLink({payload}, {call}) {
       const {domain, port, protocol} = REMOTE_SERVER;
-      let {email, userId} = payload.data;
-
-      if (!userId) {
-        const _tempExist = yield call(findBusinessTempUser, {email});
-        userId = _tempExist?.docId;
-
-        // Update user
-        yield call(fbUpdate, {
-          collection: 'tempBusinessUsers',
-          doc: userId,
-          data: {
-            ..._tempExist.data,
-            metadata: {
-              ..._tempExist.data.metadata,
-              invitedAt: +(new Date)
-            }
-          }
-        });
-      }
+      const {data, isResend = false} = payload;
+      const {email, userId} = data;
 
       if (userId) {
+
+        if (isResend) {
+
+          // Update user
+          yield call(fbUpdate, {
+            collection: 'tempBusinessUsers',
+            doc: userId,
+            data: {'metadata.invitedAt': +(new Date)}
+          });
+        }
 
         yield call(sendAuthLink, {
           email,

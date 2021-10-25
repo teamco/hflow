@@ -106,7 +106,8 @@ export const getBusinessUsers = async ({ businessRef }) => {
     value: businessRef
   });
 
-  users.forEach(doc => (data.push(doc.data())));
+  users.forEach(doc => (data.push({...doc.data(), userId: doc.id})));
+
   return data;
 };
 
@@ -124,6 +125,8 @@ export const getTempBusinessUsers = async ({ businessRef }) => {
     field: 'metadata.businessRef',
     value: businessRef
   });
-  tempBusinessUsers.forEach(doc => (data.push(doc.data())));
+
+  tempBusinessUsers.forEach(doc => (data.push({...doc.data(), userId: doc.id})));
+
   return data;
 }

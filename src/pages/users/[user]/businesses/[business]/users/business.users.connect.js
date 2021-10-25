@@ -36,7 +36,7 @@ export default connect(
         }
       },
       onResendRegisterLink(data) {
-        dispatch({type: 'businessModel/sendRegisterLink', payload: {data}});
+        dispatch({type: 'businessModel/sendRegisterLink', payload: {data, isResend: true}});
       }
     })
 )(withTranslation()(businessUsers));
