@@ -137,6 +137,8 @@ export default dvaModelExtend(commonModel, {
           }
         });
 
+        yield put({type: 'appModel/notification'});
+
         yield call(handleUserSessionTimeout);
 
         // history.push(`/admin/users/${_userExist?.docId}`);

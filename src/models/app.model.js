@@ -59,7 +59,7 @@ export default dvaModelExtend(commonModel, {
   },
   effects: {
 
-    * query({payload}, {put, select}) {
+    * query({payload}, {put}) {
       yield put({type: 'updateState', payload: {menus}});
       yield put({type: 'adminLayout', payload: {visible: true}});
     },

@@ -370,7 +370,7 @@ export default dvaModelExtend(commonModel, {
       }
     },
 
-    * sendRegisterLink({payload}, {call, select}) {
+    * sendRegisterLink({payload}, {call, put, select}) {
       const {user, ability} = yield select(state => state.authModel);
       const {domain, port, protocol} = REMOTE_SERVER;
       const {data, isResend = false} = payload;
@@ -389,24 +389,17 @@ export default dvaModelExtend(commonModel, {
           });
         }
 
-        if (user && ability.can('create', 'notifications')) {
-
-          // Create notification
-          yield call(fbAdd, {
-            collection: 'notifications',
-            data: {
-              name: 'Invitation',
-              createdBy: user.id,
-              status: STATUS.pending,
-              read: false,
-              target: email,
-              description: isResend ?
-                  i18n.t('notifications:reSentInvitation') :
-                  i18n.t('notifications:sentInvitation'),
-              createdAt: ts
-            }
-          });
-        }
+        yield put({
+          type: 'notificationModel/createAndUpdate',
+          payload: {
+            name: i18n.t('notifications:invitation'),
+            description: isResend ?
+                i18n.t('notifications:reSentInvitation') :
+                i18n.t('notifications:sentInvitation'),
+            status: STATUS.pending,
+            target: email
+          }
+        });
 
         yield call(sendAuthLink, {
           email,

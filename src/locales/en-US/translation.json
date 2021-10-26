@@ -256,6 +256,7 @@
   },
   "notifications": {
     "status": "Status",
+    "invitation": "Invitation",
     "sentInvitation": "Sent business user invitation",
     "reSentInvitation": "Resent business user invitation"
   },

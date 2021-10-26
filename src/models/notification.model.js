@@ -6,7 +6,8 @@ import {getNotifications} from '../services/notification.service';
 import {message} from 'antd';
 import i18n from '../utils/i18n';
 import {history} from 'umi';
-import {fbMultipleUpdate} from '../services/firebase.service';
+import {fbAdd, fbMultipleUpdate} from '../services/firebase.service';
+import {STATUS} from '../utils/message';
 
 /**
  * @export
@@ -41,6 +42,7 @@ export default dvaModelExtend(commonModel, {
         });
 
         yield put({type: 'updateState', payload: {notifications: data}});
+        yield put({type: 'getCount', payload: data});
 
       } else {
 
@@ -49,13 +51,17 @@ export default dvaModelExtend(commonModel, {
       }
     },
 
-    * getCount(_, {put, call, select}) {
+    * getCount({payload = {}}, {put, call, select}) {
       const {user, ability} = yield select(state => state.authModel);
       const {badge} = yield select(state => state.notificationModel);
+      let {data = []} = payload;
 
       if (user && ability.can('read', 'notifications')) {
 
-        const {data = []} = yield call(getNotifications, {userId: user.id});
+        if (!data.length) {
+          const notifications = yield call(getNotifications, {userId: user.id});
+          data = notifications.data;
+        }
 
         yield put({
           type: 'updateState',
@@ -66,6 +72,30 @@ export default dvaModelExtend(commonModel, {
             }
           }
         });
+      }
+    },
+
+    * createAndUpdate({payload}, {put, call, select}) {
+      const {user, ability} = yield select(state => state.authModel);
+      const {status, target, name, description} = payload;
+
+      if (user && ability.can('create', 'notifications')) {
+
+        // Create notification
+        yield call(fbAdd, {
+          collection: 'notifications',
+          data: {
+            name,
+            description,
+            status,
+            target,
+            createdBy: user.id,
+            read: false,
+            createdAt: +(new Date)
+          }
+        });
+
+        yield put({type: 'getCount'});
       }
     }
   },
