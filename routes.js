@@ -100,6 +100,15 @@ export const routes = [
           },
           {
             exact: true,
+            path: '/admin/notifications',
+            component: '@/pages/notifications',
+            breadcrumb: 'route:notifications',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
             path: '/admin/logs',
             component: '@/pages/userLogs',
             breadcrumb: 'route:userLogs',

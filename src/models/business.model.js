@@ -29,7 +29,7 @@ import {
 
 import {toFile} from 'utils/file';
 import {monitorHistory} from 'utils/history';
-import {errorSaveMsg} from 'utils/message';
+import {errorSaveMsg, STATUS} from 'utils/message';
 import {setAs} from 'utils/object';
 
 import {detailsInfo} from 'services/cross.model.service';
@@ -370,12 +370,14 @@ export default dvaModelExtend(commonModel, {
       }
     },
 
-    * sendRegisterLink({payload}, {call}) {
+    * sendRegisterLink({payload}, {call, select}) {
+      const {user, ability} = yield select(state => state.authModel);
       const {domain, port, protocol} = REMOTE_SERVER;
       const {data, isResend = false} = payload;
       const {email, userId} = data;
 
       if (userId) {
+        const ts = +(new Date);
 
         if (isResend) {
 
@@ -383,7 +385,26 @@ export default dvaModelExtend(commonModel, {
           yield call(fbUpdate, {
             collection: 'tempBusinessUsers',
             doc: userId,
-            data: {'metadata.invitedAt': +(new Date)}
+            data: {'metadata.invitedAt': ts}
+          });
+        }
+
+        if (user && ability.can('create', 'notifications')) {
+
+          // Create notification
+          yield call(fbAdd, {
+            collection: 'notifications',
+            data: {
+              name: 'Invitation',
+              createdBy: user.id,
+              status: STATUS.pending,
+              read: false,
+              target: email,
+              description: isResend ?
+                  i18n.t('notifications:reSentInvitation') :
+                  i18n.t('notifications:sentInvitation'),
+              createdAt: ts
+            }
           });
         }
 
@@ -484,7 +505,7 @@ export default dvaModelExtend(commonModel, {
         let data = {...user.data};
 
         data.business = businessUserRef.data();
-        data.business.metadata = {
+        data.business.userLogsMetadata = {
           ...data.business.metadata,
           ...{assignedAt: +(new Date)}
         };

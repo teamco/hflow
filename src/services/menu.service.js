@@ -6,7 +6,8 @@ import {
   TeamOutlined,
   TrademarkOutlined,
   SolutionOutlined,
-  FontSizeOutlined
+  FontSizeOutlined,
+  NotificationOutlined
 } from '@ant-design/icons';
 
 /**
@@ -46,14 +47,19 @@ export const menus = [
     icon: <InfoCircleOutlined />,
     items: [
       {
+        key: 'menu:notifications',
+        url: '/admin/notifications',
+        icon: <NotificationOutlined/>
+      },
+      {
         key: 'menu:userLogs',
         url: '/admin/logs',
-        icon: <TeamOutlined />
+        icon: <TeamOutlined/>
       },
       {
         key: 'menu:errorLogs',
         url: '/admin/errors',
-        icon: <BugOutlined />
+        icon: <BugOutlined/>
       }
     ]
   }

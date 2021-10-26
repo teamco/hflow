@@ -98,6 +98,7 @@
     "uploadTypeError": "{{name}} is not a valid file type",
     "description": "Description",
     "tags": "Tags",
+    "target": "Target",
     "preview": "Preview",
     "imgUrl": "Image Url",
     "embedUrl": "Embed Url",
@@ -114,6 +115,7 @@
     "manageRoles": "Manage Roles",
     "businessTypes": "Business Types",
     "business": "Business",
+    "notifications": "User Notifications",
     "systemLogs": "System Logs",
     "errorLogs": "Error Logs",
     "userLogs": "User Logs"
@@ -179,6 +181,7 @@
     "userProfile": "Profile",
     "businesses": "Businesses",
     "business": "Business",
+    "notifications": "Notifications",
     "businessUsers": "Assigned Users"
   },
   "panel": {
@@ -243,6 +246,18 @@
     "termsOfUse": "Terms of Use",
     "privacyPolicy": "Privacy Policy",
     "aboutUs": "About us"
+  },
+  "status": {
+    "pending": "Pending",
+    "success": "Success",
+    "warning": "Warning",
+    "inProgress": "In Progress",
+    "failed": "Failed"
+  },
+  "notifications": {
+    "status": "Status",
+    "sentInvitation": "Sent business user invitation",
+    "reSentInvitation": "Resent business user invitation"
   },
   "pages": {
   }

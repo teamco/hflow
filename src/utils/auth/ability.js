@@ -29,6 +29,7 @@ export async function defineAbilityFor({ user, userId, business }) {
 
         can(['read', 'update', 'sendVerificationEmail'], 'users');
         can(['read', 'update'], 'profile');
+        can(['read'], 'notifications');
         // can(['read'], 'userLogs');
         // can(['read'], 'errorLogs');
         can(['read', 'create', 'update'], 'businesses');

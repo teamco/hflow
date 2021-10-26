@@ -5,8 +5,8 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 
-import { commonModel } from 'models/common.model';
-import { menus } from 'services/menu.service';
+import {commonModel} from 'models/common.model';
+import {menus} from 'services/menu.service';
 
 const appMeta = {
   name: '__TITLE__',
@@ -32,7 +32,7 @@ export default dvaModelExtend(commonModel, {
     },
     activeTab: true,
     collapsedMenu: true,
-    meta: { ...appMeta, ...{ title: '' } },
+    meta: {...appMeta, ...{title: ''}},
     menus: [],
     activeForm: {
       form: null
@@ -44,63 +44,53 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setupHistory(setup) {
-      const { dispatch, history } = setup;
+      const {dispatch, history} = setup;
 
       history.listen(data => {
         // In case of route replace
-        const location = data.pathname ? { ...data } : { ...data.location };
+        const location = data.pathname ? {...data} : {...data.location};
 
-        dispatch({ type: 'updateState', payload: { location } });
+        dispatch({type: 'updateState', payload: {location}});
       });
     },
-    setup({ dispatch }) {
-      dispatch({ type: 'query' });
+    setup({dispatch}) {
+      dispatch({type: 'query'});
     }
   },
   effects: {
 
-    * query({ payload }, { put, select }) {
-      yield put({
-        type: 'updateState',
-        payload: {
-          menus
-        }
-      });
-
-      yield put({
-        type: 'adminLayout',
-        payload: {
-          visible: true
-        }
-      });
+    * query({payload}, {put, select}) {
+      yield put({type: 'updateState', payload: {menus}});
+      yield put({type: 'adminLayout', payload: {visible: true}});
     },
 
-    * adminLayout({ payload }, { put }) {
+    * adminLayout({payload}, {put}) {
+      const {visible} = payload;
       yield put({
         type: 'updateState',
         payload: {
           layoutOpts: {
-            mainHeader: payload.visible,
-            pageBreadcrumbs: payload.visible,
-            pageHeader: payload.visible,
-            mainFooter: payload.visible,
-            mainMenu: payload.visible
+            mainHeader: visible,
+            pageBreadcrumbs: visible,
+            pageHeader: visible,
+            mainFooter: visible,
+            mainMenu: visible
           }
         }
       });
     },
 
-    * updateDocumentMeta({ payload }, { put, select }) {
-      const { meta } = yield select(state => state.appModel);
+    * updateDocumentMeta({payload}, {put, select}) {
+      const {meta} = yield select(state => state.appModel);
       yield put({
         type: 'updateState',
         payload: {
-          meta: { ...meta, ...payload.meta }
+          meta: {...meta, ...payload.meta}
         }
       });
     },
 
-    * updateReferrer({ payload }, { put }) {
+    * updateReferrer({payload}, {put}) {
       yield put({
         type: 'updateState',
         payload: {
@@ -109,7 +99,7 @@ export default dvaModelExtend(commonModel, {
       });
     },
 
-    * toggleMenu({ payload }, { put }) {
+    * toggleMenu({payload}, {put}) {
       yield put({
         type: 'updateState',
         payload: {
@@ -118,16 +108,16 @@ export default dvaModelExtend(commonModel, {
       });
     },
 
-    * activeModel({ payload }, { put }) {
+    * activeModel({payload}, {put}) {
       yield put({
         type: 'updateState',
         payload: {
-          activeModel: { ...payload }
+          activeModel: {...payload}
         }
       });
     },
 
-    * checkActiveTab({ payload }, { put }) {
+    * checkActiveTab({payload}, {put}) {
       yield put({
         type: 'updateState',
         payload: {
@@ -136,8 +126,10 @@ export default dvaModelExtend(commonModel, {
       });
     },
 
-    * notification(_, { call, put, select }) {
+    * notification(_, {call, put, select}) {
       console.log('Notification');
+
+      yield put({type: 'notificationModel/getCount'});
     }
   },
 

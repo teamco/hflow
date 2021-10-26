@@ -83,7 +83,7 @@ export const expendableProfile = (
    * @constant
    * @param e
    */
-  const onRemoveRule = e => {
+  const onRemoveRole = e => {
     e.preventDefault();
     const _role = e.currentTarget.parentNode.innerText;
     const _currentRoles = [...currentRoles].filter(role => role.toLowerCase() !== _role.toLowerCase());
@@ -170,7 +170,7 @@ export const expendableProfile = (
                            style={{marginBottom: 3}}
                            key={`cr.${idx}`}
                            closable={currentRoles.length > 1}
-                           onClose={onRemoveRule}
+                           onClose={onRemoveRole}
                            icon={getRoleIcon(role)}>
                         {role}
                       </Tag>

@@ -1,7 +1,5 @@
 import React from 'react';
 
-import styles from 'pages/users/users.module.less';
-
 /**
  * @export
  * @param t
@@ -9,7 +7,7 @@ import styles from 'pages/users/users.module.less';
  * @param loading
  * @return {*}
  */
-export const metadata = ({
+export const userLogsMetadata = ({
   t,
   data,
   loading
@@ -37,7 +35,7 @@ export const metadata = ({
       key: 'createdAt',
       render: createdAt => {
         const date = new Date(createdAt);
-        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
+        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
       }
     }
   ],

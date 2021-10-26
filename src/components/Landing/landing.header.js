@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { withTranslation } from 'react-i18next';
-import { history } from 'umi';
-import { Col, Divider, Dropdown, Menu, Row } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {withTranslation} from 'react-i18next';
+import {history, NavLink} from 'umi';
+import {Col, Divider, Dropdown, Menu, Row} from 'antd';
 import classnames from 'classnames';
 
 import {
   CommentOutlined,
   LoginOutlined,
   LogoutOutlined,
-  MoreOutlined
+  BellTwoTone
 } from '@ant-design/icons';
 
 import SignIn from 'components/Authentication/signIn.connect';
@@ -88,64 +88,69 @@ const landingHeader = props => {
   };
 
   const menu = (
-    <Menu>
-      <Menu.Item key={'signOut'}>
-        <div onClick={handleSignOut}>
-          <LogoutOutlined style={{ marginRight: 10 }} />
-          {t('auth:signOut')}
-        </div>
-      </Menu.Item>
-    </Menu>
+      <Menu>
+        <Menu.Item key={'signOut'}>
+          <div onClick={handleSignOut}>
+            <LogoutOutlined style={{marginRight: 10}}/>
+            {t('auth:signOut')}
+          </div>
+        </Menu.Item>
+      </Menu>
   );
 
   return (
-    <header className={classnames(styles.header, transform ? styles.transform : '')}
-            style={{ position }}>
-      <Row>
-        <Col span={8}>
-          {icon && (
-            <img src={icon}
-                 className={styles.icon}
-                 alt={t(title)} />
-          )}
-          <img src={transform ? logoB : logoW}
-               onClick={handleHomeNavigation}
-               className={styles.logo}
-               alt={t(title)} />
-        </Col>
-        <Col span={16}>
-          <Row justify={'end'}
-               gutter={[16, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
-            <Col className={styles.headerText}>
-              <CommentOutlined />
-              <span>{t('landing:help')}</span>
-            </Col>
-            <Col className={styles.headerText}>
-              <Divider type={'vertical'} />
-              <SignIn forceLogin={true}
-                      closable={true}
-                      signInVisible={forceSignInVisible}
-                      setForceSignInVisible={setForceSignInVisible}
-                      className={styles.headerAuth} />
-              {user ? (
-                <Dropdown overlay={menu}
-                          trigger={['click']}
-                          placement={'bottomRight'}>
-                  <span>
-                    {t(user.displayName)}
-                  </span>
-                </Dropdown>
-              ) : (
-                <>
-                  <LoginOutlined />
-                  <span onClick={handleSignIn}>{t('auth:signIn')}</span>
-                </>
-              )}
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </header>
+      <header className={classnames(styles.header, transform ? styles.transform : '')}
+              style={{position}}>
+        <Row>
+          <Col span={8}>
+            {icon && (
+                <img src={icon}
+                     className={styles.icon}
+                     alt={t(title)}/>
+            )}
+            <img src={transform ? logoB : logoW}
+                 onClick={handleHomeNavigation}
+                 className={styles.logo}
+                 alt={t(title)}/>
+          </Col>
+          <Col span={16}>
+            <Row justify={'end'}
+                 gutter={[16, {xs: 8, sm: 16, md: 24, lg: 32}]}>
+              <Col className={styles.headerText}>
+                <CommentOutlined/>
+                <span>{t('landing:help')}</span>
+              </Col>
+              <Col className={styles.headerText}>
+                <Divider type={'vertical'}/>
+                <SignIn forceLogin={true}
+                        closable={true}
+                        signInVisible={forceSignInVisible}
+                        setForceSignInVisible={setForceSignInVisible}
+                        className={styles.headerAuth}/>
+                {user ? (
+                    <div>
+                      <NavLink to="/about">
+                        <BellTwoTone/>
+                      </NavLink>
+                      <Dropdown overlay={menu}
+                                trigger={['click']}
+                                placement={'bottomRight'}>
+                        <span>
+                          {t(user.displayName)}
+                        </span>
+                      </Dropdown>
+                    </div>
+                ) : (
+                    <>
+                      <LoginOutlined/>
+                      <span onClick={handleSignIn}>{t('auth:signIn')}</span>
+                    </>
+                )}
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </header>
   );
 };
 

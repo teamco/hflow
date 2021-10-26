@@ -149,6 +149,35 @@ export const fbFindById = async ({docRef, collection, doc, notice = true}) => {
 export const getRef = ({collection, doc}) => db.collection(collection).doc(doc);
 
 /**
+ * @async
+ * @export
+ * @param collection
+ * @param docs
+ * @param value
+ * @param notice
+ * @return {Promise<unknown>}
+ */
+export const fbMultipleUpdate = async ({collection, docs, value = {}, notice = true}) => {
+  const docRefs = docs.map(doc => getRef({collection, doc}));
+  return db.runTransaction(transaction => {
+    return transaction.get(docRefs[0]).then((sDoc) => {
+      for (let docRef of docRefs) transaction.update(docRef, value);
+      return value;
+    });
+  }).then(function(value) {
+    notice && successSaveMsg(true, capitalize(collection));
+    return value;
+  }).catch(async error => {
+    if (notice) {
+      await message.error(error.message);
+      errorSaveMsg(true, capitalize(collection));
+    }
+    console.error(`Update: ${collection}\n`, error);
+    throw new Error(error);
+  });
+};
+
+/**
  * Update collection
  * @async
  * @export

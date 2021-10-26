@@ -4,10 +4,11 @@ import ReactJson from 'react-json-view';
 import Page from 'components/Page';
 import Main from 'components/Main';
 
-import {metadata} from 'pages/userLogs/metadata';
-import styles from 'pages/userLogs/userLogs.module.less';
+import {userLogsMetadata} from 'pages/userLogs/userLogs.metadata';
 import {PageHeader} from 'antd';
 import {UserSwitchOutlined} from '@ant-design/icons';
+
+import styles from 'pages/userLogs/userLogs.module.less';
 
 const {Table} = Main;
 
@@ -65,7 +66,7 @@ export const userLogs = (props) => {
                  },
                  rowExpandable: record => record.eventType
                }}
-               {...metadata({
+               {...userLogsMetadata({
                  t,
                  data,
                  loading
