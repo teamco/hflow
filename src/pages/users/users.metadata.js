@@ -152,6 +152,7 @@ export const metadata = ({
         dataIndex: 'displayName',
         key: 'displayName',
         render(name, data) {
+          const isCurrentStyle = currentUser?.uid === data.uid ? styles.currentUser : null;
           const isSignedIn = data.metadata.signedIn;
           const color = isSignedIn ? '#52c41a' : '#999999';
           const signed = {
@@ -174,11 +175,17 @@ export const metadata = ({
                          alt={name}
                          className={styles.gridImg}/>
                 ) : (<MehTwoTone style={{marginRight: 10, width: 20}}/>)}
-                <NavLink to={`/admin/users/${data.id}`}>
-                  <span className={currentUser?.uid === data.uid ? styles.currentUser : null}>
+                {multiple ? (
+                    <NavLink to={`/admin/users/${data.id}`}>
+                      <span className={isCurrentStyle}>
+                        {name}
+                      </span>
+                    </NavLink>
+                ) : (
+                    <span className={isCurrentStyle}>
                     {name}
                   </span>
-                </NavLink>
+                )}
               </div>
           );
         },
