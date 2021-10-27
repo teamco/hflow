@@ -1,115 +1,24 @@
 import React, {useEffect} from 'react';
 import {NavLink} from 'umi';
 import {
-  ApiTwoTone,
-  DeleteTwoTone,
   PauseCircleTwoTone,
   PlayCircleTwoTone,
-  LockTwoTone,
-  UnlockTwoTone,
   ContactsTwoTone,
-  CheckCircleTwoTone,
-  WarningTwoTone,
-  ProfileTwoTone,
   MehTwoTone,
   SettingOutlined,
-  DownOutlined,
-  TrademarkCircleTwoTone
+  DownOutlined
 } from '@ant-design/icons';
 
-import {Modal, Popconfirm, Tooltip, Tag, Menu, Button, Dropdown} from 'antd';
+import {Tooltip, Tag, Button, Dropdown} from 'antd';
+
 import classnames from 'classnames';
 import {tsToLocaleDateTime} from 'utils/timestamp';
 
-import {getRoleIcon} from 'pages/users/[user]/profile/profile.metadata';
+import {showProfileModal} from 'pages/users/metadata/profile.modal';
+import {menu} from 'pages/users/metadata/users.menu';
 
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
-
-const menu = props => {
-  const {
-    t,
-    ability,
-    loading,
-    record,
-    rowEnabled,
-    multiple,
-    onSignOutUser,
-    onLockUser,
-    onUnlockUser,
-    onDeleteUser
-  } = props;
-
-  const {
-    isLocked,
-    signedIn
-  } = record.metadata;
-
-  return (
-      <Menu>
-        {multiple && (
-            <Menu.Item key={'profile'}
-                       icon={<ProfileTwoTone className={tableStyles.action}
-                                             twoToneColor={'#52c41a'}/>}>
-              <NavLink to={`/admin/users/${record.id}`}>
-                {t('menu:userProfile')}
-              </NavLink>
-            </Menu.Item>
-        )}
-        <Menu.Item key={'businesses'}
-                   icon={<TrademarkCircleTwoTone className={tableStyles.action}
-                                                 twoToneColor={'#52c41a'}/>}>
-          <NavLink to={`/admin/users/${record.id}/businesses`}>
-            {t('route:businesses')}
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key={'lock'}
-                   icon={isLocked ?
-                       (<LockTwoTone className={tableStyles.action}/>) :
-                       (<UnlockTwoTone twoToneColor={'#eb2f96'}
-                                       className={tableStyles.action}/>)
-                   }>
-          {isLocked ? (
-              <Popconfirm title={t('auth:unlockConfirm', {instance: record.email})}
-                          placement={'topRight'}
-                          onConfirm={() => onUnlockUser(record)}>
-                {t('auth:unlock')}
-              </Popconfirm>
-          ) : (
-              <div onClick={() => onLockUser(record)}>
-                {t('auth:lock')}
-              </div>
-          )}
-        </Menu.Item>
-        <Menu.Item key={'forceSignOut'}
-                   icon={signedIn ? (
-                       <ApiTwoTone className={tableStyles.action}/>
-                   ) : (
-                       <ApiTwoTone twoToneColor={'#999999'}
-                                   className={tableStyles.action}/>
-                   )}>
-          {signedIn ? (
-              <Popconfirm title={t('auth:signOutConfirm', {instance: record.email})}
-                          placement={'topRight'}
-                          onConfirm={() => onSignOutUser(record)}>
-                {t('auth:forceSignOut')}
-              </Popconfirm>
-          ) : t('auth:forceSignOut')
-          }
-        </Menu.Item>
-        <Menu.Item key={'delete'}
-                   danger
-                   icon={<DeleteTwoTone className={tableStyles.action}
-                                        twoToneColor="#eb2f96"/>}>
-          <Popconfirm title={t('msg:deleteConfirm', {instance: record.email})}
-                      placement={'topRight'}
-                      onConfirm={() => onDeleteUser(record)}>
-            {t('actions:delete')}
-          </Popconfirm>
-        </Menu.Item>
-      </Menu>
-  );
-};
 
 /**
  * @export
@@ -119,9 +28,12 @@ const menu = props => {
  * @param loading
  * @param multiple
  * @param rowEnabled
+ * @param visibleMessage
+ * @param setVisibleMessage
  * @param currentUser
  * @param onDeleteUser
  * @param onSignOutUser
+ * @param onSendMessage
  * @param onUnlockUser
  * @param onLockUser
  * @return {*}
@@ -134,8 +46,10 @@ export const metadata = ({
   multiple,
   rowEnabled,
   currentUser = {},
+  setVisibleMessage,
   onDeleteUser,
   onSignOutUser,
+  onSendMessage,
   onUnlockUser,
   onLockUser
 }) => {
@@ -230,12 +144,15 @@ export const metadata = ({
                     loading,
                     ability,
                     record,
+                    currentUser,
                     rowEnabled,
                     multiple,
                     onSignOutUser,
+                    onSendMessage,
                     onLockUser,
                     onUnlockUser,
-                    onDeleteUser
+                    onDeleteUser,
+                    setVisibleMessage
                   })}
                             disabled={record.key !== rowEnabled}
                             overlayClassName={styles.customActionMenu}
@@ -252,74 +169,4 @@ export const metadata = ({
     ],
     loading: loading.effects['userModel/query']
   };
-};
-
-/**
- * @export
- * @constant
- * @param t
- * @param record
- */
-export const showProfileModal = (t, record) => {
-  const {metadata} = record;
-
-  Modal.info({
-    title: false,
-    icon: false,
-    width: 500,
-    okText: t('actions:close'),
-    okButtonProps: {size: 'small'},
-    content: (
-        <div className={styles.profile}>
-          {metadata.photoURL && (
-              <img src={metadata.photoURL}
-                   referrerPolicy={'no-referrer'}
-                   alt={record.displayName}/>
-          )}
-          <div style={{flex: '40%'}}>
-            <div><strong>{t('table:name')}</strong></div>
-            <div><strong>{t('auth:email')}</strong></div>
-            <div><strong>{t('form:createdAt')}</strong></div>
-            <div><strong>{t('auth:lastSignInTime')}</strong></div>
-            <div><strong>{t('auth:emailVerified')}</strong></div>
-            <div style={{marginTop: '20px'}}>
-              <strong>{t('auth:provider')}</strong>
-            </div>
-            <div style={{marginTop: '20px'}}>
-              <strong>{t('auth:roles')}</strong>
-            </div>
-          </div>
-          <div style={{flex: '60%'}}>
-            <div>{record.displayName}</div>
-            <div>{record.email || t('error:na')}</div>
-            <div>{tsToLocaleDateTime(+(new Date(metadata.creationTime)))}</div>
-            <div>{tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))}</div>
-            <div>
-              {record.emailVerified ? (
-                  <CheckCircleTwoTone twoToneColor="#52c41a"/>
-              ) : (
-                  <WarningTwoTone twoToneColor="#FFCC00"/>
-              )}
-            </div>
-            <div style={{marginTop: '18px'}}>
-              <Tag className={styles.rules}
-                   color={metadata.signedIn ? 'green' : 'volcano'}
-                   icon={metadata.isLocked ? (<LockTwoTone/>) : (<UnlockTwoTone/>)}>
-                {metadata.providerId}
-              </Tag>
-            </div>
-            <div style={{marginTop: '16px'}}>
-              {record.roles.map((role, idx) => (
-                  <Tag className={styles.rules}
-                       style={{marginBottom: 3}}
-                       key={`cr.${idx}`}
-                       icon={getRoleIcon(role)}>
-                    {role}
-                  </Tag>
-              ))}
-            </div>
-          </div>
-        </div>
-    )
-  });
 };

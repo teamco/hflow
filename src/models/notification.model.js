@@ -30,10 +30,11 @@ export default dvaModelExtend(commonModel, {
   effects: {
     * query({payload}, {call, put, select}) {
       const {user, ability} = yield select(state => state.authModel);
+      const {userId} = payload;
 
       if (user && ability.can('read', 'notifications')) {
 
-        const {data = []} = yield call(getNotifications, {userId: user.id});
+        const {data = []} = yield call(getNotifications, {userId: userId ? userId : user.id});
 
         yield call(fbMultipleUpdate, {
           collection: 'notifications',

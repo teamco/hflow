@@ -11,8 +11,8 @@ export default connect(
     }),
     (dispatch) => ({
       dispatch,
-      onQuery() {
-        dispatch({type: `notificationModel/query`});
+      onQuery(userId) {
+        dispatch({type: `notificationModel/query`, payload: {userId}});
       }
     })
 )(withTranslation()(notifications));

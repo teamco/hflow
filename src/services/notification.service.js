@@ -16,7 +16,8 @@ export const getNotifications = async ({userId}) => {
   const notifications = await fbReadBy({
     collection: 'notifications',
     field: 'createdBy',
-    value: userId
+    value: userId,
+    optional: {order: 'createdAt'}
   });
 
   notifications.forEach(doc => {

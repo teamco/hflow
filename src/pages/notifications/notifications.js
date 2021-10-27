@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {PageHeader} from 'antd';
 import {NotificationOutlined} from '@ant-design/icons';
+import {useParams} from 'umi';
 
 import Page from 'components/Page';
 import Main from 'components/Main';
@@ -29,8 +30,13 @@ export const notifications = (props) => {
     notifications = []
   } = notificationModel;
 
+  /**
+   * @type {{user}}
+   */
+  const params = useParams();
+
   useEffect(() => {
-    onQuery();
+    onQuery(params?.user);
   }, []);
 
   const subTitle = (

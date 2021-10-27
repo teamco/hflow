@@ -35,6 +35,10 @@ export default connect(
       onUnlockUser(user) {
         dispatch({type: `userModel/unlock`, payload: {user}});
       },
+      onSendMessage(userId) {
+        debugger
+        //dispatch({type: `userModel/unlock`, payload: {userId}});
+      },
       onSendVerification(user) {
         if (user.email) {
           dispatch({type: `userModel/sendVerification`, payload: {user}});

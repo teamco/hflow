@@ -1,13 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {connect} from 'dva';
-import {PageHeader, message, Button} from 'antd';
+import {PageHeader, Button} from 'antd';
 import {
   UserSwitchOutlined,
   SaveOutlined
 } from '@ant-design/icons';
-import {withTranslation} from 'react-i18next';
 import {Can} from 'utils/auth/can';
-import i18n from 'utils/i18n';
 
 import Page from 'components/Page';
 import Main from 'components/Main';
@@ -15,6 +12,7 @@ import Main from 'components/Main';
 import {isLoading} from 'utils/state';
 import {metadata} from 'pages/users/users.metadata';
 import {expendableProfile} from 'pages/users/[user]/profile/profile.metadata';
+import SendMessage from 'pages/users/metadata/send.message';
 
 import styles from 'pages/users/users.module.less';
 
@@ -40,7 +38,8 @@ export const users = (props) => {
     onDeleteUser,
     onSignOutUser,
     onUnlockUser,
-    onLockUser
+    onLockUser,
+    onSendMessage
   } = props;
 
   let {
@@ -72,6 +71,7 @@ export const users = (props) => {
   const [touched, setTouched] = useState(userModel.touched);
   const [currentRoles, setCurrentRoles] = useState(selectedUser?.roles || []);
   const [rowEnabled, setRowEnabled] = useState(false);
+  const [visibleMessage, setVisibleMessage] = useState(false);
 
   const subTitle = (
       <>
@@ -116,6 +116,13 @@ export const users = (props) => {
         setTouched
     )
   } : {...rowProps};
+
+  const sendProps = {
+    t,
+    onSendMessage,
+    visibleMessage,
+    setVisibleMessage
+  };
 
   const updateProfile = () => {
     onUpdateRoles(selectedUser, currentRoles);
@@ -165,14 +172,17 @@ export const users = (props) => {
                  ability,
                  data,
                  rowEnabled,
-                 multiple: !selectedUser,
                  loading,
+                 multiple: !selectedUser,
                  currentUser: authModel.user,
+                 visibleMessage,
+                 setVisibleMessage,
                  onDeleteUser,
                  onSignOutUser,
                  onUnlockUser,
                  onLockUser
                })} />
+        <SendMessage {...sendProps}/>
       </Page>
   );
 };

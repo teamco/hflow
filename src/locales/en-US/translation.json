@@ -43,6 +43,7 @@
     "forceSignOut": "Force Sign out",
     "roles": "Roles",
     "email": "Email",
+    "sendMessage": "Send Message",
     "updateEmail": "Update Email",
     "emailHelper": "You can use letters, numbers & periods",
     "emailNotValid": "The input is not valid Email",
@@ -147,6 +148,7 @@
   },
   "table": {
     "name": "Name",
+    "title": "Title",
     "description": "Description",
     "total": "Total",
     "action": "Action"
@@ -156,6 +158,7 @@
     "unassign": "Unassign",
     "manage": "Manage {{type}}",
     "change": "Change",
+    "sendMessage": "Send",
     "ok": "Ok",
     "edit": "Edit {{type}}",
     "show": "Show {{type}}",
@@ -256,6 +259,8 @@
   },
   "notifications": {
     "status": "Status",
+    "public": "Public",
+    "private": "Private",
     "invitation": "Invitation",
     "message": "Message",
     "sentInvitation": "Sent business user invitation",
