@@ -41,7 +41,7 @@ const {Option} = Select;
  * @param t
  * @param data
  * @param loading
- * @param many
+ * @param multiple
  * @param onAssignUser
  * @param onUnassignUser
  * @return {*}
@@ -50,7 +50,7 @@ export const metadata = ({
   t,
   data,
   loading,
-  many,
+  multiple,
   onAssignUser,
   onUnassignUser
 }) => {
@@ -106,8 +106,8 @@ export const metadata = ({
               </div>
           );
         },
-        filterable: many,
-        sortable: many
+        filterable: multiple,
+        sortable: multiple
       },
       {
         title: t('auth:roles'),

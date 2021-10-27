@@ -71,6 +71,7 @@ export const users = (props) => {
 
   const [touched, setTouched] = useState(userModel.touched);
   const [currentRoles, setCurrentRoles] = useState(selectedUser?.roles || []);
+  const [rowEnabled, setRowEnabled] = useState(false);
 
   const subTitle = (
       <>
@@ -83,7 +84,23 @@ export const users = (props) => {
   const component = 'users';
   const disabled = ability.cannot('update', component);
 
+  const rowProps = {
+    onRow: (record, rowIndex) => {
+      return {
+        onMouseEnter: event => {
+          event.preventDefault();
+          setRowEnabled(rowIndex);
+        },
+        onMouseLeave: event => {
+          event.preventDefault();
+          setRowEnabled(false);
+        }
+      };
+    }
+  };
+
   const tableProps = selectedUser ? {
+    ...rowProps,
     pagination: false,
     expandable: expendableProfile(
         t,
@@ -98,7 +115,7 @@ export const users = (props) => {
         setCurrentRoles,
         setTouched
     )
-  } : {};
+  } : {...rowProps};
 
   const updateProfile = () => {
     onUpdateRoles(selectedUser, currentRoles);
@@ -145,8 +162,10 @@ export const users = (props) => {
                {...tableProps}
                {...metadata({
                  t,
+                 ability,
                  data,
-                 many: !selectedUser,
+                 rowEnabled,
+                 multiple: !selectedUser,
                  loading,
                  currentUser: authModel.user,
                  onDeleteUser,

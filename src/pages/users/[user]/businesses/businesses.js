@@ -80,7 +80,7 @@ export const businesses = (props) => {
                {...metadata({
                  t,
                  data,
-                 many: true,
+                 multiple: true,
                  ability,
                  loading,
                  onDeleteBusiness,

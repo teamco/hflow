@@ -11,10 +11,13 @@ import {
   CheckCircleTwoTone,
   WarningTwoTone,
   ProfileTwoTone,
-  MehTwoTone
+  MehTwoTone,
+  SettingOutlined,
+  DownOutlined,
+  TrademarkCircleTwoTone
 } from '@ant-design/icons';
 
-import {Modal, Popconfirm, Tooltip, Tag} from 'antd';
+import {Modal, Popconfirm, Tooltip, Tag, Menu, Button, Dropdown} from 'antd';
 import classnames from 'classnames';
 import {tsToLocaleDateTime} from 'utils/timestamp';
 
@@ -23,12 +26,99 @@ import {getRoleIcon} from 'pages/users/[user]/profile/profile.metadata';
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
 
+const menu = props => {
+  const {
+    t,
+    ability,
+    loading,
+    record,
+    rowEnabled,
+    multiple,
+    onSignOutUser,
+    onLockUser,
+    onUnlockUser,
+    onDeleteUser
+  } = props;
+
+  const {
+    isLocked,
+    signedIn
+  } = record.metadata;
+
+  return (
+      <Menu>
+        {multiple && (
+            <Menu.Item key={'profile'}
+                       icon={<ProfileTwoTone className={tableStyles.action}
+                                             twoToneColor={'#52c41a'}/>}>
+              <NavLink to={`/admin/users/${record.id}`}>
+                {t('menu:userProfile')}
+              </NavLink>
+            </Menu.Item>
+        )}
+        <Menu.Item key={'businesses'}
+                   icon={<TrademarkCircleTwoTone className={tableStyles.action}
+                                                 twoToneColor={'#52c41a'}/>}>
+          <NavLink to={`/admin/users/${record.id}/businesses`}>
+            {t('route:businesses')}
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key={'lock'}
+                   icon={isLocked ?
+                       (<LockTwoTone className={tableStyles.action}/>) :
+                       (<UnlockTwoTone twoToneColor={'#eb2f96'}
+                                       className={tableStyles.action}/>)
+                   }>
+          {isLocked ? (
+              <Popconfirm title={t('auth:unlockConfirm', {instance: record.email})}
+                          placement={'topRight'}
+                          onConfirm={() => onUnlockUser(record)}>
+                {t('auth:unlock')}
+              </Popconfirm>
+          ) : (
+              <div onClick={() => onLockUser(record)}>
+                {t('auth:lock')}
+              </div>
+          )}
+        </Menu.Item>
+        <Menu.Item key={'forceSignOut'}
+                   icon={signedIn ? (
+                       <ApiTwoTone className={tableStyles.action}/>
+                   ) : (
+                       <ApiTwoTone twoToneColor={'#999999'}
+                                   className={tableStyles.action}/>
+                   )}>
+          {signedIn ? (
+              <Popconfirm title={t('auth:signOutConfirm', {instance: record.email})}
+                          placement={'topRight'}
+                          onConfirm={() => onSignOutUser(record)}>
+                {t('auth:forceSignOut')}
+              </Popconfirm>
+          ) : t('auth:forceSignOut')
+          }
+        </Menu.Item>
+        <Menu.Item key={'delete'}
+                   danger
+                   icon={<DeleteTwoTone className={tableStyles.action}
+                                        twoToneColor="#eb2f96"/>}>
+          <Popconfirm title={t('msg:deleteConfirm', {instance: record.email})}
+                      placement={'topRight'}
+                      onConfirm={() => onDeleteUser(record)}>
+            {t('actions:delete')}
+          </Popconfirm>
+        </Menu.Item>
+      </Menu>
+  );
+};
+
 /**
  * @export
  * @param t
+ * @param ability
  * @param data
  * @param loading
- * @param many
+ * @param multiple
+ * @param rowEnabled
  * @param currentUser
  * @param onDeleteUser
  * @param onSignOutUser
@@ -38,9 +128,11 @@ import tableStyles from 'components/Main/Table/table.module.less';
  */
 export const metadata = ({
   t,
+  ability,
   data,
   loading,
-  many,
+  multiple,
+  rowEnabled,
   currentUser = {},
   onDeleteUser,
   onSignOutUser,
@@ -81,15 +173,17 @@ export const metadata = ({
                          referrerPolicy={'no-referrer'}
                          alt={name}
                          className={styles.gridImg}/>
-                ) : (<MehTwoTone style={{marginRight: 10, width: 20}} />)}
-                <span className={currentUser?.uid === data.uid ? styles.currentUser : null}>
-                  {name}
-                </span>
+                ) : (<MehTwoTone style={{marginRight: 10, width: 20}}/>)}
+                <NavLink to={`/admin/users/${data.id}`}>
+                  <span className={currentUser?.uid === data.uid ? styles.currentUser : null}>
+                    {name}
+                  </span>
+                </NavLink>
               </div>
           );
         },
-        filterable: many,
-        sortable: many
+        filterable: multiple,
+        sortable: multiple
       },
       {
         title: t('auth:provider'),
@@ -105,8 +199,8 @@ export const metadata = ({
       //   title: t('auth:email'),
       //   dataIndex: 'email',
       //   key: 'email',
-      //   filterable: many,
-      //   sortable: many
+      //   filterable: multiple,
+      //   sortable: multiple
       // },
       {
         title: t('auth:lastSignInTime'),
@@ -119,58 +213,32 @@ export const metadata = ({
         render: record =>
             data.length ? (
                 <div className={styles.nowrap}>
-                  <Popconfirm title={t('msg:deleteConfirm', {instance: record.email})}
-                              placement={'topRight'}
-                              onConfirm={() => onDeleteUser(record)}>
-                    <Tooltip title={t('actions:delete')}>
-                      <DeleteTwoTone className={tableStyles.action}
-                                     twoToneColor="#eb2f96"/>
-                    </Tooltip>
-                  </Popconfirm>
-                  {record.metadata.signedIn ? (
-                      <Popconfirm title={t('auth:signOutConfirm', {instance: record.email})}
-                                  placement={'topRight'}
-                                  onConfirm={() => onSignOutUser(record)}>
-                        <Tooltip title={t('auth:forceSignOut')}>
-                          <ApiTwoTone className={tableStyles.action}/>
-                        </Tooltip>
-                      </Popconfirm>
-                  ) : (
-                      <Tooltip title={t('auth:forceSignOut')}>
-                        <ApiTwoTone twoToneColor={'#999999'}
-                                    className={tableStyles.action}/>
-                      </Tooltip>
-                  )}
-                  {record.metadata.isLocked ? (
-                      <Popconfirm title={t('auth:unlockConfirm', {instance: record.email})}
-                                  placement={'topRight'}
-                                  onConfirm={() => onUnlockUser(record)}>
-                        <Tooltip title={t('auth:unlock')}>
-                          <LockTwoTone className={tableStyles.action}/>
-                        </Tooltip>
-                      </Popconfirm>
-                  ) : (
-                      <Tooltip title={t('auth:lock')}>
-                        <UnlockTwoTone twoToneColor={'#eb2f96'}
-                                       className={tableStyles.action}
-                                       onClick={() => onLockUser(record)}/>
-                      </Tooltip>
-                  )}
-                  <>
-                    <Tooltip title={t('auth:showProfile')}>
-                      <ContactsTwoTone className={tableStyles.action}
-                                       onClick={() => showProfileModal(t, record)}
-                                       twoToneColor={'#52c41a'}/>
-                    </Tooltip>
-                    {many && (
-                        <Tooltip title={t('menu:userProfile')}>
-                          <NavLink to={`/admin/users/${record.id}`}>
-                            <ProfileTwoTone className={tableStyles.action}
-                                            twoToneColor={'#52c41a'}/>
-                          </NavLink>
-                        </Tooltip>
-                    )}
-                  </>
+                  <Tooltip title={t('auth:showProfile')}>
+                    <ContactsTwoTone className={tableStyles.action}
+                                     onClick={() => showProfileModal(t, record)}
+                                     twoToneColor={'#52c41a'}/>
+                  </Tooltip>
+                  <Dropdown overlay={menu({
+                    t,
+                    loading,
+                    ability,
+                    record,
+                    rowEnabled,
+                    multiple,
+                    onSignOutUser,
+                    onLockUser,
+                    onUnlockUser,
+                    onDeleteUser
+                  })}
+                            disabled={record.key !== rowEnabled}
+                            overlayClassName={styles.customActionMenu}
+                            key={'custom'}>
+                    <Button size={'small'}
+                            icon={<SettingOutlined/>}
+                            className={styles.customAction}>
+                      {t('actions:manage', {type: t('auth:user')})} <DownOutlined/>
+                    </Button>
+                  </Dropdown>
                 </div>
             ) : null
       }
@@ -228,7 +296,7 @@ export const showProfileModal = (t, record) => {
             </div>
             <div style={{marginTop: '18px'}}>
               <Tag className={styles.rules}
-                    color={metadata.signedIn ? 'green' : 'volcano'}
+                   color={metadata.signedIn ? 'green' : 'volcano'}
                    icon={metadata.isLocked ? (<LockTwoTone/>) : (<UnlockTwoTone/>)}>
                 {metadata.providerId}
               </Tag>

@@ -20,7 +20,7 @@ export const metadata = ({
   data,
   ability,
   loading,
-  many,
+  multiple,
   onDeleteBusiness,
   onHoldBusiness,
   onActivateBusiness
@@ -36,15 +36,15 @@ export const metadata = ({
         title: t('table:name'),
         dataIndex: 'name',
         key: 'name',
-        filterable: many,
-        sortable: many,
+        filterable: multiple,
+        sortable: multiple,
         render(name, data, idx) {
           return (
               <div className={classnames(styles.nowrap, tableStyles.tdName)}>
                 <span>
                   {data.logo ?
                       <img src={data.logo} alt={name}/> :
-                      <ShopTwoTone />
+                      <ShopTwoTone/>
                   }
                 </span>
                 <span>
@@ -58,8 +58,8 @@ export const metadata = ({
         title: t('auth:email'),
         dataIndex: 'email',
         key: 'email',
-        filterable: many,
-        sortable: many
+        filterable: multiple,
+        sortable: multiple
       },
       {
         title: t('form:updatedAt'),
