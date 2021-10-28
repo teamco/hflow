@@ -1,12 +1,14 @@
 import React from 'react';
 import {Menu, Popconfirm} from 'antd';
 import {
-  ApiTwoTone, DeleteTwoTone,
+  ApiTwoTone,
+  DeleteTwoTone,
   LockTwoTone,
   MessageTwoTone,
   NotificationTwoTone,
   ProfileTwoTone,
-  TrademarkCircleTwoTone, UnlockTwoTone
+  TrademarkCircleTwoTone,
+  UnlockTwoTone
 } from '@ant-design/icons';
 
 import {NavLink} from 'umi';
@@ -57,6 +59,7 @@ export const menu = props => {
             {t('route:businesses')}
           </NavLink>
         </Menu.Item>
+        <Menu.Divider/>
         <Menu.Item key={'notifications'}
                    icon={<NotificationTwoTone className={tableStyles.action}
                                               twoToneColor={'#52c41a'}/>}>
@@ -74,6 +77,7 @@ export const menu = props => {
               {t('auth:sendMessage')}
             </Menu.Item>
         )}
+        <Menu.Divider/>
         <Menu.Item key={'lock'}
                    icon={isLocked ?
                        (<LockTwoTone className={tableStyles.action}/>) :
@@ -108,6 +112,7 @@ export const menu = props => {
           ) : t('auth:forceSignOut')
           }
         </Menu.Item>
+        <Menu.Divider/>
         <Menu.Item key={'delete'}
                    danger
                    icon={<DeleteTwoTone className={tableStyles.action}
