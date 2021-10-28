@@ -23,29 +23,39 @@ const SendMessage = (props) => {
   } = props;
 
   const [sendDisabled, setSendDisabled] = useState(true);
+  const [fields, setFields] = useState({});
 
   /**
    * @constant
    * @param values
    */
   const onFinish = values => {
-    debugger
-    onSendMessage(values);
-    setVisibleMessage(false);
+    onSendMessage(visibleMessage, values);
+    onCancel();
   };
 
+  /** @constant */
   const onCancel = () => {
-    setVisibleMessage(false);
+    setVisibleMessage({visible: false, props: {}});
+    setSendDisabled(true);
   };
 
-  const handleSend = (field, value) => {
-
+  /**
+   * @constant
+   * @param field
+   * @param {number} [count]
+   */
+  const handleSend = (field, count = 2) => {
+    const _fields = {...fields, ...field};
+    const values = Object.values(_fields).filter(v => !!v);
+    setFields(_fields);
+    setSendDisabled(values.length !== count);
   };
 
   const [form] = Form.useForm();
 
   return (
-      <Modal visible={visibleMessage}
+      <Modal visible={visibleMessage.visible}
              title={(
                  <div className={styles.sendMessage}>
                    <MessageTwoTone/>
@@ -75,17 +85,29 @@ const SendMessage = (props) => {
         <Form form={form}
               layout={'vertical'}
               name={'sendMessage'}
-              initialValues={{modifier: true}}>
+              initialValues={{
+                isPrivate: true,
+                from: visibleMessage.props?.from?.displayName,
+                to: visibleMessage.props?.to?.displayName
+              }}>
+          <Form.Item label={t('notifications:to')}
+                     name={'to'}>
+            <Input disabled/>
+          </Form.Item>
+          <Form.Item label={t('notifications:from')}
+                     name={'from'}>
+            <Input disabled/>
+          </Form.Item>
           <Form.Item label={t('table:title')}
                      name={'title'}>
-            <Input onChange={value => handleSend({title: value})}/>
+            <Input onChange={e => handleSend({title: e.target.value})}/>
           </Form.Item>
           <Form.Item label={t('table:description')}
                      name={'description'}>
             <Input.TextArea type={'textarea'}
-                            onChange={value => handleSend({description: value})}/>
+                            onChange={e => handleSend({description: e.target.value})}/>
           </Form.Item>
-          <Form.Item name={'modifier'}
+          <Form.Item name={'isPrivate'}
                      valuePropName={'checked'}>
             <Switch checkedChildren={t('notifications:private')}
                     unCheckedChildren={t('notifications:public')}

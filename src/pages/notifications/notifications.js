@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {PageHeader} from 'antd';
+import React, {useEffect, useState} from 'react';
+import {PageHeader, Tabs} from 'antd';
 import {NotificationOutlined} from '@ant-design/icons';
 import {useParams} from 'umi';
 
@@ -9,8 +9,10 @@ import Main from 'components/Main';
 import {expendableNotification, notificationsMetadata} from 'pages/notifications/notifications.metadata';
 
 import styles from 'pages/notifications/notifications.module.less';
+import SendMessage from '../users/metadata/send.message';
 
 const {Table} = Main;
+const {TabPane} = Tabs;
 
 /**
  * @export
@@ -23,17 +25,21 @@ export const notifications = (props) => {
     authModel,
     notificationModel,
     loading,
-    onQuery
+    onQuery,
+    onRead,
+    onSendMessage
   } = props;
 
   const {
-    notifications = []
+    notifications = {}
   } = notificationModel;
 
   /**
    * @type {{user}}
    */
   const params = useParams();
+
+  const [visibleMessage, setVisibleMessage] = useState({visible: false, props: {}});
 
   useEffect(() => {
     onQuery(params?.user);
@@ -51,7 +57,17 @@ export const notifications = (props) => {
   const disabled = !ability.can('read', component);
 
   const tableProps = {
-    expandable: expendableNotification({t})
+    expandable: expendableNotification({t, setVisibleMessage}),
+    onExpand(expanded, record) {
+      !record.read && onRead(record.id);
+    }
+  };
+
+  const sendProps = {
+    t,
+    onSendMessage,
+    visibleMessage,
+    setVisibleMessage
   };
 
   return (
@@ -63,13 +79,27 @@ export const notifications = (props) => {
             ]}>
         <PageHeader ghost={false}
                     subTitle={subTitle}/>
-        <Table data={notifications}
-               {...tableProps}
-               {...notificationsMetadata({
-                 t,
-                 notifications,
-                 loading
-               })} />
+        <Tabs defaultActiveKey={'inbox'}
+              tabPosition={'left'}>
+          <TabPane tab={t('notifications:inbox')} key={'inbox'}>
+            <Table data={notifications.inbox}
+                   {...tableProps}
+                   {...notificationsMetadata({
+                     t,
+                     loading,
+                     onSendMessage
+                   })} />
+          </TabPane>
+          <TabPane tab={t('notifications:sent')} key={'sent'}>
+            <Table data={notifications.sent}
+                   {...tableProps}
+                   {...notificationsMetadata({
+                     t,
+                     loading
+                   })} />
+          </TabPane>
+        </Tabs>
+        <SendMessage {...sendProps}/>
       </Page>
   );
 };

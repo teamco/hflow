@@ -1,6 +1,6 @@
 import React from 'react';
 import {Row, Col} from 'antd';
-import {EyeTwoTone, MessageTwoTone} from '@ant-design/icons';
+import {MailTwoTone, MessageTwoTone} from '@ant-design/icons';
 
 import styles from 'pages/notifications/notifications.module.less';
 
@@ -19,11 +19,21 @@ export const notificationsMetadata = ({
   size: 'middle',
   columns: [
     {
-      title: t('table:name'),
-      dataIndex: 'name',
-      key: 'name',
+      title: t('notifications:type'),
+      dataIndex: 'type',
+      key: 'type',
       filterable: true,
       sortable: true
+    },
+    {
+      title: t('table:title'),
+      dataIndex: 'title',
+      key: 'title',
+      filterable: true,
+      sortable: true,
+      render(title, record) {
+        return record.read ? title : (<strong>{title}</strong>);
+      }
     },
     {
       title: t('notifications:status'),
@@ -34,10 +44,10 @@ export const notificationsMetadata = ({
     },
     {
       title: t('form:createdAt'),
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      render: createdAt => {
-        const date = new Date(createdAt);
+      dataIndex: 'metadata',
+      key: 'metadata',
+      render(metadata) {
+        const date = new Date(metadata.createdAt);
         return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
       }
     }
@@ -45,8 +55,13 @@ export const notificationsMetadata = ({
   loading: loading.effects['notifications/query']
 });
 
+/**
+ * @export
+ * @param props
+ * @return {JSX.Element|{expandedRowRender(*): *, rowExpandable: (function(*): boolean)}}
+ */
 export const expendableNotification = props => {
-  const {t} = props;
+  const {t, setVisibleMessage} = props;
 
   return {
     expandedRowRender(record) {
@@ -63,12 +78,25 @@ export const expendableNotification = props => {
                 </div>
                 {record?.description}
               </Col>
+            </Row>
+            <Row {...rowProps}>
               <Col {...colProps}>
                 <div>
-                  <EyeTwoTone/>
-                  <strong>{t('form:target')}</strong>
+                  <MailTwoTone/>
+                  <strong>{t('notifications:from')}</strong>
                 </div>
-                {record?.target}
+                <div onClick={() => {
+                  setVisibleMessage({visible: true, props: {from: record?.sentTo, to: record?.sentFrom}});
+                }}>
+                  {record?.sentFrom?.email}
+                </div>
+              </Col>
+              <Col {...colProps}>
+                <div>
+                  <MailTwoTone/>
+                  <strong>{t('notifications:to')}</strong>
+                </div>
+                {record?.sentTo}
               </Col>
             </Row>
           </div>

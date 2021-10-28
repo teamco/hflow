@@ -392,12 +392,14 @@ export default dvaModelExtend(commonModel, {
         yield put({
           type: 'notificationModel/createAndUpdate',
           payload: {
-            name: i18n.t('notifications:invitation'),
-            description: isResend ?
+            type: i18n.t('notifications:invitation'),
+            title: isResend ?
                 i18n.t('notifications:reSentInvitation') :
                 i18n.t('notifications:sentInvitation'),
+            description: i18n.t('error:na'),
             status: STATUS.pending,
-            target: email
+            isPrivate: true,
+            sentTo: email
           }
         });
 

@@ -145,7 +145,6 @@ export const metadata = ({
                     ability,
                     record,
                     currentUser,
-                    rowEnabled,
                     multiple,
                     onSignOutUser,
                     onSendMessage,
@@ -154,8 +153,8 @@ export const metadata = ({
                     onDeleteUser,
                     setVisibleMessage
                   })}
-                            disabled={record.key !== rowEnabled}
                             overlayClassName={styles.customActionMenu}
+                            trigger={['click']}
                             key={'custom'}>
                     <Button size={'small'}
                             icon={<SettingOutlined/>}

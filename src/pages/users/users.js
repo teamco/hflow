@@ -71,7 +71,7 @@ export const users = (props) => {
   const [touched, setTouched] = useState(userModel.touched);
   const [currentRoles, setCurrentRoles] = useState(selectedUser?.roles || []);
   const [rowEnabled, setRowEnabled] = useState(false);
-  const [visibleMessage, setVisibleMessage] = useState(false);
+  const [visibleMessage, setVisibleMessage] = useState({visible: false, props: {}});
 
   const subTitle = (
       <>

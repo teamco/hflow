@@ -251,6 +251,8 @@
     "aboutUs": "About us"
   },
   "status": {
+    "sent": "Sent",
+    "read": "Read",
     "pending": "Pending",
     "success": "Success",
     "warning": "Warning",
@@ -258,6 +260,11 @@
     "failed": "Failed"
   },
   "notifications": {
+    "sent": "Sent",
+    "inbox": "Inbox",
+    "to": "To",
+    "from": "From",
+    "type": "Type",
     "status": "Status",
     "public": "Public",
     "private": "Private",

@@ -4,6 +4,7 @@ import i18n from 'utils/i18n';
 
 import {withTranslation} from 'react-i18next';
 import {users} from './users';
+import {STATUS} from '../../utils/message';
 
 export default connect(
     ({authModel, userModel, userRolesModel, loading}) => ({
@@ -35,9 +36,18 @@ export default connect(
       onUnlockUser(user) {
         dispatch({type: `userModel/unlock`, payload: {user}});
       },
-      onSendMessage(userId) {
-        debugger
-        //dispatch({type: `userModel/unlock`, payload: {userId}});
+      onSendMessage({props}, fields) {
+        dispatch({
+          type: 'notificationModel/createAndUpdate',
+          payload: {
+            type: i18n.t('notifications:message'),
+            title: fields.title,
+            description: fields.description,
+            status: STATUS.sent,
+            isPrivate: fields.isPrivate,
+            sentTo: props.to.email
+          }
+        });
       },
       onSendVerification(user) {
         if (user.email) {
