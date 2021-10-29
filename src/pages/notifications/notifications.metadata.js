@@ -86,7 +86,14 @@ export const expendableNotification = props => {
                   <strong>{t('notifications:from')}</strong>
                 </div>
                 <div onClick={() => {
-                  setVisibleMessage({visible: true, props: {from: record?.sentTo, to: record?.sentFrom}});
+                  setVisibleMessage({
+                    visible: true,
+                    props: {
+                      replyTo: {id: record?.id},
+                      from: {email: record?.sentTo},
+                      to: record?.sentFrom
+                    }
+                  });
                 }}>
                   {record?.sentFrom?.email}
                 </div>

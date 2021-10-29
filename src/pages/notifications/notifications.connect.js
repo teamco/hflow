@@ -24,9 +24,10 @@ export default connect(
           type: 'notificationModel/createAndUpdate',
           payload: {
             type: i18n.t('notifications:message'),
+            status: STATUS.sent,
+            replyTo: fields.replyTo,
             title: fields.title,
             description: fields.description,
-            status: STATUS.sent,
             isPrivate: fields.isPrivate,
             sentTo: props.to.email
           }

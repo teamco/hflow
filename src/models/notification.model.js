@@ -6,7 +6,7 @@ import {getNotifications} from '../services/notification.service';
 import {message} from 'antd';
 import i18n from '../utils/i18n';
 import {history} from 'umi';
-import {fbAdd, fbFindById, fbMultipleUpdate, fbUpdate} from '../services/firebase.service';
+import {fbAdd, fbFindById, fbMultipleUpdate, fbUpdate, getRef} from '../services/firebase.service';
 import {STATUS} from '../utils/message';
 
 /**
@@ -31,6 +31,7 @@ export default dvaModelExtend(commonModel, {
     }
   },
   effects: {
+
     * query({payload}, {call, put, select}) {
       let {user, ability} = yield select(state => state.authModel);
       const {userId} = payload;
@@ -99,9 +100,21 @@ export default dvaModelExtend(commonModel, {
 
     * createAndUpdate({payload}, {put, call, select}) {
       const {user, ability} = yield select(state => state.authModel);
-      const {type, status, sentTo, title, description, isPrivate, read = false} = payload;
+      const {type, status, replyTo, sentTo, title, description, isPrivate, read = false} = payload;
 
       if (user && ability.can('create', 'notifications')) {
+        let replyRef = null;
+        if (replyTo) {
+          replyRef = getRef({collection: 'notifications', doc: replyTo});
+
+          yield put({
+            type: 'read',
+            payload: {
+              doc: replyTo,
+              status: STATUS.answered
+            }
+          });
+        }
 
         // Create notification
         yield call(fbAdd, {
@@ -112,6 +125,7 @@ export default dvaModelExtend(commonModel, {
             description,
             status,
             sentTo,
+            replyRef,
             metadata: {
               createdBy: user.id,
               createdAt: +(new Date)
@@ -128,7 +142,7 @@ export default dvaModelExtend(commonModel, {
     * read({payload}, {put, call, select}) {
       const {user, ability} = yield select(state => state.authModel);
       const {notifications} = yield select(state => state.notificationModel);
-      const {doc} = payload;
+      const {doc, status = STATUS.read} = payload;
 
       if (user && ability.can('update', 'notifications')) {
 
@@ -138,24 +152,25 @@ export default dvaModelExtend(commonModel, {
           doc,
           data: {
             read: true,
-            status: STATUS.read,
+            status,
             'metadata.updatedAt': +(new Date())
           }
         });
 
         let key, msg, i;
-        const updatedNotices = [];
+        let updatedNotices = [];
 
         for (key in notifications) {
           const instances = notifications[key];
           for (i = 0; i < instances.length; i++) {
+            updatedNotices = [...instances];
             msg = {...[...instances][i]};
             if (msg.id === doc) {
               msg.read = true;
-              msg.status = STATUS.read;
+              msg.status = status;
+              updatedNotices[i] = msg;
+              break;
             }
-
-            updatedNotices.push(msg);
           }
         }
 
@@ -171,5 +186,6 @@ export default dvaModelExtend(commonModel, {
       }
     }
   },
+
   reducers: {}
 });

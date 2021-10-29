@@ -54,6 +54,8 @@ const SendMessage = (props) => {
 
   const [form] = Form.useForm();
 
+  const {from, to, replyTo} = visibleMessage.props;
+
   return (
       <Modal visible={visibleMessage.visible}
              title={(
@@ -87,8 +89,9 @@ const SendMessage = (props) => {
               name={'sendMessage'}
               initialValues={{
                 isPrivate: true,
-                from: visibleMessage.props?.from?.displayName,
-                to: visibleMessage.props?.to?.displayName
+                from: from?.displayName || from?.email,
+                to: to?.displayName,
+                replyTo: replyTo?.id
               }}>
           <Form.Item label={t('notifications:to')}
                      name={'to'}>
@@ -98,11 +101,20 @@ const SendMessage = (props) => {
                      name={'from'}>
             <Input disabled/>
           </Form.Item>
+          {replyTo && (
+              <Form.Item label={t('notifications:re')}
+                         name={'replyTo'}
+                         noStyle>
+                <Input type={'hidden'}/>
+              </Form.Item>
+          )}
           <Form.Item label={t('table:title')}
+                     tooltip={t('form:required', {field: t('table:title')})}
                      name={'title'}>
             <Input onChange={e => handleSend({title: e.target.value})}/>
           </Form.Item>
           <Form.Item label={t('table:description')}
+                     tooltip={t('form:required', {field: t('table:description')})}
                      name={'description'}>
             <Input.TextArea type={'textarea'}
                             onChange={e => handleSend({description: e.target.value})}/>

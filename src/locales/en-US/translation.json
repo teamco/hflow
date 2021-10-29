@@ -253,6 +253,7 @@
   "status": {
     "sent": "Sent",
     "read": "Read",
+    "answered": "Answered",
     "pending": "Pending",
     "success": "Success",
     "warning": "Warning",
@@ -263,6 +264,7 @@
     "sent": "Sent",
     "inbox": "Inbox",
     "to": "To",
+    "re": "Reply to",
     "from": "From",
     "type": "Type",
     "status": "Status",
