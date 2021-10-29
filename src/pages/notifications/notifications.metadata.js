@@ -1,6 +1,6 @@
 import React from 'react';
 import {Row, Col} from 'antd';
-import {MailTwoTone, MessageTwoTone} from '@ant-design/icons';
+import {MailTwoTone, MessageTwoTone, RetweetOutlined} from '@ant-design/icons';
 
 import styles from 'pages/notifications/notifications.module.less';
 
@@ -80,24 +80,27 @@ export const expendableNotification = props => {
               </Col>
             </Row>
             <Row {...rowProps}>
-              <Col {...colProps}>
-                <div>
-                  <MailTwoTone/>
-                  <strong>{t('notifications:from')}</strong>
-                </div>
-                <div onClick={() => {
-                  setVisibleMessage({
-                    visible: true,
-                    props: {
-                      replyTo: {id: record?.id},
-                      from: {email: record?.sentTo},
-                      to: record?.sentFrom
-                    }
-                  });
-                }}>
-                  {record?.sentFrom?.email}
-                </div>
-              </Col>
+              {record?.sentFrom && (
+                  <Col {...colProps}>
+                    <div>
+                      <MailTwoTone/>
+                      <strong>{t('notifications:from')}</strong>
+                    </div>
+                    <div className={styles.reply}
+                         onClick={() => {
+                           setVisibleMessage({
+                             visible: true,
+                             props: {
+                               replyTo: {id: record?.id},
+                               from: {email: record?.sentTo},
+                               to: record?.sentFrom
+                             }
+                           });
+                         }}>
+                      {record?.sentFrom?.email}
+                    </div>
+                  </Col>
+              )}
               <Col {...colProps}>
                 <div>
                   <MailTwoTone/>
