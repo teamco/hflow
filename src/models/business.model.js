@@ -64,36 +64,34 @@ export default dvaModelExtend(commonModel, {
 
   effects: {
 
-    * query({payload}, {put, call}) {
+    * query({payload}, {put, call, select}) {
+      const {ability} = yield select(state => state.authModel);
       const {selectedUser, userId} = payload;
 
-      yield put({
-        type: 'userModel/validateUser',
-        payload: {selectedUser, userId}
-      });
-
-      let user = yield call(fbFindById, {
-        collection: 'users',
-        doc: userId
-      });
-
-      // TODO (teamco): Fix business user.
-
-      if (user.exists) {
-        const _user = user.data();
-        const businessUser = false;//isBusiness(_user);
-        let businesses = {data: []};
-
-        if (businessUser) {
-          businesses.data = yield call(getBusinessByRef, {businessRef: _user.business?.metadata?.businessRef});
-        } else {
-          businesses = yield call(getBusinesses, {userId: _user.id});
-        }
-
-        yield put({
-          type: 'updateState',
-          payload: {data: businesses.data}
+      if (ability.can('read', 'profile')) {
+        const user = yield call(fbFindById, {
+          collection: 'users',
+          doc: userId
         });
+
+        if (user.exists && ability.can('read', 'businesses')) {
+          const _user = user.data();
+
+          // TODO (teamco): Fix business user.
+          const businessUser = false;//isBusiness(_user);
+          let businesses = {data: []};
+
+          if (businessUser) {
+            businesses.data = yield call(getBusinessByRef, {businessRef: _user.business?.metadata?.businessRef});
+          } else {
+            businesses = yield call(getBusinesses, {userId: _user.id});
+          }
+
+          yield put({
+            type: 'updateState',
+            payload: {data: businesses.data}
+          });
+        }
       }
     },
 

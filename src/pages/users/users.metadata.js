@@ -96,7 +96,7 @@ export const metadata = ({
                       </span>
                     </NavLink>
                 ) : (
-                    <span className={isCurrentStyle}>
+                  <span className={isCurrentStyle}>
                     {name}
                   </span>
                 )}

@@ -4,7 +4,7 @@ import {withTranslation} from 'react-i18next';
 import {businesses} from './businesses';
 
 export default connect(
-    ({ authModel, businessModel, loading }) => {
+    ({authModel, businessModel, loading}) => {
       return {
         authModel,
         businessModel,
@@ -14,10 +14,10 @@ export default connect(
     (dispatch) => ({
       dispatch,
       onNew(userId) {
-        dispatch({ type: `businessModel/newBusiness`, payload: { userId } });
+        dispatch({type: `businessModel/newBusiness`, payload: {userId}});
       },
       onGetBusinesses(selectedUser, userId) {
-        dispatch({ type: `businessModel/query`, payload: { selectedUser, userId } });
+        dispatch({type: `businessModel/query`, payload: {selectedUser, userId}});
       }
     })
 )(withTranslation()(businesses));

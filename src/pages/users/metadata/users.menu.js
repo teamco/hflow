@@ -61,7 +61,7 @@ export const menu = props => {
         <Menu.Divider/>
         <Menu.Item key={'notifications'}
                    icon={<NotificationTwoTone className={tableStyles.action}
-                                              twoToneColor={'#167CC0FF'}/>}>
+                                              twoToneColor={'#FFBF00'}/>}>
           <NavLink to={`/admin/users/${record.id}/notifications`}>
             {t('route:notifications')}
           </NavLink>
@@ -72,7 +72,7 @@ export const menu = props => {
                          setVisibleMessage({visible: true, props: {from: currentUser, to: record}});
                        }}
                        icon={<MessageTwoTone className={tableStyles.action}
-                                             twoToneColor={'#167CC0FF'}/>}>
+                                             twoToneColor={'#FFBF00'}/>}>
               {t('auth:sendMessage')}
             </Menu.Item>
         )}
@@ -113,8 +113,8 @@ export const menu = props => {
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item key={'delete'}
-                   danger
-                   icon={<DeleteTwoTone className={tableStyles.action}/>}>
+                   icon={<DeleteTwoTone className={tableStyles.action}
+                                        twoToneColor={'#ff0000'}/>}>
           <Popconfirm title={t('msg:deleteConfirm', {instance: record.email})}
                       placement={'topRight'}
                       onConfirm={() => onDeleteUser(record)}>
