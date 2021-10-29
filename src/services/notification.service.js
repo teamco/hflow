@@ -59,6 +59,10 @@ export const getNotifications = async ({userId, email}) => {
         msg.sentFrom = _user.data();
         _users[userId] = {...msg.sentFrom};
       }
+
+      if (msg.replyRef) {
+        msg.replyedTo = (await msg.replyRef.get()).data();
+      }
     }
   }
 

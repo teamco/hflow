@@ -40,6 +40,7 @@ export const notifications = (props) => {
   const params = useParams();
 
   const [visibleMessage, setVisibleMessage] = useState({visible: false, props: {}});
+  const [activeTab, setActiveTab] = useState('inbox');
 
   useEffect(() => {
     onQuery(params?.user);
@@ -59,7 +60,9 @@ export const notifications = (props) => {
   const tableProps = {
     expandable: expendableNotification({t, setVisibleMessage}),
     onExpand(expanded, record) {
-      !record.read && onRead(record.id);
+      if (activeTab === 'inbox' && !record.read) {
+        onRead(record.id);
+      }
     }
   };
 
@@ -80,23 +83,17 @@ export const notifications = (props) => {
         <PageHeader ghost={false}
                     subTitle={subTitle}/>
         <Tabs defaultActiveKey={'inbox'}
+              onChange={key => setActiveTab(key)}
               tabPosition={'left'}>
           <TabPane tab={t('notifications:inbox')} key={'inbox'}>
             <Table data={notifications.inbox}
                    {...tableProps}
-                   {...notificationsMetadata({
-                     t,
-                     loading,
-                     onSendMessage
-                   })} />
+                   {...notificationsMetadata({t, loading})} />
           </TabPane>
           <TabPane tab={t('notifications:sent')} key={'sent'}>
             <Table data={notifications.sent}
                    {...tableProps}
-                   {...notificationsMetadata({
-                     t,
-                     loading
-                   })} />
+                   {...notificationsMetadata({t, loading})} />
           </TabPane>
         </Tabs>
         <SendMessage {...sendProps}/>

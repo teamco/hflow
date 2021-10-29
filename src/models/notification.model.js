@@ -162,27 +162,28 @@ export default dvaModelExtend(commonModel, {
 
         for (key in notifications) {
           const instances = notifications[key];
-          for (i = 0; i < instances.length; i++) {
-            updatedNotices = [...instances];
-            msg = {...[...instances][i]};
-            if (msg.id === doc) {
-              msg.read = true;
-              msg.status = status;
-              updatedNotices[i] = msg;
-              break;
+          if (key === 'inbox') {
+            for (i = 0; i < instances.length; i++) {
+              updatedNotices = [...instances];
+              msg = {...[...instances][i]};
+              if (msg.id === doc) {
+                msg.read = true;
+                msg.status = status;
+                updatedNotices[i] = msg;
+
+                yield put({
+                  type: 'updateState',
+                  payload: {
+                    notifications: {
+                      ...notifications,
+                      [key]: updatedNotices
+                    }
+                  }
+                });
+              }
             }
           }
         }
-
-        yield put({
-          type: 'updateState',
-          payload: {
-            notifications: {
-              ...notifications,
-              [key]: updatedNotices
-            }
-          }
-        });
       }
     }
   },

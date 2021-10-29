@@ -7,14 +7,10 @@ import styles from 'pages/notifications/notifications.module.less';
 /**
  * @export
  * @param t
- * @param data
  * @param loading
  * @return {*}
  */
-export const notificationsMetadata = ({
-  t,
-  loading
-}) => ({
+export const notificationsMetadata = ({t, loading}) => ({
   width: '100%',
   size: 'middle',
   columns: [
@@ -78,6 +74,15 @@ export const expendableNotification = props => {
                 </div>
                 {record?.description}
               </Col>
+              {record?.replyedTo && (
+                  <Col {...colProps}>
+                    <div>
+                      <MessageTwoTone/>
+                      <strong>{t('status:answered')}</strong>
+                    </div>
+                    {record?.replyedTo?.title}
+                  </Col>
+              )}
             </Row>
             <Row {...rowProps}>
               {record?.sentFrom && (
