@@ -30,6 +30,7 @@ import {COLORS} from 'utils/colors';
 
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
+import menuStyles from 'components/menu.less';
 
 /**
  * @export
@@ -92,7 +93,7 @@ export const metadata = ({
                 <span>
                   {pending ? (
                           <Tag icon={<SyncOutlined spin/>}
-                               color={COLORS.processing}>
+                               color={COLORS.tags.processing}>
                             {t('auth:pending')}
                           </Tag>
                       ) :
@@ -136,11 +137,11 @@ export const metadata = ({
         render: record => data.length ? (
             <div className={styles.nowrap}>
               <Dropdown overlay={menu(record)}
-                        overlayClassName={styles.customActionMenu}
+                        overlayClassName={menuStyles.customActionMenu}
                         key={'custom'}>
                 <Button size={'small'}
                         icon={<SettingOutlined/>}
-                        className={styles.customAction}>
+                        className={menuStyles.customAction}>
                   {t('actions:manage', {type: t('menu:users')})} <DownOutlined/>
                 </Button>
               </Dropdown>

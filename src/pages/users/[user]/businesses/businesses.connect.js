@@ -18,6 +18,12 @@ export default connect(
       },
       onGetBusinesses(selectedUser, userId) {
         dispatch({type: `businessModel/query`, payload: {selectedUser, userId}});
+      },
+      onHoldBusiness() {
+      },
+      onDeleteBusiness() {
+      },
+      onActivateBusiness() {
       }
     })
 )(withTranslation()(businesses));

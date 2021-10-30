@@ -14,13 +14,14 @@ import {Tooltip, Tag, Button, Dropdown} from 'antd';
 import classnames from 'classnames';
 import {tsToLocaleDateTime} from 'utils/timestamp';
 import {COLORS} from 'utils/colors';
+import {BRANDS} from 'utils/brands';
 
 import {showProfileModal} from 'pages/users/metadata/profile.modal';
-import {menu} from 'pages/users/metadata/users.menu';
+import UserMenu from 'pages/users/metadata/users.menu';
 
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
-import {BRANDS} from '../../utils/brands';
+import menuStyles from 'components/menu.less';
 
 /**
  * @export
@@ -58,6 +59,19 @@ export const metadata = ({
 
   useEffect(() => {
   }, []);
+
+  const menuProps = {
+    loading,
+    ability,
+    currentUser,
+    multiple,
+    onSignOutUser,
+    onSendMessage,
+    onLockUser,
+    onUnlockUser,
+    onDeleteUser,
+    setVisibleMessage
+  };
 
   return {
     width: '100%',
@@ -142,26 +156,13 @@ export const metadata = ({
                                      onClick={() => showProfileModal(t, record)}
                                      twoToneColor={COLORS.success}/>
                   </Tooltip>
-                  <Dropdown overlay={menu({
-                    t,
-                    loading,
-                    ability,
-                    record,
-                    currentUser,
-                    multiple,
-                    onSignOutUser,
-                    onSendMessage,
-                    onLockUser,
-                    onUnlockUser,
-                    onDeleteUser,
-                    setVisibleMessage
-                  })}
-                            overlayClassName={styles.customActionMenu}
+                  <Dropdown overlay={<UserMenu record={record} {...menuProps} />}
+                            overlayClassName={menuStyles.customActionMenu}
                             trigger={['click']}
                             key={'custom'}>
                     <Button size={'small'}
                             icon={<SettingOutlined/>}
-                            className={styles.customAction}>
+                            className={menuStyles.customAction}>
                       {t('actions:manage', {type: t('auth:user')})} <DownOutlined/>
                     </Button>
                   </Dropdown>

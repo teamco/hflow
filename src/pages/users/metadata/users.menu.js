@@ -1,4 +1,5 @@
 import React from 'react';
+import {withTranslation} from 'react-i18next';
 import {Menu, Popconfirm} from 'antd';
 import {
   ApiTwoTone,
@@ -14,6 +15,7 @@ import {
 import {NavLink} from 'umi';
 
 import {COLORS} from 'utils/colors';
+
 import tableStyles from 'components/Main/Table/table.module.less';
 
 /**
@@ -21,7 +23,7 @@ import tableStyles from 'components/Main/Table/table.module.less';
  * @param props
  * @return {JSX.Element}
  */
-export const menu = props => {
+export const UserMenu = props => {
   const {
     t,
     ability,
@@ -125,3 +127,5 @@ export const menu = props => {
       </Menu>
   );
 };
+
+export default withTranslation()(UserMenu);

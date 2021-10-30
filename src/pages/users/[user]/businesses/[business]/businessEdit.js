@@ -1,16 +1,12 @@
 import React, {useEffect} from 'react';
 import Page from 'components/Page';
 import userStyles from 'pages/users/users.module.less';
-import {useParams, NavLink} from 'umi';
-import {Button, Form, PageHeader, Menu, Dropdown} from 'antd';
+import {useParams} from 'umi';
+import {Button, Form, PageHeader, Dropdown} from 'antd';
 import {
   TrademarkOutlined,
-  DeleteOutlined,
   DownOutlined,
-  FileDoneOutlined,
-  PauseCircleOutlined,
-  SettingOutlined,
-  UsergroupAddOutlined
+  SettingOutlined
 } from '@ant-design/icons';
 
 import Main from 'components/Main';
@@ -19,6 +15,7 @@ import {BusinessAddress} from 'pages/users/[user]/businesses/[business]/form/bus
 import {BusinessInfo} from 'pages/users/[user]/businesses/[business]/form/business.info';
 import {BusinessLicense} from 'pages/users/[user]/businesses/[business]/form/business.license';
 import {BusinessTags} from 'pages/users/[user]/businesses/[business]/form/business.tags';
+import BusinessMenu from 'pages/users/[user]/businesses/metadata/business.menu';
 
 import SaveButton from 'components/Buttons/save.button';
 
@@ -27,6 +24,7 @@ import {isLoading} from 'utils/state';
 import {isNew} from 'services/common.service';
 
 import styles from 'pages/users/[user]/businesses/businesses.module.less';
+import menuStyles from 'components/menu.less';
 
 const {Info} = Main;
 
@@ -168,6 +166,15 @@ export const businessEdit = (props) => {
     }
   };
 
+  const menuProps = {
+    isEdit,
+    loading,
+    params,
+    onActivateBusiness,
+    onHoldBusiness,
+    onDeleteBusiness
+  };
+
   const subTitle = (
       <>
         <TrademarkOutlined style={{marginRight: 10}}/>
@@ -176,41 +183,6 @@ export const businessEdit = (props) => {
             t('actions:addNew', {type: t('business')})
         }
       </>
-  );
-
-  const menu = (
-      <Menu>
-        <Menu.Item key={'users'}
-                   loading={loading.effects['businessModel/manageBusinessUsers']}
-                   disabled={!isEdit}
-                   icon={<UsergroupAddOutlined />}>
-          <NavLink to={`/admin/users/${params.user}/businesses/${params.business}/users`}>
-            {t('actions:manage', {type: t('auth:users')})}
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key={'activate'}
-                   loading={loading.effects['businessModel/activateBusiness']}
-                   disabled={!isEdit}
-                   icon={<FileDoneOutlined/>}
-                   onClick={() => onActivateBusiness(params.business)}>
-          {t('actions:activate')}
-        </Menu.Item>
-        <Menu.Item key={'hold'}
-                   loading={loading.effects['businessModel/holdBusiness']}
-                   disabled={!isEdit}
-                   icon={<PauseCircleOutlined/>}
-                   onClick={() => onHoldBusiness(params.business)}>
-          {t('actions:hold')}
-        </Menu.Item>
-        <Menu.Item key={'delete'}
-                   danger
-                   loading={loading.effects['businessModel/prepareToSave']}
-                   disabled={!isEdit}
-                   icon={<DeleteOutlined/>}
-                   onClick={() => onDeleteBusiness(params.business)}>
-          {t('actions:delete')}
-        </Menu.Item>
-      </Menu>
   );
 
   return (
@@ -239,13 +211,14 @@ export const businessEdit = (props) => {
                                       loading.effects['businessModel/query'] ||
                                       loading.effects['businessModel/prepareToSave']
                                     }/>,
-                        <Dropdown overlay={menu}
+                        <Dropdown overlay={<BusinessMenu {...menuProps} />}
                                   disabled={!isEdit || disabled}
-                                  overlayClassName={styles.customActionMenu}
+                                  trigger={['click']}
+                                  overlayClassName={menuStyles.customActionMenu}
                                   key={'custom'}>
                           <Button size={'small'}
                                   icon={<SettingOutlined/>}
-                                  className={styles.customAction}>
+                                  className={menuStyles.customAction}>
                             {t('actions:manage', {type: t('business')})} <DownOutlined/>
                           </Button>
                         </Dropdown>
