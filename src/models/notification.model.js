@@ -6,7 +6,7 @@ import {getNotifications} from '../services/notification.service';
 import {message} from 'antd';
 import i18n from '../utils/i18n';
 import {history} from 'umi';
-import {fbAdd, fbFindById, fbMultipleUpdate, fbUpdate, getRef} from '../services/firebase.service';
+import {fbAdd, fbFindById, fbUpdate, getRef} from '../services/firebase.service';
 import {STATUS} from '../utils/message';
 
 /**
@@ -116,6 +116,11 @@ export default dvaModelExtend(commonModel, {
           });
         }
 
+        const userRef = getRef({
+          collection: 'users',
+          doc: user.id
+        });
+
         // Create notification
         yield call(fbAdd, {
           collection: 'notifications',
@@ -127,7 +132,7 @@ export default dvaModelExtend(commonModel, {
             sentTo,
             replyRef,
             metadata: {
-              createdBy: user.id,
+              createdByRef: userRef,
               createdAt: +(new Date)
             },
             isPrivate,

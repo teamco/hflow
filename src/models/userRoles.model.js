@@ -3,7 +3,7 @@ import dvaModelExtend from 'dva-model-extend';
 
 import {commonModel} from 'models/common.model';
 import {detailsInfo} from 'services/cross.model.service';
-import {fbFindById, fbUpdate, fbWrite} from 'services/firebase.service';
+import {fbFindById, fbUpdate, fbWrite, getRef} from 'services/firebase.service';
 import {monitorHistory} from 'utils/history';
 
 /**
@@ -103,9 +103,14 @@ export default dvaModelExtend(commonModel, {
       if (user && ability.can('update', 'roles')) {
         let entity = yield call(fbFindById, {collection: 'roles', doc});
 
+        const userRef = getRef({
+          collection: 'users',
+          doc: user.id
+        });
+
         const metadata = {
           updatedAt: +(new Date),
-          updatedBy: user.uid
+          updatedByRef: userRef
         };
 
         if (entity.exists) {
@@ -129,7 +134,7 @@ export default dvaModelExtend(commonModel, {
             data: {
               metadata: {
                 createdAt: metadata.updatedAt,
-                createdBy: user.uid,
+                createdByRef: userRef,
                 ...metadata
               },
               roles: [...state[doc].roles]

@@ -13,10 +13,7 @@ import ct from 'countries-and-timezones';
 /** @type {array} */
 import provinces from 'provinces';
 
-import {
-  sendAuthLink,
-  sendVerificationEmail
-} from 'services/user.service';
+import {sendAuthLink, sendVerificationEmail} from 'services/user.service';
 
 import {
   findBusinessTempUser,
@@ -288,10 +285,16 @@ export default dvaModelExtend(commonModel, {
       }
 
       if (user && ability.can('update', 'businesses')) {
+
+        const userRef = getRef({
+          collection: 'users',
+          doc: manageByAdmin ? selectedUser.id : user.id
+        });
+
         const metadata = {
           ...selectedBusiness.metadata,
           updatedAt: +(new Date),
-          updatedBy: manageByAdmin ? selectedUser.uid : user.uid
+          updatedByRef: userRef
         };
 
         let data = {...payload, metadata};
@@ -340,11 +343,8 @@ export default dvaModelExtend(commonModel, {
             metadata: {
               ...metadata,
               createdAt: metadata.updatedAt,
-              createdBy: manageByAdmin ? selectedUser.uid : user.uid,
-              belongsToRef: getRef({
-                collection: 'users',
-                doc: manageByAdmin ? selectedUser.id : user.id
-              })
+              createdByRef: userRef,
+              belongsToRef: userRef
             }
           };
 
