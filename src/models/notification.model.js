@@ -144,7 +144,7 @@ export default dvaModelExtend(commonModel, {
       }
     },
 
-    * read({payload}, {put, call, select}) {
+    * setAsRead({payload}, {put, call, select}) {
       const {user, ability} = yield select(state => state.authModel);
       const {notifications} = yield select(state => state.notificationModel);
       const {doc, status = STATUS.read} = payload;

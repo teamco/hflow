@@ -3,7 +3,7 @@ import dvaModelExtend from 'dva-model-extend';
 import _ from 'lodash';
 
 import {commonModel} from 'models/common.model';
-import {fbAdd, fbReadAll} from 'services/firebase.service';
+import {fbAdd, fbReadAll, getRef} from 'services/firebase.service';
 import {isLocalHost} from 'utils/window';
 
 /**
@@ -54,9 +54,14 @@ export default dvaModelExtend(commonModel, {
         metadata,
         namespace,
         eventType,
-        createdBy: null,
+        createdByRef: null,
         duration: 0
       };
+
+      const userRef = getRef({
+        collection: 'users',
+        doc: user?.uid
+      });
 
       typeof duration !== 'undefined' && (data.duration = duration);
       typeof user?.email !== 'undefined' && (data.createdBy = user?.email);

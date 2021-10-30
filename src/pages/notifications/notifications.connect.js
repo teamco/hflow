@@ -17,7 +17,7 @@ export default connect(
         dispatch({type: `notificationModel/query`, payload: {userId}});
       },
       onRead(doc) {
-        dispatch({type: `notificationModel/read`, payload: {doc}});
+        dispatch({type: `notificationModel/setAsRead`, payload: {doc}});
       },
       onSendMessage({props}, fields) {
         dispatch({

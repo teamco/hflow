@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {fbFindById, fbReadBy} from 'services/firebase.service';
+import {fbFindById, fbReadBy, getRef} from 'services/firebase.service';
 
 /**
  * @export
@@ -11,14 +11,19 @@ export const getNotifications = async ({userId, email}) => {
   let inbox = [];
   let sent = [];
 
+  const userRef = getRef({
+    collection: 'users',
+    doc: userId
+  });
+
   /**
    * @constant
    * @type {{forEach}}
    */
   const createdBy = await fbReadBy({
     collection: 'notifications',
-    field: 'metadata.createdBy',
-    value: userId,
+    field: 'metadata.createdByRef',
+    value: userRef,
     optional: {order: 'metadata.createdAt'}
   });
 
