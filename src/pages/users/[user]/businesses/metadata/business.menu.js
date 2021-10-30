@@ -20,6 +20,7 @@ const BusinessMenu = props => {
     isEdit,
     loading,
     params,
+    record,
     onActivateBusiness,
     onHoldBusiness,
     onDeleteBusiness
@@ -31,7 +32,7 @@ const BusinessMenu = props => {
                    loading={loading.effects['businessModel/manageBusinessUsers']}
                    disabled={!isEdit}
                    icon={<UsergroupAddOutlined/>}>
-          <NavLink to={`/admin/users/${params.user}/businesses/${params.business}/users`}>
+          <NavLink to={`/admin/users/${params.user}/businesses/${record.id}/users`}>
             {t('actions:manage', {type: t('auth:users')})}
           </NavLink>
         </Menu.Item>

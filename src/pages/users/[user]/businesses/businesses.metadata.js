@@ -101,7 +101,7 @@ export const metadata = ({
                     </NavLink>
                   </Tooltip>
                 </Can>
-                <Dropdown overlay={<BusinessMenu {...menuProps} />}
+                <Dropdown overlay={<BusinessMenu record={record} {...menuProps} />}
                           trigger={['click']}
                           overlayClassName={menuStyles.customActionMenu}
                           key={'custom'}>
