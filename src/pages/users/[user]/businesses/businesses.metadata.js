@@ -19,6 +19,7 @@ import tableStyles from 'components/Main/Table/table.module.less';
 export const metadata = ({
   t,
   data,
+  user,
   ability,
   loading,
   multiple,
@@ -39,7 +40,7 @@ export const metadata = ({
         key: 'name',
         filterable: multiple,
         sortable: multiple,
-        render(name, data, idx) {
+        render(name, data) {
           return (
               <div className={classnames(styles.nowrap, tableStyles.tdName)}>
                 <span>
@@ -48,9 +49,9 @@ export const metadata = ({
                       <ShopTwoTone/>
                   }
                 </span>
-                <span>
+                <NavLink to={`/admin/users/${user}/businesses/${data.id}`}>
                   <Tooltip title={name}>{name}</Tooltip>
-                </span>
+                </NavLink>
               </div>
           );
         }
@@ -59,6 +60,13 @@ export const metadata = ({
         title: t('auth:email'),
         dataIndex: 'email',
         key: 'email',
+        filterable: multiple,
+        sortable: multiple
+      },
+      {
+        title: t('business:type'),
+        dataIndex: 'businessType',
+        key: 'businessType',
         filterable: multiple,
         sortable: multiple
       },

@@ -289,6 +289,7 @@ export default dvaModelExtend(commonModel, {
 
       if (user && ability.can('update', 'businesses')) {
         const metadata = {
+          ...selectedBusiness.metadata,
           updatedAt: +(new Date),
           updatedBy: manageByAdmin ? selectedUser.uid : user.uid
         };
@@ -337,13 +338,13 @@ export default dvaModelExtend(commonModel, {
           data = {
             ...data,
             metadata: {
+              ...metadata,
               createdAt: metadata.updatedAt,
               createdBy: manageByAdmin ? selectedUser.uid : user.uid,
               belongsToRef: getRef({
                 collection: 'users',
                 doc: manageByAdmin ? selectedUser.id : user.id
-              }),
-              ...metadata
+              })
             }
           };
 

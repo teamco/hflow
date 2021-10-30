@@ -83,6 +83,7 @@ export const businesses = (props) => {
                  {...metadata({
                    t,
                    data,
+                   user,
                    multiple: true,
                    ability,
                    loading,
