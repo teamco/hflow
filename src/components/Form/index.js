@@ -10,7 +10,7 @@ import Phone from './phone';
 import { Tooltip } from 'antd';
 import { CheckCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
 
-import styles from './form.module.less';
+import {COLORS} from 'utils/colors';
 
 /**
  * @export
@@ -46,12 +46,12 @@ export const unitParser = (value, unit = 'px') => {
  */
 export const getSuffix = (t, form, name, label) => {
   const values = form.getFieldsValue();
-  const success = (<CheckCircleTwoTone twoToneColor='#52c41a' />);
+  const success = (<CheckCircleTwoTone twoToneColor={COLORS.success}/>);
   const warning = (
-    <Tooltip placement={'topRight'}
-             title={t('form:required', { field: label })}>
-      <WarningTwoTone twoToneColor='#ff4d4f' />
-    </Tooltip>
+      <Tooltip placement={'topRight'}
+               title={t('form:required', {field: label})}>
+        <WarningTwoTone twoToneColor={COLORS.warning}/>
+      </Tooltip>
   );
 
   const ns = name.split('.');

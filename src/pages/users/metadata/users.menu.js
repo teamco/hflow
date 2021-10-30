@@ -13,6 +13,7 @@ import {
 
 import {NavLink} from 'umi';
 
+import {COLORS} from 'utils/colors';
 import tableStyles from 'components/Main/Table/table.module.less';
 
 /**
@@ -45,7 +46,7 @@ export const menu = props => {
         {multiple && (
             <Menu.Item key={'profile'}
                        icon={<ProfileTwoTone className={tableStyles.action}
-                                             twoToneColor={'#52c41a'}/>}>
+                                             twoToneColor={COLORS.success}/>}>
               <NavLink to={`/admin/users/${record.id}`}>
                 {t('menu:userProfile')}
               </NavLink>
@@ -53,7 +54,7 @@ export const menu = props => {
         )}
         <Menu.Item key={'businesses'}
                    icon={<TrademarkCircleTwoTone className={tableStyles.action}
-                                                 twoToneColor={'#52c41a'}/>}>
+                                                 twoToneColor={COLORS.success}/>}>
           <NavLink to={`/admin/users/${record.id}/businesses`}>
             {t('route:businesses')}
           </NavLink>
@@ -61,7 +62,7 @@ export const menu = props => {
         <Menu.Divider/>
         <Menu.Item key={'notifications'}
                    icon={<NotificationTwoTone className={tableStyles.action}
-                                              twoToneColor={'#FFBF00'}/>}>
+                                              twoToneColor={COLORS.warning}/>}>
           <NavLink to={`/admin/users/${record.id}/notifications`}>
             {t('route:notifications')}
           </NavLink>
@@ -72,7 +73,7 @@ export const menu = props => {
                          setVisibleMessage({visible: true, props: {from: currentUser, to: record}});
                        }}
                        icon={<MessageTwoTone className={tableStyles.action}
-                                             twoToneColor={'#FFBF00'}/>}>
+                                             twoToneColor={COLORS.warning}/>}>
               {t('auth:sendMessage')}
             </Menu.Item>
         )}
@@ -80,7 +81,7 @@ export const menu = props => {
         <Menu.Item key={'lock'}
                    icon={isLocked ?
                        (<LockTwoTone className={tableStyles.action}/>) :
-                       (<UnlockTwoTone twoToneColor={'#eb2f96'}
+                       (<UnlockTwoTone twoToneColor={COLORS.danger}
                                        className={tableStyles.action}/>)
                    }>
           {isLocked ? (
@@ -99,7 +100,7 @@ export const menu = props => {
                    icon={signedIn ? (
                        <ApiTwoTone className={tableStyles.action}/>
                    ) : (
-                       <ApiTwoTone twoToneColor={'#999999'}
+                       <ApiTwoTone twoToneColor={COLORS.disabled}
                                    className={tableStyles.action}/>
                    )}>
           {signedIn ? (
@@ -114,7 +115,7 @@ export const menu = props => {
         <Menu.Divider/>
         <Menu.Item key={'delete'}
                    icon={<DeleteTwoTone className={tableStyles.action}
-                                        twoToneColor={'#ff0000'}/>}>
+                                        twoToneColor={COLORS.danger}/>}>
           <Popconfirm title={t('msg:deleteConfirm', {instance: record.email})}
                       placement={'topRight'}
                       onConfirm={() => onDeleteUser(record)}>

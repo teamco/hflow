@@ -3,6 +3,8 @@ import {Modal, Tag} from 'antd';
 import {CheckCircleTwoTone, LockTwoTone, UnlockTwoTone, WarningTwoTone} from '@ant-design/icons';
 
 import {tsToLocaleDateTime} from 'utils/timestamp';
+import {COLORS} from 'utils/colors';
+import {BRANDS} from 'utils/brands';
 import {getRoleIcon} from 'pages/users/[user]/profile/profile.metadata';
 
 import styles from '../users.module.less';
@@ -49,17 +51,17 @@ export const showProfileModal = (t, record) => {
             <div>{tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))}</div>
             <div>
               {record.emailVerified ? (
-                  <CheckCircleTwoTone twoToneColor="#52c41a"/>
+                  <CheckCircleTwoTone twoToneColor={COLORS.success}/>
               ) : (
-                  <WarningTwoTone twoToneColor="#FFCC00"/>
+                  <WarningTwoTone twoToneColor={COLORS.warning}/>
               )}
             </div>
-            <div style={{marginTop: '18px'}}>
-              <Tag className={styles.rules}
-                   color={metadata.signedIn ? 'green' : 'volcano'}
-                   icon={metadata.isLocked ? (<LockTwoTone/>) : (<UnlockTwoTone/>)}>
+            <div className={styles.profileProvider}>
+              <Tag color={metadata.signedIn ? BRANDS[metadata.providerId]?.color : null}
+                   icon={BRANDS[metadata.providerId]?.icon} className={styles.rules}>
                 {metadata.providerId}
               </Tag>
+              <div>{metadata.isLocked ? (<LockTwoTone/>) : (<UnlockTwoTone/>)}</div>
             </div>
             <div style={{marginTop: '16px'}}>
               {record.roles.map((role, idx) => (

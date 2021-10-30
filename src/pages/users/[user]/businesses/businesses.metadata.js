@@ -7,10 +7,11 @@ import {
   UserAddOutlined,
   ProfileTwoTone,
   EyeTwoTone,
-ShopTwoTone
+  ShopTwoTone
 } from '@ant-design/icons';
 
 import {tsToLocaleDateTime} from 'utils/timestamp';
+import {COLORS} from 'utils/colors';
 
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
@@ -76,7 +77,7 @@ export const metadata = ({
                   <Tooltip title={t('actions:edit', {type: t('menu:business')})}>
                     <NavLink to={`/admin/users/${params.user}/businesses/${record.id}`}>
                       <ProfileTwoTone className={tableStyles.action}
-                                      twoToneColor={'#52c41a'}/>
+                                      twoToneColor={COLORS.success}/>
                     </NavLink>
                   </Tooltip>
                   <Tooltip title={t('actions:manage', {type: t('auth:users')})}>
@@ -90,7 +91,7 @@ export const metadata = ({
                     <Tooltip title={t('actions:show', {type: t('menu:business')})}>
                       <NavLink to={`/admin/users/${params.user}/businesses/${record.id}`}>
                         <EyeTwoTone className={tableStyles.action}
-                                    twoToneColor={'#52c41a'}/>
+                                    twoToneColor={COLORS.success}/>
                       </NavLink>
                     </Tooltip>
                   </Can>

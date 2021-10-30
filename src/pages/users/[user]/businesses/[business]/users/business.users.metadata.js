@@ -7,11 +7,9 @@ import {
   DownOutlined,
   MailTwoTone,
   CalendarTwoTone,
-  ControlTwoTone,
   SyncOutlined
 } from '@ant-design/icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faBook, faDonate, faUserCog} from '@fortawesome/free-solid-svg-icons';
+
 import {
   Col,
   Row,
@@ -19,7 +17,6 @@ import {
   Button,
   Dropdown,
   Popconfirm,
-  Select,
   Tag,
   Tooltip
 } from 'antd';
@@ -27,14 +24,12 @@ import {
 import classnames from 'classnames';
 import {tsToLocaleDateTime} from 'utils/timestamp';
 import EmailVerified from 'components/Profile/email.verified';
-import {isContributor, isModerator, isOwner} from 'services/userRoles.service';
-import {Can} from 'utils/auth/can';
+
+import {getRoleIcon} from 'pages/users/[user]/profile/profile.metadata';
+import {COLORS} from 'utils/colors';
 
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
-import {getRoleIcon} from 'pages/users/[user]/profile/profile.metadata';
-
-const {Option} = Select;
 
 /**
  * @export
@@ -59,7 +54,7 @@ export const metadata = ({
       <Menu>
         <Menu.Item key={'delete'}
                    icon={<DeleteTwoTone className={tableStyles.action}
-                                        twoToneColor="#eb2f96"/>}>
+                                        twoToneColor={COLORS.danger}/>}>
           <Popconfirm title={t('msg:unassignConfirm', {instance: record.email})}
                       placement={'topRight'}
                       onConfirm={() => onUnassignUser(record)}>
@@ -79,7 +74,7 @@ export const metadata = ({
         key: 'displayName',
         render(name, data) {
           const {pending, signedIn} = data?.metadata || {};
-          const color = signedIn ? '#52c41a' : '#999999';
+          const color = signedIn ? COLORS.success : COLORS.disabled;
           const signed = {
             title: t(signedIn ? 'auth:signedIn' : 'auth:signedOut'),
             icon: signedIn ?
@@ -97,7 +92,7 @@ export const metadata = ({
                 <span>
                   {pending ? (
                           <Tag icon={<SyncOutlined spin/>}
-                               color={'processing'}>
+                               color={COLORS.processing}>
                             {t('auth:pending')}
                           </Tag>
                       ) :

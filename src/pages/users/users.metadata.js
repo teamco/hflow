@@ -13,12 +13,14 @@ import {Tooltip, Tag, Button, Dropdown} from 'antd';
 
 import classnames from 'classnames';
 import {tsToLocaleDateTime} from 'utils/timestamp';
+import {COLORS} from 'utils/colors';
 
 import {showProfileModal} from 'pages/users/metadata/profile.modal';
 import {menu} from 'pages/users/metadata/users.menu';
 
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
+import {BRANDS} from '../../utils/brands';
 
 /**
  * @export
@@ -68,7 +70,7 @@ export const metadata = ({
         render(name, data) {
           const isCurrentStyle = currentUser?.uid === data.uid ? styles.currentUser : null;
           const isSignedIn = data.metadata.signedIn;
-          const color = isSignedIn ? '#52c41a' : '#999999';
+          const color = isSignedIn ? COLORS.success : COLORS.disabled;
           const signed = {
             title: t(isSignedIn ? 'auth:signedIn' : 'auth:signedOut'),
             icon: isSignedIn ?
@@ -110,7 +112,8 @@ export const metadata = ({
         title: t('auth:provider'),
         dataIndex: 'metadata',
         render: metadata => (
-            <Tag color={metadata.signedIn ? 'cyan' : 'lightgrey'}
+            <Tag color={metadata.signedIn ? BRANDS[metadata.providerId]?.color : null}
+                 icon={BRANDS[metadata.providerId]?.icon}
                  className={styles.provider}>
               {metadata.providerId}
             </Tag>
@@ -137,7 +140,7 @@ export const metadata = ({
                   <Tooltip title={t('auth:showProfile')}>
                     <ContactsTwoTone className={tableStyles.action}
                                      onClick={() => showProfileModal(t, record)}
-                                     twoToneColor={'#52c41a'}/>
+                                     twoToneColor={COLORS.success}/>
                   </Tooltip>
                   <Dropdown overlay={menu({
                     t,

@@ -55,23 +55,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ant-design/icons@npm:^4.6.3":
-  version: 4.6.4
-  resolution: "@ant-design/icons@npm:4.6.4"
-  dependencies:
-    "@ant-design/colors": ^6.0.0
-    "@ant-design/icons-svg": ^4.0.0
-    "@babel/runtime": ^7.11.2
-    classnames: ^2.2.6
-    rc-util: ^5.9.4
-  peerDependencies:
-    react: ">=16.0.0"
-    react-dom: ">=16.0.0"
-  checksum: 8bc2cbac17dcd1eb2296370ced7b8c66ba24e720809373ea50f06b00711bdc13e4bd6783d571ff0df7fd05f092bd96206c3dd5dee5f42f4a0fc2c6f2c864d00b
-  languageName: node
-  linkType: hard
-
-"@ant-design/icons@npm:^4.7.0":
+"@ant-design/icons@npm:^4.6.3, @ant-design/icons@npm:^4.7.0":
   version: 4.7.0
   resolution: "@ant-design/icons@npm:4.7.0"
   dependencies:
@@ -9762,8 +9746,8 @@ __metadata:
   linkType: hard
 
 "rc-input-number@npm:~7.1.0":
-  version: 7.1.0
-  resolution: "rc-input-number@npm:7.1.0"
+  version: 7.1.4
+  resolution: "rc-input-number@npm:7.1.4"
   dependencies:
     "@babel/runtime": ^7.10.1
     classnames: ^2.2.5
@@ -9771,7 +9755,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 8e57b4b2cc13ba8a1d15939c4b57ad0667263673c1c60635224a7c7718b8e01a4e761b71ea6bba4da872a1019c7254f40a433c4c01479c3c26a23fee066dcb43
+  checksum: 76528d3f57630ad2141a1c1e5b103ceed782c2fe4e2b38c858e09e9f35004319d924dcc68d633befe88f2f7506aae71e330444d03a02cfcba3ebda056edd8ffa
   languageName: node
   linkType: hard
 
@@ -10160,8 +10144,8 @@ __metadata:
   linkType: hard
 
 "rc-table@npm:~7.15.1":
-  version: 7.15.1
-  resolution: "rc-table@npm:7.15.1"
+  version: 7.15.2
+  resolution: "rc-table@npm:7.15.2"
   dependencies:
     "@babel/runtime": ^7.10.1
     classnames: ^2.2.5
@@ -10171,7 +10155,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: df31d31bb00abf4ff0455512ac2a7af1586be2e73229a7cb2a79e4aa9c6599106b2cf20d20aacbd7b41f6f65e1453370af1bcc5c46720c4a00bc7ab861126f8a
+  checksum: ab9a1f692ce6ec61904798e21b1ede9352e9b1a7caf595cc5aae452a44cb23f213cbdcc34a67be151b8b75815882fe603fadb3124e12f66b30f92b10b23c356a
   languageName: node
   linkType: hard
 
@@ -10411,7 +10395,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rc-util@npm:^5.12.0, rc-util@npm:^5.13.0, rc-util@npm:^5.13.1":
+"rc-util@npm:^5.12.0":
   version: 5.13.1
   resolution: "rc-util@npm:5.13.1"
   dependencies:
@@ -10422,6 +10406,20 @@ __metadata:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
   checksum: 8dc1994a47afa87132f64027ff7642d560b7651fba4243ab21d37bf25afcace98a77259ea0bf2d769e8b6c72aebaddb1f3d2699b01a5a81628954d7983056446
+  languageName: node
+  linkType: hard
+
+"rc-util@npm:^5.13.0, rc-util@npm:^5.13.1":
+  version: 5.14.0
+  resolution: "rc-util@npm:5.14.0"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    react-is: ^16.12.0
+    shallowequal: ^1.1.0
+  peerDependencies:
+    react: ">=16.9.0"
+    react-dom: ">=16.9.0"
+  checksum: 9cf41398dbdcb55c94ec193fb234df211677390c6f9c273048d5a3923951930a99f3e0f293c0fb813858901f9590265d102ce3f892e7ce12b052d6128588cd72
   languageName: node
   linkType: hard
 
