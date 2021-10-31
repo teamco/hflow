@@ -22,9 +22,7 @@ import {routes} from '/routes';
  */
 const Breadcrumbs = ({breadcrumbs, meta, onUpdateDocumentMeta, ...props}) => {
   const {t} = props;
-
   const title = breadcrumbs.map(({breadcrumb}) => t(breadcrumb.props.children)).join(' / ');
-
   useEffect(() => {
     onUpdateDocumentMeta({title});
   }, [title !== meta.title]);

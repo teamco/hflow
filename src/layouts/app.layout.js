@@ -1,4 +1,4 @@
-import React, {Component, memo, Suspense} from 'react';
+import React, {memo, Suspense} from 'react';
 import {connect} from 'dva';
 import {history, withRouter, Helmet} from 'umi';
 import {Form, Layout} from 'antd';
@@ -12,10 +12,13 @@ import 'utils/i18n';
 import './app.layout.less';
 
 const {Content} = Layout;
+const queryString = require('query-string');
 
-class AppLayout extends Component {
 
-  render() {
+const AppLayout = (props) => {
+
+    const {mode} = queryString.parse(window.location.search);
+
     const {
       t,
       children,
@@ -27,7 +30,7 @@ class AppLayout extends Component {
       onNotification,
       onUpdateDocumentMeta,
       onRoute
-    } = this.props;
+    } = props;
 
     const {
       language,
@@ -50,7 +53,7 @@ class AppLayout extends Component {
     const {user} = authModel;
     const {badge} = notificationModel;
 
-    return user ? (
+    return user || mode === 'signIn' ? (
         <div className={'admin'}>
           <Helmet>
             <meta charSet={meta.charSet}/>
@@ -71,7 +74,7 @@ class AppLayout extends Component {
                                             badge={badge}/>}
                 <Content>
                   <Form.Provider>
-                    {pageBreadcrumbs && (
+                    {pageBreadcrumbs && mode !== 'signIn' && (
                         <Main.Breadcrumbs meta={meta}
                                           onUpdateDocumentMeta={onUpdateDocumentMeta}/>
                     )}
@@ -86,7 +89,6 @@ class AppLayout extends Component {
     ) : (
         <Login/>
     );
-  }
 }
 
 export default withRouter(
