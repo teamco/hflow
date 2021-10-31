@@ -51,7 +51,9 @@ export const getNotifications = async ({userId, email}) => {
   let _users = {};
 
   for (let msg of inbox) {
-    const userId = msg.metadata.createdBy;
+    const sentFrom = msg.metadata.createdByRef;
+    const userId = (await sentFrom.get()).data().id;
+
     if (_users[userId]) {
       msg.sentFrom = _users[userId];
     } else {

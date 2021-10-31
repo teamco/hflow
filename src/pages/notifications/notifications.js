@@ -6,7 +6,8 @@ import {useParams} from 'umi';
 import Page from 'components/Page';
 import Main from 'components/Main';
 
-import {expendableNotification, notificationsMetadata} from 'pages/notifications/notifications.metadata';
+import {notificationsMetadata} from 'pages/notifications/notifications.metadata';
+import {expendableNotification} from 'pages/notifications/metadata/notification.expendable';
 
 import styles from 'pages/notifications/notifications.module.less';
 import SendMessage from '../users/metadata/send.message';

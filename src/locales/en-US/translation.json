@@ -264,7 +264,7 @@
     "sent": "Sent",
     "inbox": "Inbox",
     "to": "To",
-    "re": "Reply to",
+    "re": "RE: {{sender}}",
     "from": "From",
     "type": "Type",
     "status": "Status",

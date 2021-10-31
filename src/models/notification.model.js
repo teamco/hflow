@@ -58,12 +58,6 @@ export default dvaModelExtend(commonModel, {
 
         const {sent = [], inbox = []} = yield call(getNotifications, {userId: user.id, email: user.email});
 
-        // yield call(fbMultipleUpdate, {
-        //   collection: 'notifications',
-        //   docs: inbox.map(data => data.id),
-        //   value: {read: true}
-        // });
-
         yield put({type: 'updateState', payload: {notifications: {sent, inbox}}});
         yield put({type: 'getCount', payload: inbox});
 
@@ -103,23 +97,14 @@ export default dvaModelExtend(commonModel, {
       const {type, status, replyTo, sentTo, title, description, isPrivate, read = false} = payload;
 
       if (user && ability.can('create', 'notifications')) {
+
         let replyRef = null;
         if (replyTo) {
           replyRef = getRef({collection: 'notifications', doc: replyTo});
-
-          yield put({
-            type: 'read',
-            payload: {
-              doc: replyTo,
-              status: STATUS.answered
-            }
-          });
+          yield put({type: 'setAsRead', payload: {doc: replyTo, status: STATUS.answered}});
         }
 
-        const userRef = getRef({
-          collection: 'users',
-          doc: user.id
-        });
+        const userRef = getRef({collection: 'users', doc: user.id});
 
         // Create notification
         yield call(fbAdd, {
