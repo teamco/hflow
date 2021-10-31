@@ -1,20 +1,13 @@
-import {FacebookOutlined, TwitterOutlined, GoogleOutlined, LockOutlined} from '@ant-design/icons';
+import {GoogleOutlined, LockOutlined} from '@ant-design/icons';
+import {COLORS} from './colors';
 
 export const BRANDS = {
   'google.com': {
     icon: <GoogleOutlined/>,
     color: '#4285F4'
   },
-  facebook: {
-    icon: <FacebookOutlined/>,
-    color: '#3b5999'
-  },
-  twitter: {
-    icon: <TwitterOutlined/>,
-    color: '#55acee'
-  },
   password: {
     icon: <LockOutlined/>,
-    color: '#ccc'
+    color: COLORS.tags.cyan
   }
 };
