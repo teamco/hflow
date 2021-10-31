@@ -10,7 +10,8 @@ import Page from 'components/Page';
 import Main from 'components/Main';
 
 import RegisterUser from 'pages/users/[user]/businesses/[business]/users/register';
-import {expandable, metadata} from 'pages/users/[user]/businesses/[business]/users/business.users.metadata';
+import {metadata} from 'pages/users/[user]/businesses/[business]/users/business.users.metadata';
+import {expandable} from 'pages/users/[user]/businesses/[business]/users/metadata/business.user.expandable';
 
 import {Can} from 'utils/auth/can';
 import {fromForm} from 'utils/object';
@@ -120,7 +121,8 @@ export const businessUsers = (props) => {
                  multiple: true,
                  loading,
                  onAssignUser,
-                 onUnassignUser
+                 onUnassignUser,
+                 onResendRegisterLink
                })} />
         <RegisterUser {...registerProps} />
       </Page>

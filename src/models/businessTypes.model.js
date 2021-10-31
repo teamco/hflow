@@ -3,7 +3,7 @@ import dvaModelExtend from 'dva-model-extend';
 
 import {commonModel} from 'models/common.model';
 import {detailsInfo} from 'services/cross.model.service';
-import {fbFindById, fbUpdate, fbWrite} from 'services/firebase.service';
+import {fbFindById, fbUpdate, fbWrite, getRef} from 'services/firebase.service';
 import {monitorHistory} from 'utils/history';
 
 /**
@@ -70,17 +70,25 @@ export default dvaModelExtend(commonModel, {
       if (user && ability.can('update', 'businessTypes')) {
         let entity = yield call(fbFindById, _db);
 
+        const userRef = getRef({
+          collection: 'users',
+          doc: user.id
+        });
+
         const metadata = {
           updatedAt: +(new Date),
-          updatedBy: user.uid
+          updatedByRef: userRef
         };
 
         if (entity.exists) {
+
+          entity = entity.data();
+
           yield call(fbUpdate, {
             ..._db,
             data: {
               metadata: {
-                ...entity.data().metadata,
+                ...entity.metadata,
                 ...metadata
               },
               types: [...tags]
@@ -94,7 +102,7 @@ export default dvaModelExtend(commonModel, {
             data: {
               metadata: {
                 createdAt: metadata.updatedAt,
-                createdBy: user.uid,
+                createdByRef: userRef,
                 ...metadata
               },
               types: [...tags]

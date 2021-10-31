@@ -13,17 +13,15 @@ export default connect(
       dietaryModel,
       startersAndDessertsModel,
       loading
-    }) => {
-      return {
-        authModel,
-        businessServiceModel,
-        businessPreparationModel,
-        businessModel,
-        dietaryModel,
-        startersAndDessertsModel,
-        loading
-      };
-    },
+    }) => ({
+      authModel,
+      businessServiceModel,
+      businessPreparationModel,
+      businessModel,
+      dietaryModel,
+      startersAndDessertsModel,
+      loading
+    }),
     (dispatch) => ({
       dispatch,
       onFieldsChange(changedFields, allFields) {
@@ -51,18 +49,6 @@ export default connect(
           payload: {...payload, model: 'businessModel'}
         });
       },
-      onDietaryQuery() {
-        dispatch({type: 'dietaryModel/query'});
-      },
-      onStartersAndDessertsModelQuery() {
-        dispatch({type: 'startersAndDessertsModel/query'});
-      },
-      onPreparationQuery() {
-        dispatch({type: 'businessPreparationModel/query'});
-      },
-      onServiceQuery() {
-        dispatch({type: 'businessServiceModel/query'});
-      },
       onSave(payload, params) {
         dispatch({type: 'businessModel/prepareToSave', payload, params});
       },
@@ -78,6 +64,12 @@ export default connect(
       },
       onHandleStates(country) {
         dispatch({type: `businessModel/handleStates`, payload: {country}});
+      },
+      onHoldBusiness() {
+      },
+      onDeleteBusiness() {
+      },
+      onActivateBusiness() {
       }
     })
 )(withTranslation()(businessEdit));

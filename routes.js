@@ -55,6 +55,15 @@ export const routes = [
           },
           {
             exact: true,
+            path: '/admin/users/:user/notifications',
+            component: '@/pages/notifications',
+            breadcrumb: 'route:notifications',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
             path: '/admin/users/:user/businesses',
             component: '@/pages/users/[user]/businesses',
             breadcrumb: 'route:businesses',

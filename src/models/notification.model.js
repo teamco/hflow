@@ -6,7 +6,7 @@ import {getNotifications} from '../services/notification.service';
 import {message} from 'antd';
 import i18n from '../utils/i18n';
 import {history} from 'umi';
-import {fbAdd, fbMultipleUpdate} from '../services/firebase.service';
+import {fbAdd, fbFindById, fbUpdate, getRef} from '../services/firebase.service';
 import {STATUS} from '../utils/message';
 
 /**
@@ -19,7 +19,10 @@ export default dvaModelExtend(commonModel, {
       count: 0,
       overflow: 10
     },
-    notifications: []
+    notifications: {
+      sent: [],
+      inbox: []
+    }
   },
   subscriptions: {
     setupHistory(setup) {
@@ -28,21 +31,41 @@ export default dvaModelExtend(commonModel, {
     }
   },
   effects: {
+
     * query({payload}, {call, put, select}) {
-      const {user, ability} = yield select(state => state.authModel);
+      let {user, ability} = yield select(state => state.authModel);
+      const {userId} = payload;
 
       if (user && ability.can('read', 'notifications')) {
+        if (userId && ability.can('read', 'profile')) {
+          const _user = yield call(fbFindById, {
+            collection: 'users',
+            doc: userId
+          });
 
-        const {data = []} = yield call(getNotifications, {userId: user.id});
+          if (_user.exists) {
+            user = _user.data();
+          } else {
+            return yield put({
+              type: 'raiseCondition',
+              payload: {
+                message: i18n.t('error:notFound', {entity: 'User'}),
+                key: 'selectedUser'
+              }
+            });
+          }
+        }
 
-        yield call(fbMultipleUpdate, {
-          collection: 'notifications',
-          docs: data.map(data => data.id),
-          value: {read: true}
-        });
+        const {sent = [], inbox = []} = yield call(getNotifications, {userId: user.id, email: user.email});
 
-        yield put({type: 'updateState', payload: {notifications: data}});
-        yield put({type: 'getCount', payload: data});
+        // yield call(fbMultipleUpdate, {
+        //   collection: 'notifications',
+        //   docs: inbox.map(data => data.id),
+        //   value: {read: true}
+        // });
+
+        yield put({type: 'updateState', payload: {notifications: {sent, inbox}}});
+        yield put({type: 'getCount', payload: inbox});
 
       } else {
 
@@ -54,20 +77,20 @@ export default dvaModelExtend(commonModel, {
     * getCount({payload = {}}, {put, call, select}) {
       const {user, ability} = yield select(state => state.authModel);
       const {badge} = yield select(state => state.notificationModel);
-      let {data = []} = payload;
+      let {inbox = []} = payload;
 
       if (user && ability.can('read', 'notifications')) {
 
-        if (!data.length) {
-          const notifications = yield call(getNotifications, {userId: user.id});
-          data = notifications.data;
+        if (!inbox.length) {
+          const notifications = yield call(getNotifications, {userId: user.id, email: user.email});
+          inbox = notifications.inbox;
         }
 
         yield put({
           type: 'updateState',
           payload: {
             badge: {
-              count: data.filter(n => !n.read).length,
+              count: inbox.filter(n => !n.read).length,
               overflow: badge.overflow
             }
           }
@@ -77,27 +100,98 @@ export default dvaModelExtend(commonModel, {
 
     * createAndUpdate({payload}, {put, call, select}) {
       const {user, ability} = yield select(state => state.authModel);
-      const {status, target, name, description} = payload;
+      const {type, status, replyTo, sentTo, title, description, isPrivate, read = false} = payload;
 
       if (user && ability.can('create', 'notifications')) {
+        let replyRef = null;
+        if (replyTo) {
+          replyRef = getRef({collection: 'notifications', doc: replyTo});
+
+          yield put({
+            type: 'read',
+            payload: {
+              doc: replyTo,
+              status: STATUS.answered
+            }
+          });
+        }
+
+        const userRef = getRef({
+          collection: 'users',
+          doc: user.id
+        });
 
         // Create notification
         yield call(fbAdd, {
           collection: 'notifications',
           data: {
-            name,
+            type,
+            title,
             description,
             status,
-            target,
-            createdBy: user.id,
-            read: false,
-            createdAt: +(new Date)
+            sentTo,
+            replyRef,
+            metadata: {
+              createdByRef: userRef,
+              createdAt: +(new Date)
+            },
+            isPrivate,
+            read
           }
         });
 
         yield put({type: 'getCount'});
       }
+    },
+
+    * setAsRead({payload}, {put, call, select}) {
+      const {user, ability} = yield select(state => state.authModel);
+      const {notifications} = yield select(state => state.notificationModel);
+      const {doc, status = STATUS.read} = payload;
+
+      if (user && ability.can('update', 'notifications')) {
+
+        // Update notifications
+        yield call(fbUpdate, {
+          collection: 'notifications',
+          doc,
+          data: {
+            read: true,
+            status,
+            'metadata.updatedAt': +(new Date())
+          }
+        });
+
+        let key, msg, i;
+        let updatedNotices = [];
+
+        for (key in notifications) {
+          const instances = notifications[key];
+          if (key === 'inbox') {
+            for (i = 0; i < instances.length; i++) {
+              updatedNotices = [...instances];
+              msg = {...[...instances][i]};
+              if (msg.id === doc) {
+                msg.read = true;
+                msg.status = status;
+                updatedNotices[i] = msg;
+
+                yield put({
+                  type: 'updateState',
+                  payload: {
+                    notifications: {
+                      ...notifications,
+                      [key]: updatedNotices
+                    }
+                  }
+                });
+              }
+            }
+          }
+        }
+      }
     }
   },
+
   reducers: {}
 });

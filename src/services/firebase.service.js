@@ -106,17 +106,42 @@ export const fbReadAll = async ({collection, notice = true}) => {
 };
 
 /**
+ * Limit refs
+ * @export
+ * @param docRef
+ * @param limit
+ * @return {*}
+ */
+export const limitBy = ({docRef, limit}) => limit ? docRef.limit(limit) : docRef;
+
+/**
+ * Order refs
+ * @export
+ * @param docRef
+ * @param order
+ * @param [at]
+ * @return {*}
+ */
+export const orderBy = ({docRef, order, at = 'desc'}) => order ? docRef.orderBy(order, at) : docRef;
+
+/**
  * Read from collection by condition
  * @async
  * @export
  * @param collection
  * @param field
  * @param [operator]
+ * @param [optional]
  * @param value
  * @param {boolean} [notice]
  */
-export const fbReadBy = async ({collection, field, operator = '==', value, notice = true}) => {
-  return await db.collection(collection).where(field, operator, value).get().catch(async error => {
+export const fbReadBy = async ({collection, field, operator = '==', value, notice = true, optional = {}}) => {
+  const {limit, order} = optional;
+  let docRef = db.collection(collection).where(field, operator, value);
+
+  docRef = limitBy({docRef: orderBy({docRef, order}), limit});
+
+  return await docRef.get().catch(async error => {
     notice && await message.error(error.message);
     console.error(`Read: ${collection}\n`, error);
     throw new Error(error);
@@ -159,7 +184,7 @@ export const getRef = ({collection, doc}) => db.collection(collection).doc(doc);
  */
 export const fbMultipleUpdate = async ({collection, docs, value = {}, notice = true}) => {
   const docRefs = docs.map(doc => getRef({collection, doc}));
-  return db.runTransaction(transaction => {
+  return docRefs.length && db.runTransaction(transaction => {
     return transaction.get(docRefs[0]).then((sDoc) => {
       for (let docRef of docRefs) transaction.update(docRef, value);
       return value;

@@ -12,7 +12,7 @@
   }
 
   .currentUser {
-    background-color: gold;
+    background-color: rgba(255, 191, 0, 0.3);
     padding: 3px 5px;
     border-radius: 2px;
   }
@@ -34,13 +34,50 @@
   }
 }
 
+.profileProvider {
+  display: flex;
+  margin-top: 18px;
+
+  > div {
+    margin-left: 5px;
+  }
+}
+
+.sendMessage {
+  font-size: 16px;
+
+  span[role="img"] {
+    margin-right: 10px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      top: 2px;
+      position: relative;
+    }
+  }
+}
+
+.sendMessageBtn {
+  span[role="img"] {
+    margin-right: 5px;
+
+    svg {
+      width: 12px;
+      height: 12px;
+      top: 1px;
+      position: relative;
+    }
+  }
+}
+
 .profile {
   margin-left: -30px;
   display: flex;
   margin-top: 20px;
 
   .currentUser {
-    background-color: gold;
+    background-color: rgba(255, 191, 0, 0.3);
     padding: 3px 5px;
     border-radius: 2px;
   }
@@ -92,22 +129,9 @@
 .provider {
   text-transform: lowercase;
   font-variant: small-caps;
-}
 
-.customAction {
-  span[aria-label="down"] {
-    svg {
-      width: 8px;
-      position: relative;
-      top: 2px;
-    }
-  }
-}
-
-.customActionMenu {
-  :global {
-    .ant-dropdown-menu-item {
-      padding: 0 12px !important;
-    }
+  span[role='img'] {
+    position: relative;
+    top: 1px;
   }
 }

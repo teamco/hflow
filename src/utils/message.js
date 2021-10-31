@@ -7,6 +7,9 @@ import i18n from './i18n';
  * @type {*}
  */
 export const STATUS = {
+  sent: i18n.t('status:sent'),
+  read: i18n.t('status:read'),
+  answered: i18n.t('status:answered'),
   pending: i18n.t('status:pending'),
   success: i18n.t('status:success'),
   failed: i18n.t('status:failed'),

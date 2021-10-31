@@ -13,10 +13,7 @@ import ct from 'countries-and-timezones';
 /** @type {array} */
 import provinces from 'provinces';
 
-import {
-  sendAuthLink,
-  sendVerificationEmail
-} from 'services/user.service';
+import {sendAuthLink, sendVerificationEmail} from 'services/user.service';
 
 import {
   findBusinessTempUser,
@@ -64,36 +61,34 @@ export default dvaModelExtend(commonModel, {
 
   effects: {
 
-    * query({payload}, {put, call}) {
+    * query({payload}, {put, call, select}) {
+      const {ability} = yield select(state => state.authModel);
       const {selectedUser, userId} = payload;
 
-      yield put({
-        type: 'userModel/validateUser',
-        payload: {selectedUser, userId}
-      });
-
-      let user = yield call(fbFindById, {
-        collection: 'users',
-        doc: userId
-      });
-
-      // TODO (teamco): Fix business user.
-
-      if (user.exists) {
-        const _user = user.data();
-        const businessUser = false;//isBusiness(_user);
-        let businesses = {data: []};
-
-        if (businessUser) {
-          businesses.data = yield call(getBusinessByRef, {businessRef: _user.business?.metadata?.businessRef});
-        } else {
-          businesses = yield call(getBusinesses, {userId: _user.id});
-        }
-
-        yield put({
-          type: 'updateState',
-          payload: {data: businesses.data}
+      if (ability.can('read', 'profile')) {
+        const user = yield call(fbFindById, {
+          collection: 'users',
+          doc: userId
         });
+
+        if (user.exists && ability.can('read', 'businesses')) {
+          const _user = user.data();
+
+          // TODO (teamco): Fix business user.
+          const businessUser = false;//isBusiness(_user);
+          let businesses = {data: []};
+
+          if (businessUser) {
+            businesses.data = yield call(getBusinessByRef, {businessRef: _user.business?.metadata?.businessRef});
+          } else {
+            businesses = yield call(getBusinesses, {userId: _user.id});
+          }
+
+          yield put({
+            type: 'updateState',
+            payload: {data: businesses.data}
+          });
+        }
       }
     },
 
@@ -290,9 +285,16 @@ export default dvaModelExtend(commonModel, {
       }
 
       if (user && ability.can('update', 'businesses')) {
+
+        const userRef = getRef({
+          collection: 'users',
+          doc: manageByAdmin ? selectedUser.id : user.id
+        });
+
         const metadata = {
+          ...selectedBusiness.metadata,
           updatedAt: +(new Date),
-          updatedBy: manageByAdmin ? selectedUser.uid : user.uid
+          updatedByRef: userRef
         };
 
         let data = {...payload, metadata};
@@ -339,13 +341,10 @@ export default dvaModelExtend(commonModel, {
           data = {
             ...data,
             metadata: {
+              ...metadata,
               createdAt: metadata.updatedAt,
-              createdBy: manageByAdmin ? selectedUser.uid : user.uid,
-              belongsToRef: getRef({
-                collection: 'users',
-                doc: manageByAdmin ? selectedUser.id : user.id
-              }),
-              ...metadata
+              createdByRef: userRef,
+              belongsToRef: userRef
             }
           };
 
@@ -392,12 +391,14 @@ export default dvaModelExtend(commonModel, {
         yield put({
           type: 'notificationModel/createAndUpdate',
           payload: {
-            name: i18n.t('notifications:invitation'),
-            description: isResend ?
+            type: i18n.t('notifications:invitation'),
+            title: isResend ?
                 i18n.t('notifications:reSentInvitation') :
                 i18n.t('notifications:sentInvitation'),
+            description: i18n.t('error:na'),
             status: STATUS.pending,
-            target: email
+            isPrivate: true,
+            sentTo: email
           }
         });
 

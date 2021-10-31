@@ -2,22 +2,28 @@ import React from 'react';
 import {NavLink, useParams} from 'umi';
 import classnames from 'classnames';
 import {Can} from 'utils/auth/can';
-import {Tooltip} from 'antd';
+import {Button, Dropdown, Tooltip} from 'antd';
 import {
   UserAddOutlined,
   ProfileTwoTone,
-  EyeTwoTone,
-ShopTwoTone
+  ShopTwoTone,
+  SettingOutlined,
+  DownOutlined
 } from '@ant-design/icons';
 
 import {tsToLocaleDateTime} from 'utils/timestamp';
+import {COLORS} from 'utils/colors';
+
+import BusinessMenu from './metadata/business.menu';
 
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
+import menuStyles from 'components/menu.less';
 
 export const metadata = ({
   t,
   data,
+  user,
   ability,
   loading,
   multiple,
@@ -27,6 +33,14 @@ export const metadata = ({
 }) => {
 
   const params = useParams();
+  const menuProps = {
+    isEdit: true,
+    loading,
+    params,
+    onActivateBusiness,
+    onHoldBusiness,
+    onDeleteBusiness
+  };
 
   return {
     width: '100%',
@@ -38,7 +52,7 @@ export const metadata = ({
         key: 'name',
         filterable: multiple,
         sortable: multiple,
-        render(name, data, idx) {
+        render(name, data) {
           return (
               <div className={classnames(styles.nowrap, tableStyles.tdName)}>
                 <span>
@@ -47,9 +61,9 @@ export const metadata = ({
                       <ShopTwoTone/>
                   }
                 </span>
-                <span>
+                <NavLink to={`/admin/users/${user}/businesses/${data.id}`}>
                   <Tooltip title={name}>{name}</Tooltip>
-                </span>
+                </NavLink>
               </div>
           );
         }
@@ -58,6 +72,13 @@ export const metadata = ({
         title: t('auth:email'),
         dataIndex: 'email',
         key: 'email',
+        filterable: multiple,
+        sortable: multiple
+      },
+      {
+        title: t('business:type'),
+        dataIndex: 'businessType',
+        key: 'businessType',
         filterable: multiple,
         sortable: multiple
       },
@@ -76,25 +97,20 @@ export const metadata = ({
                   <Tooltip title={t('actions:edit', {type: t('menu:business')})}>
                     <NavLink to={`/admin/users/${params.user}/businesses/${record.id}`}>
                       <ProfileTwoTone className={tableStyles.action}
-                                      twoToneColor={'#52c41a'}/>
-                    </NavLink>
-                  </Tooltip>
-                  <Tooltip title={t('actions:manage', {type: t('auth:users')})}>
-                    <NavLink to={`/admin/users/${params.user}/businesses/${record.id}/users`}>
-                      <UserAddOutlined className={tableStyles.action}/>
+                                      twoToneColor={COLORS.success}/>
                     </NavLink>
                   </Tooltip>
                 </Can>
-                <Can not I={'update'} a={'businesses'}>
-                  <Can I={'read'} a={'businesses'}>
-                    <Tooltip title={t('actions:show', {type: t('menu:business')})}>
-                      <NavLink to={`/admin/users/${params.user}/businesses/${record.id}`}>
-                        <EyeTwoTone className={tableStyles.action}
-                                    twoToneColor={'#52c41a'}/>
-                      </NavLink>
-                    </Tooltip>
-                  </Can>
-                </Can>
+                <Dropdown overlay={<BusinessMenu record={record} {...menuProps} />}
+                          trigger={['click']}
+                          overlayClassName={menuStyles.customActionMenu}
+                          key={'custom'}>
+                  <Button size={'small'}
+                          icon={<SettingOutlined/>}
+                          className={menuStyles.customAction}>
+                    {t('actions:manage', {type: t('business')})} <DownOutlined/>
+                  </Button>
+                </Dropdown>
               </div>
           ) : null;
         }

@@ -40,9 +40,10 @@
     "signOut": "Sign out",
     "signedIn": "Signed in",
     "signedOut": "Signed out",
-    "forceSignOut": "Force Sign out",
+    "forceSignOut": "Force SignOut",
     "roles": "Roles",
     "email": "Email",
+    "sendMessage": "Send Message",
     "updateEmail": "Update Email",
     "emailHelper": "You can use letters, numbers & periods",
     "emailNotValid": "The input is not valid Email",
@@ -147,6 +148,7 @@
   },
   "table": {
     "name": "Name",
+    "title": "Title",
     "description": "Description",
     "total": "Total",
     "action": "Action"
@@ -156,6 +158,7 @@
     "unassign": "Unassign",
     "manage": "Manage {{type}}",
     "change": "Change",
+    "sendMessage": "Send",
     "ok": "Ok",
     "edit": "Edit {{type}}",
     "show": "Show {{type}}",
@@ -248,6 +251,9 @@
     "aboutUs": "About us"
   },
   "status": {
+    "sent": "Sent",
+    "read": "Read",
+    "answered": "Answered",
     "pending": "Pending",
     "success": "Success",
     "warning": "Warning",
@@ -255,7 +261,15 @@
     "failed": "Failed"
   },
   "notifications": {
+    "sent": "Sent",
+    "inbox": "Inbox",
+    "to": "To",
+    "re": "Reply to",
+    "from": "From",
+    "type": "Type",
     "status": "Status",
+    "public": "Public",
+    "private": "Private",
     "invitation": "Invitation",
     "message": "Message",
     "sentInvitation": "Sent business user invitation",
