@@ -30,7 +30,7 @@ import {errorSaveMsg, STATUS} from 'utils/message';
 import {setAs} from 'utils/object';
 
 import {detailsInfo} from 'services/cross.model.service';
-import {fbAdd, fbFindById, fbUpdate, getRef} from 'services/firebase.service';
+import {fbAdd, fbDelete, fbFindById, fbUpdate, getRef} from 'services/firebase.service';
 import {isAdmin} from 'services/userRoles.service';
 import {isNew} from 'services/common.service';
 
@@ -425,7 +425,7 @@ export default dvaModelExtend(commonModel, {
 
         const data = {
           email,
-          userRoles,
+          businessRoles: userRoles,
           metadata: {
             pending: true,
             invitedAt: +(new Date),
@@ -487,39 +487,35 @@ export default dvaModelExtend(commonModel, {
 
     * finishRegistration({payload}, {call, put, select}) {
       const {businessUserRef} = yield select(state => state.businessModel);
-      const {user} = payload;
+      const {_userExist} = payload;
 
-      let _userExist = yield call(fbFindById, {
-        collection: 'users',
-        doc: user.docId
-      });
+      if (_userExist.docId && businessUserRef) {
 
-      if (_userExist.id && businessUserRef) {
-
-        let data = {...user.data};
+        let data = {..._userExist.data};
 
         data.business = businessUserRef.data();
-        data.business.userLogsMetadata = {
-          ...data.business.metadata,
-          ...{assignedAt: +(new Date)}
+        const {businessRoles, metadata} = data.business;
+
+        data.business = {
+          businessRoles,
+          metadata: {
+            ...metadata,
+            ...{assignedAt: +(new Date)}
+          }
         };
+
+        // TODO (kudenv.work): Need fetch roles from API and apply them to App.
+        data.roles = ['Business User'];
 
         yield call(fbUpdate, {
           collection: 'users',
-          doc: user.docId,
-          data: {...data, id: user.docId}
+          doc: _userExist.docId,
+          data: {...data, id: _userExist.docId}
         });
 
-        yield call(fbUpdate, {
+        yield call(fbDelete, {
           collection: 'tempBusinessUsers',
-          doc: businessUserRef.id,
-          data: {
-            ...data.business,
-            metadata: {
-              ...data.business.metadata,
-              pending: false
-            }
-          }
+          doc: businessUserRef.id
         });
 
         yield call(sendVerificationEmail, {user: _userExist});

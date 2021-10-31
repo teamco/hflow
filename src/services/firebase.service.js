@@ -9,7 +9,7 @@ import capitalize from 'capitalize-first-letter';
 
 import 'firebase/auth';
 import 'firebase/firestore';
-import {errorSaveMsg, successSaveMsg} from 'utils/message';
+import {errorDeleteMsg, errorSaveMsg, successDeleteMsg, successSaveMsg} from 'utils/message';
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
@@ -224,3 +224,26 @@ export const fbUpdate = async ({collection, doc, data, notice = true}) => {
     throw new Error(error);
   });
 };
+
+/**
+ * Delete collection
+ * @async
+ * @export
+ * @param collection
+ * @param doc
+ * @param {boolean} [notice]
+ */
+export const fbDelete = async ({collection, doc, notice = true}) => {
+  const docRef = getRef({collection, doc});
+  return await docRef.delete().then(() => {
+    notice && successDeleteMsg(capitalize(collection));
+  }).catch(async error => {
+    if (notice) {
+      await message.error(error.message);
+      errorDeleteMsg(capitalize(collection));
+    }
+    console.error(`Delete: ${collection}\n`, error);
+    throw new Error(error);
+  });
+};
+

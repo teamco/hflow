@@ -117,7 +117,7 @@ export default dvaModelExtend(commonModel, {
         if (registerData.isBusinessUser) {
           yield put({
             type: 'businessModel/finishRegistration',
-            payload: {user: _userExist}
+            payload: {_userExist}
           });
         }
 
@@ -184,7 +184,6 @@ export default dvaModelExtend(commonModel, {
         photoURL,
         isBusinessUser
       };
-
       yield put({type: 'updateState', payload: {registerData: {...userProps}}});
     },
 
