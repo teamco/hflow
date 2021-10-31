@@ -3,12 +3,7 @@ import dvaModelExtend from 'dva-model-extend';
 
 import {commonModel} from 'models/common.model';
 import {fbAdd, fbSignOut, fbUpdate} from 'services/firebase.service';
-import {
-  findUser,
-  gravatarUrl,
-  handleUserSessionTimeout,
-  updateFbUserEmail
-} from 'services/user.service';
+import {findUser, gravatarUrl, handleUserSessionTimeout, updateFbUserEmail} from 'services/user.service';
 import {defineAbilityFor} from 'utils/auth/ability';
 import {defineInstance} from 'utils/instance';
 
@@ -55,9 +50,6 @@ export default dvaModelExtend(commonModel, {
         providerData = []
       } = user || {};
 
-      displayName = defineInstance(displayName, registerData?.displayName);
-      photoURL = defineInstance(photoURL, registerData?.photoURL);
-
       if (isSignedOut && !Object.keys(registerData).length) {
         return yield put({type: 'updateState', payload: {isSignedOut: false}});
       }
@@ -69,6 +61,12 @@ export default dvaModelExtend(commonModel, {
       } = metadata;
 
       providerId = defineInstance(providerId, providerData[0]?.providerId);
+
+      // Update user props with register data.
+      if (registerData.isBusinessUser) {
+        displayName = registerData?.displayName;
+        photoURL = registerData?.photoURL;
+      }
 
       const userProps = {
         uid,
@@ -184,6 +182,7 @@ export default dvaModelExtend(commonModel, {
         photoURL,
         isBusinessUser
       };
+
       yield put({type: 'updateState', payload: {registerData: {...userProps}}});
     },
 
