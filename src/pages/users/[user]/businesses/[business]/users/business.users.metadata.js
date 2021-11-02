@@ -109,10 +109,11 @@ export const metadata = ({
         title: t('auth:roles'),
         dataIndex: ['userRoles'],
         key: 'roles',
-        render(currentRoles) {
+        render(name, data) {
+          const roles = data?.roles || data?.userRoles;
           return (
               <div>
-                {currentRoles?.map((role, idx) => (
+                {roles?.map((role, idx) => (
                     <Tag className={styles.rules}
                          style={{marginBottom: 3}}
                          key={`cr.${idx}`}

@@ -3,7 +3,7 @@ import {connect} from 'dva';
 import {history, withRouter, Helmet} from 'umi';
 import {Form, Layout} from 'antd';
 import {withTranslation} from 'react-i18next';
-
+import * as queryString from 'querystring';
 import Login from 'pages/login';
 import Loader from 'components/Loader';
 import Main from 'components/Main';
@@ -12,7 +12,8 @@ import 'utils/i18n';
 import './app.layout.less';
 
 const {Content} = Layout;
-const queryString = require('query-string');
+
+// const queryString = require('query-string');
 
 
 const AppLayout = (props) => {
