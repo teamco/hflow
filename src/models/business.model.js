@@ -425,7 +425,7 @@ export default dvaModelExtend(commonModel, {
 
         const data = {
           email,
-          businessRoles: userRoles,
+          roles: userRoles,
           metadata: {
             pending: true,
             invitedAt: +(new Date),
@@ -494,15 +494,16 @@ export default dvaModelExtend(commonModel, {
         let data = {..._userExist.data};
 
         data.business = businessUserRef.data();
-        const {businessRoles, metadata} = data.business;
+        const {metadata} = data.business;
 
         data.business = {
-          businessRoles,
           metadata: {
             ...metadata,
             ...{assignedAt: +(new Date)}
           }
         };
+
+        data.metadata.pending = false;
 
         // TODO (kudenv.work): Need fetch roles from API and apply them to App.
         data.roles = ['Business User'];
