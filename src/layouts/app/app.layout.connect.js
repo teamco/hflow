@@ -17,19 +17,10 @@ export default withRouter(connect(
             history.push(path);
           },
           onToggleMenu(collapse) {
-            dispatch({
-              type: `appModel/toggleMenu`,
-              payload: {collapse}
-            });
+            dispatch({type: `appModel/toggleMenu`, payload: {collapse}});
           },
           onActiveTab(payload) {
-            dispatch({
-              type: 'appModel/checkActiveTab',
-              payload
-            });
-          },
-          onNotification() {
-            dispatch({type: 'appModel/notification'});
+            dispatch({type: 'appModel/checkActiveTab', payload});
           },
           onDefineAbilities() {
             dispatch({type: 'authModel/defineAbilities'});

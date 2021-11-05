@@ -33,7 +33,6 @@ export const AppLayout = (props) => {
     notificationModel,
     loading,
     onToggleMenu,
-    onNotification,
     onUpdateDocumentMeta,
     onRoute
   } = props;
@@ -42,16 +41,11 @@ export const AppLayout = (props) => {
     language,
     menus,
     collapsedMenu,
-    activeModel,
-    activeButtons,
-    activeForm,
     meta,
-    interval: {timeout, enabled},
     layoutOpts: {
       mainMenu,
       mainHeader,
       mainFooter,
-      pageHeader,
       pageBreadcrumbs
     },
     waitBeforeLogin
