@@ -24,6 +24,9 @@ export default connect(
       onQuery() {
         dispatch({type: `userModel/query`});
       },
+      onChangeGridLayout() {
+        dispatch({type: `userModel/changeGridLayout`});
+      },
       onDeleteUser(user) {
         dispatch({type: `userModel/delete`, payload: {user}});
       },

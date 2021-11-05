@@ -3,12 +3,7 @@ import dvaModelExtend from 'dva-model-extend';
 import {message} from 'antd';
 import {commonModel} from 'models/common.model';
 import {fbFindById, fbUpdate} from 'services/firebase.service';
-import {
-  findUser,
-  getUsers,
-  forceSignOutUser,
-  sendVerificationEmail
-} from 'services/user.service';
+import {findUser, forceSignOutUser, getUsers, sendVerificationEmail} from 'services/user.service';
 import {defineAbilityFor} from 'utils/auth/ability';
 import {monitorHistory} from 'utils/history';
 import i18n from 'utils/i18n';
@@ -23,6 +18,7 @@ export default dvaModelExtend(commonModel, {
     selectedProfile: null,
     selectedUser: null,
     data: [],
+    gridLayout: true,
     verificationSent: false
   },
   subscriptions: {
@@ -116,10 +112,12 @@ export default dvaModelExtend(commonModel, {
         }
       });
 
-      yield put({
-        type: 'updateQuery',
-        payload: {_userExist}
-      });
+      yield put({type: 'updateQuery', payload: {_userExist}});
+    },
+
+    * changeGridLayout({payload}, {put, select}) {
+      const {gridLayout} = yield select(state => state.userModel);
+      yield put({type: 'updateState', payload: {gridLayout: !gridLayout}});
     },
 
     * validateUser({payload}, {put}) {
