@@ -2,12 +2,8 @@ import React, {useEffect} from 'react';
 import Page from 'components/Page';
 import userStyles from 'pages/users/users.module.less';
 import {useParams} from 'umi';
-import {Button, Form, PageHeader, Dropdown} from 'antd';
-import {
-  TrademarkOutlined,
-  DownOutlined,
-  SettingOutlined
-} from '@ant-design/icons';
+import {Button, Dropdown, Form, PageHeader} from 'antd';
+import {DownOutlined, SettingOutlined, TrademarkOutlined} from '@ant-design/icons';
 
 import Main from 'components/Main';
 
@@ -92,7 +88,7 @@ export const businessEdit = (props) => {
     onSave(formValues, params);
   };
 
-  const infoProps = {
+  const businessInfoProps = {
     t,
     formRef,
     disabled,
@@ -155,7 +151,7 @@ export const businessEdit = (props) => {
     updatedAt
   } = fromForm(entityForm, 'metadata') || {};
 
-  const detailProps = {
+  const infoProps = {
     t,
     isEdit,
     info: {
@@ -233,11 +229,11 @@ export const businessEdit = (props) => {
                   country: selectedCountry
                 }}
                 onFieldsChange={onFieldsChange}>
-            <BusinessInfo {...infoProps} />
+            <BusinessInfo {...businessInfoProps} />
             <BusinessAddress {...addressProps} />
             <BusinessLicense {...licenseProps} />
             <BusinessTags {...tagsProps} />
-            <Info {...detailProps} />
+            <Info {...infoProps} />
           </Form>
         </div>
       </Page>

@@ -59,6 +59,8 @@ export const AppLayout = (props) => {
   const {user} = authModel;
   const {badge} = notificationModel;
 
+  const headerProps = {t, user, badge};
+
   // TODO (teamco): Find better solution.
   const isAuth = user || mode === 'signIn';
 
@@ -79,8 +81,7 @@ export const AppLayout = (props) => {
                            onCollapse={onToggleMenu}/>
             )}
             <Layout className={'site-layout'}>
-              {mainHeader && <Main.Header user={user}
-                                          badge={badge}/>}
+              {mainHeader && <Main.Header {...headerProps}/>}
               <Content>
                 <Form.Provider>
                   {pageBreadcrumbs && mode !== 'signIn' && (

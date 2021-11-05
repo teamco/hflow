@@ -26,7 +26,7 @@ export const profile = (props) => {
 
   useEffect(() => {
     onGetUser(selectedUser, params.user);
-  }, [authModel.user]);
+  }, [authModel.user, params.user]);
 
   const {ability} = authModel;
   const component = 'profile';
