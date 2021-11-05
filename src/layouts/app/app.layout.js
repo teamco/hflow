@@ -6,6 +6,7 @@ import * as queryString from 'querystring';
 import Login from 'pages/login';
 import Loader from 'components/Loader';
 import Main from 'components/Main';
+import {delayedFn} from 'utils/timestamp';
 
 import 'utils/i18n';
 import './app.layout.less';
@@ -56,15 +57,18 @@ export const AppLayout = (props) => {
     waitBeforeLogin
   } = appModel;
 
-  const _ts = setTimeout(() => {
-    setIsSignInVisible(true);
-    clearTimeout(_ts);
-  }, waitBeforeLogin);
+  delayedFn({
+    callback: () => setIsSignInVisible(!isAuth),
+    ts: waitBeforeLogin
+  });
 
   const {user} = authModel;
   const {badge} = notificationModel;
 
-  return user || mode === 'signIn' ? (
+  // TODO (teamco): Find better solution.
+  const isAuth = user || mode === 'signIn';
+
+  return isAuth ? (
       <div className={'admin'}>
         <Helmet>
           <meta charSet={meta.charSet}/>
@@ -99,8 +103,10 @@ export const AppLayout = (props) => {
       </div>
   ) : (
       <>
-        <Loader fullScreen spinning={!isSignInVisible}/>
-        {isSignInVisible && (<Login/>)}
+        {isSignInVisible ?
+            <Login/> :
+            <Loader fullScreen spinning={true}/>
+        }
       </>
   );
 };
