@@ -1,19 +1,24 @@
-import React, { Suspense, useEffect } from 'react';
-import { connect } from 'dva';
-import { withRouter, Helmet } from 'umi';
-import { Form, Layout } from 'antd';
+import React, {Suspense, useEffect} from 'react';
+import {Helmet} from 'umi';
+import {Form, Layout} from 'antd';
 import ReactInterval from 'react-interval';
 
 import Loader from 'components/Loader';
 
-import { AbilityContext } from 'utils/auth/can';
+import {AbilityContext} from 'utils/auth/can';
 
 import 'utils/i18n';
 import styles from './landing.layout.module.less';
 
-const { Content } = Layout;
+const {Content} = Layout;
 
-const LandingLayout = (props) => {
+/**
+ * @export
+ * @param props
+ * @return {JSX.Element}
+ * @constructor
+ */
+export const LandingLayout = (props) => {
 
   const {
     t,
@@ -69,27 +74,3 @@ const LandingLayout = (props) => {
     <Loader fullScreen spinning={true} />
   );
 };
-
-export default withRouter(
-  connect(
-    ({ appModel, authModel, loading }) => {
-      return {
-        appModel,
-        authModel,
-        loading
-      };
-    },
-    (dispatch) => ({
-      dispatch,
-      onNotification() {
-        dispatch({ type: 'appModel/notification' });
-      },
-      onDefineAbilities() {
-        dispatch({ type: 'authModel/defineAbilities' });
-      },
-      onUpdateDocumentMeta(meta) {
-        dispatch({ type: 'appModel/updateDocumentMeta', payload: { meta } });
-      }
-    })
-  )(LandingLayout)
-);
