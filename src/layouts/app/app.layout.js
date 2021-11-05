@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react';
+import React, {Suspense, useState} from 'react';
 import {Helmet} from 'umi';
 import {Form, Layout} from 'antd';
 import * as queryString from 'querystring';
@@ -21,6 +21,8 @@ const {Content} = Layout;
 export const AppLayout = (props) => {
 
   const {mode} = queryString.parse(window.location.search);
+
+  const [isSignInVisible, setIsSignInVisible] = useState(false);
 
   const {
     t,
@@ -50,8 +52,14 @@ export const AppLayout = (props) => {
       mainFooter,
       pageHeader,
       pageBreadcrumbs
-    }
+    },
+    waitBeforeLogin
   } = appModel;
+
+  const _ts = setTimeout(() => {
+    setIsSignInVisible(true);
+    clearTimeout(_ts);
+  }, waitBeforeLogin);
 
   const {user} = authModel;
   const {badge} = notificationModel;
@@ -90,6 +98,9 @@ export const AppLayout = (props) => {
         </Suspense>
       </div>
   ) : (
-      <Login/>
+      <>
+        <Loader fullScreen spinning={!isSignInVisible}/>
+        {isSignInVisible && (<Login/>)}
+      </>
   );
 };

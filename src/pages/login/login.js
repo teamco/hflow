@@ -16,7 +16,7 @@ import {isLoading} from 'utils/state';
  * @param props
  * @return {JSX.Element}
  */
-export const login = (props) => {
+export const Login = (props) => {
 
   /* These props are provided by withFirebaseAuth HOC */
   const {
@@ -33,10 +33,10 @@ export const login = (props) => {
   const {
     t,
     authModel,
-    signInVisible
+    isVisible = true
   } = props;
 
-  const [isSignInVisible, setIsSignInVisible] = useState(true);
+  const [isSignInVisible, setIsSignInVisible] = useState(isVisible);
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
   const [isErrorVisible, setIsErrorVisible] = useState(false);
 

@@ -8,6 +8,7 @@ import Loader from 'components/Loader';
 import {AbilityContext} from 'utils/auth/can';
 
 import 'utils/i18n';
+
 import styles from './landing.layout.module.less';
 
 const {Content} = Layout;
