@@ -77,7 +77,8 @@ export const businessEdit = (props) => {
     }
   }, [
     authModel.user,
-    update
+    update,
+    params.user
   ]);
 
   /**
