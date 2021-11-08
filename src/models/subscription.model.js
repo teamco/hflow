@@ -2,6 +2,9 @@
 import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from 'models/common.model';
+import {getAllSubscriptionsByType} from '../services/subscription.service';
+
+
 
 /**
  * @export
@@ -19,8 +22,9 @@ export default dvaModelExtend(commonModel, {
   },
   effects: {
 
-    * query({ payload }, { put, select }) {
-      const {subscriptions} = yield select(state => state.subscriptionModel);
+    * query({ payload }, {call, put, select }) {
+      const {type = 'application'} = payload;
+      const subscriptions = yield call(getAllSubscriptionsByType({type}))
 
       yield put({
         type: 'updateState',

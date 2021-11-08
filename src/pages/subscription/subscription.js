@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-
+import {Col, Row } from 'antd';
 import Subscription from 'components/Subscription';
 import SignUp from 'components/Authentication/signUp.connect';
 import LandingPage from 'layouts/landing.page.layout';
@@ -17,7 +17,7 @@ export const subscription = (props) => {
   } = props;
 
   useEffect(() => {
-    onQuery();
+   // onQuery({type: 'application'});
   }, []);
 
   const handleAssignSubscription = e => {
@@ -34,6 +34,7 @@ export const subscription = (props) => {
     onSignIn,
     isSignInAble: false
   };
+  debugger;
 
   const subscriptionProps = {
     className: styles.assign,
@@ -54,14 +55,28 @@ export const subscription = (props) => {
       description: <h5>Core course library, paths and skill assessments</h5>
     }
   };
+  const styless = {padding: '8px 0'};
 
   return (
-      <LandingPage spinEffects={[
+      <LandingPage
+          pageStyles={styles.pageContent}
+          spinEffects={[
         'subscriptionModel/query',
         'subscriptionModel/assignTo'
       ]}>
         <div className={styles.subscription}>
-          <Subscription {...subscriptionProps}/>
+          <Row gutter={16}>
+            <Col className="gutter-row" span={6}>
+              <Subscription {...subscriptionProps}/>
+            </Col>
+            <Col className="gutter-row" span={6}>
+              <Subscription {...subscriptionProps}/>
+            </Col>
+            <Col className="gutter-row" span={6}>
+                <Subscription {...subscriptionProps}/>
+            </Col>
+          </Row>
+
           <SignUp {...signUpProps} />
         </div>
       </LandingPage>

@@ -110,3 +110,7 @@ dist
 /src/.umi/
 **/*.module.css*
 **/*.css*
+
+.yarnrc.yml
+.pnp.cjs
+.pnp.loader.mjs

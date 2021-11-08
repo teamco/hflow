@@ -9,8 +9,6 @@ export const getAllBusinesses = async () => {
     const _data = doc.data();
     data.push(_.merge(_data, {id: doc.id}));
   });
-
-  debugger
 };
 
 /**

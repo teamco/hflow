@@ -14,8 +14,8 @@ export default connect(
       onSignIn(user) {
         dispatch({type: 'authModel/signIn', payload: {user}});
       },
-      onQuery() {
-        dispatch({type: 'subscriptionModel/query'});
+      onQuery(type) {
+        dispatch({type: 'subscriptionModel/query', payload: {type}});
       },
       onAssignSubscription(subscription) {
         dispatch({type: 'subscriptionModel/assignTo', payload: {subscription}});

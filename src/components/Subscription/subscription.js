@@ -25,6 +25,7 @@ export const Subscription = props => {
       <Card hoverable={hoverable}
             className={classnames(styles.subscription, className)}
             cover={cover}
+            bordered
             actions={actions}>
         <Meta avatar={avatar}
               title={title}

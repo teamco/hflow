@@ -26,7 +26,8 @@ const landingPage = (props) => {
     loading,
     onSignOut,
     children,
-    spinEffects = []
+    spinEffects = [],
+    pageStyles = stylesPage.pageContent
   } = props;
 
   useEffect(() => {
@@ -63,7 +64,7 @@ const landingPage = (props) => {
           <Content>
             <div className={styles.page}>
               <HeaderSection {...headerProps} />
-              <div className={stylesPage.pageContent}>
+              <div className={pageStyles}>
                 {children}
               </div>
             </div>
