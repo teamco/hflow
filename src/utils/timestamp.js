@@ -26,3 +26,16 @@ export const tsToTime = ts => {
 export const tsToLocaleDateTime = ts => {
   return `${tsToDate(ts)} ${tsToTime(ts)}`;
 };
+
+/**
+ * @export
+ * @param props
+ */
+export const delayedFn = props => {
+  const {callback, ts} = props;
+
+  const _ts = setTimeout(() => {
+    callback();
+    clearTimeout(_ts);
+  }, ts);
+};

@@ -1,15 +1,8 @@
 import React, {useEffect} from 'react';
 import {NavLink} from 'umi';
-import {
-  PauseCircleTwoTone,
-  PlayCircleTwoTone,
-  ContactsTwoTone,
-  MehTwoTone,
-  SettingOutlined,
-  DownOutlined
-} from '@ant-design/icons';
+import {ContactsTwoTone, DownOutlined, PauseCircleTwoTone, PlayCircleTwoTone, SettingOutlined} from '@ant-design/icons';
 
-import {Tooltip, Tag, Button, Dropdown} from 'antd';
+import {Avatar, Button, Dropdown, Tag, Tooltip} from 'antd';
 
 import classnames from 'classnames';
 import {tsToLocaleDateTime} from 'utils/timestamp';
@@ -30,7 +23,6 @@ import menuStyles from 'components/menu.less';
  * @param data
  * @param loading
  * @param multiple
- * @param rowEnabled
  * @param visibleMessage
  * @param setVisibleMessage
  * @param currentUser
@@ -47,7 +39,6 @@ export const metadata = ({
   data,
   loading,
   multiple,
-  rowEnabled,
   currentUser = {},
   setVisibleMessage,
   onDeleteUser,
@@ -82,7 +73,7 @@ export const metadata = ({
         dataIndex: 'displayName',
         key: 'displayName',
         render(name, data) {
-          const isCurrentStyle = currentUser?.uid === data.uid ? styles.currentUser : null;
+          const isCurrentStyle = currentUser?.id === data.id ? styles.currentUser : null;
           const isSignedIn = data.metadata.signedIn;
           const color = isSignedIn ? COLORS.success : COLORS.disabled;
           const signed = {
@@ -104,7 +95,10 @@ export const metadata = ({
                          referrerPolicy={'no-referrer'}
                          alt={name}
                          className={styles.gridImg}/>
-                ) : (<MehTwoTone style={{marginRight: 10, width: 20}}/>)}
+                ) : (
+                    <Avatar src={'https://joeschmoe.io/api/v1/random'}
+                            className={styles.avatar}/>
+                )}
                 {multiple ? (
                     <NavLink to={`/admin/users/${data.id}`}>
                       <span className={isCurrentStyle}>
@@ -112,9 +106,9 @@ export const metadata = ({
                       </span>
                     </NavLink>
                 ) : (
-                  <span className={isCurrentStyle}>
-                    {name}
-                  </span>
+                    <span className={isCurrentStyle}>
+                      {name}
+                    </span>
                 )}
               </div>
           );
@@ -154,7 +148,7 @@ export const metadata = ({
                   <Tooltip title={t('auth:showProfile')}>
                     <ContactsTwoTone className={tableStyles.action}
                                      onClick={() => showProfileModal(t, record)}
-                                     twoToneColor={COLORS.success}/>
+                                     twoToneColor={COLORS.tags.blue}/>
                   </Tooltip>
                   <Dropdown overlay={<UserMenu record={record} {...menuProps} />}
                             overlayClassName={menuStyles.customActionMenu}

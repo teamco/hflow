@@ -1,11 +1,11 @@
 import React from 'react';
-import { connect } from 'dva';
-import { Result } from 'antd';
+import {connect} from 'dva';
+import {Result} from 'antd';
 import Page from 'components/Page';
-import { withTranslation } from 'react-i18next';
+import {withTranslation} from 'react-i18next';
 
-import styles from 'layouts/app.layout.less';
-import { Can } from 'utils/auth/can';
+import styles from 'layouts/app/app.layout.less';
+import {Can} from 'utils/auth/can';
 
 /**
  * @function
@@ -14,7 +14,7 @@ import { Can } from 'utils/auth/can';
  * @param errorModel
  * @return {JSX.Element}
  */
-function page403({ t, component, errorModel }) {
+function page403({t, component, errorModel}) {
 
   return (
     <Can not I={'read'} a={component}>

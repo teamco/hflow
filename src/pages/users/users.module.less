@@ -11,6 +11,40 @@
     }
   }
 
+  .userCards {
+    display: block;
+
+    .userCard {
+      float: left;
+      width: 150px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+
+      .cardImg {
+        margin: 10px;
+        border-radius: 4px;
+        width: 130px;
+        height: 130px;
+      }
+
+      :global {
+        .ant-card-meta-avatar {
+          padding-right: 10px;
+        }
+
+        .ant-card-body {
+          padding: 10px;
+        }
+      }
+    }
+  }
+
+  .avatar {
+    margin-right: 10px;
+    height: 20px;
+    width: 20px;
+  }
+
   .currentUser {
     background-color: rgba(255, 191, 0, 0.3);
     padding: 3px 5px;

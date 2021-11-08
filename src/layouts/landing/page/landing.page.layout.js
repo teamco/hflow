@@ -1,14 +1,11 @@
 import React, {useEffect} from 'react';
-import {connect} from 'dva';
-import {withTranslation} from 'react-i18next';
-
 import {BackTop, Layout, Spin} from 'antd';
 
 import Footer from 'components/Footer';
 import HeaderSection from 'pages/landing/sections/header.section';
 
 import styles from 'pages/landing/landing.module.less';
-import stylesPage from 'layouts/landing.page.layout.module.less';
+import stylesPage from 'layouts/landing/page/landing.page.layout.module.less';
 
 const {Content} = Layout;
 
@@ -18,7 +15,7 @@ const {Content} = Layout;
  * @param props
  * @return {JSX.Element}
  */
-const landingPage = (props) => {
+export const LandingPage = (props) => {
   const {
     t,
     landingModel,
@@ -75,19 +72,3 @@ const landingPage = (props) => {
       </Spin>
   );
 };
-
-export default connect(
-    ({landingModel, authModel, loading}) => {
-      return {
-        landingModel,
-        authModel,
-        loading
-      };
-    },
-    (dispatch) => ({
-      dispatch,
-      onSignOut() {
-        dispatch({type: 'authModel/signOut', payload: {}});
-      }
-    })
-)(withTranslation()(landingPage));

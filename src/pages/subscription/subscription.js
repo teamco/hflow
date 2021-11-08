@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Col, Row } from 'antd';
 import Subscription from 'components/Subscription';
 import SignUp from 'components/Authentication/signUp.connect';
-import LandingPage from 'layouts/landing.page.layout';
+import LandingPage from 'layouts/landing/page';
 
 import styles from 'pages/subscription/subscription.module.less';
 

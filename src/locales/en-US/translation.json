@@ -24,6 +24,8 @@
     "errors": "User Errors"
   },
   "auth": {
+    "welcome": "Welcome",
+    "hello": "Welcome, {{user}}",
     "signInWith": "Sign in with {{provider}}",
     "signInAnonymous": "Sign in Anonymously",
     "signIn": "Sign in",

@@ -40,7 +40,8 @@ export default dvaModelExtend(commonModel, {
     activeModel: {
       isEdit: false,
       title: ''
-    }
+    },
+    waitBeforeLogin: 5000
   },
   subscriptions: {
     setupHistory(setup) {

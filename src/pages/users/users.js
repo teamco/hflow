@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {PageHeader, Button} from 'antd';
-import {
-  UserSwitchOutlined,
-  SaveOutlined
-} from '@ant-design/icons';
+import {Button, PageHeader} from 'antd';
+import {SaveOutlined, UserSwitchOutlined} from '@ant-design/icons';
 import {Can} from 'utils/auth/can';
 
 import Page from 'components/Page';
@@ -15,8 +12,9 @@ import {expendableProfile} from 'pages/users/[user]/profile/profile.metadata';
 import SendMessage from 'pages/users/metadata/send.message';
 
 import styles from 'pages/users/users.module.less';
+import {userCardMetadata} from './metadata/user.card';
 
-const {Table} = Main;
+const {Table, Card} = Main;
 
 /**
  * @constant
@@ -34,6 +32,7 @@ export const users = (props) => {
     onUpdateRoles,
     onRolesQuery,
     onQuery,
+    onChangeGridLayout,
     onSendVerification,
     onDeleteUser,
     onSignOutUser,
@@ -44,6 +43,7 @@ export const users = (props) => {
 
   let {
     data = [],
+    gridLayout,
     verificationSent
   } = userModel;
 
@@ -70,7 +70,6 @@ export const users = (props) => {
 
   const [touched, setTouched] = useState(userModel.touched);
   const [currentRoles, setCurrentRoles] = useState(selectedUser?.roles || []);
-  const [rowEnabled, setRowEnabled] = useState(false);
   const [visibleMessage, setVisibleMessage] = useState({visible: false, props: {}});
 
   const subTitle = (
@@ -84,23 +83,7 @@ export const users = (props) => {
   const component = 'users';
   const disabled = ability.cannot('update', component);
 
-  const rowProps = {
-    onRow: (record, rowIndex) => {
-      return {
-        onMouseEnter: event => {
-          event.preventDefault();
-          setRowEnabled(rowIndex);
-        },
-        onMouseLeave: event => {
-          event.preventDefault();
-          setRowEnabled(false);
-        }
-      };
-    }
-  };
-
   const tableProps = selectedUser ? {
-    ...rowProps,
     pagination: false,
     expandable: expendableProfile(
         t,
@@ -115,7 +98,7 @@ export const users = (props) => {
         setCurrentRoles,
         setTouched
     )
-  } : {...rowProps};
+  } : {};
 
   const sendProps = {
     t,
@@ -139,9 +122,22 @@ export const users = (props) => {
       const _selected = [...selectedUser?.roles || []].sort();
       const _equal = JSON.stringify(_current) === JSON.stringify(_selected);
       return disabled || _equal;
-    } else {
-      return disabled;
     }
+
+    return disabled;
+  };
+
+  const userProps = {
+    loading,
+    ability,
+    currentUser: authModel.user,
+    multiple: !selectedUser,
+    onSignOutUser,
+    onSendMessage,
+    onLockUser,
+    onUnlockUser,
+    onDeleteUser,
+    setVisibleMessage
   };
 
   return (
@@ -152,9 +148,15 @@ export const users = (props) => {
         <PageHeader ghost={false}
                     subTitle={subTitle}
                     extra={[
+                      // <Button key={'layout'}
+                      //         size={'small'}
+                      //         icon={<LayoutOutlined/>}
+                      //         onClick={onChangeGridLayout}
+                      //         type={'primary'}/>,
                       selectedUser && (
                           <Can I={'update'} a={component} key={'save'}>
-                            <Button size={'small'}
+                            <Button key={'update'}
+                                    size={'small'}
                                     disabled={isDisabled()}
                                     loading={isLoading(loading.effects['userModel/updateRoles'])}
                                     icon={<SaveOutlined/>}
@@ -165,23 +167,30 @@ export const users = (props) => {
                           </Can>
                       )
                     ]}/>
-        <Table data={data}
-               {...tableProps}
-               {...metadata({
-                 t,
-                 ability,
-                 data,
-                 rowEnabled,
-                 loading,
-                 multiple: !selectedUser,
-                 currentUser: authModel.user,
-                 visibleMessage,
-                 setVisibleMessage,
-                 onDeleteUser,
-                 onSignOutUser,
-                 onUnlockUser,
-                 onLockUser
-               })} />
+        {gridLayout ? (
+            <Table data={data}
+                   {...tableProps}
+                   {...metadata({
+                     t,
+                     data,
+                     visibleMessage,
+                     ...userProps
+                   })} />
+        ) : (
+            <div className={styles.userCards}>
+              {data.map((user, idx) => {
+                const props = {
+                  ...userCardMetadata(t, {
+                    user,
+                    className: styles.userCard,
+                    ...userProps
+                  })
+                };
+
+                return (<Card key={idx} {...props} />);
+              })}
+            </div>
+        )}
         <SendMessage {...sendProps}/>
       </Page>
   );

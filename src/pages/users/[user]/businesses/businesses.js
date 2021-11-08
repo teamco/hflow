@@ -2,11 +2,8 @@ import Page from 'components/Page';
 import userStyles from 'pages/users/users.module.less';
 import React, {useEffect} from 'react';
 import {useParams} from 'umi';
-import {PageHeader, Button} from 'antd';
-import {
-  AppstoreAddOutlined,
-  TrademarkOutlined
-} from '@ant-design/icons';
+import {Button, PageHeader} from 'antd';
+import {AppstoreAddOutlined, TrademarkOutlined} from '@ant-design/icons';
 
 import Main from 'components/Main';
 import {metadata} from 'pages/users/[user]/businesses/businesses.metadata';
@@ -42,7 +39,7 @@ export const businesses = (props) => {
 
   useEffect(() => {
     onGetBusinesses(selectedUser, user);
-  }, [authModel.user]);
+  }, [authModel.user, user]);
 
   const subTitle = (
       <>

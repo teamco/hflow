@@ -1,10 +1,10 @@
 import React from 'react';
-import { connect } from 'dva';
-import { Result } from 'antd';
+import {connect} from 'dva';
+import {Result} from 'antd';
 import Page from 'components/Page';
-import { withTranslation } from 'react-i18next';
+import {withTranslation} from 'react-i18next';
 
-import styles from 'layouts/app.layout.less';
+import styles from 'layouts/app/app.layout.less';
 
 /**
  * @function

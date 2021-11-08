@@ -2,7 +2,7 @@ export const routes = [
   {
     exact: false,
     path: '/',
-    component: '@/layouts/landing.layout',
+    component: '@/layouts/landing',
     routes: [
       {
         exact: true,
@@ -18,7 +18,7 @@ export const routes = [
       {
         exact: false,
         path: '/admin',
-        component: '@/layouts/app.layout',
+        component: '@/layouts/app',
         routes: [
           {
             exact: true,

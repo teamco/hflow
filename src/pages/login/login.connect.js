@@ -3,7 +3,7 @@ import {withTranslation} from 'react-i18next';
 import withFirebaseAuth from 'react-with-firebase-auth';
 import {firebaseAppAuth, providers} from 'services/firebase.service';
 
-import {login} from './login';
+import {Login} from './login';
 
 /** Create the FirebaseAuth component wrapper */
 const createComponentWithAuth = withFirebaseAuth({
@@ -19,4 +19,4 @@ export default connect(
         dispatch({type: 'authModel/signIn', payload: {user}});
       }
     })
-)(withTranslation()(createComponentWithAuth(login)));
+)(withTranslation()(createComponentWithAuth(Login)));
