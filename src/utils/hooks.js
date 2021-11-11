@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * @export
@@ -16,3 +16,16 @@ export const useDelayedRender = (delay = 500) => {
 
   return fn => !delayed && fn();
 };
+
+/**
+ * @export
+ * @return {[]}
+ */
+export function useFocus() {
+  const htmlElRef = useRef(null);
+  const setFocus = () => {
+    htmlElRef.current?.focus();
+  };
+
+  return [htmlElRef, setFocus];
+}
