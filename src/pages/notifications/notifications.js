@@ -1,19 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import {PageHeader, Tabs} from 'antd';
-import {NotificationOutlined} from '@ant-design/icons';
-import {useParams} from 'umi';
+import React, { useEffect, useState } from 'react';
+import { PageHeader, Tabs } from 'antd';
+import { NotificationOutlined } from '@ant-design/icons';
+import { useParams } from 'umi';
 
 import Page from 'components/Page';
 import Main from 'components/Main';
 
-import {notificationsMetadata} from 'pages/notifications/notifications.metadata';
-import {expendableNotification} from 'pages/notifications/metadata/notification.expendable';
+import { notificationsMetadata } from 'pages/notifications/notifications.metadata';
+import { expendableNotification } from 'pages/notifications/metadata/notification.expendable';
 
 import styles from 'pages/notifications/notifications.module.less';
 import SendMessage from '../users/metadata/send.message';
 
-const {Table} = Main;
-const {TabPane} = Tabs;
+const { Table } = Main;
+const { TabPane } = Tabs;
 
 /**
  * @export
@@ -40,7 +40,7 @@ export const notifications = (props) => {
    */
   const params = useParams();
 
-  const [visibleMessage, setVisibleMessage] = useState({visible: false, props: {}});
+  const [visibleMessage, setVisibleMessage] = useState({ visible: false, props: {} });
   const [activeTab, setActiveTab] = useState('inbox');
 
   useEffect(() => {
@@ -49,17 +49,17 @@ export const notifications = (props) => {
 
   const subTitle = (
       <>
-        <NotificationOutlined style={{marginRight: 10}}/>
-        {t('actions:manage', {type: t('menu:notifications')})}
+        <NotificationOutlined style={{ marginRight: 10 }}/>
+        {t('actions:manage', { type: t('menu:notifications') })}
       </>
   );
 
-  const {ability} = authModel;
+  const { ability } = authModel;
   const component = 'notifications';
   const disabled = !ability.can('read', component);
 
   const tableProps = {
-    expandable: expendableNotification({t, setVisibleMessage}),
+    expandable: expendableNotification({ t, setVisibleMessage }),
     onExpand(expanded, record) {
       if (activeTab === 'inbox' && !record.read) {
         onRead(record.id);
@@ -89,12 +89,12 @@ export const notifications = (props) => {
           <TabPane tab={t('notifications:inbox')} key={'inbox'}>
             <Table data={notifications.inbox}
                    {...tableProps}
-                   {...notificationsMetadata({t, loading})} />
+                   {...notificationsMetadata({ t, loading })} />
           </TabPane>
           <TabPane tab={t('notifications:sent')} key={'sent'}>
             <Table data={notifications.sent}
                    {...tableProps}
-                   {...notificationsMetadata({t, loading})} />
+                   {...notificationsMetadata({ t, loading })} />
           </TabPane>
         </Tabs>
         <SendMessage {...sendProps}/>

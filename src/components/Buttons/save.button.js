@@ -23,15 +23,15 @@ const saveButton = props => {
   } = props;
 
   return (
-    <Button key={'save'}
-            size={size}
-            disabled={disabled}
-            loading={isLoading(loading)}
-            icon={<SaveOutlined />}
-            onClick={() => formRef.submit()}
-            type={type}>
-      {isEdit ? t('actions:update') : t('actions:save')}
-    </Button>
+      <Button key={'save'}
+              size={size}
+              disabled={disabled}
+              loading={isLoading(loading)}
+              icon={<SaveOutlined/>}
+              onClick={() => formRef.submit()}
+              type={type}>
+        {isEdit ? t('actions:update') : t('actions:save')}
+      </Button>
   );
 };
 

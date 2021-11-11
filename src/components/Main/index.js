@@ -7,11 +7,11 @@ import MainCard from 'components/Main/Card/MainCard';
 import MainInfo from 'components/Main/Info/MainInfo';
 
 export default {
-  Header: MainHeader,
-  Footer: MainFooter,
-  Table: MainTable,
-  Card: MainCard,
+  Header     : MainHeader,
+  Footer     : MainFooter,
+  Table      : MainTable,
+  Card       : MainCard,
   Breadcrumbs: MainBreadcrumbs,
-  Menu: MainSiderMenu,
-  Info: MainInfo
+  Menu       : MainSiderMenu,
+  Info       : MainInfo
 };

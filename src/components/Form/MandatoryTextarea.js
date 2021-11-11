@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {Input, Form} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Form, Input } from 'antd';
 import classnames from 'classnames';
 
 import styles from './form.module.less';
 
-const {TextArea} = Input;
+const { TextArea } = Input;
 
 /**
  * @export
@@ -43,7 +43,7 @@ const MandatoryTextarea = props => {
     setMandatory(styles[value.length ? 'validated' : 'mandatory']);
   };
 
-  const {rules = []} = config;
+  const { rules = [] } = config;
 
   return (
       <Form.Item label={label}

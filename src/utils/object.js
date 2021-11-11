@@ -73,10 +73,10 @@ export const toTags = (tags = [], disabled = false) => {
  */
 export const asSortedTags = (tags = [], key = 'name') => {
   return sortBy(tags, key).map((tag, idx) => (
-    <Option key={idx}
-            disabled={tag.disabled}
-            value={tag.name}>
-      {tag.name}
-    </Option>
+      <Option key={idx}
+              disabled={tag.disabled}
+              value={tag.name}>
+        {tag.name}
+      </Option>
   ));
 };

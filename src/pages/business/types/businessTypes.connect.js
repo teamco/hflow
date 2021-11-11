@@ -1,10 +1,10 @@
-import {connect} from 'dva';
-import {withTranslation} from 'react-i18next';
+import { connect } from 'dva';
+import { withTranslation } from 'react-i18next';
 
-import {businessTypes} from './businessTypes';
+import { businessTypes } from './businessTypes';
 
 export default connect(
-    ({authModel, businessTypesModel, loading}) => {
+    ({ authModel, businessTypesModel, loading }) => {
       return {
         loading,
         authModel,
@@ -14,13 +14,13 @@ export default connect(
     (dispatch) => ({
       dispatch,
       onQuery() {
-        dispatch({type: `businessTypesModel/query`});
+        dispatch({ type: `businessTypesModel/query` });
       },
       onUpdateTags(tags) {
-        dispatch({type: 'businessTypesModel/updateTags', payload: {tags}});
+        dispatch({ type: 'businessTypesModel/updateTags', payload: { tags } });
       },
       onSave() {
-        dispatch({type: 'businessTypesModel/prepareToSave'});
+        dispatch({ type: 'businessTypesModel/prepareToSave' });
       }
     })
 )(withTranslation()(businessTypes));

@@ -1,4 +1,4 @@
-const {domain = 'localhost', port = 8003, protocol = 'http'} = process.env.REMOTE_SERVER || {};
+const { domain = 'localhost', port = 8003, protocol = 'http' } = process.env.REMOTE_SERVER || {};
 
 /**
  * @export

@@ -1,20 +1,18 @@
-import React, {useEffect} from 'react';
-import {Form, PageHeader} from 'antd';
-import {
-  PieChartOutlined
-} from '@ant-design/icons';
+import React, { useEffect } from 'react';
+import { Form, PageHeader } from 'antd';
+import { PieChartOutlined } from '@ant-design/icons';
 
 import Page from 'components/Page';
 import SaveButton from 'components/Buttons/save.button';
 import FormComponents from 'components/Form';
 import Main from 'components/Main';
 
-import {fromForm} from 'utils/object';
+import { fromForm } from 'utils/object';
 
 import styles from 'pages/userRoles/userRoles.module.less';
 
-const {GenericPanel, EditableTags} = FormComponents;
-const {Info} = Main;
+const { GenericPanel, EditableTags } = FormComponents;
+const { Info } = Main;
 
 /**
  * @export
@@ -56,7 +54,7 @@ export const userRoles = props => {
 
   const subTitle = (
       <>
-        <PieChartOutlined style={{marginRight: 10}}/>
+        <PieChartOutlined style={{ marginRight: 10 }}/>
         {t('panel:manageRoles')}
       </>
   );
@@ -79,7 +77,7 @@ export const userRoles = props => {
     }
   };
 
-  const {ability} = authModel;
+  const { ability } = authModel;
   const component = 'roles';
   const disabled = ability.cannot('update', component);
 

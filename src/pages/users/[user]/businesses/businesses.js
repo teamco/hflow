@@ -1,17 +1,17 @@
 import Page from 'components/Page';
 import userStyles from 'pages/users/users.module.less';
-import React, {useEffect} from 'react';
-import {useParams} from 'umi';
-import {Button, PageHeader} from 'antd';
-import {AppstoreAddOutlined, TrademarkOutlined} from '@ant-design/icons';
+import React, { useEffect } from 'react';
+import { useParams } from 'umi';
+import { Button, PageHeader } from 'antd';
+import { AppstoreAddOutlined, TrademarkOutlined } from '@ant-design/icons';
 
 import Main from 'components/Main';
-import {metadata} from 'pages/users/[user]/businesses/businesses.metadata';
+import { metadata } from 'pages/users/[user]/businesses/businesses.metadata';
 
 import styles from 'pages/users/[user]/businesses/businesses.module.less';
-import {Can} from 'utils/auth/can';
+import { Can } from 'utils/auth/can';
 
-const {Table} = Main;
+const { Table } = Main;
 
 export const businesses = (props) => {
   const {
@@ -35,7 +35,7 @@ export const businesses = (props) => {
   /**
    * @type {{user}}
    */
-  const {user} = useParams();
+  const { user } = useParams();
 
   useEffect(() => {
     onGetBusinesses(selectedUser, user);
@@ -43,12 +43,12 @@ export const businesses = (props) => {
 
   const subTitle = (
       <>
-        <TrademarkOutlined style={{marginRight: 10}}/>
+        <TrademarkOutlined style={{ marginRight: 10 }}/>
         {t('business')}
       </>
   );
 
-  const {ability} = authModel;
+  const { ability } = authModel;
   const component = 'businesses';
   const disabled = ability.cannot('create', component);
 

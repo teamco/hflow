@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {BackTop, Layout, Spin} from 'antd';
+import React, { useEffect } from 'react';
+import { BackTop, Layout, Spin } from 'antd';
 
 import Footer from 'components/Footer';
 import HeaderSection from 'pages/landing/sections/header.section';
@@ -7,7 +7,7 @@ import HeaderSection from 'pages/landing/sections/header.section';
 import styles from 'pages/landing/landing.module.less';
 import stylesPage from 'layouts/landing/page/landing.page.layout.module.less';
 
-const {Content} = Layout;
+const { Content } = Layout;
 
 /**
  * @export

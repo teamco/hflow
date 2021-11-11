@@ -1,6 +1,6 @@
-import { AbilityBuilder, Ability } from '@casl/ability';
+import { Ability, AbilityBuilder } from '@casl/ability';
 import { fbFindById } from 'services/firebase.service';
-import { isAdmin, isCurrent, isContributor, isModerator, isOwner, isReader } from 'services/userRoles.service';
+import { isAdmin, isContributor, isCurrent, isModerator, isReader } from 'services/userRoles.service';
 import i18n from 'utils/i18n';
 
 /**
@@ -53,7 +53,7 @@ export async function defineAbilityFor({ user, userId, business }) {
       cannot(['create', 'update'], 'businesses');
       cannot(['update'], 'businessUserRole');
 
-      const {userRoles} = selectedUser.business;
+      const { userRoles } = selectedUser.business;
 
       if (isModerator(userRoles)) {
         can(['update'], 'businessUserRole');

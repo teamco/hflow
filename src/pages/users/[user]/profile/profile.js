@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {useParams} from 'umi';
+import React, { useEffect } from 'react';
+import { useParams } from 'umi';
 
 import Page from 'components/Page';
 import Users from 'pages/users';
@@ -28,7 +28,7 @@ export const profile = (props) => {
     onGetUser(selectedUser, params.user);
   }, [authModel.user, params.user]);
 
-  const {ability} = authModel;
+  const { ability } = authModel;
   const component = 'profile';
   const disabled = ability.cannot('update', component);
 
@@ -42,7 +42,7 @@ export const profile = (props) => {
             ]}>
         <Users selectedUser={selectedUser}/>
         <Businesses selectedUser={selectedUser}
-                    style={{marginTop: 20}}/>
+                    style={{ marginTop: 20 }}/>
       </Page>
   );
 };

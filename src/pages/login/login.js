@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {FacebookOutlined, GoogleOutlined, TwitterOutlined} from '@ant-design/icons';
-import {Button, Tooltip} from 'antd';
+import { FacebookOutlined, GoogleOutlined, TwitterOutlined } from '@ant-design/icons';
+import { Button, Tooltip } from 'antd';
 
 import ErrorModal from 'components/Authentication/modals/error.modal';
 import SignInModal from 'components/Authentication/modals/signin.modal';
@@ -9,7 +9,7 @@ import SignUp from 'components/Authentication/signUp.connect';
 import Page from 'components/Page';
 import Logo from 'components/Logo';
 
-import {isLoading} from 'utils/state';
+import { isLoading } from 'utils/state';
 
 /**
  * @constant
@@ -50,7 +50,7 @@ export const Login = (props) => {
 
   if (error) {
     errorProps = {
-      title: t('error:errorNum', {number: 400}),
+      title: t('error:errorNum', { number: 400 }),
       error
     };
 
@@ -95,7 +95,7 @@ export const Login = (props) => {
    * @return {JSX.Element}
    */
   const authBtn = (provider, icon, signInFn) => (
-      <Tooltip title={t('auth:signInWith', {provider})}>
+      <Tooltip title={t('auth:signInWith', { provider })}>
         <Button loading={isLoading(loading)}
                 onClick={() => handleCancel(signInFn)}
                 icon={icon}
@@ -143,8 +143,8 @@ export const Login = (props) => {
     isRegisterVisible,
     setIsRegisterVisible,
     setIsSignInVisible,
-    signInVisible: true,
-    onSignIn: props.onSignIn
+    signInVisible      : true,
+    onSignIn           : props.onSignIn
   };
 
   const signInProps = {
@@ -164,7 +164,7 @@ export const Login = (props) => {
   };
 
   const logoProps = {
-    url: '/',
+    url  : '/',
     title: '__TITLE_'
   };
 
@@ -174,7 +174,7 @@ export const Login = (props) => {
         <SignUp {...signUpProps} />
         <ErrorModal errorProps={errorProps}
                     isErrorVisible={isErrorVisible}
-                    handleErrorCancel={handleErrorCancel} />
+                    handleErrorCancel={handleErrorCancel}/>
         <SignInModal {...signInProps} />
       </Page>
   );

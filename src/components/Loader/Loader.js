@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
-import {Spin} from 'antd';
+import { Spin } from 'antd';
 
 import './loader.less';
 
@@ -18,11 +18,11 @@ const Loader = (props) => {
   const spinning = 'spinning' in props ? props.spinning : true;
 
   const loaderClassNames = classnames('loader', {
-    ['hidden']: !spinning,
+    ['hidden']    : !spinning,
     ['fullScreen']: fullScreen,
-    ['contained']: contained,
-    ['page']: page,
-    ['sider']: sider
+    ['contained'] : contained,
+    ['page']      : page,
+    ['sider']     : sider
   });
 
   return (
@@ -35,7 +35,7 @@ const Loader = (props) => {
 };
 
 Loader.propTypes = {
-  spinning: PropTypes.bool,
+  spinning  : PropTypes.bool,
   fullScreen: PropTypes.bool
 };
 

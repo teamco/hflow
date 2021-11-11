@@ -25,13 +25,13 @@ function MainTable(props) {
    */
   const filterBy = key => {
     const _filter = dataSource.map(data => ({
-      text: data[key],
+      text : data[key],
       value: data[key]
     }));
 
     return [
       ...new Map(_filter.map(item =>
-        [item['value'], item])).values()
+          [item['value'], item])).values()
     ];
   };
 
@@ -69,11 +69,11 @@ function MainTable(props) {
   delete gridProps.columns;
 
   return (
-    <Table className={styles.grid}
-           expandable={gridProps.expandable}
-           footer={() => `${props.t('table:total')}: ${total}`}
-           columns={columns}
-           {...gridProps} />
+      <Table className={styles.grid}
+             expandable={gridProps.expandable}
+             footer={() => `${props.t('table:total')}: ${total}`}
+             columns={columns}
+             {...gridProps} />
   );
 }
 

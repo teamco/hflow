@@ -1,8 +1,8 @@
-import {connect} from 'dva';
-import {history} from 'umi';
-import {withTranslation} from 'react-i18next';
+import { connect } from 'dva';
+import { history } from 'umi';
+import { withTranslation } from 'react-i18next';
 
-import {businessEdit} from './businessEdit';
+import { businessEdit } from './businessEdit';
 
 export default connect(
     ({
@@ -26,7 +26,7 @@ export default connect(
       dispatch,
       onFieldsChange(changedFields, allFields) {
         dispatch({
-          type: 'businessModel/updateFields',
+          type   : 'businessModel/updateFields',
           payload: {
             changedFields,
             allFields,
@@ -36,7 +36,7 @@ export default connect(
       },
       onFileChange(payload) {
         dispatch({
-          type: 'businessModel/handleAddFile',
+          type   : 'businessModel/handleAddFile',
           payload: {
             ...payload,
             model: 'businessModel'
@@ -45,25 +45,25 @@ export default connect(
       },
       onFileRemove(payload) {
         dispatch({
-          type: 'businessModel/handleRemoveFile',
-          payload: {...payload, model: 'businessModel'}
+          type   : 'businessModel/handleRemoveFile',
+          payload: { ...payload, model: 'businessModel' }
         });
       },
       onSave(payload, params) {
-        dispatch({type: 'businessModel/prepareToSave', payload, params});
+        dispatch({ type: 'businessModel/prepareToSave', payload, params });
       },
       onClose(userId) {
         history.push(`/admin/users/${userId}/businesses`);
       },
       onUpdateTags(tags) {
-        dispatch({type: 'businessModel/updateTags', payload: {tags}});
+        dispatch({ type: 'businessModel/updateTags', payload: { tags } });
       },
       onEditBusiness(params) {
-        dispatch({type: `userModel/validateUser`, payload: {userId: params.user}});
-        dispatch({type: `businessModel/editBusiness`, payload: {params}});
+        dispatch({ type: `userModel/validateUser`, payload: { userId: params.user } });
+        dispatch({ type: `businessModel/editBusiness`, payload: { params } });
       },
       onHandleStates(country) {
-        dispatch({type: `businessModel/handleStates`, payload: {country}});
+        dispatch({ type: `businessModel/handleStates`, payload: { country } });
       },
       onHoldBusiness() {
       },

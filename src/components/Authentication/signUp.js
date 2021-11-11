@@ -1,20 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {Form, Input, Button, Modal, Row, Col, message, Tooltip} from 'antd';
-import {
-  LockTwoTone,
-  FormOutlined,
-  ProfileTwoTone, LoginOutlined
-} from '@ant-design/icons';
-import {faUserCircle} from '@fortawesome/free-regular-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Form, Input, message, Modal, Row, Tooltip } from 'antd';
+import { FormOutlined, LockTwoTone, LoginOutlined, ProfileTwoTone } from '@ant-design/icons';
+import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import {onUpdateMeter} from 'components/Authentication/methods/meter';
-import {emailPartial} from 'components/partials/email.partial';
+import { onUpdateMeter } from 'components/Authentication/methods/meter';
+import { emailPartial } from 'components/partials/email.partial';
 
 import styles from 'components/Authentication/authentication.module.less';
 
 import Strength from 'components/Authentication/strength';
-import {isLoading} from 'utils/state';
+import { isLoading } from 'utils/state';
 
 export const signUp = props => {
 
@@ -65,9 +61,9 @@ export const signUp = props => {
   const onFinish = values => {
     createUserWithEmailAndPassword(values.email, values.password);
     onRegisterData({
-      email: values.email,
-      firstName: values.firstName,
-      lastName: values.lastName,
+      email         : values.email,
+      firstName     : values.firstName,
+      lastName      : values.lastName,
       isBusinessUser: false
     });
   };
@@ -91,7 +87,7 @@ export const signUp = props => {
                  onCancel={handleCancel}
                  maskClosable={false}
                  centered
-                 maskStyle={signInVisible ? {backgroundColor: 'rgba(0, 0, 0, 0.45)'} : null}
+                 maskStyle={signInVisible ? { backgroundColor: 'rgba(0, 0, 0, 0.45)' } : null}
                  footer={null}>
             <Form name={'auth_signup'}
                   className={styles.loginForm}
@@ -101,11 +97,11 @@ export const signUp = props => {
                 <Row gutter={8}>
                   <Col span={12}>
                     <Form.Item name={'firstName'}
-                               style={{marginBottom: 0}}
+                               style={{ marginBottom: 0 }}
                                rules={[
                                  {
                                    required: true,
-                                   message: t('form:required', {field: t('form:firstName')})
+                                   message : t('form:required', { field: t('form:firstName') })
                                  }
                                ]}>
                       <Input prefix={<ProfileTwoTone/>}
@@ -114,11 +110,11 @@ export const signUp = props => {
                   </Col>
                   <Col span={12}>
                     <Form.Item name={'lastName'}
-                               style={{marginBottom: 0}}
+                               style={{ marginBottom: 0 }}
                                rules={[
                                  {
                                    required: true,
-                                   message: t('form:required', {field: t('form:lastName')})
+                                   message : t('form:required', { field: t('form:lastName') })
                                  }
                                ]}>
                       <Input prefix={<ProfileTwoTone/>}
@@ -127,23 +123,24 @@ export const signUp = props => {
                   </Col>
                 </Row>
               </Form.Item>
-              {emailPartial({t, name: 'email'})}
+              {emailPartial({ t, name: 'email' })}
               <Form.Item>
                 <Row gutter={8}>
                   <Col span={12}>
                     <Form.Item name={'password'}
                                hasFeedback
-                               extra={t('auth:passwordHelper', {length: MIN_PASSWORD_LENGTH})}
-                               onChange={e => onUpdateMeter({e, setMeterText, setMeterValue})}
+                               extra={t('auth:passwordHelper', { length: MIN_PASSWORD_LENGTH })}
+                               onChange={e => onUpdateMeter({ e, setMeterText, setMeterValue })}
                                rules={[
                                  {
                                    required: true,
-                                   message: t('form:required', {field: t('auth:password')})
+                                   message : t('form:required', { field: t('auth:password') })
                                  },
-                                 ({getFieldValue}) => ({
+                                 ({ getFieldValue }) => ({
                                    validator(_, value) {
                                      if (value && getFieldValue('password').length < MIN_PASSWORD_LENGTH) {
-                                       return Promise.reject(t('auth:passwordTooEasy', {length: MIN_PASSWORD_LENGTH}));
+                                       return Promise.reject(
+                                           t('auth:passwordTooEasy', { length: MIN_PASSWORD_LENGTH }));
                                      }
                                      return Promise.resolve();
                                    }
@@ -161,9 +158,9 @@ export const signUp = props => {
                                rules={[
                                  {
                                    required: true,
-                                   message: t('form:required', {field: t('auth:passwordConfirm')})
+                                   message: t('form:required', { field: t('auth:passwordConfirm') })
                                  },
-                                 ({getFieldValue}) => ({
+                                 ({ getFieldValue }) => ({
                                    validator(_, value) {
                                      if (!value || getFieldValue('password') === value) {
                                        return Promise.resolve();
@@ -183,7 +180,7 @@ export const signUp = props => {
                           meterValue={meterValue}
                           meterText={meterText}/>
               </Form.Item>
-              <Form.Item style={{marginBottom: 0, marginTop: 20}}>
+              <Form.Item style={{ marginBottom: 0, marginTop: 20 }}>
                 <Row gutter={[16, 16]}
                      className={styles.loginBtns}>
                   <Col span={12}>

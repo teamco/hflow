@@ -1,24 +1,24 @@
 import React from 'react';
-import {Button, Popconfirm} from 'antd';
-import {QuestionCircleOutlined} from '@ant-design/icons';
-import {isLoading} from 'utils/state';
+import { Button, Popconfirm } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { isLoading } from 'utils/state';
 
 import i18n from './i18n';
-import {COLORS} from './colors';
+import { COLORS } from './colors';
 
 /**
  * @export
  * @param model
  * @param props
  */
-export const buttonsMetadata = ({model, props}) => {
-  const {onButtonsMetadata, onSave, onClose, onDelete, loading} = props;
+export const buttonsMetadata = ({ model, props }) => {
+  const { onButtonsMetadata, onSave, onClose, onDelete, loading } = props;
   onButtonsMetadata({
-    saveBtn: {
+    saveBtn  : {
       onClick: onSave,
       loading: loading.effects[`${model}/prepareToSave`]
     },
-    closeBtn: {
+    closeBtn : {
       onClick: onClose,
       loading: false
     },
@@ -63,11 +63,11 @@ export const closeBtn = (onClick, loading) => (
  * @return {JSX.Element}
  */
 export const deleteBtn = (onClick, loading, instance) => (
-    <Popconfirm title={i18n.t('msg:deleteConfirm', {instance})}
+    <Popconfirm title={i18n.t('msg:deleteConfirm', { instance })}
                 key={'delete-confirm'}
                 placement={'bottomRight'}
                 onConfirm={onClick}
-                icon={<QuestionCircleOutlined style={{color: COLORS.danger}}/>}>
+                icon={<QuestionCircleOutlined style={{ color: COLORS.danger }}/>}>
       <Button danger size={'small'}
               type={'primary'}
               htmlType={'submit'}

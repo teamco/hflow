@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Subscription from 'components/Subscription';
 import SignUp from 'components/Authentication/signUp.connect';
@@ -43,14 +43,14 @@ export const subscription = (props) => {
         Start with standard
       </div>
     ],
-    cover: (
+    cover  : (
         <div className={styles.content}>
           <h2>Standard</h2>
           <h3>299<sup>$</sup></h3>
           <span>per year</span>
         </div>
     ),
-    meta: {
+    meta   : {
       description: <h5>Core course library, paths and skill assessments</h5>
     }
   };

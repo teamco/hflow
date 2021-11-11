@@ -1,6 +1,6 @@
 import React from 'react';
-import {withTranslation} from 'react-i18next';
-import {Menu, Popconfirm} from 'antd';
+import { withTranslation } from 'react-i18next';
+import { Menu, Popconfirm } from 'antd';
 import {
   ApiTwoTone,
   DeleteTwoTone,
@@ -12,9 +12,9 @@ import {
   UnlockTwoTone
 } from '@ant-design/icons';
 
-import {NavLink} from 'umi';
+import { NavLink } from 'umi';
 
-import {COLORS} from 'utils/colors';
+import { COLORS } from 'utils/colors';
 
 import tableStyles from 'components/Main/Table/table.module.less';
 
@@ -72,7 +72,7 @@ export const UserMenu = props => {
         {(currentUser?.uid !== record.uid) && (
             <Menu.Item key={'message'}
                        onClick={() => {
-                         setVisibleMessage({visible: true, props: {from: currentUser, to: record}});
+                         setVisibleMessage({ visible: true, props: { from: currentUser, to: record } });
                        }}
                        icon={<MessageTwoTone className={tableStyles.action}
                                              twoToneColor={COLORS.warning}/>}>
@@ -87,7 +87,7 @@ export const UserMenu = props => {
                                        className={tableStyles.action}/>)
                    }>
           {isLocked ? (
-              <Popconfirm title={t('auth:unlockConfirm', {instance: record.email})}
+              <Popconfirm title={t('auth:unlockConfirm', { instance: record.email })}
                           placement={'topRight'}
                           onConfirm={() => onUnlockUser(record)}>
                 {t('auth:unlock')}
@@ -106,7 +106,7 @@ export const UserMenu = props => {
                                    className={tableStyles.action}/>
                    )}>
           {signedIn ? (
-              <Popconfirm title={t('auth:signOutConfirm', {instance: record.email})}
+              <Popconfirm title={t('auth:signOutConfirm', { instance: record.email })}
                           placement={'topRight'}
                           onConfirm={() => onSignOutUser(record)}>
                 {t('auth:forceSignOut')}
@@ -118,7 +118,7 @@ export const UserMenu = props => {
         <Menu.Item key={'delete'}
                    icon={<DeleteTwoTone className={tableStyles.action}
                                         twoToneColor={COLORS.danger}/>}>
-          <Popconfirm title={t('msg:deleteConfirm', {instance: record.email})}
+          <Popconfirm title={t('msg:deleteConfirm', { instance: record.email })}
                       placement={'topRight'}
                       onConfirm={() => onDeleteUser(record)}>
             {t('actions:delete')}

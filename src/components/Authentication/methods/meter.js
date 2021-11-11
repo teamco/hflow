@@ -11,7 +11,7 @@ import zxcvbn from 'zxcvbn';
  * @param setMeterText
  * @param setMeterValue
  */
-export const onUpdateMeter = ({e, setMeterValue, setMeterText}) => {
+export const onUpdateMeter = ({ e, setMeterValue, setMeterText }) => {
   const value = e.target.value;
   const result = zxcvbn(value);
 

@@ -1,10 +1,10 @@
-import {connect} from 'dva';
-import {withTranslation} from 'react-i18next';
+import { connect } from 'dva';
+import { withTranslation } from 'react-i18next';
 
-import {userRoles} from './userRoles';
+import { userRoles } from './userRoles';
 
 export default connect(
-    ({authModel, userRolesModel, loading}) => {
+    ({ authModel, userRolesModel, loading }) => {
       return {
         loading,
         authModel,
@@ -14,7 +14,7 @@ export default connect(
     (dispatch) => ({
       dispatch,
       onQuery() {
-        dispatch({type: `userRolesModel/query`});
+        dispatch({ type: `userRolesModel/query` });
       },
       onSave(payload) {
         dispatch({
@@ -24,14 +24,14 @@ export default connect(
       },
       onUpdateUserRoles(roles) {
         dispatch({
-          type: 'userRolesModel/updateUserRoles',
-          payload: {roles}
+          type   : 'userRolesModel/updateUserRoles',
+          payload: { roles }
         });
       },
       onUpdateBusinessRoles(roles) {
         dispatch({
-          type: 'userRolesModel/updateBusinessRoles',
-          payload: {roles}
+          type   : 'userRolesModel/updateBusinessRoles',
+          payload: { roles }
         });
       }
     })

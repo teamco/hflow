@@ -10,7 +10,7 @@ import Phone from './phone';
 import { Tooltip } from 'antd';
 import { CheckCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
 
-import {COLORS} from 'utils/colors';
+import { COLORS } from 'utils/colors';
 
 /**
  * @export
@@ -49,7 +49,7 @@ export const getSuffix = (t, form, name, label) => {
   const success = (<CheckCircleTwoTone twoToneColor={COLORS.success}/>);
   const warning = (
       <Tooltip placement={'topRight'}
-               title={t('form:required', {field: label})}>
+               title={t('form:required', { field: label })}>
         <WarningTwoTone twoToneColor={COLORS.warning}/>
       </Tooltip>
   );

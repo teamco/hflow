@@ -46,6 +46,6 @@ export function useWindowSize(useState, useLayoutEffect) {
 export function isLocalHost() {
   const { hostname } = window.location;
   return hostname === 'localhost' ||
-    hostname.match(/^192\./) ||
-    hostname.match(/^10\./);
+      hostname.match(/^192\./) ||
+      hostname.match(/^10\./);
 }

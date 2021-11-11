@@ -1,15 +1,21 @@
-import React, {useEffect} from 'react';
-import {NavLink} from 'umi';
-import {ContactsTwoTone, DownOutlined, PauseCircleTwoTone, PlayCircleTwoTone, SettingOutlined} from '@ant-design/icons';
+import React, { useEffect } from 'react';
+import { NavLink } from 'umi';
+import {
+  ContactsTwoTone,
+  DownOutlined,
+  PauseCircleTwoTone,
+  PlayCircleTwoTone,
+  SettingOutlined
+} from '@ant-design/icons';
 
-import {Avatar, Button, Dropdown, Tag, Tooltip} from 'antd';
+import { Avatar, Button, Dropdown, Tag, Tooltip } from 'antd';
 
 import classnames from 'classnames';
-import {tsToLocaleDateTime} from 'utils/timestamp';
-import {COLORS} from 'utils/colors';
-import {BRANDS} from 'utils/brands';
+import { tsToLocaleDateTime } from 'utils/timestamp';
+import { COLORS } from 'utils/colors';
+import { BRANDS } from 'utils/brands';
 
-import {showProfileModal} from 'pages/users/metadata/profile.modal';
+import { showProfileModal } from 'pages/users/metadata/profile.modal';
 import UserMenu from 'pages/users/metadata/users.menu';
 
 import styles from 'pages/users/users.module.less';
@@ -65,20 +71,20 @@ export const metadata = ({
   };
 
   return {
-    width: '100%',
-    size: 'middle',
+    width  : '100%',
+    size   : 'middle',
     columns: [
       {
-        title: t('table:name'),
+        title    : t('table:name'),
         dataIndex: 'displayName',
-        key: 'displayName',
+        key      : 'displayName',
         render(name, data) {
           const isCurrentStyle = currentUser?.id === data.id ? styles.currentUser : null;
           const isSignedIn = data.metadata.signedIn;
           const color = isSignedIn ? COLORS.success : COLORS.disabled;
           const signed = {
             title: t(isSignedIn ? 'auth:signedIn' : 'auth:signedOut'),
-            icon: isSignedIn ?
+            icon : isSignedIn ?
                 (<PlayCircleTwoTone twoToneColor={color}/>) :
                 (<PauseCircleTwoTone twoToneColor={color}/>)
           };
@@ -114,12 +120,12 @@ export const metadata = ({
           );
         },
         filterable: multiple,
-        sortable: multiple
+        sortable : multiple
       },
       {
-        title: t('auth:provider'),
+        title    : t('auth:provider'),
         dataIndex: 'metadata',
-        render: metadata => (
+        render   : metadata => (
             <Tag color={metadata.signedIn ? BRANDS[metadata.providerId]?.color : null}
                  icon={BRANDS[metadata.providerId]?.icon}
                  className={styles.provider}>
@@ -135,13 +141,13 @@ export const metadata = ({
       //   sortable: multiple
       // },
       {
-        title: t('auth:lastSignInTime'),
+        title    : t('auth:lastSignInTime'),
         dataIndex: 'metadata',
-        key: 'lastSignInTime',
-        render: metadata => tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))
+        key      : 'lastSignInTime',
+        render   : metadata => tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))
       },
       {
-        title: t('table:action'),
+        title : t('table:action'),
         render: record =>
             data.length ? (
                 <div className={styles.nowrap}>
@@ -157,7 +163,7 @@ export const metadata = ({
                     <Button size={'small'}
                             icon={<SettingOutlined/>}
                             className={menuStyles.customAction}>
-                      {t('actions:manage', {type: t('auth:user')})} <DownOutlined/>
+                      {t('actions:manage', { type: t('auth:user') })} <DownOutlined/>
                     </Button>
                   </Dropdown>
                 </div>

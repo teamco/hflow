@@ -1,18 +1,12 @@
 import React from 'react';
-import {NavLink, useParams} from 'umi';
+import { NavLink, useParams } from 'umi';
 import classnames from 'classnames';
-import {Can} from 'utils/auth/can';
-import {Button, Dropdown, Tooltip} from 'antd';
-import {
-  UserAddOutlined,
-  ProfileTwoTone,
-  ShopTwoTone,
-  SettingOutlined,
-  DownOutlined
-} from '@ant-design/icons';
+import { Can } from 'utils/auth/can';
+import { Button, Dropdown, Tooltip } from 'antd';
+import { DownOutlined, ProfileTwoTone, SettingOutlined, ShopTwoTone } from '@ant-design/icons';
 
-import {tsToLocaleDateTime} from 'utils/timestamp';
-import {COLORS} from 'utils/colors';
+import { tsToLocaleDateTime } from 'utils/timestamp';
+import { COLORS } from 'utils/colors';
 
 import BusinessMenu from './metadata/business.menu';
 
@@ -43,15 +37,15 @@ export const metadata = ({
   };
 
   return {
-    width: '100%',
-    size: 'middle',
+    width  : '100%',
+    size   : 'middle',
     columns: [
       {
-        title: t('table:name'),
-        dataIndex: 'name',
-        key: 'name',
+        title     : t('table:name'),
+        dataIndex : 'name',
+        key       : 'name',
         filterable: multiple,
-        sortable: multiple,
+        sortable  : multiple,
         render(name, data) {
           return (
               <div className={classnames(styles.nowrap, tableStyles.tdName)}>
@@ -69,24 +63,24 @@ export const metadata = ({
         }
       },
       {
-        title: t('auth:email'),
-        dataIndex: 'email',
-        key: 'email',
+        title     : t('auth:email'),
+        dataIndex : 'email',
+        key       : 'email',
         filterable: multiple,
-        sortable: multiple
+        sortable  : multiple
       },
       {
-        title: t('business:type'),
-        dataIndex: 'businessType',
-        key: 'businessType',
+        title     : t('business:type'),
+        dataIndex : 'businessType',
+        key       : 'businessType',
         filterable: multiple,
-        sortable: multiple
+        sortable  : multiple
       },
       {
-        title: t('form:updatedAt'),
+        title    : t('form:updatedAt'),
         dataIndex: 'metadata',
-        key: 'metadata.updatedAt',
-        render: metadata => tsToLocaleDateTime(metadata.updatedAt)
+        key      : 'metadata.updatedAt',
+        render   : metadata => tsToLocaleDateTime(metadata.updatedAt)
       },
       {
         title: t('table:action'),
@@ -94,7 +88,7 @@ export const metadata = ({
           return data.length ? (
               <div className={styles.nowrap}>
                 <Can I={'update'} a={'businesses'}>
-                  <Tooltip title={t('actions:edit', {type: t('menu:business')})}>
+                  <Tooltip title={t('actions:edit', { type: t('menu:business') })}>
                     <NavLink to={`/admin/users/${params.user}/businesses/${record.id}`}>
                       <ProfileTwoTone className={tableStyles.action}
                                       twoToneColor={COLORS.success}/>
@@ -108,7 +102,7 @@ export const metadata = ({
                   <Button size={'small'}
                           icon={<SettingOutlined/>}
                           className={menuStyles.customAction}>
-                    {t('actions:manage', {type: t('business')})} <DownOutlined/>
+                    {t('actions:manage', { type: t('business') })} <DownOutlined/>
                   </Button>
                 </Dropdown>
               </div>

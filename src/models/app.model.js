@@ -5,11 +5,11 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 
-import {commonModel} from 'models/common.model';
-import {menus} from 'services/menu.service';
+import { commonModel } from 'models/common.model';
+import { menus } from 'services/menu.service';
 
 const appMeta = {
-  name: '__TITLE__',
+  name   : '__TITLE__',
   charSet: 'utf-8'
 };
 
@@ -17,120 +17,120 @@ const appMeta = {
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'appModel',
-  state: {
-    interval: {
+  namespace    : 'appModel',
+  state        : {
+    interval       : {
       timeout: 60000,
       enabled: true
     },
-    layoutOpts: {
-      mainHeader: false,
+    layoutOpts     : {
+      mainHeader     : false,
       pageBreadcrumbs: false,
-      pageHeader: false,
-      mainFooter: false,
-      mainMenu: false
+      pageHeader     : false,
+      mainFooter     : false,
+      mainMenu       : false
     },
-    activeTab: true,
-    collapsedMenu: true,
-    meta: {...appMeta, ...{title: ''}},
-    menus: [],
-    activeForm: {
+    activeTab      : true,
+    collapsedMenu  : true,
+    meta           : { ...appMeta, ...{ title: '' } },
+    menus          : [],
+    activeForm     : {
       form: null
     },
-    activeModel: {
+    activeModel    : {
       isEdit: false,
-      title: ''
+      title : ''
     },
     waitBeforeLogin: 5000
   },
   subscriptions: {
     setupHistory(setup) {
-      const {dispatch, history} = setup;
+      const { dispatch, history } = setup;
 
       history.listen(data => {
         // In case of route replace
-        const location = data.pathname ? {...data} : {...data.location};
+        const location = data.pathname ? { ...data } : { ...data.location };
 
-        dispatch({type: 'updateState', payload: {location}});
+        dispatch({ type: 'updateState', payload: { location } });
       });
     },
-    setup({dispatch}) {
-      dispatch({type: 'query'});
+    setup({ dispatch }) {
+      dispatch({ type: 'query' });
     }
   },
-  effects: {
+  effects      : {
 
-    * query({payload}, {put}) {
-      yield put({type: 'updateState', payload: {menus}});
-      yield put({type: 'adminLayout', payload: {visible: true}});
+    * query({ payload }, { put }) {
+      yield put({ type: 'updateState', payload: { menus } });
+      yield put({ type: 'adminLayout', payload: { visible: true } });
     },
 
-    * adminLayout({payload}, {put}) {
-      const {visible} = payload;
+    * adminLayout({ payload }, { put }) {
+      const { visible } = payload;
       yield put({
-        type: 'updateState',
+        type   : 'updateState',
         payload: {
           layoutOpts: {
-            mainHeader: visible,
+            mainHeader     : visible,
             pageBreadcrumbs: visible,
-            pageHeader: visible,
-            mainFooter: visible,
-            mainMenu: visible
+            pageHeader     : visible,
+            mainFooter     : visible,
+            mainMenu       : visible
           }
         }
       });
     },
 
-    * updateDocumentMeta({payload}, {put, select}) {
-      const {meta} = yield select(state => state.appModel);
+    * updateDocumentMeta({ payload }, { put, select }) {
+      const { meta } = yield select(state => state.appModel);
       yield put({
-        type: 'updateState',
+        type   : 'updateState',
         payload: {
-          meta: {...meta, ...payload.meta}
+          meta: { ...meta, ...payload.meta }
         }
       });
     },
 
-    * updateReferrer({payload}, {put}) {
+    * updateReferrer({ payload }, { put }) {
       yield put({
-        type: 'updateState',
+        type   : 'updateState',
         payload: {
           referrer: payload.referrer
         }
       });
     },
 
-    * toggleMenu({payload}, {put}) {
+    * toggleMenu({ payload }, { put }) {
       yield put({
-        type: 'updateState',
+        type   : 'updateState',
         payload: {
           collapsedMenu: payload.collapse
         }
       });
     },
 
-    * activeModel({payload}, {put}) {
+    * activeModel({ payload }, { put }) {
       yield put({
-        type: 'updateState',
+        type   : 'updateState',
         payload: {
-          activeModel: {...payload}
+          activeModel: { ...payload }
         }
       });
     },
 
-    * checkActiveTab({payload}, {put}) {
+    * checkActiveTab({ payload }, { put }) {
       yield put({
-        type: 'updateState',
+        type   : 'updateState',
         payload: {
           activeTab: payload
         }
       });
     },
 
-    * notification(_, {call, put, select}) {
+    * notification(_, { call, put, select }) {
       console.log('Notification');
 
-      yield put({type: 'notificationModel/getCount'});
+      yield put({ type: 'notificationModel/getCount' });
     }
   },
 

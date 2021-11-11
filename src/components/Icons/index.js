@@ -1,7 +1,7 @@
 import Icon from '@ant-design/icons';
 
-import {HeartSvg} from './heart.svg';
-import {PandaSvg} from './panda.svg';
+import { HeartSvg } from './heart.svg';
+import { PandaSvg } from './panda.svg';
 
 /**
  * @export

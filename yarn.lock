@@ -71,13 +71,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ant-design/pro-layout@npm:^6.27.1":
-  version: 6.27.1
-  resolution: "@ant-design/pro-layout@npm:6.27.1"
+"@ant-design/pro-layout@npm:^6.27.2":
+  version: 6.27.2
+  resolution: "@ant-design/pro-layout@npm:6.27.2"
   dependencies:
     "@ant-design/icons": ^4.0.0
     "@ant-design/pro-provider": 1.4.20
-    "@ant-design/pro-utils": 1.26.0
+    "@ant-design/pro-utils": 1.26.1
     "@umijs/route-utils": ^1.0.35
     "@umijs/use-params": ^1.0.2
     classnames: ^2.2.6
@@ -86,7 +86,7 @@ __metadata:
     path-to-regexp: 2.4.0
     rc-resize-observer: ^0.2.1
     rc-util: ^5.0.6
-    swr: ^1.1.0-beta.0
+    swr: 1.1.0-beta.6
     unstated-next: ^1.1.0
     use-json-comparison: ^1.0.3
     use-media-antd-query: ^1.0.6
@@ -94,7 +94,7 @@ __metadata:
   peerDependencies:
     antd: 4.x
     react: ">=16.9.0"
-  checksum: e77208add0c29c66d534456dbf44a9ee89652e3bd1f0acc11d9c47746ca97350d92932a4f07aefaf0bac7744754cf03ee826894ed9ca94cb7259a3a183e26a1b
+  checksum: 6d2c048ec1686e2c489311642a064ae3b6a19213545be52ac07bdf4e07a4a306a99afe7b3a1853da4285fc7e8ed2272c210c486af25364b6844593b6c21f22c4
   languageName: node
   linkType: hard
 
@@ -110,9 +110,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ant-design/pro-utils@npm:1.26.0":
-  version: 1.26.0
-  resolution: "@ant-design/pro-utils@npm:1.26.0"
+"@ant-design/pro-utils@npm:1.26.1":
+  version: 1.26.1
+  resolution: "@ant-design/pro-utils@npm:1.26.1"
   dependencies:
     "@ant-design/icons": ^4.3.0
     "@ant-design/pro-provider": 1.4.20
@@ -120,12 +120,12 @@ __metadata:
     moment: ^2.27.0
     rc-util: ^5.0.6
     react-sortable-hoc: ^2.0.0
-    swr: ^1.1.0-beta.0
+    swr: 1.1.0-beta.6
   peerDependencies:
     antd: 4.x
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: cf7a927f6309dc13450adabf4eadacb8e0a3ddc778ad86b8816a318d14b349bfd598274466a2ca9e1b5872b856b64d81277bd625bdbf50860263e3664e06710e
+  checksum: cf456ae14a760a3aa13388f87d5b58c6e49a54739760bb601d4e7728c097b4ff997d7236fbb7cb60c51ccf09172df3c09036aec5e5964d808bcff144c67c782e
   languageName: node
   linkType: hard
 
@@ -531,15 +531,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.15.3, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.9.2":
-  version: 7.15.4
-  resolution: "@babel/runtime@npm:7.15.4"
-  dependencies:
-    regenerator-runtime: ^0.13.4
-  checksum: c40825430400e47c19b97e4142d5315d2910305b9714d44a711472587ee2fd4521fdba5f02ddd9df3902f5e988d9854fa83f4da1e0c091f70f6983fa52480606
-  languageName: node
-  linkType: hard
-
 "@babel/runtime@npm:^7.14.5":
   version: 7.14.5
   resolution: "@babel/runtime@npm:7.14.5"
@@ -555,6 +546,24 @@ __metadata:
   dependencies:
     regenerator-runtime: ^0.13.4
   checksum: 927ffed7871f2ed29f967a8dad7a72aa10662f93b6735a89d664a161fa4dc2074b8947ca159a8a0a49cec9a71c8de473d7c2b22d3de0ee4d7dd06d24a7f98018
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.15.3, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.9.2":
+  version: 7.15.4
+  resolution: "@babel/runtime@npm:7.15.4"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: c40825430400e47c19b97e4142d5315d2910305b9714d44a711472587ee2fd4521fdba5f02ddd9df3902f5e988d9854fa83f4da1e0c091f70f6983fa52480606
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.7.6":
+  version: 7.16.3
+  resolution: "@babel/runtime@npm:7.16.3"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: ab8ac887096d76185ddbf291d28fb976cd32473696dc497ad4905b784acbd5aa462533ad83a5c5104e10ead28c2e0e119840ee28ed8eff90dcdde9d57f916eda
   languageName: node
   linkType: hard
 
@@ -1862,14 +1871,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^17.0.33":
-  version: 17.0.33
-  resolution: "@types/react@npm:17.0.33"
+"@types/react@npm:^17.0.34":
+  version: 17.0.34
+  resolution: "@types/react@npm:17.0.34"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 5f53f3dae034229ff1eccb5de1c16d046696e883f8eae81b86e95c532798e655015e4edff8a6c9ec8f1c0ef12bb60dec43622d06256ba33ba6069e67a74b8d4e
+  checksum: 16729ad7d50922ccbf8eb93874d7781dc2f1c64edc78134b5edc7154839d41e9fe320eb1c11ad2d1c9bf28b99cb1febda344509c1fda025955a5c2b43c688c8f
   languageName: node
   linkType: hard
 
@@ -5409,10 +5418,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"generate-password@npm:^1.6.1":
-  version: 1.6.1
-  resolution: "generate-password@npm:1.6.1"
-  checksum: aa01fd835568436158e045a368546d275f7bb647d3e461091820fa7b53efb92285fcaca5dbd919adb8ab9f5e4064cbbfa0da697ef9c226eeb67487e6b68e8fc0
+"generate-password@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "generate-password@npm:1.7.0"
+  checksum: c0d13e9a9c72d84adc4365a0c0dbd28463f2da1975b4ec83f34a126b95122551274755db641418e5aa11c8d94c1d216c8da8314f38e56e05378e1a43792f4614
   languageName: node
   linkType: hard
 
@@ -5711,7 +5720,7 @@ __metadata:
   resolution: "hflow@workspace:."
   dependencies:
     "@ant-design/icons": ^4.7.0
-    "@ant-design/pro-layout": ^6.27.1
+    "@ant-design/pro-layout": ^6.27.2
     "@casl/ability": ^5.4.3
     "@casl/react": ^2.3.0
     "@fortawesome/fontawesome-free": ^5.15.4
@@ -5720,7 +5729,7 @@ __metadata:
     "@fortawesome/free-regular-svg-icons": ^5.15.4
     "@fortawesome/free-solid-svg-icons": ^5.15.4
     "@fortawesome/react-fontawesome": ^0.1.16
-    "@types/react": ^17.0.33
+    "@types/react": ^17.0.34
     "@umijs/preset-react": ^1.8.25
     "@umijs/test": ^3.5.20
     antd: ^4.16.13
@@ -5736,9 +5745,9 @@ __metadata:
     dva-core: ^2.0.4
     dva-model-extend: ^0.1.2
     firebase: ^8.10.0
-    generate-password: ^1.6.1
+    generate-password: ^1.7.0
     gravatar: ^1.8.2
-    i18next: ^21.3.3
+    i18next: ^21.4.2
     i18next-browser-languagedetector: ^6.1.2
     i18next-xhr-backend: ^3.2.2
     lint-staged: ^11.2.6
@@ -5751,10 +5760,10 @@ __metadata:
     query-string: ^7.0.1
     react: ^17.0.2
     react-dom: ^17.0.2
-    react-i18next: ^11.13.0
+    react-i18next: ^11.14.1
     react-interval: ^2.1.2
     react-json-view: ^1.21.3
-    react-router: ^5.2.1
+    react-router: ^6.0.2
     react-router-breadcrumbs-hoc: ^4.1.0
     react-with-firebase-auth: ^1.3.11
     redbox-react: ^1.6.0
@@ -5795,6 +5804,15 @@ __metadata:
     tiny-warning: ^1.0.0
     value-equal: ^1.0.1
   checksum: addd84bc4683929bae4400419b5af132ff4e4e9b311a0d4e224579ea8e184a6b80d7f72c55927e4fa117f69076a9e47ce082d8d0b422f1a9ddac7991490ca1d0
+  languageName: node
+  linkType: hard
+
+"history@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "history@npm:5.1.0"
+  dependencies:
+    "@babel/runtime": ^7.7.6
+  checksum: c978710a188ee5ad5d2acf55721c77e27469578c891a66311e71e8920d1390d14476e39a6db07e0ab0f5f8d594f1f62eb55a1059c7549cde7795a36367df5869
   languageName: node
   linkType: hard
 
@@ -5960,12 +5978,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^21.3.3":
-  version: 21.3.3
-  resolution: "i18next@npm:21.3.3"
+"i18next@npm:^21.4.2":
+  version: 21.4.2
+  resolution: "i18next@npm:21.4.2"
   dependencies:
     "@babel/runtime": ^7.12.0
-  checksum: 666462d8f3163b5867823b09a186b981f69be71cf5924c7b4d6749ba5b6e248eb5796e6928da1b5b19d17a0e6a51aa1922012c5aef269c90ebfe837b9d2db067
+  checksum: 921f021a03d30747c54f3beeba71be6359a1ce607527dee571f5b050b6939623693dee12dc2225cef5cab9683bc094cd75fd8c320ffbba6ecacfb127fa95bf1c
   languageName: node
   linkType: hard
 
@@ -10524,16 +10542,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^11.13.0":
-  version: 11.13.0
-  resolution: "react-i18next@npm:11.13.0"
+"react-i18next@npm:^11.14.1":
+  version: 11.14.1
+  resolution: "react-i18next@npm:11.14.1"
   dependencies:
     "@babel/runtime": ^7.14.5
     html-parse-stringify: ^3.0.1
   peerDependencies:
     i18next: ">= 19.0.0"
     react: ">= 16.8.0"
-  checksum: 93cd93730869e869a1bade404d96905e1f68e86a9eaf46cbfae040e3019956ce3de0c22e9726dc1268883d139899b849296cd54723d47436211828d4f03bbea1
+  checksum: 1dd52aa2b890b27be43436c3b3c27d75469c7439888689fabf69f49b3f9ccde81396b22fc43159928c63594f3a980e07ddbcd175ca96dbbc1a87be4a484fc38c
   languageName: node
   linkType: hard
 
@@ -10706,23 +10724,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:^5.2.1":
-  version: 5.2.1
-  resolution: "react-router@npm:5.2.1"
+"react-router@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "react-router@npm:6.0.2"
   dependencies:
-    "@babel/runtime": ^7.12.13
-    history: ^4.9.0
-    hoist-non-react-statics: ^3.1.0
-    loose-envify: ^1.3.1
-    mini-create-react-context: ^0.4.0
-    path-to-regexp: ^1.7.0
-    prop-types: ^15.6.2
-    react-is: ^16.6.0
-    tiny-invariant: ^1.0.2
-    tiny-warning: ^1.0.0
+    history: ^5.1.0
   peerDependencies:
-    react: ">=15"
-  checksum: 7daae084bf64531eb619cc5f4cc40ce5ae0a541b64f71d74ec71a38cbf6130ebdbb7cf38f157303fad5846deec259401f96c4d6c7386466dcc989719e01f9aaa
+    react: ">=16.8"
+  checksum: 9d4f3a8002a90f38be022c6740e11e9bb481e60ad04c5a0ce2d6dbe685059c09b3037c45414d6e7e40eb97308842380413cfb93c5cdcb992e7ee0c50b4f7fcaa
   languageName: node
   linkType: hard
 
@@ -12246,12 +12255,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swr@npm:^1.1.0-beta.0":
-  version: 1.1.0-beta.0
-  resolution: "swr@npm:1.1.0-beta.0"
+"swr@npm:1.1.0-beta.6":
+  version: 1.1.0-beta.6
+  resolution: "swr@npm:1.1.0-beta.6"
   peerDependencies:
-    react: ^16.11.0 || ^17.0.0
-  checksum: cc6d596b1725f4357c385166dd3332fa1e955458528c18ee9bd18b9e7e429fa400a5ddd1d13861a6be880fcc5b6a580ae7488b8c355867847b88b08ccf80a5fa
+    react: ^16.11.0 || ^17.0.0 || ^18.0.0
+  checksum: 92d1cc553d180b19386ca39b69d30e43dfd3e8d9defbb3a9c988fad9f1233fe6eac4cf45e6f44700cb6c6e92c8fe38583edd124dc70f3f08bd96abf12443a6d4
   languageName: node
   linkType: hard
 

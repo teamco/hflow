@@ -1,6 +1,6 @@
 import React from 'react';
-import {Col, Row} from 'antd';
-import {MailTwoTone, MessageTwoTone} from '@ant-design/icons';
+import { Col, Row } from 'antd';
+import { MailTwoTone, MessageTwoTone } from '@ant-design/icons';
 
 import styles from '../notifications.module.less';
 
@@ -10,12 +10,12 @@ import styles from '../notifications.module.less';
  * @return {JSX.Element|{expandedRowRender(*): *, rowExpandable: (function(*): boolean)}}
  */
 export const expendableNotification = props => {
-  const {t, setVisibleMessage} = props;
+  const { t, setVisibleMessage } = props;
 
   return {
     expandedRowRender(record) {
-      const rowProps = {gutter: {xs: 8, sm: 16, md: 24, lg: 32}};
-      const colProps = {sm: 12, md: 8, style: {marginTop: 10}};
+      const rowProps = { gutter: { xs: 8, sm: 16, md: 24, lg: 32 } };
+      const colProps = { sm: 12, md: 8, style: { marginTop: 10 } };
 
       return (
           <div className={styles.notificationsInfo}>
@@ -48,14 +48,14 @@ export const expendableNotification = props => {
                          onClick={() => {
                            setVisibleMessage({
                              visible: true,
-                             props: {
-                               replyTo: {id: record?.id},
-                               from: {email: record?.sentTo},
-                               to: record?.sentFrom
+                             props  : {
+                               replyTo: { id: record?.id },
+                               from   : { email: record?.sentTo },
+                               to     : record?.sentFrom
                              }
                            });
                          }}>
-                      {t('notifications:re', {sender: record?.sentFrom?.email})}
+                      {t('notifications:re', { sender: record?.sentFrom?.email })}
                     </div>
                   </Col>
               )}

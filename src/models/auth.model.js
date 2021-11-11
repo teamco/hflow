@@ -1,43 +1,43 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 
-import {commonModel} from 'models/common.model';
-import {fbAdd, fbSignOut, fbUpdate} from 'services/firebase.service';
-import {findUser, gravatarUrl, handleUserSessionTimeout, updateFbUserEmail} from 'services/user.service';
-import {defineAbilityFor} from 'utils/auth/ability';
-import {defineInstance} from 'utils/instance';
+import { commonModel } from 'models/common.model';
+import { fbAdd, fbSignOut, fbUpdate } from 'services/firebase.service';
+import { findUser, gravatarUrl, handleUserSessionTimeout, updateFbUserEmail } from 'services/user.service';
+import { defineAbilityFor } from 'utils/auth/ability';
+import { defineInstance } from 'utils/instance';
 
 /**
  * @export
  * @default
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'authModel',
-  state: {
+  namespace    : 'authModel',
+  state        : {
     MIN_PASSWORD_LENGTH: 8,
-    registerData: {},
-    user: null,
-    refreshSignIn: true,
-    isSignedOut: false,
-    ability: null
+    registerData       : {},
+    user               : null,
+    refreshSignIn      : true,
+    isSignedOut        : false,
+    ability            : null
   },
   subscriptions: {
     setupHistory(setup) {
     },
-    setup({dispatch}) {
+    setup({ dispatch }) {
     }
   },
 
   effects: {
 
-    * signIn({payload}, {call, put, select}) {
+    * signIn({ payload }, { call, put, select }) {
       const {
         registerData = {},
         isSignedOut,
         refreshSignIn
       } = yield select(state => state.authModel);
 
-      let {user = {}, _userExist} = payload || {};
+      let { user = {}, _userExist } = payload || {};
 
       let {
         uid = null,
@@ -51,7 +51,7 @@ export default dvaModelExtend(commonModel, {
       } = user || {};
 
       if (isSignedOut && !Object.keys(registerData).length) {
-        return yield put({type: 'updateState', payload: {isSignedOut: false}});
+        return yield put({ type: 'updateState', payload: { isSignedOut: false } });
       }
 
       let {
@@ -79,8 +79,8 @@ export default dvaModelExtend(commonModel, {
           lastSignInTime,
           photoURL,
           providerId,
-          signedIn: true,
-          isLocked: true,
+          signedIn : true,
+          isLocked : true,
           updatedAt: +(new Date)
         }
       };
@@ -94,18 +94,18 @@ export default dvaModelExtend(commonModel, {
         _userExist = yield call(findUser, {
           uid,
           emailVerified,
-          metadata: {...userProps.metadata}
+          metadata: { ...userProps.metadata }
         });
       }
 
       if (_userExist?.docId) {
-        const _user = {..._userExist.data, id: _userExist.docId};
+        const _user = { ..._userExist.data, id: _userExist.docId };
 
         // Update user
         yield call(fbUpdate, {
           collection: 'users',
-          doc: _userExist.docId,
-          data: {
+          doc       : _userExist.docId,
+          data      : {
             ..._user,
             roles: [...(_user?.roles || [])]
           }
@@ -114,28 +114,28 @@ export default dvaModelExtend(commonModel, {
         // Finish business user registration
         if (registerData.isBusinessUser) {
           yield put({
-            type: 'businessModel/finishRegistration',
-            payload: {_userExist}
+            type   : 'businessModel/finishRegistration',
+            payload: { _userExist }
           });
         }
 
         // Define user abilities
         const ability = yield call(defineAbilityFor, {
-          user: _user,
+          user  : _user,
           userId: _userExist?.docId
         });
 
         yield put({
-          type: 'updateState',
+          type   : 'updateState',
           payload: {
-            user: {..._user},
+            user        : { ..._user },
             registerData: {},
-            isSignedOut: false,
+            isSignedOut : false,
             ability
           }
         });
 
-        yield put({type: 'appModel/notification'});
+        yield put({ type: 'appModel/notification' });
 
         yield call(handleUserSessionTimeout);
 
@@ -144,18 +144,18 @@ export default dvaModelExtend(commonModel, {
       } else if (refreshSignIn) {
 
         // Create user
-        _userExist = yield call(fbAdd, {collection: 'users', data: userProps});
+        _userExist = yield call(fbAdd, { collection: 'users', data: userProps });
 
         yield put({
-          type: 'updateState',
+          type   : 'updateState',
           payload: {
-            isSignedOut: false,
+            isSignedOut  : false,
             refreshSignIn: false
           }
         });
 
         return yield put({
-          type: 'signIn',
+          type   : 'signIn',
           payload: {
             user: _userExist.data,
             _userExist
@@ -167,14 +167,14 @@ export default dvaModelExtend(commonModel, {
       }
     },
 
-    * registerData({payload}, {call, put}) {
+    * registerData({ payload }, { call, put }) {
       if (!payload?.registerData) {
         // TODO (teamco): Show error.
         return false;
       }
 
-      const {email, firstName, lastName, isBusinessUser} = payload.registerData;
-      const photoURL = yield call(gravatarUrl, {email});
+      const { email, firstName, lastName, isBusinessUser } = payload.registerData;
+      const photoURL = yield call(gravatarUrl, { email });
       const displayName = `${firstName} ${lastName}`;
 
       const userProps = {
@@ -183,92 +183,92 @@ export default dvaModelExtend(commonModel, {
         isBusinessUser
       };
 
-      yield put({type: 'updateState', payload: {registerData: {...userProps}}});
+      yield put({ type: 'updateState', payload: { registerData: { ...userProps } } });
     },
 
-    * signUp({payload}, {}) {
+    * signUp({ payload }, {}) {
       if (!payload.user) {
         return false;
       }
     },
 
-    * updateEmail({payload}, {call, put}) {
+    * updateEmail({ payload }, { call, put }) {
       if (!payload.user) {
         return false;
       }
 
       const _userExist = yield call(findUser, {
-        uid: payload.user.uid,
-        email: payload.email,
-        metadata: {updatedAt: +(new Date)}
+        uid     : payload.user.uid,
+        email   : payload.email,
+        metadata: { updatedAt: +(new Date) }
       });
 
       if (_userExist.docId) {
         // Update local user
-        yield call(fbUpdate, {collection: 'users', doc: _userExist.docId, data: _userExist.data});
+        yield call(fbUpdate, { collection: 'users', doc: _userExist.docId, data: _userExist.data });
         // Update fb user
-        yield call(updateFbUserEmail, {email: payload.email});
+        yield call(updateFbUserEmail, { email: payload.email });
 
         yield put({
-          type: 'updateState',
+          type   : 'updateState',
           payload: {
-            user: _userExist.data,
-            ability: yield call(defineAbilityFor, {user: _userExist.data})
+            user   : _userExist.data,
+            ability: yield call(defineAbilityFor, { user: _userExist.data })
           }
         });
       }
     },
 
-    * defineAbilities({payload}, {call, put, select}) {
-      const {user} = yield select(state => state.authModel);
-      const ability = yield call(defineAbilityFor, {user, userId: user?.id});
+    * defineAbilities({ payload }, { call, put, select }) {
+      const { user } = yield select(state => state.authModel);
+      const ability = yield call(defineAbilityFor, { user, userId: user?.id });
 
       yield put({
-        type: 'updateState',
-        payload: {ability}
+        type   : 'updateState',
+        payload: { ability }
       });
     },
 
-    * signOut({payload}, {call, put, select}) {
+    * signOut({ payload }, { call, put, select }) {
       const state = yield select(state => state.authModel);
-      const {user} = payload;
+      const { user } = payload;
 
       // Clear garbage.
       if (!user) {
         yield call(fbSignOut);
 
         return yield put({
-          type: 'updateState',
+          type   : 'updateState',
           payload: {
-            user: null,
-            isSignedOut: false,
+            user         : null,
+            isSignedOut  : false,
             refreshSignIn: true,
-            ability: yield call(defineAbilityFor, {user: null})
+            ability      : yield call(defineAbilityFor, { user: null })
           }
         });
       }
 
       const _userExist = yield call(findUser, {
-        uid: user.uid,
+        uid     : user.uid,
         metadata: {
-          forceSignOut: false,
+          forceSignOut : false,
           refreshSignIn: true,
-          signedIn: false,
-          updatedAt: +(new Date)
+          signedIn     : false,
+          updatedAt    : +(new Date)
         }
       });
 
       if (_userExist.docId) {
-        yield call(fbUpdate, {collection: 'users', doc: _userExist.docId, data: _userExist.data});
+        yield call(fbUpdate, { collection: 'users', doc: _userExist.docId, data: _userExist.data });
 
         if (state.user?.uid === user.uid) {
           yield put({
-            type: 'updateState',
+            type   : 'updateState',
             payload: {
-              user: null,
-              isSignedOut: true,
+              user         : null,
+              isSignedOut  : true,
               refreshSignIn: true,
-              ability: yield call(defineAbilityFor, {user: null})
+              ability      : yield call(defineAbilityFor, { user: null })
             }
           });
 

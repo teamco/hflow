@@ -1,31 +1,31 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 
-import {commonModel} from 'models/common.model';
-import {detailsInfo} from 'services/cross.model.service';
-import {fbFindById, fbUpdate, fbWrite, getRef} from 'services/firebase.service';
-import {monitorHistory} from 'utils/history';
+import { commonModel } from 'models/common.model';
+import { detailsInfo } from 'services/cross.model.service';
+import { fbFindById, fbUpdate, fbWrite, getRef } from 'services/firebase.service';
+import { monitorHistory } from 'utils/history';
 
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'userRolesModel',
-  state: {
-    userRoles: {},
+  namespace    : 'userRolesModel',
+  state        : {
+    userRoles    : {},
     businessRoles: {}
   },
   subscriptions: {
-    setupHistory({history, dispatch}) {
-      monitorHistory({history, dispatch}, 'userRolesModel');
+    setupHistory({ history, dispatch }) {
+      monitorHistory({ history, dispatch }, 'userRolesModel');
     },
-    setup({dispatch}) {
+    setup({ dispatch }) {
     }
   },
-  effects: {
+  effects      : {
 
-    * query({payload}, {call, put, select}) {
-      const {user, ability} = yield select(state => state.authModel);
+    * query({ payload }, { call, put, select }) {
+      const { user, ability } = yield select(state => state.authModel);
       let userRoles = {};
       let businessRoles = {};
 
@@ -33,12 +33,12 @@ export default dvaModelExtend(commonModel, {
 
         const fbUserRoles = yield call(fbFindById, {
           collection: 'roles',
-          doc: 'userRoles'
+          doc       : 'userRoles'
         });
 
         const fbBusinessRoles = yield call(fbFindById, {
           collection: 'roles',
-          doc: 'businessRoles'
+          doc       : 'businessRoles'
         });
 
         let data = {};
@@ -53,24 +53,24 @@ export default dvaModelExtend(commonModel, {
           data = businessRoles?.metadata ? businessRoles : {};
         }
 
-        data.metadata = yield call(detailsInfo, {entity: data, user});
+        data.metadata = yield call(detailsInfo, { entity: data, user });
 
         yield put({
-          type: 'toForm',
+          type   : 'toForm',
           payload: {
             model: 'userRolesModel',
-            form: {...data}
+            form : { ...data }
           }
         });
 
         yield put({
-          type: 'updateState',
-          payload: {isEdit: !!(fbUserRoles.exists || fbBusinessRoles.exist)}
+          type   : 'updateState',
+          payload: { isEdit: !!(fbUserRoles.exists || fbBusinessRoles.exist) }
         });
       }
 
       yield put({
-        type: 'updateState',
+        type   : 'updateState',
         payload: {
           userRoles,
           businessRoles
@@ -78,51 +78,51 @@ export default dvaModelExtend(commonModel, {
       });
     },
 
-    * updateUserRoles({payload}, {put, select}) {
-      const {userRoles} = yield select(state => state.userRolesModel);
+    * updateUserRoles({ payload }, { put, select }) {
+      const { userRoles } = yield select(state => state.userRolesModel);
       yield put({
-        type: 'updateState',
-        payload: {userRoles: {...userRoles, roles: payload.roles}}
+        type   : 'updateState',
+        payload: { userRoles: { ...userRoles, roles: payload.roles } }
       });
     },
 
-    * updateBusinessRoles({payload}, {put, select}) {
-      const {businessRoles} = yield select(state => state.userRolesModel);
+    * updateBusinessRoles({ payload }, { put, select }) {
+      const { businessRoles } = yield select(state => state.userRolesModel);
       yield put({
-        type: 'updateState',
-        payload: {businessRoles: {...businessRoles, roles: payload.roles}}
+        type   : 'updateState',
+        payload: { businessRoles: { ...businessRoles, roles: payload.roles } }
       });
     },
 
-    * save({payload}, {call, select}) {
-      const {user, ability} = yield select(state => state.authModel);
+    * save({ payload }, { call, select }) {
+      const { user, ability } = yield select(state => state.authModel);
       const state = yield select(state => state.userRolesModel);
 
-      const {doc} = payload;
+      const { doc } = payload;
 
       if (user && ability.can('update', 'roles')) {
-        let entity = yield call(fbFindById, {collection: 'roles', doc});
+        let entity = yield call(fbFindById, { collection: 'roles', doc });
 
         const userRef = getRef({
           collection: 'users',
-          doc: user.id
+          doc       : user.id
         });
 
         const metadata = {
-          updatedAt: +(new Date),
+          updatedAt   : +(new Date),
           updatedByRef: userRef
         };
 
         if (entity.exists) {
           yield call(fbUpdate, {
             collection: 'roles',
-            doc: doc,
-            data: {
+            doc       : doc,
+            data      : {
               metadata: {
                 ...entity.data().metadata,
                 ...metadata
               },
-              roles: [...state[doc].roles]
+              roles   : [...state[doc].roles]
             }
           });
 
@@ -131,23 +131,23 @@ export default dvaModelExtend(commonModel, {
           entity = yield call(fbWrite, {
             collection: 'roles',
             doc,
-            data: {
+            data      : {
               metadata: {
-                createdAt: metadata.updatedAt,
+                createdAt   : metadata.updatedAt,
                 createdByRef: userRef,
                 ...metadata
               },
-              roles: [...state[doc].roles]
+              roles   : [...state[doc].roles]
             }
           });
         }
       }
     },
 
-    * prepareToSave({payload}, {put}) {
-      yield put({type: 'save', payload: {doc: 'userRoles'}});
-      yield put({type: 'save', payload: {doc: 'businessRoles'}});
+    * prepareToSave({ payload }, { put }) {
+      yield put({ type: 'save', payload: { doc: 'userRoles' } });
+      yield put({ type: 'save', payload: { doc: 'businessRoles' } });
     }
   },
-  reducers: {}
+  reducers     : {}
 });

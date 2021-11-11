@@ -32,7 +32,7 @@ export const tsToLocaleDateTime = ts => {
  * @param props
  */
 export const delayedFn = props => {
-  const {callback, ts} = props;
+  const { callback, ts } = props;
 
   const _ts = setTimeout(() => {
     callback();

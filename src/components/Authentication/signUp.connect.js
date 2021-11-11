@@ -1,10 +1,10 @@
-import {connect} from 'dva';
-import {withTranslation} from 'react-i18next';
+import { connect } from 'dva';
+import { withTranslation } from 'react-i18next';
 
 import withFirebaseAuth from 'react-with-firebase-auth';
-import {firebaseAppAuth, providers} from 'services/firebase.service';
+import { firebaseAppAuth, providers } from 'services/firebase.service';
 
-import {signUp} from './signUp';
+import { signUp } from './signUp';
 
 /** Create the FirebaseAuth component wrapper */
 const createComponentWithAuth = withFirebaseAuth({
@@ -13,14 +13,14 @@ const createComponentWithAuth = withFirebaseAuth({
 });
 
 export default connect(
-    ({authModel}) => authModel,
+    ({ authModel }) => authModel,
     (dispatch) => ({
       dispatch,
       onRegisterData(registerData) {
-        dispatch({type: 'authModel/registerData', payload: {registerData}});
+        dispatch({ type: 'authModel/registerData', payload: { registerData } });
       },
       onSignOut(user) {
-        dispatch({type: 'authModel/signOut', payload: {user}});
+        dispatch({ type: 'authModel/signOut', payload: { user } });
       }
     })
 )(withTranslation()(createComponentWithAuth(signUp)));

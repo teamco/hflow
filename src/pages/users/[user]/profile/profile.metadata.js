@@ -1,5 +1,5 @@
 import React from 'react';
-import {Col, Row, Select, Tag} from 'antd';
+import { Col, Row, Select, Tag } from 'antd';
 import {
   AndroidOutlined,
   BoldOutlined,
@@ -7,16 +7,17 @@ import {
   ControlTwoTone,
   MailTwoTone,
   TeamOutlined,
-  ToolOutlined, UserOutlined
+  ToolOutlined,
+  UserOutlined
 } from '@ant-design/icons';
-import {tsToLocaleDateTime} from 'utils/timestamp';
+import { tsToLocaleDateTime } from 'utils/timestamp';
 import EmailVerified from 'components/Profile/email.verified';
 
-import {isAdmin, isBusiness, isDeveloper, isTest} from 'services/userRoles.service';
+import { isAdmin, isBusiness, isDeveloper, isTest } from 'services/userRoles.service';
 
 import styles from 'pages/users/users.module.less';
 
-const {Option, OptGroup} = Select;
+const { Option, OptGroup } = Select;
 
 /**
  * @constant
@@ -109,7 +110,7 @@ export const expendableProfile = (
             <Select value={t('actions:select')}
                     onSelect={handleRoleTags}
                     size={'small'}
-                    style={{width: 200}}>
+                    style={{ width: 200 }}>
               <OptGroup label={t('panel:userRoles')}>
                 {filterRoles(currentRoles, userRoles?.roles).map((role, idx) => (
                     <Option key={`ur.${idx}`} value={role}>{role}</Option>
@@ -129,8 +130,8 @@ export const expendableProfile = (
 
   return {
     expandedRowRender(record) {
-      const rowProps = {gutter: {xs: 8, sm: 16, md: 24, lg: 32}};
-      const colProps = {sm: 12, md: 8, style: {marginTop: 10}};
+      const rowProps = { gutter: { xs: 8, sm: 16, md: 24, lg: 32 } };
+      const colProps = { sm: 12, md: 8, style: { marginTop: 10 } };
 
       return (
           <div className={styles.profileExpand}>
@@ -167,7 +168,7 @@ export const expendableProfile = (
                 <div>
                   {currentRoles.map((role, idx) => (
                       <Tag className={styles.rules}
-                           style={{marginBottom: 3}}
+                           style={{ marginBottom: 3 }}
                            key={`cr.${idx}`}
                            closable={currentRoles.length > 1}
                            onClose={onRemoveRole}

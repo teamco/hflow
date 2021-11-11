@@ -1,16 +1,11 @@
 import React from 'react';
-import {withTranslation} from 'react-i18next';
-import {Menu, Popconfirm} from 'antd';
-import {
-  DeleteTwoTone,
-  MessageTwoTone,
-  NotificationTwoTone,
-  PaperClipOutlined
-} from '@ant-design/icons';
+import { withTranslation } from 'react-i18next';
+import { Menu, Popconfirm } from 'antd';
+import { DeleteTwoTone, MessageTwoTone, NotificationTwoTone, PaperClipOutlined } from '@ant-design/icons';
 
-import {NavLink} from 'umi';
+import { NavLink } from 'umi';
 
-import {COLORS} from 'utils/colors';
+import { COLORS } from 'utils/colors';
 
 import tableStyles from 'components/Main/Table/table.module.less';
 
@@ -31,8 +26,8 @@ const BusinessUserMenu = props => {
     onResendRegisterLink
   } = props;
 
-  const {metadata} = record;
-  const {pending} = metadata;
+  const { metadata } = record;
+  const { pending } = metadata;
 
   return (
       <Menu>
@@ -54,7 +49,7 @@ const BusinessUserMenu = props => {
               </Menu.Item>
               <Menu.Item key={'message'}
                          onClick={() => {
-                           setVisibleMessage({visible: true, props: {from: currentUser, to: record}});
+                           setVisibleMessage({ visible: true, props: { from: currentUser, to: record } });
                          }}
                          icon={<MessageTwoTone className={tableStyles.action}
                                                twoToneColor={COLORS.warning}/>}>
@@ -66,7 +61,7 @@ const BusinessUserMenu = props => {
         <Menu.Item key={'delete'}
                    icon={<DeleteTwoTone className={tableStyles.action}
                                         twoToneColor={COLORS.danger}/>}>
-          <Popconfirm title={t('msg:unassignConfirm', {instance: record.email})}
+          <Popconfirm title={t('msg:unassignConfirm', { instance: record.email })}
                       placement={'topRight'}
                       onConfirm={() => onUnassignUser(record)}>
             {t('actions:unassign')}

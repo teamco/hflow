@@ -1,7 +1,7 @@
-import {connect} from 'dva';
-import {withTranslation} from 'react-i18next';
+import { connect } from 'dva';
+import { withTranslation } from 'react-i18next';
 
-import {landing} from './landing';
+import { landing } from './landing';
 
 export default connect(
     ({ authModel, landingModel, loading }) => {

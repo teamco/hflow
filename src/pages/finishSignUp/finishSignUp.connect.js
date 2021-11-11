@@ -1,10 +1,10 @@
-import {connect} from 'dva';
-import {withTranslation} from 'react-i18next';
+import { connect } from 'dva';
+import { withTranslation } from 'react-i18next';
 import withFirebaseAuth from 'react-with-firebase-auth';
 
-import {firebaseAppAuth, providers} from 'services/firebase.service';
+import { firebaseAppAuth, providers } from 'services/firebase.service';
 
-import {finishSignUp} from './finishSignUp';
+import { finishSignUp } from './finishSignUp';
 
 /** Create the FirebaseAuth component wrapper */
 const createComponentWithAuth = withFirebaseAuth({

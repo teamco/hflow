@@ -21,19 +21,19 @@ export const BusinessLicense = ({
   uploadLicense
 }) => {
   return (
-    <GenericPanel header={t('business:license')}
-                  name={'license'}>
-      <div>
-        <UploadFile label={t('business:subLicense')}
-                    name={'license'}
-                    disabled={disabled}
-                    {...uploadLicense}
-                    form={formRef} />
-        <DatePicker label={t('business:licenseExpiration')}
-                    name={'licenseExpiration'}
-                    disabled={disabled}
-                    form={formRef} />
-      </div>
-    </GenericPanel>
+      <GenericPanel header={t('business:license')}
+                    name={'license'}>
+        <div>
+          <UploadFile label={t('business:subLicense')}
+                      name={'license'}
+                      disabled={disabled}
+                      {...uploadLicense}
+                      form={formRef}/>
+          <DatePicker label={t('business:licenseExpiration')}
+                      name={'licenseExpiration'}
+                      disabled={disabled}
+                      form={formRef}/>
+        </div>
+      </GenericPanel>
   );
 };

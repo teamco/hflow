@@ -1,20 +1,18 @@
-import React, {useEffect} from 'react';
-import {Form, PageHeader} from 'antd';
-import {
-  FontSizeOutlined
-} from '@ant-design/icons';
+import React, { useEffect } from 'react';
+import { Form, PageHeader } from 'antd';
+import { FontSizeOutlined } from '@ant-design/icons';
 
 import Page from 'components/Page';
 import SaveButton from 'components/Buttons/save.button';
 import FormComponents from 'components/Form';
 import Main from 'components/Main';
 
-import {fromForm} from 'utils/object';
+import { fromForm } from 'utils/object';
 
 import styles from 'pages/business/types/businessTypes.module.less';
 
-const {GenericPanel, EditableTags} = FormComponents;
-const {Info} = Main;
+const { GenericPanel, EditableTags } = FormComponents;
+const { Info } = Main;
 
 /**
  * @export
@@ -54,7 +52,7 @@ export const businessTypes = props => {
 
   const subTitle = (
       <>
-        <FontSizeOutlined style={{marginRight: 10}}/>
+        <FontSizeOutlined style={{ marginRight: 10 }}/>
         {t('panel:businessConfig')}
       </>
   );
@@ -77,7 +75,7 @@ export const businessTypes = props => {
     }
   };
 
-  const {ability} = authModel;
+  const { ability } = authModel;
   const component = 'roles';
   const disabled = ability.cannot('update', component);
 

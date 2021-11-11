@@ -1,15 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {withTranslation} from 'react-i18next';
-import {history, NavLink} from 'umi';
-import {Col, Divider, Dropdown, Menu, Row} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { withTranslation } from 'react-i18next';
+import { history, NavLink } from 'umi';
+import { Col, Divider, Dropdown, Menu, Row } from 'antd';
 import classnames from 'classnames';
 
-import {
-  CommentOutlined,
-  LoginOutlined,
-  LogoutOutlined,
-  BellTwoTone
-} from '@ant-design/icons';
+import { BellTwoTone, CommentOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
 
 import SignIn from 'components/Authentication/signIn.connect';
 
@@ -43,7 +38,7 @@ const landingHeader = props => {
    * @constant
    * @param event
    */
-  const handleScroll = function(event) {
+  const handleScroll = function (event) {
     event.preventDefault();
     let scrollTop = window.scrollY;
     setTransform(scrollTop > topUnder);
@@ -91,7 +86,7 @@ const landingHeader = props => {
       <Menu>
         <Menu.Item key={'signOut'}>
           <div onClick={handleSignOut}>
-            <LogoutOutlined style={{marginRight: 10}}/>
+            <LogoutOutlined style={{ marginRight: 10 }}/>
             {t('auth:signOut')}
           </div>
         </Menu.Item>
@@ -100,7 +95,7 @@ const landingHeader = props => {
 
   return (
       <header className={classnames(styles.header, transform ? styles.transform : '')}
-              style={{position}}>
+              style={{ position }}>
         <Row>
           <Col span={8}>
             {icon && (
@@ -115,7 +110,7 @@ const landingHeader = props => {
           </Col>
           <Col span={16}>
             <Row justify={'end'}
-                 gutter={[16, {xs: 8, sm: 16, md: 24, lg: 32}]}>
+                 gutter={[16, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
               <Col className={styles.headerText}>
                 <CommentOutlined/>
                 <span>{t('landing:help')}</span>

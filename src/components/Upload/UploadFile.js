@@ -1,27 +1,22 @@
 import React from 'react';
-import {withTranslation} from 'react-i18next';
-import {Button, message, Tooltip, Upload} from 'antd';
-import {
-  UploadOutlined,
-  InboxOutlined,
-  FileDoneOutlined,
-  FormOutlined
-} from '@ant-design/icons';
-import {Link} from 'umi';
+import { withTranslation } from 'react-i18next';
+import { Button, message, Tooltip, Upload } from 'antd';
+import { FileDoneOutlined, FormOutlined, InboxOutlined, UploadOutlined } from '@ant-design/icons';
+import { Link } from 'umi';
 import ImgCrop from 'antd-img-crop';
 import classnames from 'classnames';
 
-import {download, getExtension} from 'utils/file';
-import {errorDownloadMsg} from 'utils/message';
+import { download, getExtension } from 'utils/file';
+import { errorDownloadMsg } from 'utils/message';
 
 import './upload.less';
 
-const {Dragger} = Upload;
+const { Dragger } = Upload;
 
 class UploadFile extends React.Component {
   state = {
     ableToDownload: true,
-    showUpload: false
+    showUpload    : false
   };
 
   render() {
@@ -81,37 +76,37 @@ class UploadFile extends React.Component {
     };
 
     let uploadProps = {
-      accept: allowed,
+      accept  : allowed,
       disabled,
       fileList: fileProps.fileList,
       listType,
       beforeUpload(file) {
         if (allowed.indexOf(file.type) < 0) {
-          return message.error(t('form:uploadTypeError', {name: file.name}));
+          return message.error(t('form:uploadTypeError', { name: file.name }));
         }
-        onFileRemove({file, field});
-        onFileChange({file, field});
+        onFileRemove({ file, field });
+        onFileChange({ file, field });
         return false;
       },
       onRemove(file) {
-        onFileRemove({file, field});
+        onFileRemove({ file, field });
       },
       progress: {
         strokeColor: {
-          '0%': '#108ee9',
+          '0%'  : '#108ee9',
           '100%': '#87d068'
         },
         strokeWidth: 3,
-        format: percent => `${parseFloat(percent.toFixed(2))}%`
+        format     : percent => `${parseFloat(percent.toFixed(2))}%`
       }
     };
 
-    type === 'image' && preview && (uploadProps = {...uploadProps, ...{onPreview}});
+    type === 'image' && preview && (uploadProps = { ...uploadProps, ...{ onPreview } });
 
     const isFileUploaded = fileProps?.fileList[0] || fileProps?.previewUrl;
 
     if (!this.state.showUpload && isFileUploaded && !fileProps?.fileList[0]) {
-      hideStyle = {display: 'none'};
+      hideStyle = { display: 'none' };
     } else {
       hideStyle = null;
     }
@@ -178,14 +173,14 @@ class UploadFile extends React.Component {
 
       // Prevent multiple clicks.
       this.state.ableToDownload && !disabled && download(url, _file).then(() => {
-        this.setState({ableToDownload: true});
+        this.setState({ ableToDownload: true });
       }).catch(error => {
         console.warn(error);
         errorDownloadMsg(_file);
-        this.setState({ableToDownload: true});
+        this.setState({ ableToDownload: true });
       });
 
-      this.setState({ableToDownload: false});
+      this.setState({ ableToDownload: false });
     };
 
     /**
@@ -220,13 +215,13 @@ class UploadFile extends React.Component {
                   {getFileName(fileProps?.fileName)}
                 </div>
             )}
-            {(isFileUploaded && !fileProps?.fileList[0]) &&  (
+            {(isFileUploaded && !fileProps?.fileList[0]) && (
                 <Button key={'change'}
                         size={'small'}
                         className={'site-upload-btn'}
                         disabled={disabled || this.state.showUpload}
                         icon={<FormOutlined/>}
-                        onClick={() => this.setState({showUpload: true})}
+                        onClick={() => this.setState({ showUpload: true })}
                         type={'primary'}>
                   {t('actions:change')}
                 </Button>

@@ -1,6 +1,6 @@
-import {getSuffix} from './index';
-import React, {useEffect} from 'react';
-import {Form, Input} from 'antd';
+import { getSuffix } from './index';
+import React, { useEffect } from 'react';
+import { Form, Input } from 'antd';
 
 import countryCodes from 'country-codes-list';
 
@@ -29,7 +29,7 @@ const phone = ({
 
   useEffect(() => {
     countryData.countryCallingCode && formRef.setFieldsValue({
-      phone: {code: `+${countryData.countryCallingCode || ''}`}
+      phone: { code: `+${countryData.countryCallingCode || ''}` }
     });
 
   }, [countryData]);
@@ -41,7 +41,7 @@ const phone = ({
   const updateCountryName = e => {
     const value = e.target.value.replace(/\+/, '');
     const code = countryCodes.findOne('countryCallingCode', value);
-    formRef.setFieldsValue({country: code?.countryCode});
+    formRef.setFieldsValue({ country: code?.countryCode });
   };
 
   return (
@@ -53,7 +53,7 @@ const phone = ({
           {/*         placement={'topLeft'}>*/}
           <Input type={'text'}
                  disabled={disabled}
-                 style={{width: '19%'}}
+                 style={{ width: '19%' }}
                  readOnly={true}
                  hidden={true}
                  onChange={updateCountryName}
@@ -65,19 +65,19 @@ const phone = ({
                    rules={[
                      {
                        required,
-                       message: t('form:required', {field: t('address:area')})
+                       message: t('form:required', { field: t('address:area') })
                      },
-                     ({getFieldValue}) => ({
+                     ({ getFieldValue }) => ({
                        validator(_, value = '') {
                          return value.match(/^\d+$/) ?
                              Promise.resolve() :
-                             Promise.reject(t('business:formError', {type: t('address:area')}));
+                             Promise.reject(t('business:formError', { type: t('address:area') }));
                        }
                      })
                    ]}>
           <Input type={'text'}
                  disabled={disabled}
-                 style={{width: '20%'}}
+                 style={{ width: '20%' }}
                  placeholder={t('address:area')}/>
         </Form.Item>
         <Form.Item name={[name, 'number']}
@@ -85,36 +85,36 @@ const phone = ({
                    rules={[
                      {
                        required,
-                       message: t('form:required', {field: t('auth:phone')})
+                       message: t('form:required', { field: t('auth:phone') })
                      },
-                     ({getFieldValue}) => ({
+                     ({ getFieldValue }) => ({
                        validator(_, value = '') {
                          return value.match(/^\d+$/) ?
                              Promise.resolve() :
-                             Promise.reject(t('business:formError', {type: t('address:phone')}));
+                             Promise.reject(t('business:formError', { type: t('address:phone') }));
                        }
                      })
                    ]}>
           <Input type={'text'}
                  disabled={disabled}
-                 style={{width: '63%'}}
+                 style={{ width: '63%' }}
                  placeholder={t('address:phone')}
                  suffix={getSuffix(t, formRef, 'phone.number', t('address:phone'))}/>
         </Form.Item>
         <Form.Item name={[name, 'ext']}
                    noStyle
                    rules={[
-                     ({getFieldValue}) => ({
+                     ({ getFieldValue }) => ({
                        validator(_, value) {
                          return !value || value.match(/^\d+$/) ?
                              Promise.resolve() :
-                             Promise.reject(t('business:formError', {type: t('address:ext')}));
+                             Promise.reject(t('business:formError', { type: t('address:ext') }));
                        }
                      })
                    ]}>
           <Input type={'text'}
                  disabled={disabled}
-                 style={{width: '17%'}}
+                 style={{ width: '17%' }}
                  placeholder={t('address:ext')}/>
         </Form.Item>
       </Input.Group>

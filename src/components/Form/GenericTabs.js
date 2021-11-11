@@ -12,17 +12,17 @@ class GenericTabs extends Component {
     } = this.props;
 
     const _children = Array.isArray(children) ?
-      [...children] : [children];
+        [...children] : [children];
 
     return (
-      <Tabs defaultActiveKey={defaultActiveKey}>
-        {_children.map((child, idx) => (
-          <TabPane tab={tabs[idx]}
-                   key={idx}>
-            {child}
-          </TabPane>
-        ))}
-      </Tabs>
+        <Tabs defaultActiveKey={defaultActiveKey}>
+          {_children.map((child, idx) => (
+              <TabPane tab={tabs[idx]}
+                       key={idx}>
+                {child}
+              </TabPane>
+          ))}
+        </Tabs>
     );
   }
 }

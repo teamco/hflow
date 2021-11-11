@@ -36,15 +36,15 @@ export const landing = (props) => {
   };
 
   return (
-    <Spin spinning={loading.effects['landingModel/query']}>
-      <Layout className={styles.landing}>
-        <Content>
-          <div className={styles.page}>
-            <HeaderSection {...headerProps} />
-          </div>
-        </Content>
-        <Footer />
-      </Layout>
-    </Spin>
+      <Spin spinning={loading.effects['landingModel/query']}>
+        <Layout className={styles.landing}>
+          <Content>
+            <div className={styles.page}>
+              <HeaderSection {...headerProps} />
+            </div>
+          </Content>
+          <Footer/>
+        </Layout>
+      </Spin>
   );
 };

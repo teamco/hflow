@@ -1,16 +1,12 @@
 import React from 'react';
-import {Button, Col, Divider, Form, Input, Modal, Row, Tooltip} from 'antd';
-import {
-  FormOutlined,
-  LockTwoTone,
-  LoginOutlined
-} from '@ant-design/icons';
+import { Button, Col, Divider, Form, Input, Modal, Row, Tooltip } from 'antd';
+import { FormOutlined, LockTwoTone, LoginOutlined } from '@ant-design/icons';
 
-import {emailPartial} from 'components/partials/email.partial';
+import { emailPartial } from 'components/partials/email.partial';
 
 import styles from 'components/Authentication/authentication.module.less';
 
-import {isLoading} from 'utils/state';
+import { isLoading } from 'utils/state';
 
 /**
  * @constant
@@ -52,19 +48,19 @@ const SignInModal = props => {
              className={styles.authModal}
              width={350}
              centered
-             maskStyle={signInVisible ? {backgroundColor: 'rgba(0, 0, 0, 0.45)'} : null}
+             maskStyle={signInVisible ? { backgroundColor: 'rgba(0, 0, 0, 0.45)' } : null}
              footer={null}>
         <Form name={'auth_login'}
               className={styles.loginForm}
               size={'large'}
               onFinish={onFinish}>
-          {emailPartial({t, name: 'email'})}
+          {emailPartial({ t, name: 'email' })}
           <Form.Item name={'password'}
-                     extra={t('auth:passwordHelper', {length: authModel.MIN_PASSWORD_LENGTH})}
+                     extra={t('auth:passwordHelper', { length: authModel.MIN_PASSWORD_LENGTH })}
                      rules={[
                        {
                          required: true,
-                         message: t('form:required', {field: t('auth:password')})
+                         message : t('form:required', { field: t('auth:password') })
                        }
                      ]}>
             <Input.Password prefix={<LockTwoTone/>}
@@ -103,8 +99,8 @@ const SignInModal = props => {
               </Col>
             </Row>
           </Form.Item>
-          <Divider plain>{t('auth:signInWith', {provider: null})}</Divider>
-          <Form.Item style={{marginBottom: 0}}>
+          <Divider plain>{t('auth:signInWith', { provider: null })}</Divider>
+          <Form.Item style={{ marginBottom: 0 }}>
             <Row gutter={[16, 16]}
                  className={styles.loginBtns}>
               <Col span={8}>{_googleBtn}</Col>

@@ -23,18 +23,18 @@ const AntHillRow = (props) => {
   // const [width] = useWindowSize(useState, useLayoutEffect);
 
   return (
-    <Row gutter={layout.rowProps[items] || gutter} {...rest}>
-      {_children.filter(item => item).map((child, key) => {
-        return (
-          <Col span={child.props.span || layout.colsSpan[items]}
-               key={key}
-               {...calculateColProps(layout.colProps[items], child.props.span)}
-               style={calculatePadding(items)}>
-            {child}
-          </Col>
-        );
-      })}
-    </Row>
+      <Row gutter={layout.rowProps[items] || gutter} {...rest}>
+        {_children.filter(item => item).map((child, key) => {
+          return (
+              <Col span={child.props.span || layout.colsSpan[items]}
+                   key={key}
+                   {...calculateColProps(layout.colProps[items], child.props.span)}
+                   style={calculatePadding(items)}>
+                {child}
+              </Col>
+          );
+        })}
+      </Row>
   );
 };
 

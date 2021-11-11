@@ -22,13 +22,13 @@ const strength = props => {
   const percent = meterValue === null ? 0 : (meterValue + 1) * 20;
 
   return (
-    <div className={className}>
-      <Progress strokeColor={{ '0%': _strength.colors[0], '100%': _strength.colors[1] }}
-                status={'active'}
-                showInfo={false}
-                percent={percent} />
-      <span>{(strength[meterText] || {}).text || ''}</span>
-    </div>
+      <div className={className}>
+        <Progress strokeColor={{ '0%': _strength.colors[0], '100%': _strength.colors[1] }}
+                  status={'active'}
+                  showInfo={false}
+                  percent={percent}/>
+        <span>{(strength[meterText] || {}).text || ''}</span>
+      </div>
   );
 };
 
