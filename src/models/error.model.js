@@ -8,8 +8,8 @@ import { monitorHistory } from 'utils/history';
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace    : 'errorModel',
-  state        : {
+  namespace: 'errorModel',
+  state: {
     data: []
   },
   subscriptions: {
@@ -20,9 +20,9 @@ export default dvaModelExtend(commonModel, {
       dispatch({ type: 'query' });
     }
   },
-  effects      : {
+  effects: {
     * query({ payload }, { put, select }) {
     }
   },
-  reducers     : {}
+  reducers: {}
 });

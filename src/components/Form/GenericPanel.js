@@ -167,8 +167,8 @@ class GenericPanel extends Component {
               ) : (
                   <div key={idx}
                        style={{
-                         display : 'flex',
-                         padding : '8px 0',
+                         display: 'flex',
+                         padding: '8px 0',
                          flexFlow: 'wrap'
                        }}>
                     {_formItem(_rowChild, idx)}

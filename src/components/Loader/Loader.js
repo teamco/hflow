@@ -18,11 +18,11 @@ const Loader = (props) => {
   const spinning = 'spinning' in props ? props.spinning : true;
 
   const loaderClassNames = classnames('loader', {
-    ['hidden']    : !spinning,
+    ['hidden']: !spinning,
     ['fullScreen']: fullScreen,
-    ['contained'] : contained,
-    ['page']      : page,
-    ['sider']     : sider
+    ['contained']: contained,
+    ['page']: page,
+    ['sider']: sider
   });
 
   return (
@@ -35,7 +35,7 @@ const Loader = (props) => {
 };
 
 Loader.propTypes = {
-  spinning  : PropTypes.bool,
+  spinning: PropTypes.bool,
   fullScreen: PropTypes.bool
 };
 

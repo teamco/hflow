@@ -14,9 +14,9 @@ export default class MainHeader extends React.Component {
     return (
         <Header className={'site-layout-background'}
                 style={{
-                  padding : 0,
+                  padding: 0,
                   position: 'relative',
-                  display : 'flex'
+                  display: 'flex'
                 }}>
           {user && (
               <div className={'site-layout-header-info'}>

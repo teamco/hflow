@@ -21,11 +21,11 @@ export const monitorHistory = (setup, namespace) => {
         skipOnModel.indexOf(namespace) === -1;
 
     shouldMonitor && dispatch({
-      type   : 'userLogModel/monitor',
+      type: 'userLogModel/monitor',
       payload: {
         eventType: 'Navigation',
         createdAt: +(new Date()),
-        metadata : _location,
+        metadata: _location,
         namespace
       }
     });

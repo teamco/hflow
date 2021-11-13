@@ -28,10 +28,10 @@ export const firebaseAppAuth = firebaseApp.auth();
  * @return {*}
  */
 export const providers = {
-  googleProvider  : new firebase.auth.GoogleAuthProvider(),
+  googleProvider: new firebase.auth.GoogleAuthProvider(),
   facebookProvider: new firebase.auth.FacebookAuthProvider(),
-  twitterProvider : new firebase.auth.TwitterAuthProvider(),
-  githubProvider  : new firebase.auth.GithubAuthProvider()
+  twitterProvider: new firebase.auth.TwitterAuthProvider(),
+  githubProvider: new firebase.auth.GithubAuthProvider()
   // oauthProvider: new firebase.auth.OAuthProvider(),
   // phoneAuthProvider: new firebase.auth.PhoneAuthProvider()
 };

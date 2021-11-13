@@ -19,12 +19,12 @@ export const showProfileModal = (t, record) => {
   const { metadata } = record;
 
   Modal.info({
-    title        : false,
-    icon         : false,
-    width        : 500,
-    okText       : t('actions:close'),
+    title: false,
+    icon: false,
+    width: 500,
+    okText: t('actions:close'),
     okButtonProps: { size: 'small' },
-    content      : (
+    content: (
         <div className={styles.profile}>
           {metadata.photoURL && (
               <img src={metadata.photoURL}

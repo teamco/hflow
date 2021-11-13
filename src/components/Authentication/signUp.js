@@ -61,9 +61,9 @@ export const signUp = props => {
   const onFinish = values => {
     createUserWithEmailAndPassword(values.email, values.password);
     onRegisterData({
-      email         : values.email,
-      firstName     : values.firstName,
-      lastName      : values.lastName,
+      email: values.email,
+      firstName: values.firstName,
+      lastName: values.lastName,
       isBusinessUser: false
     });
   };
@@ -101,7 +101,7 @@ export const signUp = props => {
                                rules={[
                                  {
                                    required: true,
-                                   message : t('form:required', { field: t('form:firstName') })
+                                   message: t('form:required', { field: t('form:firstName') })
                                  }
                                ]}>
                       <Input prefix={<ProfileTwoTone/>}
@@ -114,7 +114,7 @@ export const signUp = props => {
                                rules={[
                                  {
                                    required: true,
-                                   message : t('form:required', { field: t('form:lastName') })
+                                   message: t('form:required', { field: t('form:lastName') })
                                  }
                                ]}>
                       <Input prefix={<ProfileTwoTone/>}
@@ -134,7 +134,7 @@ export const signUp = props => {
                                rules={[
                                  {
                                    required: true,
-                                   message : t('form:required', { field: t('auth:password') })
+                                   message: t('form:required', { field: t('auth:password') })
                                  },
                                  ({ getFieldValue }) => ({
                                    validator(_, value) {

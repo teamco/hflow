@@ -95,13 +95,13 @@ export const businessEdit = (props) => {
     disabled,
     businessTypes,
     uploadLogo: {
-      field  : 'logo',
+      field: 'logo',
       allowed: [
         'image/png',
         'image/jpeg'
       ],
-      type   : '*',
-      ui     : 'dragger',
+      type: '*',
+      ui: 'dragger',
       uploadedFiles,
       onFileRemove,
       onFileChange
@@ -113,15 +113,15 @@ export const businessEdit = (props) => {
     formRef,
     disabled,
     uploadLicense: {
-      field  : 'license',
+      field: 'license',
       allowed: [
         'application/pdf',
         'application/docx',
         'image/png',
         'image/jpeg'
       ],
-      type   : '*',
-      ui     : 'dragger',
+      type: '*',
+      ui: 'dragger',
       uploadedFiles,
       onFileRemove,
       onFileChange

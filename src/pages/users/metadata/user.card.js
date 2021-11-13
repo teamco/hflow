@@ -45,7 +45,7 @@ export const userCardMetadata = (t, props) => {
   return {
     cover,
     className,
-    avatar : (
+    avatar: (
         <Tooltip title={signed.status}>
           {signed.icon}
         </Tooltip>

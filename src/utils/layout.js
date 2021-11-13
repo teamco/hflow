@@ -23,7 +23,7 @@ export const calculatePadding = memoize((columns, width) => {
   if (columns > 1) {
     const gutter = (layout.rowProps[columns] || {})[breakPoint] || {};
     return ({
-      paddingLeft : gutter / 2,
+      paddingLeft: gutter / 2,
       paddingRight: gutter / 2
     });
   }
@@ -56,55 +56,55 @@ export const layout = {
     0: {},
     1: {},
     2: {
-      xs : 8,
-      sm : 16,
-      md : 24,
-      lg : 24,
-      xl : 32,
+      xs: 8,
+      sm: 16,
+      md: 24,
+      lg: 24,
+      xl: 32,
       xxl: 32
     },
     3: {
-      xs : 0,
-      sm : 16,
-      md : 24,
-      lg : 24,
-      xl : 32,
+      xs: 0,
+      sm: 16,
+      md: 24,
+      lg: 24,
+      xl: 32,
       xxl: 32
     }
   },
   colsSpan: {
-    1 : 24,
-    2 : 12,
-    3 : 8,
-    4 : 6,
-    6 : 4,
-    8 : 3,
+    1: 24,
+    2: 12,
+    3: 8,
+    4: 6,
+    6: 4,
+    8: 3,
     12: 2
   },
   colProps: {
     0: {},
     1: {
-      xs : 24,
-      sm : 24,
-      md : 24,
-      lg : 24,
-      xl : 24,
+      xs: 24,
+      sm: 24,
+      md: 24,
+      lg: 24,
+      xl: 24,
       xxl: 24
     },
     2: {
-      xs : 24,
-      sm : 24,
-      md : 12,
-      lg : 8,
-      xl : 8,
+      xs: 24,
+      sm: 24,
+      md: 12,
+      lg: 8,
+      xl: 8,
       xxl: 8
     },
     3: {
-      xs : 24,
-      sm : 24,
-      md : 8,
-      lg : 8,
-      xl : 8,
+      xs: 24,
+      sm: 24,
+      md: 8,
+      lg: 8,
+      xl: 8,
       xxl: 8
     }
   }

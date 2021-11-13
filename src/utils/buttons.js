@@ -14,11 +14,11 @@ import { COLORS } from './colors';
 export const buttonsMetadata = ({ model, props }) => {
   const { onButtonsMetadata, onSave, onClose, onDelete, loading } = props;
   onButtonsMetadata({
-    saveBtn  : {
+    saveBtn: {
       onClick: onSave,
       loading: loading.effects[`${model}/prepareToSave`]
     },
-    closeBtn : {
+    closeBtn: {
       onClick: onClose,
       loading: false
     },

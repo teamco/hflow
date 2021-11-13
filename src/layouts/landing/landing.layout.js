@@ -33,7 +33,7 @@ export const LandingLayout = (props) => {
   const {
     language = 'en-US',
     meta,
-    interval  : { timeout, enabled },
+    interval: { timeout, enabled },
     layoutOpts: {}
   } = appModel;
 

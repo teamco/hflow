@@ -13,16 +13,16 @@ export default withRouter(connect(
     }),
     (dispatch) => ({
       dispatch,
-          onRoute(path) {
-            history.push(path);
-          },
-          onToggleMenu(collapse) {
-            dispatch({ type: `appModel/toggleMenu`, payload: { collapse } });
-          },
-          onActiveTab(payload) {
-            dispatch({ type: 'appModel/checkActiveTab', payload });
-          },
-          onDefineAbilities() {
+      onRoute(path) {
+        history.push(path);
+      },
+      onToggleMenu(collapse) {
+        dispatch({ type: `appModel/toggleMenu`, payload: { collapse } });
+      },
+      onActiveTab(payload) {
+        dispatch({ type: 'appModel/checkActiveTab', payload });
+      },
+      onDefineAbilities() {
             dispatch({ type: 'authModel/defineAbilities' });
           },
           onUpdateDocumentMeta(meta) {

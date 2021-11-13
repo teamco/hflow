@@ -7,8 +7,8 @@ import { commonModel } from 'models/common.model';
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace    : 'subscriptionModel',
-  state        : {
+  namespace: 'subscriptionModel',
+  state: {
     subscriptions: []
   },
   subscriptions: {
@@ -17,17 +17,17 @@ export default dvaModelExtend(commonModel, {
     setup({ dispatch }) {
     }
   },
-  effects      : {
+  effects: {
 
     * query({ payload }, { put, select }) {
       const { subscriptions } = yield select(state => state.subscriptionModel);
 
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: { subscriptions }
       });
     }
 
   },
-  reducers     : {}
+  reducers: {}
 });

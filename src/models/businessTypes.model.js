@@ -10,8 +10,8 @@ import { monitorHistory } from 'utils/history';
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace    : 'businessTypesModel',
-  state        : {},
+  namespace: 'businessTypesModel',
+  state: {},
   subscriptions: {
     setupHistory({ history, dispatch }) {
       monitorHistory({ history, dispatch }, 'businessTypesModel');
@@ -19,7 +19,7 @@ export default dvaModelExtend(commonModel, {
     setup({ dispatch }) {
     }
   },
-  effects      : {
+  effects: {
 
     * query({ payload }, { call, put, select }) {
       const { user, ability } = yield select(state => state.authModel);
@@ -29,7 +29,7 @@ export default dvaModelExtend(commonModel, {
 
         const fbTypes = yield call(fbFindById, {
           collection: 'businessConfig',
-          doc       : 'types'
+          doc: 'types'
         });
 
         let data = {};
@@ -42,17 +42,17 @@ export default dvaModelExtend(commonModel, {
         data.metadata = yield call(detailsInfo, { entity: data, user });
 
         yield put({
-          type   : 'toForm',
+          type: 'toForm',
           payload: {
             model: 'businessTypesModel',
-            form : { ...data }
+            form: { ...data }
           }
         });
 
         yield put({
-          type   : 'updateState',
+          type: 'updateState',
           payload: {
-            tags  : [...businessTypes?.types],
+            tags: [...businessTypes?.types],
             isEdit: !!(fbTypes.exists)
           }
         });
@@ -72,11 +72,11 @@ export default dvaModelExtend(commonModel, {
 
         const userRef = getRef({
           collection: 'users',
-          doc       : user.id
+          doc: user.id
         });
 
         const metadata = {
-          updatedAt   : +(new Date),
+          updatedAt: +(new Date),
           updatedByRef: userRef
         };
 
@@ -101,11 +101,11 @@ export default dvaModelExtend(commonModel, {
             ..._db,
             data: {
               metadata: {
-                createdAt   : metadata.updatedAt,
+                createdAt: metadata.updatedAt,
                 createdByRef: userRef,
                 ...metadata
               },
-              types   : [...tags]
+              types: [...tags]
             }
           });
 
@@ -116,14 +116,14 @@ export default dvaModelExtend(commonModel, {
         data.metadata = yield call(detailsInfo, { entity, user });
 
         yield put({
-          type   : 'toForm',
+          type: 'toForm',
           payload: {
             model: 'businessTypesModel',
-            form : { ...data }
+            form: { ...data }
           }
         });
       }
     }
   },
-  reducers     : {}
+  reducers: {}
 });

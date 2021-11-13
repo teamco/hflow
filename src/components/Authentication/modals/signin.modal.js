@@ -60,7 +60,7 @@ const SignInModal = props => {
                      rules={[
                        {
                          required: true,
-                         message : t('form:required', { field: t('auth:password') })
+                         message: t('form:required', { field: t('auth:password') })
                        }
                      ]}>
             <Input.Password prefix={<LockTwoTone/>}

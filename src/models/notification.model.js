@@ -13,14 +13,14 @@ import { STATUS } from '../utils/message';
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace    : 'notificationModel',
-  state        : {
-    badge        : {
-      count   : 0,
+  namespace: 'notificationModel',
+  state: {
+    badge: {
+      count: 0,
       overflow: 10
     },
     notifications: {
-      sent : [],
+      sent: [],
       inbox: []
     }
   },
@@ -30,7 +30,7 @@ export default dvaModelExtend(commonModel, {
     setup({ dispatch }) {
     }
   },
-  effects      : {
+  effects: {
 
     * query({ payload }, { call, put, select }) {
       let { user, ability } = yield select(state => state.authModel);
@@ -40,17 +40,17 @@ export default dvaModelExtend(commonModel, {
         if (userId && ability.can('read', 'profile')) {
           const _user = yield call(fbFindById, {
             collection: 'users',
-            doc       : userId
+            doc: userId
           });
 
           if (_user.exists) {
             user = _user.data();
           } else {
             return yield put({
-              type   : 'raiseCondition',
+              type: 'raiseCondition',
               payload: {
                 message: i18n.t('error:notFound', { entity: 'User' }),
-                key    : 'selectedUser'
+                key: 'selectedUser'
               }
             });
           }
@@ -81,10 +81,10 @@ export default dvaModelExtend(commonModel, {
         }
 
         yield put({
-          type   : 'updateState',
+          type: 'updateState',
           payload: {
             badge: {
-              count   : inbox.filter(n => !n.read).length,
+              count: inbox.filter(n => !n.read).length,
               overflow: badge.overflow
             }
           }
@@ -109,7 +109,7 @@ export default dvaModelExtend(commonModel, {
         // Create notification
         yield call(fbAdd, {
           collection: 'notifications',
-          data      : {
+          data: {
             type,
             title,
             description,
@@ -118,7 +118,7 @@ export default dvaModelExtend(commonModel, {
             replyRef,
             metadata: {
               createdByRef: userRef,
-              createdAt   : +(new Date)
+              createdAt: +(new Date)
             },
             isPrivate,
             read
@@ -140,8 +140,8 @@ export default dvaModelExtend(commonModel, {
         yield call(fbUpdate, {
           collection: 'notifications',
           doc,
-          data      : {
-            read                : true,
+          data: {
+            read: true,
             status,
             'metadata.updatedAt': +(new Date())
           }
@@ -162,7 +162,7 @@ export default dvaModelExtend(commonModel, {
                 updatedNotices[i] = msg;
 
                 yield put({
-                  type   : 'updateState',
+                  type: 'updateState',
                   payload: {
                     notifications: {
                       ...notifications,

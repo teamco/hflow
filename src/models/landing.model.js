@@ -8,9 +8,9 @@ import { commonModel } from 'models/common.model';
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace    : 'landingModel',
-  state        : {
-    data    : [],
+  namespace: 'landingModel',
+  state: {
+    data: [],
     topUnder: 160
   },
   subscriptions: {
@@ -20,9 +20,9 @@ export default dvaModelExtend(commonModel, {
       dispatch({ type: 'query' });
     }
   },
-  effects      : {
+  effects: {
     * query({ payload }, { put, select }) {
     }
   },
-  reducers     : {}
+  reducers: {}
 });

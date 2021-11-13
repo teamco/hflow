@@ -54,7 +54,7 @@ export const registerUser = props => {
 
     // Clean form fields
     clean && formRef.setFieldsValue({
-      email    : null,
+      email: null,
       userRoles: []
     });
   };
@@ -65,7 +65,7 @@ export const registerUser = props => {
    */
   const onFinish = values => {
     onRegisterBusinessUser({
-      email    : values.email,
+      email: values.email,
       userRoles: values.userRoles,
       ...params
     });
@@ -96,7 +96,7 @@ export const registerUser = props => {
                          rules={[
                            {
                              required: true,
-                             message : t('form:required', { field: t('panel:businessRoles') })
+                             message: t('form:required', { field: t('panel:businessRoles') })
                            }
                          ]}>
                 <Select size={'large'}

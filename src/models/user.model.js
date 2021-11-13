@@ -12,13 +12,13 @@ import i18n from 'utils/i18n';
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace    : 'userModel',
-  state        : {
-    profiles        : [1],
-    selectedProfile : null,
-    selectedUser    : null,
-    data            : [],
-    gridLayout      : true,
+  namespace: 'userModel',
+  state: {
+    profiles: [1],
+    selectedProfile: null,
+    selectedUser: null,
+    data: [],
+    gridLayout: true,
     verificationSent: false
   },
   subscriptions: {
@@ -51,15 +51,15 @@ export default dvaModelExtend(commonModel, {
       if (_userExist.docId) {
         yield call(fbUpdate, {
           collection: 'users',
-          doc       : _userExist.docId,
-          data      : _userExist.data
+          doc: _userExist.docId,
+          data: _userExist.data
         });
       }
 
       // Update current user.
       if (user && user.email === _userExist.data.email) {
         yield put({
-          type   : 'authModel/updateState',
+          type: 'authModel/updateState',
           payload: { user: _userExist.data }
         });
       }
@@ -88,15 +88,15 @@ export default dvaModelExtend(commonModel, {
       const { user } = payload;
 
       let _userExist = yield call(findUser, {
-        uid     : user.uid,
+        uid: user.uid,
         metadata: {
-          isLocked : true,
+          isLocked: true,
           updatedAt: +(new Date)
         }
       });
 
       yield put({
-        type   : 'updateQuery',
+        type: 'updateQuery',
         payload: { _userExist }
       });
     },
@@ -105,9 +105,9 @@ export default dvaModelExtend(commonModel, {
       const { user } = payload;
 
       let _userExist = yield call(findUser, {
-        uid     : user.uid,
+        uid: user.uid,
         metadata: {
-          isLocked : false,
+          isLocked: false,
           updatedAt: +(new Date)
         }
       });
@@ -138,30 +138,30 @@ export default dvaModelExtend(commonModel, {
         const ability = yield call(defineAbilityFor, { user, userId });
 
         yield put({
-          type   : 'authModel/updateState',
+          type: 'authModel/updateState',
           payload: { ability }
         });
 
         if (ability.can('read', 'profile')) {
           const _user = yield call(fbFindById, {
             collection: 'users',
-            doc       : userId
+            doc: userId
           });
 
           if (_user.exists) {
             const selectedUser = { ..._user.data(), ...{ id: _user.id } };
 
             return yield put({
-              type   : 'updateState',
+              type: 'updateState',
               payload: { selectedUser }
             });
           }
 
           yield put({
-            type   : 'raiseCondition',
+            type: 'raiseCondition',
             payload: {
               message: i18n.t('error:notFound', { entity: 'User' }),
-              key    : 'selectedUser'
+              key: 'selectedUser'
             }
           });
         }
@@ -179,14 +179,14 @@ export default dvaModelExtend(commonModel, {
         // Update user roles
         yield call(fbUpdate, {
           collection: 'users',
-          doc       : selectedUser.id,
-          data      : { ...selectedUser, roles }
+          doc: selectedUser.id,
+          data: { ...selectedUser, roles }
         });
 
         yield put({
-          type   : 'updateState',
+          type: 'updateState',
           payload: {
-            touched     : false,
+            touched: false,
             selectedUser: { ...selectedUser, roles }
           }
         });
@@ -194,10 +194,10 @@ export default dvaModelExtend(commonModel, {
       } else {
 
         yield put({
-          type   : 'raiseCondition',
+          type: 'raiseCondition',
           payload: {
             message: i18n.t('error:noPermissions'),
-            key    : 'selectedUser'
+            key: 'selectedUser'
           }
         });
       }
@@ -210,13 +210,13 @@ export default dvaModelExtend(commonModel, {
 
       let _userExist = yield call(fbFindById, {
         collection: 'users',
-        doc       : payload.user.id
+        doc: payload.user.id
       });
 
       const _sent = _userExist && canSend && (yield call(sendVerificationEmail, { user: _userExist }));
 
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: { verificationSent: _sent }
       });
     }

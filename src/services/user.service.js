@@ -49,8 +49,8 @@ export const getUsers = async ({ user }) => {
       await fbReadAll({ collection: 'users' }) :
       await fbReadBy({
         collection: 'users',
-        field     : 'uid',
-        value     : user.uid
+        field: 'uid',
+        value: user.uid
       });
 
   users.forEach(doc => {
@@ -110,7 +110,7 @@ export const getAllUserRoles = async () => {
   roles.forEach(doc => {
     const _data = doc.data();
     data.push({
-      id  : doc.id,
+      id: doc.id,
       type: _data.type
     });
   });
@@ -140,8 +140,8 @@ export const forceSignOutUser = async ({ uid, email }) => {
     ...user.data.metadata,
     ...{
       forceSignOut: true,
-      signedIn    : false,
-      updatedAt   : +(new Date)
+      signedIn: false,
+      updatedAt: +(new Date)
     }
   };
 

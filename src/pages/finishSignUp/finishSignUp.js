@@ -86,9 +86,9 @@ export const finishSignUp = (props) => {
   const onFinish = values => {
     createUserWithEmailAndPassword(values.email, values.password);
     onRegisterData({
-      email         : values.email,
-      firstName     : values.firstName,
-      lastName      : values.lastName,
+      email: values.email,
+      firstName: values.firstName,
+      lastName: values.lastName,
       isBusinessUser: true
     });
   };

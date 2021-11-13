@@ -41,14 +41,14 @@ export default connect(
       },
       onSendMessage({ props }, fields) {
         dispatch({
-          type   : 'notificationModel/createAndUpdate',
+          type: 'notificationModel/createAndUpdate',
           payload: {
-            type       : i18n.t('notifications:message'),
-            title      : fields.title,
+            type: i18n.t('notifications:message'),
+            title: fields.title,
             description: fields.description,
-            status     : STATUS.sent,
-            isPrivate  : fields.isPrivate,
-            sentTo     : props.to.email
+            status: STATUS.sent,
+            isPrivate: fields.isPrivate,
+            sentTo: props.to.email
           }
         });
       },

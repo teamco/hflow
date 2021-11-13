@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
  */
 const defaultSettings = {
   enableHighAccuracy: false,
-  timeout           : Infinity,
-  maximumAge        : 0
+  timeout: Infinity,
+  maximumAge: 0
 };
 
 /**
@@ -29,12 +29,12 @@ export const useGeolocation = (watch = false, settings = defaultSettings) => {
    */
   const onChange = ({ coords, timestamp }) => {
     setLocation({
-      accuracy        : coords.accuracy,
-      altitude        : coords.altitude,
+      accuracy: coords.accuracy,
+      altitude: coords.altitude,
       altitudeAccuracy: coords.altitudeAccuracy,
-      latitude        : coords.latitude,
-      longitude       : coords.longitude,
-      speed           : coords.speed,
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+      speed: coords.speed,
       timestamp
     });
   };

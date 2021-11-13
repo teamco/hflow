@@ -48,10 +48,10 @@ export const expendableNotification = props => {
                          onClick={() => {
                            setVisibleMessage({
                              visible: true,
-                             props  : {
+                             props: {
                                replyTo: { id: record?.id },
-                               from   : { email: record?.sentTo },
-                               to     : record?.sentFrom
+                               from: { email: record?.sentTo },
+                               to: record?.sentFrom
                              }
                            });
                          }}>

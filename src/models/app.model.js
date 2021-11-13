@@ -9,7 +9,7 @@ import { commonModel } from 'models/common.model';
 import { menus } from 'services/menu.service';
 
 const appMeta = {
-  name   : '__TITLE__',
+  name: '__TITLE__',
   charSet: 'utf-8'
 };
 
@@ -17,29 +17,29 @@ const appMeta = {
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace    : 'appModel',
-  state        : {
-    interval       : {
+  namespace: 'appModel',
+  state: {
+    interval: {
       timeout: 60000,
       enabled: true
     },
-    layoutOpts     : {
-      mainHeader     : false,
+    layoutOpts: {
+      mainHeader: false,
       pageBreadcrumbs: false,
-      pageHeader     : false,
-      mainFooter     : false,
-      mainMenu       : false
+      pageHeader: false,
+      mainFooter: false,
+      mainMenu: false
     },
-    activeTab      : true,
-    collapsedMenu  : true,
-    meta           : { ...appMeta, ...{ title: '' } },
-    menus          : [],
-    activeForm     : {
+    activeTab: true,
+    collapsedMenu: true,
+    meta: { ...appMeta, ...{ title: '' } },
+    menus: [],
+    activeForm: {
       form: null
     },
-    activeModel    : {
+    activeModel: {
       isEdit: false,
-      title : ''
+      title: ''
     },
     waitBeforeLogin: 5000
   },
@@ -58,7 +58,7 @@ export default dvaModelExtend(commonModel, {
       dispatch({ type: 'query' });
     }
   },
-  effects      : {
+  effects: {
 
     * query({ payload }, { put }) {
       yield put({ type: 'updateState', payload: { menus } });
@@ -68,14 +68,14 @@ export default dvaModelExtend(commonModel, {
     * adminLayout({ payload }, { put }) {
       const { visible } = payload;
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: {
           layoutOpts: {
-            mainHeader     : visible,
+            mainHeader: visible,
             pageBreadcrumbs: visible,
-            pageHeader     : visible,
-            mainFooter     : visible,
-            mainMenu       : visible
+            pageHeader: visible,
+            mainFooter: visible,
+            mainMenu: visible
           }
         }
       });
@@ -84,7 +84,7 @@ export default dvaModelExtend(commonModel, {
     * updateDocumentMeta({ payload }, { put, select }) {
       const { meta } = yield select(state => state.appModel);
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: {
           meta: { ...meta, ...payload.meta }
         }
@@ -93,7 +93,7 @@ export default dvaModelExtend(commonModel, {
 
     * updateReferrer({ payload }, { put }) {
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: {
           referrer: payload.referrer
         }
@@ -102,7 +102,7 @@ export default dvaModelExtend(commonModel, {
 
     * toggleMenu({ payload }, { put }) {
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: {
           collapsedMenu: payload.collapse
         }
@@ -111,7 +111,7 @@ export default dvaModelExtend(commonModel, {
 
     * activeModel({ payload }, { put }) {
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: {
           activeModel: { ...payload }
         }
@@ -120,7 +120,7 @@ export default dvaModelExtend(commonModel, {
 
     * checkActiveTab({ payload }, { put }) {
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: {
           activeTab: payload
         }

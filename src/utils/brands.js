@@ -3,11 +3,11 @@ import { COLORS } from './colors';
 
 export const BRANDS = {
   'google.com': {
-    icon : <GoogleOutlined/>,
+    icon: <GoogleOutlined/>,
     color: '#4285F4'
   },
-  password    : {
-    icon : <LockOutlined/>,
+  password: {
+    icon: <LockOutlined/>,
     color: COLORS.tags.cyan
   }
 };

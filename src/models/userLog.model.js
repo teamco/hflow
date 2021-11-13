@@ -10,15 +10,15 @@ import { isLocalHost } from 'utils/window';
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace    : 'userLogModel',
-  state        : {
+  namespace: 'userLogModel',
+  state: {
     data: []
   },
   subscriptions: {
     setup({ dispatch }) {
     }
   },
-  effects      : {
+  effects: {
 
     * query({ payload }, { put, call }) {
       let data = [];
@@ -34,7 +34,7 @@ export default dvaModelExtend(commonModel, {
       });
 
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: {
           data: data.sort((a, b) =>
               (a.createdAt > b.createdAt) ? 1 :
@@ -55,12 +55,12 @@ export default dvaModelExtend(commonModel, {
         namespace,
         eventType,
         createdByRef: null,
-        duration    : 0
+        duration: 0
       };
 
       const userRef = getRef({
         collection: 'users',
-        doc       : user?.uid
+        doc: user?.uid
       });
 
       typeof duration !== 'undefined' && (data.duration = duration);
@@ -75,5 +75,5 @@ export default dvaModelExtend(commonModel, {
       }
     }
   },
-  reducers     : {}
+  reducers: {}
 });

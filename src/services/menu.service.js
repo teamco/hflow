@@ -16,49 +16,49 @@ import {
  */
 export const menus = [
   {
-    key  : 'menu:manageUsers',
-    icon : <UserOutlined/>,
+    key: 'menu:manageUsers',
+    icon: <UserOutlined/>,
     items: [
       {
-        key : 'menu:users',
-        url : '/admin/users',
+        key: 'menu:users',
+        url: '/admin/users',
         icon: <UserOutlined/>
       },
       {
-        key : 'menu:manageRoles',
-        url : '/admin/manageRoles',
+        key: 'menu:manageRoles',
+        url: '/admin/manageRoles',
         icon: <SolutionOutlined/>
       }
     ]
   },
   {
-    key  : 'menu:business',
-    icon : <TrademarkOutlined/>,
+    key: 'menu:business',
+    icon: <TrademarkOutlined/>,
     items: [
       {
-        key : 'menu:businessTypes',
-        url : '/admin/businessTypes',
+        key: 'menu:businessTypes',
+        url: '/admin/businessTypes',
         icon: <FontSizeOutlined/>
       }
     ]
   },
   {
-    key  : 'menu:systemLogs',
-    icon : <InfoCircleOutlined/>,
+    key: 'menu:systemLogs',
+    icon: <InfoCircleOutlined/>,
     items: [
       {
-        key : 'menu:notifications',
-        url : '/admin/notifications',
+        key: 'menu:notifications',
+        url: '/admin/notifications',
         icon: <NotificationOutlined/>
       },
       {
-        key : 'menu:userLogs',
-        url : '/admin/logs',
+        key: 'menu:userLogs',
+        url: '/admin/logs',
         icon: <TeamOutlined/>
       },
       {
-        key : 'menu:errorLogs',
-        url : '/admin/errors',
+        key: 'menu:errorLogs',
+        url: '/admin/errors',
         icon: <BugOutlined/>
       }
     ]

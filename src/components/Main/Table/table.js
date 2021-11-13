@@ -25,7 +25,7 @@ function MainTable(props) {
    */
   const filterBy = key => {
     const _filter = dataSource.map(data => ({
-      text : data[key],
+      text: data[key],
       value: data[key]
     }));
 

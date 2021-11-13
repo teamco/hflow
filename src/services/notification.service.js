@@ -13,7 +13,7 @@ export const getNotifications = async ({ userId, email }) => {
 
   const userRef = getRef({
     collection: 'users',
-    doc       : userId
+    doc: userId
   });
 
   /**
@@ -22,9 +22,9 @@ export const getNotifications = async ({ userId, email }) => {
    */
   const createdBy = await fbReadBy({
     collection: 'notifications',
-    field     : 'metadata.createdByRef',
-    value     : userRef,
-    optional  : { order: 'metadata.createdAt' }
+    field: 'metadata.createdByRef',
+    value: userRef,
+    optional: { order: 'metadata.createdAt' }
   });
 
   /**
@@ -33,9 +33,9 @@ export const getNotifications = async ({ userId, email }) => {
    */
   const sentTo = await fbReadBy({
     collection: 'notifications',
-    field     : 'sentTo',
-    value     : email,
-    optional  : { order: 'metadata.createdAt' }
+    field: 'sentTo',
+    value: email,
+    optional: { order: 'metadata.createdAt' }
   });
 
   createdBy.forEach(doc => {

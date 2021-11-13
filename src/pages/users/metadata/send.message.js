@@ -86,9 +86,9 @@ const SendMessage = (props) => {
               name={'sendMessage'}
               initialValues={{
                 isPrivate: true,
-                from     : from?.email,
-                to       : to?.email,
-                replyTo  : replyTo?.id
+                from: from?.email,
+                to: to?.email,
+                replyTo: replyTo?.id
               }}>
           <Form.Item label={t('notifications:to')}
                      name={'to'}>

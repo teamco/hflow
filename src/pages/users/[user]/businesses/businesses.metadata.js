@@ -37,15 +37,15 @@ export const metadata = ({
   };
 
   return {
-    width  : '100%',
-    size   : 'middle',
+    width: '100%',
+    size: 'middle',
     columns: [
       {
-        title     : t('table:name'),
-        dataIndex : 'name',
-        key       : 'name',
+        title: t('table:name'),
+        dataIndex: 'name',
+        key: 'name',
         filterable: multiple,
-        sortable  : multiple,
+        sortable: multiple,
         render(name, data) {
           return (
               <div className={classnames(styles.nowrap, tableStyles.tdName)}>
@@ -63,24 +63,24 @@ export const metadata = ({
         }
       },
       {
-        title     : t('auth:email'),
-        dataIndex : 'email',
-        key       : 'email',
+        title: t('auth:email'),
+        dataIndex: 'email',
+        key: 'email',
         filterable: multiple,
-        sortable  : multiple
+        sortable: multiple
       },
       {
-        title     : t('business:type'),
-        dataIndex : 'businessType',
-        key       : 'businessType',
+        title: t('business:type'),
+        dataIndex: 'businessType',
+        key: 'businessType',
         filterable: multiple,
-        sortable  : multiple
+        sortable: multiple
       },
       {
-        title    : t('form:updatedAt'),
+        title: t('form:updatedAt'),
         dataIndex: 'metadata',
-        key      : 'metadata.updatedAt',
-        render   : metadata => tsToLocaleDateTime(metadata.updatedAt)
+        key: 'metadata.updatedAt',
+        render: metadata => tsToLocaleDateTime(metadata.updatedAt)
       },
       {
         title: t('table:action'),

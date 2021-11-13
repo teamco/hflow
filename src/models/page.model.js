@@ -7,8 +7,8 @@ import { commonModel } from 'models/common.model';
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace    : 'pageModel',
-  state        : {
+  namespace: 'pageModel',
+  state: {
     data: []
   },
   subscriptions: {
@@ -18,9 +18,9 @@ export default dvaModelExtend(commonModel, {
       dispatch({ type: 'query' });
     }
   },
-  effects      : {
+  effects: {
     * query({ payload }, { put, select }) {
     }
   },
-  reducers     : {}
+  reducers: {}
 });

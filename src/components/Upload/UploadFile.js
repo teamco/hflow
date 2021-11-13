@@ -16,7 +16,7 @@ const { Dragger } = Upload;
 class UploadFile extends React.Component {
   state = {
     ableToDownload: true,
-    showUpload    : false
+    showUpload: false
   };
 
   render() {
@@ -76,7 +76,7 @@ class UploadFile extends React.Component {
     };
 
     let uploadProps = {
-      accept  : allowed,
+      accept: allowed,
       disabled,
       fileList: fileProps.fileList,
       listType,
@@ -93,11 +93,11 @@ class UploadFile extends React.Component {
       },
       progress: {
         strokeColor: {
-          '0%'  : '#108ee9',
+          '0%': '#108ee9',
           '100%': '#87d068'
         },
         strokeWidth: 3,
-        format     : percent => `${parseFloat(percent.toFixed(2))}%`
+        format: percent => `${parseFloat(percent.toFixed(2))}%`
       }
     };
 

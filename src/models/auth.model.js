@@ -12,14 +12,14 @@ import { defineInstance } from 'utils/instance';
  * @default
  */
 export default dvaModelExtend(commonModel, {
-  namespace    : 'authModel',
-  state        : {
+  namespace: 'authModel',
+  state: {
     MIN_PASSWORD_LENGTH: 8,
-    registerData       : {},
-    user               : null,
-    refreshSignIn      : true,
-    isSignedOut        : false,
-    ability            : null
+    registerData: {},
+    user: null,
+    refreshSignIn: true,
+    isSignedOut: false,
+    ability: null
   },
   subscriptions: {
     setupHistory(setup) {
@@ -79,8 +79,8 @@ export default dvaModelExtend(commonModel, {
           lastSignInTime,
           photoURL,
           providerId,
-          signedIn : true,
-          isLocked : true,
+          signedIn: true,
+          isLocked: true,
           updatedAt: +(new Date)
         }
       };
@@ -104,8 +104,8 @@ export default dvaModelExtend(commonModel, {
         // Update user
         yield call(fbUpdate, {
           collection: 'users',
-          doc       : _userExist.docId,
-          data      : {
+          doc: _userExist.docId,
+          data: {
             ..._user,
             roles: [...(_user?.roles || [])]
           }
@@ -114,23 +114,23 @@ export default dvaModelExtend(commonModel, {
         // Finish business user registration
         if (registerData.isBusinessUser) {
           yield put({
-            type   : 'businessModel/finishRegistration',
+            type: 'businessModel/finishRegistration',
             payload: { _userExist }
           });
         }
 
         // Define user abilities
         const ability = yield call(defineAbilityFor, {
-          user  : _user,
+          user: _user,
           userId: _userExist?.docId
         });
 
         yield put({
-          type   : 'updateState',
+          type: 'updateState',
           payload: {
-            user        : { ..._user },
+            user: { ..._user },
             registerData: {},
-            isSignedOut : false,
+            isSignedOut: false,
             ability
           }
         });
@@ -147,15 +147,15 @@ export default dvaModelExtend(commonModel, {
         _userExist = yield call(fbAdd, { collection: 'users', data: userProps });
 
         yield put({
-          type   : 'updateState',
+          type: 'updateState',
           payload: {
-            isSignedOut  : false,
+            isSignedOut: false,
             refreshSignIn: false
           }
         });
 
         return yield put({
-          type   : 'signIn',
+          type: 'signIn',
           payload: {
             user: _userExist.data,
             _userExist
@@ -198,8 +198,8 @@ export default dvaModelExtend(commonModel, {
       }
 
       const _userExist = yield call(findUser, {
-        uid     : payload.user.uid,
-        email   : payload.email,
+        uid: payload.user.uid,
+        email: payload.email,
         metadata: { updatedAt: +(new Date) }
       });
 
@@ -210,9 +210,9 @@ export default dvaModelExtend(commonModel, {
         yield call(updateFbUserEmail, { email: payload.email });
 
         yield put({
-          type   : 'updateState',
+          type: 'updateState',
           payload: {
-            user   : _userExist.data,
+            user: _userExist.data,
             ability: yield call(defineAbilityFor, { user: _userExist.data })
           }
         });
@@ -224,7 +224,7 @@ export default dvaModelExtend(commonModel, {
       const ability = yield call(defineAbilityFor, { user, userId: user?.id });
 
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: { ability }
       });
     },
@@ -238,23 +238,23 @@ export default dvaModelExtend(commonModel, {
         yield call(fbSignOut);
 
         return yield put({
-          type   : 'updateState',
+          type: 'updateState',
           payload: {
-            user         : null,
-            isSignedOut  : false,
+            user: null,
+            isSignedOut: false,
             refreshSignIn: true,
-            ability      : yield call(defineAbilityFor, { user: null })
+            ability: yield call(defineAbilityFor, { user: null })
           }
         });
       }
 
       const _userExist = yield call(findUser, {
-        uid     : user.uid,
+        uid: user.uid,
         metadata: {
-          forceSignOut : false,
+          forceSignOut: false,
           refreshSignIn: true,
-          signedIn     : false,
-          updatedAt    : +(new Date)
+          signedIn: false,
+          updatedAt: +(new Date)
         }
       });
 
@@ -263,12 +263,12 @@ export default dvaModelExtend(commonModel, {
 
         if (state.user?.uid === user.uid) {
           yield put({
-            type   : 'updateState',
+            type: 'updateState',
             payload: {
-              user         : null,
-              isSignedOut  : true,
+              user: null,
+              isSignedOut: true,
               refreshSignIn: true,
-              ability      : yield call(defineAbilityFor, { user: null })
+              ability: yield call(defineAbilityFor, { user: null })
             }
           });
 

@@ -12,28 +12,28 @@ export const userLogsMetadata = ({
   data,
   loading
 }) => ({
-  width  : '100%',
-  size   : 'middle',
+  width: '100%',
+  size: 'middle',
   columns: [
     {
-      title     : t('logs:eventType'),
-      dataIndex : 'eventType',
-      key       : 'eventType',
+      title: t('logs:eventType'),
+      dataIndex: 'eventType',
+      key: 'eventType',
       filterable: true,
-      sortable  : true
+      sortable: true
     },
     {
-      title     : t('logs:namespace'),
-      dataIndex : 'namespace',
-      key       : 'namespace',
+      title: t('logs:namespace'),
+      dataIndex: 'namespace',
+      key: 'namespace',
       filterable: true,
-      sortable  : true
+      sortable: true
     },
     {
-      title    : t('form:createdAt'),
+      title: t('form:createdAt'),
       dataIndex: 'createdAt',
-      key      : 'createdAt',
-      render   : createdAt => {
+      key: 'createdAt',
+      render: createdAt => {
         const date = new Date(createdAt);
         return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
       }

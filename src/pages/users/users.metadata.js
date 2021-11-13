@@ -71,20 +71,20 @@ export const metadata = ({
   };
 
   return {
-    width  : '100%',
-    size   : 'middle',
+    width: '100%',
+    size: 'middle',
     columns: [
       {
-        title    : t('table:name'),
+        title: t('table:name'),
         dataIndex: 'displayName',
-        key      : 'displayName',
+        key: 'displayName',
         render(name, data) {
           const isCurrentStyle = currentUser?.id === data.id ? styles.currentUser : null;
           const isSignedIn = data.metadata.signedIn;
           const color = isSignedIn ? COLORS.success : COLORS.disabled;
           const signed = {
             title: t(isSignedIn ? 'auth:signedIn' : 'auth:signedOut'),
-            icon : isSignedIn ?
+            icon: isSignedIn ?
                 (<PlayCircleTwoTone twoToneColor={color}/>) :
                 (<PauseCircleTwoTone twoToneColor={color}/>)
           };
@@ -120,12 +120,12 @@ export const metadata = ({
           );
         },
         filterable: multiple,
-        sortable : multiple
+        sortable: multiple
       },
       {
-        title    : t('auth:provider'),
+        title: t('auth:provider'),
         dataIndex: 'metadata',
-        render   : metadata => (
+        render: metadata => (
             <Tag color={metadata.signedIn ? BRANDS[metadata.providerId]?.color : null}
                  icon={BRANDS[metadata.providerId]?.icon}
                  className={styles.provider}>
@@ -141,13 +141,13 @@ export const metadata = ({
       //   sortable: multiple
       // },
       {
-        title    : t('auth:lastSignInTime'),
+        title: t('auth:lastSignInTime'),
         dataIndex: 'metadata',
-        key      : 'lastSignInTime',
-        render   : metadata => tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))
+        key: 'lastSignInTime',
+        render: metadata => tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))
       },
       {
-        title : t('table:action'),
+        title: t('table:action'),
         render: record =>
             data.length ? (
                 <div className={styles.nowrap}>

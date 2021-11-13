@@ -26,7 +26,7 @@ export default connect(
       dispatch,
       onFieldsChange(changedFields, allFields) {
         dispatch({
-          type   : 'businessModel/updateFields',
+          type: 'businessModel/updateFields',
           payload: {
             changedFields,
             allFields,
@@ -36,7 +36,7 @@ export default connect(
       },
       onFileChange(payload) {
         dispatch({
-          type   : 'businessModel/handleAddFile',
+          type: 'businessModel/handleAddFile',
           payload: {
             ...payload,
             model: 'businessModel'
@@ -45,7 +45,7 @@ export default connect(
       },
       onFileRemove(payload) {
         dispatch({
-          type   : 'businessModel/handleRemoveFile',
+          type: 'businessModel/handleRemoveFile',
           payload: { ...payload, model: 'businessModel' }
         });
       },

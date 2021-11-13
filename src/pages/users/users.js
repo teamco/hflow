@@ -131,7 +131,7 @@ export const users = (props) => {
     loading,
     ability,
     currentUser: authModel.user,
-    multiple   : !selectedUser,
+    multiple: !selectedUser,
     onSignOutUser,
     onSendMessage,
     onLockUser,

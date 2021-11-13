@@ -18,7 +18,7 @@ i18n
     .init({
       fallbackLng: 'en-US',
 
-      debug       : false,
+      debug: false,
       keySeparator: false,
       // saveMissing: true, // send not translated keys to endpoint
       resources,

@@ -53,7 +53,7 @@ export const AppLayout = (props) => {
 
   delayedFn({
     callback: () => setIsSignInVisible(!isAuth),
-    ts      : waitBeforeLogin
+    ts: waitBeforeLogin
   });
 
   const { user } = authModel;

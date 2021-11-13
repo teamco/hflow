@@ -10,8 +10,8 @@ import styles from 'components/Form/form.module.less';
  */
 class EditableTags extends React.Component {
   state = {
-    inputVisible  : false,
-    inputValue    : '',
+    inputVisible: false,
+    inputValue: '',
     editInputIndex: -1,
     editInputValue: ''
   };

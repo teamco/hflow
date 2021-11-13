@@ -114,7 +114,7 @@ export const businessUsers = (props) => {
                {...tableProps}
                {...metadata({
                  t,
-                 data    : assignedUsers,
+                 data: assignedUsers,
                  multiple: true,
                  loading,
                  onAssignUser,

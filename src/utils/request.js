@@ -28,9 +28,9 @@ function _csrfToken() {
 }
 
 const DEFAULT_HEADERS = {
-  'Content-Type'               : 'application/json;charset=UTF-8',
+  'Content-Type': 'application/json;charset=UTF-8',
   'Access-Control-Allow-Origin': '*',
-  accept                       : 'application/json'
+  accept: 'application/json'
 };
 
 /**
@@ -94,7 +94,7 @@ function config({
 
   return {
     ...{
-      url    : adoptUrlToAPI(url, direct),
+      url: adoptUrlToAPI(url, direct),
       method,
       responseType,
       headers: { ...mergeHeaders(), ...headers }

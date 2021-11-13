@@ -28,8 +28,8 @@ export const getBusinesses = async ({ userId }) => {
    */
   const businesses = await fbReadBy({
     collection: 'businesses',
-    field     : 'metadata.belongsToRef',
-    value     : userRef
+    field: 'metadata.belongsToRef',
+    value: userRef
   });
 
   businesses.forEach(doc => {
@@ -73,8 +73,8 @@ export const findBusinessTempUser = async ({ email }) => {
    */
   const users = await fbReadBy({
     collection: 'tempBusinessUsers',
-    field     : 'email',
-    value     : email
+    field: 'email',
+    value: email
   });
 
   users.forEach(doc => {
@@ -102,8 +102,8 @@ export const getBusinessUsers = async ({ businessRef }) => {
    */
   const users = await fbReadBy({
     collection: 'users',
-    field     : 'business.metadata.businessRef',
-    value     : businessRef
+    field: 'business.metadata.businessRef',
+    value: businessRef
   });
 
   users.forEach(doc => (data.push({ ...doc.data(), userId: doc.id })));
@@ -122,8 +122,8 @@ export const getTempBusinessUsers = async ({ businessRef }) => {
   let data = [];
   const tempBusinessUsers = await fbReadBy({
     collection: 'tempBusinessUsers',
-    field     : 'metadata.businessRef',
-    value     : businessRef
+    field: 'metadata.businessRef',
+    value: businessRef
   });
 
   tempBusinessUsers.forEach(doc => (data.push({ ...doc.data(), userId: doc.id })));

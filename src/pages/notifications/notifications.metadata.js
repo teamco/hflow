@@ -7,37 +7,37 @@ import React from 'react';
  * @return {*}
  */
 export const notificationsMetadata = ({ t, loading }) => ({
-  width  : '100%',
-  size   : 'middle',
+  width: '100%',
+  size: 'middle',
   columns: [
     {
-      title     : t('notifications:type'),
-      dataIndex : 'type',
-      key       : 'type',
+      title: t('notifications:type'),
+      dataIndex: 'type',
+      key: 'type',
       filterable: true,
-      sortable  : true
+      sortable: true
     },
     {
-      title     : t('table:title'),
-      dataIndex : 'title',
-      key       : 'title',
+      title: t('table:title'),
+      dataIndex: 'title',
+      key: 'title',
       filterable: true,
-      sortable  : true,
+      sortable: true,
       render(title, record) {
         return record.read ? title : (<strong>{title}</strong>);
       }
     },
     {
-      title     : t('notifications:status'),
-      dataIndex : 'status',
-      key       : 'status',
+      title: t('notifications:status'),
+      dataIndex: 'status',
+      key: 'status',
       filterable: true,
-      sortable  : true
+      sortable: true
     },
     {
-      title    : t('form:createdAt'),
+      title: t('form:createdAt'),
       dataIndex: 'metadata',
-      key      : 'metadata',
+      key: 'metadata',
       render(metadata) {
         const date = new Date(metadata.createdAt);
         return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;

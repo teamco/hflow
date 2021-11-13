@@ -21,15 +21,15 @@ export default connect(
       },
       onSendMessage({ props }, fields) {
         dispatch({
-          type   : 'notificationModel/createAndUpdate',
+          type: 'notificationModel/createAndUpdate',
           payload: {
-            type       : i18n.t('notifications:message'),
-            status     : STATUS.sent,
-            replyTo    : fields.replyTo,
-            title      : fields.title,
+            type: i18n.t('notifications:message'),
+            status: STATUS.sent,
+            replyTo: fields.replyTo,
+            title: fields.title,
             description: fields.description,
-            isPrivate  : fields.isPrivate,
-            sentTo     : props.to.email
+            isPrivate: fields.isPrivate,
+            sentTo: props.to.email
           }
         });
       }

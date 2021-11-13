@@ -143,8 +143,8 @@ export const Login = (props) => {
     isRegisterVisible,
     setIsRegisterVisible,
     setIsSignInVisible,
-    signInVisible      : true,
-    onSignIn           : props.onSignIn
+    signInVisible: true,
+    onSignIn: props.onSignIn
   };
 
   const signInProps = {
@@ -164,7 +164,7 @@ export const Login = (props) => {
   };
 
   const logoProps = {
-    url  : '/',
+    url: '/',
     title: '__TITLE_'
   };
 

@@ -24,13 +24,13 @@ export default connect(
       },
       onUpdateUserRoles(roles) {
         dispatch({
-          type   : 'userRolesModel/updateUserRoles',
+          type: 'userRolesModel/updateUserRoles',
           payload: { roles }
         });
       },
       onUpdateBusinessRoles(roles) {
         dispatch({
-          type   : 'userRolesModel/updateBusinessRoles',
+          type: 'userRolesModel/updateBusinessRoles',
           payload: { roles }
         });
       }

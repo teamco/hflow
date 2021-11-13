@@ -5,23 +5,23 @@ import { merge } from 'lodash';
 
 const DEFAULT_FORM = [
   {
-    name : 'entityType',
+    name: 'entityType',
     value: 'form'
   },
   {
-    name : 'entityKey',
+    name: 'entityKey',
     value: ''
   }
 ];
 
 const DEFAULT_STATE = {
-  referrer     : document.referrer,
-  resetForm    : false,
-  entityForm   : DEFAULT_FORM,
-  language     : 'en-US',
-  isEdit       : false,
-  touched      : false,
-  tags         : [],
+  referrer: document.referrer,
+  resetForm: false,
+  entityForm: DEFAULT_FORM,
+  language: 'en-US',
+  isEdit: false,
+  touched: false,
+  tags: [],
   uploadedFiles: {}
 };
 
@@ -34,13 +34,13 @@ const commonModel = {
 
   subscriptions: {},
 
-  effects : {
+  effects: {
 
     * updateTags({ payload }, { put }) {
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: {
-          tags   : payload.tags,
+          tags: payload.tags,
           touched: true
         }
       });
@@ -48,7 +48,7 @@ const commonModel = {
 
     * cleanForm({ payload }, { put }) {
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: { ...DEFAULT_STATE }
       });
     },
@@ -64,7 +64,7 @@ const commonModel = {
         const idx = yield call(getEntityFormIdx, { entityForm, key });
 
         const formItem = {
-          name : key,
+          name: key,
           value: payload.form[key]
         };
 
@@ -77,7 +77,7 @@ const commonModel = {
       }
 
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: {
           entityForm: [..._entityForm.filter((form, idx) => toDelete.indexOf(idx) === -1)]
         }
@@ -88,9 +88,9 @@ const commonModel = {
       const { allFields } = payload;
 
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: {
-          touched   : true,
+          touched: true,
           entityForm: [...allFields].map(field => ({ name: field.name, value: field.value }))
         }
       });
@@ -114,9 +114,9 @@ const commonModel = {
       yield put({ type: 'updateState', payload: { uploadedFiles: { ..._files } } });
 
       yield put({
-        type   : 'toForm',
+        type: 'toForm',
         payload: {
-          form : { license: previewUrl },
+          form: { license: previewUrl },
           model: payload.model
         }
       });
@@ -138,7 +138,7 @@ const commonModel = {
       message.warning(payload.message).then();
 
       yield put({
-        type   : 'updateState',
+        type: 'updateState',
         payload: { [payload.key]: null }
       });
 
