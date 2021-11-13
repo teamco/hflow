@@ -69,7 +69,7 @@ export const businesses = (props) => {
                                   loading={loading.effects['businessModel/newBusiness']}
                                   disabled={disabled}
                                   icon={<AppstoreAddOutlined/>}
-                                  onClick={() => onNew(params.user)}
+                                  onClick={() => onNew(user)}
                                   type={'primary'}>
                             {t('actions:new')}
                           </Button>

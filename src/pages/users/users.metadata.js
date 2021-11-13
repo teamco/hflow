@@ -90,17 +90,19 @@ export const metadata = ({
           };
 
           return (
-              <div className={styles.nowrap}>
-                <Tooltip title={signed.title}>
+            <div className={classnames(styles.nowrap, styles.flex)}>
+              <Tooltip title={signed.title}>
                   <span className={classnames(styles.signed)}>
                     {signed.icon}
                   </span>
-                </Tooltip>
-                {data.metadata.photoURL ? (
+              </Tooltip>
+              {data.metadata.photoURL ? (
+                  <div className={styles.avatarWrapper}>
                     <img src={data.metadata.photoURL}
                          referrerPolicy={'no-referrer'}
                          alt={name}
                          className={styles.gridImg}/>
+                  </div>
                 ) : (
                     <Avatar src={'https://joeschmoe.io/api/v1/random'}
                             className={styles.avatar}/>
