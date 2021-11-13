@@ -22,7 +22,11 @@ export default defineConfig({
   lessLoader: {
     lessLoaderOptions: {}
   },
+  extraBabelPlugins: [],
   nodeModulesTransform: {
     type: 'none'
-  }
+  },
+  headScripts: [],
+  plugins: [],
+  manifest: {}
 });
