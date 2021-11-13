@@ -155,6 +155,7 @@ export const businessEdit = (props) => {
   const infoProps = {
     t,
     isEdit,
+    touched,
     info: {
       createdBy,
       updatedBy,

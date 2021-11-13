@@ -10,6 +10,7 @@ export default class MainInfo extends React.Component {
   render() {
     const {
       t,
+      touched,
       isEdit = false,
       info: {
         createdBy = {},
@@ -21,6 +22,7 @@ export default class MainInfo extends React.Component {
 
     return isEdit && (
         <GenericPanel header={t('form:entityInfo', { entity: t('panel:details') })}
+                      collapsible={touched ? 'disabled' : 'header'}
                       name={'entityInfo'}>
           <div>
             <div label={t('form:createdBy')}>

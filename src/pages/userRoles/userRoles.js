@@ -37,7 +37,8 @@ export const userRoles = props => {
     userRoles,
     businessRoles,
     isEdit,
-    entityForm
+    entityForm,
+    touched
   } = userRolesModel;
 
   useEffect(() => {
@@ -69,6 +70,7 @@ export const userRoles = props => {
   const infoProps = {
     t,
     isEdit,
+    touched,
     info: {
       createdBy,
       updatedBy,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse, Form } from 'antd';
+import { Collapse, Form, Spin } from 'antd';
 import { withTranslation } from 'react-i18next';
 import classnames from 'classnames';
 
@@ -38,6 +38,7 @@ class GenericPanel extends Component {
       header,
       name,
       inRow = true,
+      collapsible = 'header',
       className = ''
     } = this.props;
 
@@ -154,22 +155,27 @@ class GenericPanel extends Component {
     };
 
     return (
-        <Collapse collapsible={'header'}
+        <Collapse collapsible={collapsible}
                   className={classnames(styles.collapsePanel, className)}
                   defaultActiveKey={defaultActiveKey}>
           <Panel header={header}
                  key={name}>
-            {_getChildren(children).map((_rowChild, idx) => {
-              return _rowChild ? inRow ? (
-                  <AntHillRow key={idx}>
-                    {_formItem(_rowChild, idx)}
-                  </AntHillRow>
-              ) : (
-                  <div key={idx}
-                       style={{
-                         display: 'flex',
-                         padding: '8px 0',
-                         flexFlow: 'wrap'
+            {collapsible === 'disabled' ? (
+                    <div className={styles.disabledPanel}>
+                      <Spin spinning={true}/>
+                    </div>
+                ) :
+                _getChildren(children).map((_rowChild, idx) => {
+                  return _rowChild ? inRow ? (
+                      <AntHillRow key={idx}>
+                        {_formItem(_rowChild, idx)}
+                      </AntHillRow>
+                  ) : (
+                      <div key={idx}
+                           style={{
+                             display: 'flex',
+                             padding: '8px 0',
+                             flexFlow: 'wrap'
                        }}>
                     {_formItem(_rowChild, idx)}
                   </div>

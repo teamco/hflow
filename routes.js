@@ -129,7 +129,8 @@ export const routes = [
       },
       {
         component: '@/pages/404',
-        breadcrumb: 'route:page404'
+        breadcrumb: 'route:page404',
+        path: '/errors/404'
       }
     ]
   }

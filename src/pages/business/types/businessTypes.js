@@ -67,6 +67,7 @@ export const businessTypes = props => {
   const infoProps = {
     t,
     isEdit,
+    touched,
     info: {
       createdBy,
       updatedBy,
