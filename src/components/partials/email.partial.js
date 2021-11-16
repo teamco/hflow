@@ -25,13 +25,13 @@ export const emailProps = t => ({
  */
 export const emailPartial = ({ t, name, className, emailRef }) => {
   return (
-    <Form.Item name={name}
-               className={className}
-               {...emailProps(t)}>
-      <Input prefix={<MailTwoTone />}
-             ref={emailRef}
-             autoComplete={'off'}
-             placeholder={t('auth:email')} />
-    </Form.Item>
+      <Form.Item name={name}
+                 className={className}
+                 {...emailProps(t)}>
+        <Input prefix={<MailTwoTone/>}
+               ref={emailRef}
+               autoComplete={'off'}
+               placeholder={t('auth:email')}/>
+      </Form.Item>
   );
 };

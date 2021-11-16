@@ -30,7 +30,7 @@ export const BusinessTags = ({
                         disabled={disabled}
                         newTag={t('actions:new')}
                         onChange={onUpdateTags}
-                        tags={tags} />
+                        tags={tags}/>
         </div>
       </GenericPanel>
   );

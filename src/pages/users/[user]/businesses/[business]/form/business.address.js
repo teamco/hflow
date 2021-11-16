@@ -1,8 +1,8 @@
 import React from 'react';
-import {Input, Select} from 'antd';
+import { Input, Select } from 'antd';
 import countryCodes from 'country-codes-list';
 
-import {sortBy} from 'utils/array';
+import { sortBy } from 'utils/array';
 
 import FormComponents from 'components/Form';
 
@@ -18,8 +18,8 @@ const getSelectedCountry = formRef => {
   return countryCodes.findOne('countryCode', country) || {};
 };
 
-const {Option} = Select;
-const {GenericPanel, MandatoryTextarea, Phone} = FormComponents;
+const { Option } = Select;
+const { GenericPanel, MandatoryTextarea, Phone } = FormComponents;
 
 /**
  * @export
@@ -59,11 +59,11 @@ export const BusinessAddress = props => {
                  disabled={disabled}
                  config={{
                    rules: [
-                     ({getFieldValue}) => ({
+                     ({ getFieldValue }) => ({
                        validator(_, value) {
                          return !value || value.match(/^http/) ?
                              Promise.resolve() :
-                             Promise.reject(t('business:formError', {type: t('business:website')}));
+                             Promise.reject(t('business:formError', { type: t('business:website') }));
                        }
                      })
                    ]
@@ -76,9 +76,9 @@ export const BusinessAddress = props => {
                   disabled={disabled}
                   onSelect={value => {
                     onHandleStates(value);
-                    formRef.setFieldsValue({state: null});
+                    formRef.setFieldsValue({ state: null });
                   }}
-                  config={{rules: [{required: true}]}}>
+                  config={{ rules: [{ required: true }] }}>
             {sortBy(countries, 'name').map(country => (
                 <Option key={country?.id}
                         value={country?.id}>
@@ -91,7 +91,7 @@ export const BusinessAddress = props => {
                       form={formRef}
                       disabled={disabled}
                       label={t('address:stateProvince')}
-                      config={{rules: [{required: true}]}}>
+                      config={{ rules: [{ required: true }] }}>
                 {sortBy(states, 'name').map(state => (
                     <Option key={state?.short}
                             value={state?.name}>
@@ -113,7 +113,7 @@ export const BusinessAddress = props => {
                      zip: formRef.getFieldValue('zip').toUpperCase()
                    });
                  }}
-                 config={{rules: [{required: true}]}}/>
+                 config={{ rules: [{ required: true }] }}/>
           <></>
         </div>
         <div>
@@ -121,7 +121,7 @@ export const BusinessAddress = props => {
                              name={'address'}
                              disabled={disabled}
                              form={formRef}
-                             config={{rules: [{required: true}]}}/>
+                             config={{ rules: [{ required: true }] }}/>
           <></>
         </div>
       </GenericPanel>

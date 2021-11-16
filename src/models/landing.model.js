@@ -4,12 +4,6 @@ import React from 'react';
 import dvaModelExtend from 'dva-model-extend';
 import { commonModel } from 'models/common.model';
 
-import {
-  FieldTimeOutlined,
-  ExperimentOutlined,
-  CheckCircleOutlined
-} from '@ant-design/icons';
-
 /**
  * @export
  */

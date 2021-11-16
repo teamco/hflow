@@ -38,7 +38,7 @@ export const showModal = ({ type, buttons = {}, ...rest }) => {
 export function showConfirm(onOk, okText = i18n.t('actions:ok'), okType = 'primary') {
   confirm({
     title: i18n.t('actions:delete'),
-    icon: <QuestionCircleOutlined />,
+    icon: <QuestionCircleOutlined/>,
     content: i18n.t('msg:deleteConfirm', { instance: '$t(instance:website)' }),
     onOk,
     okText,

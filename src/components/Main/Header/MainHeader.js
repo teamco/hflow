@@ -1,15 +1,15 @@
 import React from 'react';
-import {Badge, Layout} from 'antd';
+import { Badge, Layout } from 'antd';
 import SignIn from 'components/Authentication/signIn.connect';
-import {BellOutlined, BellTwoTone} from '@ant-design/icons';
-import {NavLink} from 'umi';
+import { BellOutlined, BellTwoTone } from '@ant-design/icons';
+import { NavLink } from 'umi';
 
-const {Header} = Layout;
+const { Header } = Layout;
 
 export default class MainHeader extends React.Component {
 
   render() {
-    const {t, user, badge: {count = 0, overflow = 10}} = this.props;
+    const { t, user, badge: { count = 0, overflow = 10 } } = this.props;
 
     return (
         <Header className={'site-layout-background'}
@@ -30,7 +30,7 @@ export default class MainHeader extends React.Component {
             <SignIn/>
             {user && (
                 <NavLink to={'/admin/notifications'}
-                         style={count ? count < overflow ? {marginRight: 5} : null : {marginRight: 0}}>
+                         style={count ? count < overflow ? { marginRight: 5 } : null : { marginRight: 0 }}>
                   {count ? (
                       <Badge count={count}
                              size={'small'}

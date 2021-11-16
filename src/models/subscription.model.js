@@ -34,7 +34,6 @@ export default dvaModelExtend(commonModel, {
         payload: {subscriptions: allSubscriptions}
       })
     }
-
   },
   reducers: {}
 });

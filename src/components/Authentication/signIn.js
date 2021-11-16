@@ -1,14 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 
-import {Button, Tooltip} from 'antd';
-import {
-  LoginOutlined,
-  GoogleOutlined,
-  FacebookOutlined,
-  TwitterOutlined,
-  LogoutOutlined
-} from '@ant-design/icons';
+import { Button, Tooltip } from 'antd';
+import { FacebookOutlined, GoogleOutlined, LoginOutlined, LogoutOutlined, TwitterOutlined } from '@ant-design/icons';
 
 import SignUp from 'components/Authentication/signUp.connect';
 import ErrorModal from 'components/Authentication/modals/error.modal';
@@ -16,7 +10,7 @@ import SignInModal from 'components/Authentication/modals/signin.modal';
 import UpdateEmailModal from 'components/Authentication/modals/updateEmail.modal';
 
 import styles from 'components/Authentication/authentication.module.less';
-import {isLoading} from 'utils/state';
+import { isLoading } from 'utils/state';
 
 /**
  * @constant
@@ -62,8 +56,8 @@ export const signIn = props => {
   useEffect(() => {
     if (user) {
       if (authModel.user) {
-        const {metadata, email} = authModel.user;
-        metadata.forceSignOut && onSignOutUser({user});
+        const { metadata, email } = authModel.user;
+        metadata.forceSignOut && onSignOutUser({ user });
         !email && setIsNAEmailVisible(true);
       } else if (forceLogin) {
         onSignIn(user);
@@ -85,7 +79,7 @@ export const signIn = props => {
 
   if (error) {
     errorProps = {
-      title: t('error:errorNum', {number: 400}),
+      title: t('error:errorNum', { number: 400 }),
       error
     };
 
@@ -139,7 +133,7 @@ export const signIn = props => {
    */
   const handleNAEmailOk = values => {
     setIsNAEmailVisible(false);
-    onUpdateEmail({user, email: values.na_email});
+    onUpdateEmail({ user, email: values.na_email });
   };
 
   /**
@@ -166,7 +160,7 @@ export const signIn = props => {
    * @return {JSX.Element}
    */
   const authBtn = (provider, icon, signInFn) => (
-      <Tooltip title={t('auth:signInWith', {provider})}>
+      <Tooltip title={t('auth:signInWith', { provider })}>
         <Button loading={isLoading(loading)}
                 className={styles.authBtn}
                 onClick={() => handleCancel(signInFn)}

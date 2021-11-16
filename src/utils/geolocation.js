@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * @constant
@@ -7,7 +7,7 @@ import {useState, useEffect} from 'react';
 const defaultSettings = {
   enableHighAccuracy: false,
   timeout: Infinity,
-  maximumAge: 0,
+  maximumAge: 0
 };
 
 /**
@@ -17,7 +17,7 @@ const defaultSettings = {
  * @return {{error: unknown}}
  */
 export const useGeolocation = (watch = false, settings = defaultSettings) => {
-  const {geolocation} = window.navigator;
+  const { geolocation } = window.navigator;
 
   const [location, setLocation] = useState({});
   const [error, setError] = useState(null);
@@ -27,7 +27,7 @@ export const useGeolocation = (watch = false, settings = defaultSettings) => {
    * @param coords
    * @param timestamp
    */
-  const onChange = ({coords, timestamp}) => {
+  const onChange = ({ coords, timestamp }) => {
     setLocation({
       accuracy: coords.accuracy,
       altitude: coords.altitude,
@@ -35,7 +35,7 @@ export const useGeolocation = (watch = false, settings = defaultSettings) => {
       latitude: coords.latitude,
       longitude: coords.longitude,
       speed: coords.speed,
-      timestamp,
+      timestamp
     });
   };
 
@@ -63,8 +63,8 @@ export const useGeolocation = (watch = false, settings = defaultSettings) => {
   }, [
     settings.enableHighAccuracy,
     settings.timeout,
-    settings.maximumAge,
+    settings.maximumAge
   ]);
 
-  return {...location, error};
+  return { ...location, error };
 };

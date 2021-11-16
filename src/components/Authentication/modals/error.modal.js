@@ -10,12 +10,12 @@ import { Modal } from 'antd';
 const ErrorModal = props => {
   const { errorProps, isErrorVisible, handleErrorCancel } = props;
   return (
-    <Modal title={errorProps.title}
-           visible={isErrorVisible}
-           footer={null}
-           onCancel={handleErrorCancel}>
-      <span>{errorProps.error}</span>
-    </Modal>
+      <Modal title={errorProps.title}
+             visible={isErrorVisible}
+             footer={null}
+             onCancel={handleErrorCancel}>
+        <span>{errorProps.error}</span>
+      </Modal>
   );
 };
 

@@ -1,28 +1,28 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import Page from 'components/Page';
 import userStyles from 'pages/users/users.module.less';
-import {useParams} from 'umi';
-import {Button, Dropdown, Form, PageHeader} from 'antd';
-import {DownOutlined, SettingOutlined, TrademarkOutlined} from '@ant-design/icons';
+import { useParams } from 'umi';
+import { Button, Dropdown, Form, PageHeader } from 'antd';
+import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
 
 import Main from 'components/Main';
 
-import {BusinessAddress} from 'pages/users/[user]/businesses/[business]/form/business.address';
-import {BusinessInfo} from 'pages/users/[user]/businesses/[business]/form/business.info';
-import {BusinessLicense} from 'pages/users/[user]/businesses/[business]/form/business.license';
-import {BusinessTags} from 'pages/users/[user]/businesses/[business]/form/business.tags';
+import { BusinessAddress } from 'pages/users/[user]/businesses/[business]/form/business.address';
+import { BusinessInfo } from 'pages/users/[user]/businesses/[business]/form/business.info';
+import { BusinessLicense } from 'pages/users/[user]/businesses/[business]/form/business.license';
+import { BusinessTags } from 'pages/users/[user]/businesses/[business]/form/business.tags';
 import BusinessMenu from 'pages/users/[user]/businesses/metadata/business.menu';
 
 import SaveButton from 'components/Buttons/save.button';
 
-import {fromForm} from 'utils/object';
-import {isLoading} from 'utils/state';
-import {isNew} from 'services/common.service';
+import { fromForm } from 'utils/object';
+import { isLoading } from 'utils/state';
+import { isNew } from 'services/common.service';
 
 import styles from 'pages/users/[user]/businesses/businesses.module.less';
 import menuStyles from 'components/menu.less';
 
-const {Info} = Main;
+const { Info } = Main;
 
 export const businessEdit = (props) => {
   const [formRef] = Form.useForm();
@@ -64,7 +64,7 @@ export const businessEdit = (props) => {
     touched
   } = businessModel;
 
-  const {ability} = authModel;
+  const { ability } = authModel;
   const component = 'businesses';
   const disabled = ability.cannot('update', component);
   const update = ability.can('update', component);
@@ -155,6 +155,7 @@ export const businessEdit = (props) => {
   const infoProps = {
     t,
     isEdit,
+    touched,
     info: {
       createdBy,
       updatedBy,
@@ -174,10 +175,10 @@ export const businessEdit = (props) => {
 
   const subTitle = (
       <>
-        <TrademarkOutlined style={{marginRight: 10}}/>
+        <TrademarkOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
-            t('actions:edit', {type: t('business')}) :
-            t('actions:addNew', {type: t('business')})
+            t('actions:edit', { type: t('business') }) :
+            t('actions:addNew', { type: t('business') })
         }
       </>
   );
@@ -216,7 +217,7 @@ export const businessEdit = (props) => {
                           <Button size={'small'}
                                   icon={<SettingOutlined/>}
                                   className={menuStyles.customAction}>
-                            {t('actions:manage', {type: t('business')})} <DownOutlined/>
+                            {t('actions:manage', { type: t('business') })} <DownOutlined/>
                           </Button>
                         </Dropdown>
                       ]}/>

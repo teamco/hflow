@@ -109,29 +109,29 @@ class EditableTags extends React.Component {
     const { newTag = t('actions:newTag') } = this.props;
 
     return (
-      <div>
-        {(tags || []).map((tag, index) => {
-          if (editInputIndex === index) {
-            return (
-              <Input ref={this.saveEditInputRef}
+        <div>
+          {(tags || []).map((tag, index) => {
+            if (editInputIndex === index) {
+              return (
+                  <Input ref={this.saveEditInputRef}
+                         key={tag}
+                         size={size}
+                         disabled={disabled}
+                         className={styles.tagInput}
+                         value={editInputValue}
+                         onChange={this.handleEditInputChange}
+                         onBlur={this.handleEditInputConfirm}
+                         onPressEnter={this.handleEditInputConfirm}/>
+              );
+            }
+
+            const isLongTag = tag.length > 20;
+
+            const tagElem = (
+                <Tag className={styles.editTag}
                      key={tag}
-                     size={size}
-                     disabled={disabled}
-                     className={styles.tagInput}
-                     value={editInputValue}
-                     onChange={this.handleEditInputChange}
-                     onBlur={this.handleEditInputConfirm}
-                     onPressEnter={this.handleEditInputConfirm} />
-            );
-          }
-
-          const isLongTag = tag.length > 20;
-
-          const tagElem = (
-            <Tag className={styles.editTag}
-                 key={tag}
-                 closable={!disabled}
-                 onClose={() => this.handleClose(tag)}>
+                     closable={!disabled}
+                     onClose={() => this.handleClose(tag)}>
                   <span onDoubleClick={e => {
                     this.setState({
                       editInputIndex: index,
@@ -143,34 +143,34 @@ class EditableTags extends React.Component {
                   }}>
                     {isLongTag ? `${tag.slice(0, 20)}...` : tag}
                   </span>
-            </Tag>
-          );
-          return isLongTag ? (
-            <Tooltip title={tag} key={tag}>
-              {tagElem}
-            </Tooltip>
-          ) : (
-            tagElem
-          );
-        })}
-        {inputVisible && (
-          <Input ref={this.saveInputRef}
-                 type={'text'}
-                 size={size}
-                 disabled={disabled}
-                 className={styles.tagInput}
-                 value={inputValue}
-                 onChange={this.handleInputChange}
-                 onBlur={this.handleInputConfirm}
-                 onPressEnter={this.handleInputConfirm} />
-        )}
-        {!inputVisible && (
-          <Tag className={disabled ? styles.siteTagDisabled : styles.siteTagPlus}
-               onClick={this.showInput}>
-            <PlusOutlined /> {newTag}
-          </Tag>
-        )}
-      </div>
+                </Tag>
+            );
+            return isLongTag ? (
+                <Tooltip title={tag} key={tag}>
+                  {tagElem}
+                </Tooltip>
+            ) : (
+                tagElem
+            );
+          })}
+          {inputVisible && (
+              <Input ref={this.saveInputRef}
+                     type={'text'}
+                     size={size}
+                     disabled={disabled}
+                     className={styles.tagInput}
+                     value={inputValue}
+                     onChange={this.handleInputChange}
+                     onBlur={this.handleInputConfirm}
+                     onPressEnter={this.handleInputConfirm}/>
+          )}
+          {!inputVisible && (
+              <Tag className={disabled ? styles.siteTagDisabled : styles.siteTagPlus}
+                   onClick={this.showInput}>
+                <PlusOutlined/> {newTag}
+              </Tag>
+          )}
+        </div>
     );
   }
 }

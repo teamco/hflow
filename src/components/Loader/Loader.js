@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
-import {Spin} from 'antd';
+import { Spin } from 'antd';
 
 import './loader.less';
 

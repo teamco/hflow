@@ -1,20 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {Button, PageHeader} from 'antd';
-import {SaveOutlined, UserSwitchOutlined} from '@ant-design/icons';
-import {Can} from 'utils/auth/can';
+import React, { useEffect, useState } from 'react';
+import { Button, PageHeader } from 'antd';
+import { SaveOutlined, UserSwitchOutlined } from '@ant-design/icons';
+import { Can } from 'utils/auth/can';
 
 import Page from 'components/Page';
 import Main from 'components/Main';
 
-import {isLoading} from 'utils/state';
-import {metadata} from 'pages/users/users.metadata';
-import {expendableProfile} from 'pages/users/[user]/profile/profile.metadata';
+import { isLoading } from 'utils/state';
+import { metadata } from 'pages/users/users.metadata';
+import { expendableProfile } from 'pages/users/[user]/profile/profile.metadata';
 import SendMessage from 'pages/users/metadata/send.message';
 
 import styles from 'pages/users/users.module.less';
-import {userCardMetadata} from './metadata/user.card';
+import { userCardMetadata } from './metadata/user.card';
 
-const {Table, Card} = Main;
+const { Table, Card } = Main;
 
 /**
  * @constant
@@ -47,7 +47,7 @@ export const users = (props) => {
     verificationSent
   } = userModel;
 
-  const {userRoles, businessRoles} = userRolesModel;
+  const { userRoles, businessRoles } = userRolesModel;
 
   data = selectedUser ? [selectedUser] : data;
 
@@ -70,16 +70,16 @@ export const users = (props) => {
 
   const [touched, setTouched] = useState(userModel.touched);
   const [currentRoles, setCurrentRoles] = useState(selectedUser?.roles || []);
-  const [visibleMessage, setVisibleMessage] = useState({visible: false, props: {}});
+  const [visibleMessage, setVisibleMessage] = useState({ visible: false, props: {} });
 
   const subTitle = (
       <>
-        <UserSwitchOutlined style={{marginRight: 10}}/>
-        {t('actions:manage', {type: t('auth:users')})}
+        <UserSwitchOutlined style={{ marginRight: 10 }}/>
+        {t('actions:manage', { type: t('auth:users') })}
       </>
   );
 
-  const {ability} = authModel;
+  const { ability } = authModel;
   const component = 'users';
   const disabled = ability.cannot('update', component);
 

@@ -1,11 +1,11 @@
 import React from 'react';
-import {Avatar, Dropdown, Tooltip} from 'antd';
-import {ContactsTwoTone, EllipsisOutlined, PauseCircleTwoTone, PlayCircleTwoTone} from '@ant-design/icons';
-import {NavLink} from 'umi';
+import { Avatar, Dropdown, Tooltip } from 'antd';
+import { ContactsTwoTone, EllipsisOutlined, PauseCircleTwoTone, PlayCircleTwoTone } from '@ant-design/icons';
+import { NavLink } from 'umi';
 
-import {COLORS} from 'utils/colors';
+import { COLORS } from 'utils/colors';
 
-import {showProfileModal} from './profile.modal';
+import { showProfileModal } from './profile.modal';
 import UserMenu from './users.menu';
 
 import menuStyles from 'components/menu.less';
@@ -18,9 +18,9 @@ export const userCardMetadata = (t, props) => {
     ...rest
   } = props;
 
-  const {metadata, displayName} = props.user;
+  const { metadata, displayName } = props.user;
 
-  const menuProps = {currentUser, ...rest};
+  const menuProps = { currentUser, ...rest };
 
   const cover = metadata.photoURL ? (
       <img src={metadata.photoURL}

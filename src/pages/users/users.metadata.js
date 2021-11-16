@@ -1,15 +1,21 @@
-import React, {useEffect} from 'react';
-import {NavLink} from 'umi';
-import {ContactsTwoTone, DownOutlined, PauseCircleTwoTone, PlayCircleTwoTone, SettingOutlined} from '@ant-design/icons';
+import React, { useEffect } from 'react';
+import { NavLink } from 'umi';
+import {
+  ContactsTwoTone,
+  DownOutlined,
+  PauseCircleTwoTone,
+  PlayCircleTwoTone,
+  SettingOutlined
+} from '@ant-design/icons';
 
-import {Avatar, Button, Dropdown, Tag, Tooltip} from 'antd';
+import { Avatar, Button, Dropdown, Tag, Tooltip } from 'antd';
 
 import classnames from 'classnames';
-import {tsToLocaleDateTime} from 'utils/timestamp';
-import {COLORS} from 'utils/colors';
-import {BRANDS} from 'utils/brands';
+import { tsToLocaleDateTime } from 'utils/timestamp';
+import { COLORS } from 'utils/colors';
+import { BRANDS } from 'utils/brands';
 
-import {showProfileModal} from 'pages/users/metadata/profile.modal';
+import { showProfileModal } from 'pages/users/metadata/profile.modal';
 import UserMenu from 'pages/users/metadata/users.menu';
 
 import styles from 'pages/users/users.module.less';
@@ -84,17 +90,19 @@ export const metadata = ({
           };
 
           return (
-              <div className={styles.nowrap}>
-                <Tooltip title={signed.title}>
+            <div className={classnames(styles.nowrap, styles.flex)}>
+              <Tooltip title={signed.title}>
                   <span className={classnames(styles.signed)}>
                     {signed.icon}
                   </span>
-                </Tooltip>
-                {data.metadata.photoURL ? (
+              </Tooltip>
+              {data.metadata.photoURL ? (
+                  <div className={styles.avatarWrapper}>
                     <img src={data.metadata.photoURL}
                          referrerPolicy={'no-referrer'}
                          alt={name}
                          className={styles.gridImg}/>
+                  </div>
                 ) : (
                     <Avatar src={'https://joeschmoe.io/api/v1/random'}
                             className={styles.avatar}/>
@@ -157,7 +165,7 @@ export const metadata = ({
                     <Button size={'small'}
                             icon={<SettingOutlined/>}
                             className={menuStyles.customAction}>
-                      {t('actions:manage', {type: t('auth:user')})} <DownOutlined/>
+                      {t('actions:manage', { type: t('auth:user') })} <DownOutlined/>
                     </Button>
                   </Dropdown>
                 </div>

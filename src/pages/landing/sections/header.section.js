@@ -38,11 +38,11 @@ const headerSection = props => {
   };
 
   return (
-    <>
-      <section className={styles.headerSection}>
-        <LandingHeader {...headerProps} />
-      </section>
-    </>
+      <>
+        <section className={styles.headerSection}>
+          <LandingHeader {...headerProps} />
+        </section>
+      </>
   );
 };
 

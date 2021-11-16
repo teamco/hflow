@@ -1,5 +1,5 @@
-import {GoogleOutlined, LockOutlined} from '@ant-design/icons';
-import {COLORS} from './colors';
+import { GoogleOutlined, LockOutlined } from '@ant-design/icons';
+import { COLORS } from './colors';
 
 export const BRANDS = {
   'google.com': {

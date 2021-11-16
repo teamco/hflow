@@ -1,11 +1,11 @@
 import React from 'react';
-import {Card} from 'antd';
-import {withTranslation} from 'react-i18next';
+import { Card } from 'antd';
+import { withTranslation } from 'react-i18next';
 import classnames from 'classnames';
 
 import styles from './mainCard.module.less';
 
-const {Meta} = Card;
+const { Meta } = Card;
 
 const MainCard = props => {
   const {

@@ -1,4 +1,4 @@
-import {Loader} from 'resource-loader';
+import { Loader } from 'resource-loader';
 
 /**
  * @export
@@ -11,7 +11,7 @@ export const getExtension = base64 => {
     const regex = new RegExp(regexStr[0]);
     return regexStr?.input?.replace(regex, '');
   }
-}
+};
 
 /**
  * @export
@@ -21,10 +21,10 @@ export const getExtension = base64 => {
  * @param {boolean} [isEdit]
  * @return {*|Promise<*>}
  */
-export const toFile = ({file, entity, type, isEdit = false}) => {
+export const toFile = ({ file, entity, type, isEdit = false }) => {
   // File preparation before saving.
   if (file) {
-    return toBase64({file});
+    return toBase64({ file });
   } else if (isEdit && entity) {
     return entity[type];
   } else {
@@ -39,12 +39,12 @@ export const toFile = ({file, entity, type, isEdit = false}) => {
  * @param cb
  * @return {Promise<string>}
  */
-export const srcToBlob = async ({src, cb}) => {
+export const srcToBlob = async ({ src, cb }) => {
   const loader = new Loader();
   loader.add(src).use((resource, next) => {
     next();
   }).load((loader, resources) => {
-    const blob = new Blob([resources[src].data], {type: 'image/png'});
+    const blob = new Blob([resources[src].data], { type: 'image/png' });
     cb(URL.createObjectURL(blob));
   });
 };
@@ -69,7 +69,7 @@ export async function getFileFromUrl(url) {
 export function getImageFromUrl(url, callback) {
   const img = new Image();
   img.setAttribute('crossOrigin', 'Anonymous');
-  img.onload = function(a) {
+  img.onload = function (a) {
     const canvas = document.createElement('canvas');
     canvas.width = this.width;
     canvas.height = this.height;
@@ -94,7 +94,7 @@ export function getImageFromUrl(url, callback) {
       ia[i] = byteString.charCodeAt(i);
     }
 
-    return callback(new Blob([ia], {type: mimeString}));
+    return callback(new Blob([ia], { type: mimeString }));
   };
 
   img.src = url;
@@ -106,7 +106,7 @@ export function getImageFromUrl(url, callback) {
  * @param file
  * @return {Promise<unknown>}
  */
-export function toBase64({file}) {
+export function toBase64({ file }) {
   if (!file) {
     return null;
   }
@@ -141,7 +141,7 @@ export const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
     byteArrays.push(byteArray);
   }
 
-  return new Blob(byteArrays, {type: contentType});
+  return new Blob(byteArrays, { type: contentType });
 };
 
 /**

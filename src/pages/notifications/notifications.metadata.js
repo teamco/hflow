@@ -6,7 +6,7 @@ import React from 'react';
  * @param loading
  * @return {*}
  */
-export const notificationsMetadata = ({t, loading}) => ({
+export const notificationsMetadata = ({ t, loading }) => ({
   width: '100%',
   size: 'middle',
   columns: [

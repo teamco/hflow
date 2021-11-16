@@ -1,13 +1,13 @@
 import React from 'react';
 import {
   BugOutlined,
+  FontSizeOutlined,
   InfoCircleOutlined,
-  UserOutlined,
+  NotificationOutlined,
+  SolutionOutlined,
   TeamOutlined,
   TrademarkOutlined,
-  SolutionOutlined,
-  FontSizeOutlined,
-  NotificationOutlined
+  UserOutlined
 } from '@ant-design/icons';
 
 /**
@@ -17,34 +17,34 @@ import {
 export const menus = [
   {
     key: 'menu:manageUsers',
-    icon: <UserOutlined />,
+    icon: <UserOutlined/>,
     items: [
       {
         key: 'menu:users',
         url: '/admin/users',
-        icon: <UserOutlined />
+        icon: <UserOutlined/>
       },
       {
         key: 'menu:manageRoles',
         url: '/admin/manageRoles',
-        icon: <SolutionOutlined />
-      },
+        icon: <SolutionOutlined/>
+      }
     ]
   },
   {
     key: 'menu:business',
-    icon: <TrademarkOutlined />,
+    icon: <TrademarkOutlined/>,
     items: [
       {
         key: 'menu:businessTypes',
         url: '/admin/businessTypes',
-        icon: <FontSizeOutlined />
-      },
+        icon: <FontSizeOutlined/>
+      }
     ]
   },
   {
     key: 'menu:systemLogs',
-    icon: <InfoCircleOutlined />,
+    icon: <InfoCircleOutlined/>,
     items: [
       {
         key: 'menu:notifications',

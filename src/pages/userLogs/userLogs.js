@@ -1,16 +1,16 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import ReactJson from 'react-json-view';
 
 import Page from 'components/Page';
 import Main from 'components/Main';
 
-import {userLogsMetadata} from 'pages/userLogs/userLogs.metadata';
-import {PageHeader} from 'antd';
-import {UserSwitchOutlined} from '@ant-design/icons';
+import { userLogsMetadata } from 'pages/userLogs/userLogs.metadata';
+import { PageHeader } from 'antd';
+import { UserSwitchOutlined } from '@ant-design/icons';
 
 import styles from 'pages/userLogs/userLogs.module.less';
 
-const {Table} = Main;
+const { Table } = Main;
 
 export const userLogs = (props) => {
   const {
@@ -31,7 +31,7 @@ export const userLogs = (props) => {
 
   const subTitle = (
       <>
-        <UserSwitchOutlined style={{ marginRight: 10 }} />
+        <UserSwitchOutlined style={{ marginRight: 10 }}/>
         {t('actions:manage', { type: t('user:logs') })}
       </>
   );
@@ -45,7 +45,7 @@ export const userLogs = (props) => {
             component={component}
             spinEffects={['authModel/defineAbilities']}>
         <PageHeader ghost={false}
-                    subTitle={subTitle} />
+                    subTitle={subTitle}/>
         <Table data={data}
                expandable={{
                  expandedRowRender(record) {

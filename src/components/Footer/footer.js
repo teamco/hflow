@@ -8,23 +8,23 @@ import styles from 'components/Footer/footer.module.less';
 const { Footer } = Layout;
 
 const footer = props => {
-  const {t} = props;
+  const { t } = props;
 
   return (
-    <Footer className={styles.footer}>
+      <Footer className={styles.footer}>
 
-    </Footer>
-  )
-}
+      </Footer>
+  );
+};
 
 export default connect(
-  ({ pageModel, loading }) => {
-    return {
-      pageModel,
-      loading
-    };
-  },
-  (dispatch) => ({
-    dispatch
-  })
+    ({ pageModel, loading }) => {
+      return {
+        pageModel,
+        loading
+      };
+    },
+    (dispatch) => ({
+      dispatch
+    })
 )(withTranslation()(footer));

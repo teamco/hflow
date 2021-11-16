@@ -3,13 +3,13 @@
  * @type {{initializeApp, auth}}
  */
 import firebase from 'firebase/app';
-import {firebaseConfig} from 'services/config/firebase.config';
-import {message} from 'antd';
+import { firebaseConfig } from 'services/config/firebase.config';
+import { message } from 'antd';
 import capitalize from 'capitalize-first-letter';
 
 import 'firebase/auth';
 import 'firebase/firestore';
-import {errorDeleteMsg, errorSaveMsg, successDeleteMsg, successSaveMsg} from 'utils/message';
+import { errorDeleteMsg, errorSaveMsg, successDeleteMsg, successSaveMsg } from 'utils/message';
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
@@ -52,7 +52,7 @@ export const fbSignOut = async () => {
  * @param [data]
  * @param {boolean} [notice]
  */
-export const fbAdd = async ({collection, data = {}, notice = true}) => {
+export const fbAdd = async ({ collection, data = {}, notice = true }) => {
   return await db.collection(collection).add(data).then(async (docRef) => {
     const data = (await docRef.get()).data();
     notice && successSaveMsg(false, capitalize(collection));
@@ -79,10 +79,10 @@ export const fbAdd = async ({collection, data = {}, notice = true}) => {
  * @param {boolean} [notice]
  * @return {Promise<{data: *, id: *}|void>}
  */
-export const fbWrite = async ({collection, doc, data = {}, notice = true}) => {
-  return await getRef({collection, doc}).set({...data}).then(async () => {
+export const fbWrite = async ({ collection, doc, data = {}, notice = true }) => {
+  return await getRef({ collection, doc }).set({ ...data }).then(async () => {
     notice && successSaveMsg(false, capitalize(collection));
-    return await fbFindById({collection, data});
+    return await fbFindById({ collection, data });
   }).catch(async error => {
     notice && await message.error(error.message);
     console.error(`Write: ${collection}\n`, error);
@@ -97,7 +97,7 @@ export const fbWrite = async ({collection, doc, data = {}, notice = true}) => {
  * @param collection
  * @param {boolean} [notice]
  */
-export const fbReadAll = async ({collection, notice = true}) => {
+export const fbReadAll = async ({ collection, notice = true }) => {
   return await db.collection(collection).get().catch(async error => {
     notice && await message.error(error.message);
     console.error(`All: ${collection}\n`, error);
@@ -112,7 +112,7 @@ export const fbReadAll = async ({collection, notice = true}) => {
  * @param limit
  * @return {*}
  */
-export const limitBy = ({docRef, limit}) => limit ? docRef.limit(limit) : docRef;
+export const limitBy = ({ docRef, limit }) => limit ? docRef.limit(limit) : docRef;
 
 /**
  * Order refs
@@ -122,7 +122,7 @@ export const limitBy = ({docRef, limit}) => limit ? docRef.limit(limit) : docRef
  * @param [at]
  * @return {*}
  */
-export const orderBy = ({docRef, order, at = 'desc'}) => order ? docRef.orderBy(order, at) : docRef;
+export const orderBy = ({ docRef, order, at = 'desc' }) => order ? docRef.orderBy(order, at) : docRef;
 
 /**
  * Read from collection by condition
@@ -135,11 +135,11 @@ export const orderBy = ({docRef, order, at = 'desc'}) => order ? docRef.orderBy(
  * @param value
  * @param {boolean} [notice]
  */
-export const fbReadBy = async ({collection, field, operator = '==', value, notice = true, optional = {}}) => {
-  const {limit, order} = optional;
+export const fbReadBy = async ({ collection, field, operator = '==', value, notice = true, optional = {} }) => {
+  const { limit, order } = optional;
   let docRef = db.collection(collection).where(field, operator, value);
 
-  docRef = limitBy({docRef: orderBy({docRef, order}), limit});
+  docRef = limitBy({ docRef: orderBy({ docRef, order }), limit });
 
   return await docRef.get().catch(async error => {
     notice && await message.error(error.message);
@@ -156,8 +156,8 @@ export const fbReadBy = async ({collection, field, operator = '==', value, notic
  * @param {boolean} [notice]
  * @return {Promise<firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>>}
  */
-export const fbFindById = async ({docRef, collection, doc, notice = true}) => {
-  docRef = docRef || getRef({collection, doc});
+export const fbFindById = async ({ docRef, collection, doc, notice = true }) => {
+  docRef = docRef || getRef({ collection, doc });
   return await docRef.get().catch(async error => {
     notice && await message.error(error.message);
     console.error(`Find: ${collection}\n`, error);
@@ -171,7 +171,7 @@ export const fbFindById = async ({docRef, collection, doc, notice = true}) => {
  * @param doc
  * @return {firebase.firestore.DocumentReference<firebase.firestore.DocumentData>}
  */
-export const getRef = ({collection, doc}) => db.collection(collection).doc(doc);
+export const getRef = ({ collection, doc }) => db.collection(collection).doc(doc);
 
 /**
  * @async
@@ -182,14 +182,14 @@ export const getRef = ({collection, doc}) => db.collection(collection).doc(doc);
  * @param notice
  * @return {Promise<unknown>}
  */
-export const fbMultipleUpdate = async ({collection, docs, value = {}, notice = true}) => {
-  const docRefs = docs.map(doc => getRef({collection, doc}));
+export const fbMultipleUpdate = async ({ collection, docs, value = {}, notice = true }) => {
+  const docRefs = docs.map(doc => getRef({ collection, doc }));
   return docRefs.length && db.runTransaction(transaction => {
     return transaction.get(docRefs[0]).then((sDoc) => {
       for (let docRef of docRefs) transaction.update(docRef, value);
       return value;
     });
-  }).then(function(value) {
+  }).then(function (value) {
     notice && successSaveMsg(true, capitalize(collection));
     return value;
   }).catch(async error => {
@@ -211,8 +211,8 @@ export const fbMultipleUpdate = async ({collection, docs, value = {}, notice = t
  * @param data
  * @param {boolean} [notice]
  */
-export const fbUpdate = async ({collection, doc, data, notice = true}) => {
-  const docRef = getRef({collection, doc});
+export const fbUpdate = async ({ collection, doc, data, notice = true }) => {
+  const docRef = getRef({ collection, doc });
   return await docRef.update(data).then(() => {
     notice && successSaveMsg(true, capitalize(collection));
   }).catch(async error => {
@@ -233,8 +233,8 @@ export const fbUpdate = async ({collection, doc, data, notice = true}) => {
  * @param doc
  * @param {boolean} [notice]
  */
-export const fbDelete = async ({collection, doc, notice = true}) => {
-  const docRef = getRef({collection, doc});
+export const fbDelete = async ({ collection, doc, notice = true }) => {
+  const docRef = getRef({ collection, doc });
   return await docRef.delete().then(() => {
     notice && successDeleteMsg(capitalize(collection));
   }).catch(async error => {

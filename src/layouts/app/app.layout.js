@@ -1,17 +1,17 @@
-import React, {Suspense, useState} from 'react';
-import {Helmet} from 'umi';
-import {Form, Layout} from 'antd';
+import React, { Suspense, useState } from 'react';
+import { Helmet } from 'umi';
+import { Form, Layout } from 'antd';
 import * as queryString from 'querystring';
 
 import Login from 'pages/login';
 import Loader from 'components/Loader';
 import Main from 'components/Main';
-import {delayedFn} from 'utils/timestamp';
+import { delayedFn } from 'utils/timestamp';
 
 import 'utils/i18n';
 import './app.layout.less';
 
-const {Content} = Layout;
+const { Content } = Layout;
 
 /**
  * @export
@@ -21,7 +21,7 @@ const {Content} = Layout;
  */
 export const AppLayout = (props) => {
 
-  const {mode} = queryString.parse(window.location.search);
+  const { mode } = queryString.parse(window.location.search);
 
   const [isSignInVisible, setIsSignInVisible] = useState(false);
 
@@ -56,10 +56,10 @@ export const AppLayout = (props) => {
     ts: waitBeforeLogin
   });
 
-  const {user} = authModel;
-  const {badge} = notificationModel;
+  const { user } = authModel;
+  const { badge } = notificationModel;
 
-  const headerProps = {t, user, badge};
+  const headerProps = { t, user, badge };
 
   // TODO (teamco): Find better solution.
   const isAuth = user || mode === 'signIn';
@@ -72,7 +72,7 @@ export const AppLayout = (props) => {
         </Helmet>
         <Suspense fallback={<Loader fullScreen spinning={loading.effects['appModel/query']}/>}>
           {/* Have to refresh for production environment */}
-          <Layout style={{minHeight: '100vh'}} key={language ? language : 'en-US'}>
+          <Layout style={{ minHeight: '100vh' }} key={language ? language : 'en-US'}>
             {mainMenu && (
                 <Main.Menu data={menus}
                            onRoute={onRoute}
@@ -91,7 +91,7 @@ export const AppLayout = (props) => {
                   <div className="site-layout-content">{children}</div>
                 </Form.Provider>
               </Content>
-              {mainFooter && <Main.Footer author={t('author', {year: 2020})}/>}
+              {mainFooter && <Main.Footer author={t('author', { year: 2020 })}/>}
             </Layout>
           </Layout>
         </Suspense>

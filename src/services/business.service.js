@@ -1,13 +1,13 @@
 import _ from 'lodash';
-import {fbReadAll, fbReadBy, getRef} from 'services/firebase.service';
+import { fbReadAll, fbReadBy, getRef } from 'services/firebase.service';
 
 export const getAllBusinesses = async () => {
-  const businesses = await fbReadAll({collection: 'businesses'});
+  const businesses = await fbReadAll({ collection: 'businesses' });
 
   let data = [];
   businesses.forEach(doc => {
     const _data = doc.data();
-    data.push(_.merge(_data, {id: doc.id}));
+    data.push(_.merge(_data, { id: doc.id }));
   });
 };
 
@@ -16,9 +16,9 @@ export const getAllBusinesses = async () => {
  * @param userId
  * @return {{docId, data}}
  */
-export const getBusinesses = async ({userId}) => {
+export const getBusinesses = async ({ userId }) => {
   let data = [];
-  const userRef = await getRef({collection: 'users', doc: userId});
+  const userRef = await getRef({ collection: 'users', doc: userId });
 
   /**
    * @constant
@@ -32,10 +32,10 @@ export const getBusinesses = async ({userId}) => {
 
   businesses.forEach(doc => {
     const _data = doc.data();
-    data.push(_.merge(_data, {id: doc.id}));
+    data.push(_.merge(_data, { id: doc.id }));
   });
 
-  return {data};
+  return { data };
 };
 
 /**
@@ -43,14 +43,14 @@ export const getBusinesses = async ({userId}) => {
  * @param businessRef
  * @return {Promise<*[]>}
  */
-export const getBusinessByRef = async ({businessRef}) => {
+export const getBusinessByRef = async ({ businessRef }) => {
 
   /**
    * @constant
    * @type {{data, id}}
    */
   const business = await businessRef.get();
-  const data = {...business.data(), id: business.id};
+  const data = { ...business.data(), id: business.id };
 
   return [data];
 };
@@ -61,7 +61,7 @@ export const getBusinessByRef = async ({businessRef}) => {
  * @param email
  * @return {Promise<{data: {}, docId: any}>}
  */
-export const findBusinessTempUser = async ({email}) => {
+export const findBusinessTempUser = async ({ email }) => {
   let data = {},
       docId = undefined;
 
@@ -91,7 +91,7 @@ export const findBusinessTempUser = async ({email}) => {
  * @async
  * @param businessRef
  */
-export const getBusinessUsers = async ({businessRef}) => {
+export const getBusinessUsers = async ({ businessRef }) => {
   let data = [];
 
   /**
@@ -104,7 +104,7 @@ export const getBusinessUsers = async ({businessRef}) => {
     value: businessRef
   });
 
-  users.forEach(doc => (data.push({...doc.data(), userId: doc.id})));
+  users.forEach(doc => (data.push({ ...doc.data(), userId: doc.id })));
 
   return data;
 };
@@ -116,7 +116,7 @@ export const getBusinessUsers = async ({businessRef}) => {
  * @param businessId
  * @return {data}
  */
-export const getTempBusinessUsers = async ({businessRef}) => {
+export const getTempBusinessUsers = async ({ businessRef }) => {
   let data = [];
   const tempBusinessUsers = await fbReadBy({
     collection: 'tempBusinessUsers',
@@ -124,7 +124,7 @@ export const getTempBusinessUsers = async ({businessRef}) => {
     value: businessRef
   });
 
-  tempBusinessUsers.forEach(doc => (data.push({...doc.data(), userId: doc.id})));
+  tempBusinessUsers.forEach(doc => (data.push({ ...doc.data(), userId: doc.id })));
 
   return data;
 };

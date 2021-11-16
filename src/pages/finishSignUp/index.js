@@ -1,3 +1,3 @@
-import finishSignUp from './finishSignUp.connect'
+import finishSignUp from './finishSignUp.connect';
 
-export default finishSignUp
+export default finishSignUp;

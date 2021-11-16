@@ -5,5 +5,5 @@ import strength from './strength';
 export default {
   SignIn: signIn,
   SignUp: signUp,
-  Strength: strength,
+  Strength: strength
 };

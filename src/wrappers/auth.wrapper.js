@@ -1,5 +1,3 @@
-import { Redirect } from 'umi';
-
 /**
  * @export
  * @param props

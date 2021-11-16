@@ -1,18 +1,16 @@
-import React, {useEffect} from 'react';
-import {useParams} from 'umi';
-import {Form, Select, Button, Modal, Tooltip} from 'antd';
-import {
-  FormOutlined
-} from '@ant-design/icons';
+import React, { useEffect } from 'react';
+import { useParams } from 'umi';
+import { Button, Form, Modal, Select, Tooltip } from 'antd';
+import { FormOutlined } from '@ant-design/icons';
 
-import {emailPartial} from 'components/partials/email.partial';
-import {isOwner} from 'services/userRoles.service';
-import {useFocus} from 'utils/dom';
-import {isLoading} from 'utils/state';
+import { emailPartial } from 'components/partials/email.partial';
+import { isOwner } from 'services/userRoles.service';
+import { useFocus } from 'utils/hooks';
+import { isLoading } from 'utils/state';
 
 import styles from 'components/Authentication/authentication.module.less';
 
-const {Option} = Select;
+const { Option } = Select;
 
 /**
  * @export
@@ -32,7 +30,7 @@ export const registerUser = props => {
     onQuery
   } = props;
 
-  const {businessRoles = []} = userRolesModel;
+  const { businessRoles = [] } = userRolesModel;
 
   /**
    * @type {{user, business}}
@@ -75,7 +73,7 @@ export const registerUser = props => {
     handleCancel(true);
   };
 
-  const {ability} = authModel;
+  const { ability } = authModel;
   const disabled = ability.cannot('create', 'businessUsers');
 
   const roles = [...businessRoles?.roles || []]?.sort().filter(role => !isOwner(role));
@@ -93,18 +91,18 @@ export const registerUser = props => {
                   size={'large'}
                   form={formRef}
                   onFinish={onFinish}>
-              {emailPartial({t, emailRef, name: 'email'})}
+              {emailPartial({ t, emailRef, name: 'email' })}
               <Form.Item name={'userRoles'}
                          rules={[
                            {
                              required: true,
-                             message: t('form:required', {field: t('panel:businessRoles')})
+                             message: t('form:required', { field: t('panel:businessRoles') })
                            }
                          ]}>
                 <Select size={'large'}
                         mode={'multiple'}
                         placeholder={t('panel:businessRoles')}
-                        style={{width: '100%'}}>
+                        style={{ width: '100%' }}>
                   {roles.map((role, idx) => (
                       <Option key={idx}
                               value={role}>
@@ -113,7 +111,7 @@ export const registerUser = props => {
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item style={{marginBottom: 0, marginTop: 20}}>
+              <Form.Item style={{ marginBottom: 0, marginTop: 20 }}>
                 <Tooltip title={t('auth:registerTitle')}>
                   <Button type={'primary'}
                           size={'default'}

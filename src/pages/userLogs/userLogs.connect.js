@@ -1,10 +1,10 @@
-import {connect} from 'dva';
-import {withTranslation} from 'react-i18next';
+import { connect } from 'dva';
+import { withTranslation } from 'react-i18next';
 
-import {userLogs} from './userLogs';
+import { userLogs } from './userLogs';
 
 export default connect(
-    ({authModel, userLogModel, loading}) => {
+    ({ authModel, userLogModel, loading }) => {
       return {
         authModel,
         userLogModel,
@@ -14,7 +14,7 @@ export default connect(
     (dispatch) => ({
       dispatch,
       onQuery() {
-        dispatch({type: `userLogModel/query`});
+        dispatch({ type: `userLogModel/query` });
       }
     })
 )(withTranslation()(userLogs));

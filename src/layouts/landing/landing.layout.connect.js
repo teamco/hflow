@@ -1,9 +1,9 @@
-import {withRouter} from 'umi';
-import {connect} from 'dva';
-import {LandingLayout} from './landing.layout';
+import { withRouter } from 'umi';
+import { connect } from 'dva';
+import { LandingLayout } from './landing.layout';
 
 export default withRouter(connect(
-    ({appModel, authModel, loading}) => ({
+    ({ appModel, authModel, loading }) => ({
       appModel,
       authModel,
       loading
@@ -11,13 +11,13 @@ export default withRouter(connect(
     (dispatch) => ({
       dispatch,
       onNotification() {
-        dispatch({type: 'appModel/notification'});
+        dispatch({ type: 'appModel/notification' });
       },
       onDefineAbilities() {
-        dispatch({type: 'authModel/defineAbilities'});
+        dispatch({ type: 'authModel/defineAbilities' });
       },
       onUpdateDocumentMeta(meta) {
-        dispatch({type: 'appModel/updateDocumentMeta', payload: {meta}});
+        dispatch({ type: 'appModel/updateDocumentMeta', payload: { meta } });
       }
     }))(LandingLayout)
 );

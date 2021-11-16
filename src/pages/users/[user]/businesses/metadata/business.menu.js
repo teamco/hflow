@@ -1,13 +1,8 @@
 import React from 'react';
-import {NavLink} from 'umi';
-import {Menu, Popconfirm} from 'antd';
-import {
-  DeleteOutlined,
-  FileDoneOutlined,
-  PauseCircleOutlined,
-  UsergroupAddOutlined
-} from '@ant-design/icons';
-import {withTranslation} from 'react-i18next';
+import { NavLink } from 'umi';
+import { Menu, Popconfirm } from 'antd';
+import { DeleteOutlined, FileDoneOutlined, PauseCircleOutlined, UsergroupAddOutlined } from '@ant-design/icons';
+import { withTranslation } from 'react-i18next';
 
 /**
  * @export
@@ -33,7 +28,7 @@ const BusinessMenu = props => {
                    disabled={!isEdit}
                    icon={<UsergroupAddOutlined/>}>
           <NavLink to={`/admin/users/${params.user}/businesses/${record.id}/users`}>
-            {t('actions:manage', {type: t('auth:users')})}
+            {t('actions:manage', { type: t('auth:users') })}
           </NavLink>
         </Menu.Item>
         <Menu.Item key={'activate'}
@@ -56,7 +51,7 @@ const BusinessMenu = props => {
                    loading={loading.effects['businessModel/prepareToSave']}
                    disabled={!isEdit}
                    icon={<DeleteOutlined/>}>
-          <Popconfirm title={t('msg:deleteConfirm', {instance: t('business')})}
+          <Popconfirm title={t('msg:deleteConfirm', { instance: t('business') })}
                       placement={'topRight'}
                       onConfirm={() => onDeleteBusiness(params.business)}>
             {t('actions:delete')}

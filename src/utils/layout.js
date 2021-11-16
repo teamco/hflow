@@ -9,10 +9,10 @@ import memoize from 'lodash/memoize';
 export const getBreakPoint = width => {
   width = isNaN(parseInt(width, 10)) ? window.innerWidth : width;
   return inRange(width, 0, 576) ? 'xs' :
-    inRange(width, 576, 768) ? 'sm' :
-      inRange(width, 768, 992) ? 'md' :
-        inRange(width, 992, 1200) ? 'lg' :
-          inRange(width, 1200, 1600) ? 'xl' : 'xxl';
+      inRange(width, 576, 768) ? 'sm' :
+          inRange(width, 768, 992) ? 'md' :
+              inRange(width, 992, 1200) ? 'lg' :
+                  inRange(width, 1200, 1600) ? 'xl' : 'xxl';
 };
 
 /**

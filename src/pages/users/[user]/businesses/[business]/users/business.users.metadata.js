@@ -1,30 +1,14 @@
-import React, {useState} from 'react';
-import {
-  PauseCircleTwoTone,
-  PlayCircleTwoTone,
-  SettingOutlined,
-  DownOutlined,
-  MailTwoTone,
-  CalendarTwoTone,
-  SyncOutlined
-} from '@ant-design/icons';
+import React from 'react';
+import { DownOutlined, PauseCircleTwoTone, PlayCircleTwoTone, SettingOutlined, SyncOutlined } from '@ant-design/icons';
 
-import {
-  Col,
-  Row,
-  Button,
-  Dropdown,
-  Tag,
-  Tooltip
-} from 'antd';
+import { Button, Dropdown, Tag, Tooltip } from 'antd';
 
 import classnames from 'classnames';
-import {tsToLocaleDateTime} from 'utils/timestamp';
-import EmailVerified from 'components/Profile/email.verified';
+import { tsToLocaleDateTime } from 'utils/timestamp';
 import BusinessUserMenu from './metadata/business.user.menu';
 
-import {getRoleIcon} from 'pages/users/[user]/profile/profile.metadata';
-import {COLORS} from 'utils/colors';
+import { getRoleIcon } from 'pages/users/[user]/profile/profile.metadata';
+import { COLORS } from 'utils/colors';
 
 import styles from 'pages/users/users.module.less';
 import menuStyles from 'components/menu.less';
@@ -74,7 +58,7 @@ export const metadata = ({
         dataIndex: 'displayName',
         key: 'displayName',
         render(name, data) {
-          const {pending, signedIn} = data?.metadata || {};
+          const { pending, signedIn } = data?.metadata || {};
           const color = signedIn ? COLORS.success : COLORS.disabled;
           const signed = {
             title: t(signedIn ? 'auth:signedIn' : 'auth:signedOut'),
@@ -115,7 +99,7 @@ export const metadata = ({
               <div>
                 {roles?.map((role, idx) => (
                     <Tag className={styles.rules}
-                         style={{marginBottom: 3}}
+                         style={{ marginBottom: 3 }}
                          key={`cr.${idx}`}
                          closable={false}
                          icon={getRoleIcon(role)}>
@@ -143,7 +127,7 @@ export const metadata = ({
                 <Button size={'small'}
                         icon={<SettingOutlined/>}
                         className={menuStyles.customAction}>
-                  {t('actions:manage', {type: t('menu:users')})} <DownOutlined/>
+                  {t('actions:manage', { type: t('menu:users') })} <DownOutlined/>
                 </Button>
               </Dropdown>
             </div>

@@ -1,9 +1,9 @@
 import React from 'react';
-import {CheckCircleTwoTone, WarningTwoTone} from '@ant-design/icons';
-import {withTranslation} from 'react-i18next';
+import { CheckCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
+import { withTranslation } from 'react-i18next';
 
-import {Can} from 'utils/auth/can';
-import {COLORS} from 'utils/colors';
+import { Can } from 'utils/auth/can';
+import { COLORS } from 'utils/colors';
 
 import styles from 'pages/users/users.module.less';
 
@@ -14,7 +14,7 @@ import styles from 'pages/users/users.module.less';
  * @return {JSX.Element}
  */
 function emailVerified(props) {
-  const {t, data, verification = {component: null}} = props;
+  const { t, data, verification = { component: null } } = props;
 
   return (
       <div>

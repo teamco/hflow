@@ -31,7 +31,7 @@ function MainTable(props) {
 
     return [
       ...new Map(_filter.map(item =>
-        [item['value'], item])).values()
+          [item['value'], item])).values()
     ];
   };
 
@@ -69,11 +69,11 @@ function MainTable(props) {
   delete gridProps.columns;
 
   return (
-    <Table className={styles.grid}
-           expandable={gridProps.expandable}
-           footer={() => `${props.t('table:total')}: ${total}`}
-           columns={columns}
-           {...gridProps} />
+      <Table className={styles.grid}
+             expandable={gridProps.expandable}
+             footer={() => `${props.t('table:total')}: ${total}`}
+             columns={columns}
+             {...gridProps} />
   );
 }
 

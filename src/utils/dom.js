@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 /**
  * @export
  * @param {string} html Representing a single element
@@ -24,17 +22,4 @@ export function htmlToElements(html) {
   html = html.trim();
   template.innerHTML = html;
   return template.content.childNodes;
-}
-
-/**
- * @export
- * @return {[]}
- */
-export function useFocus() {
-  const htmlElRef = useRef(null);
-  const setFocus = () => {
-    htmlElRef.current?.focus();
-  };
-
-  return [htmlElRef, setFocus];
 }

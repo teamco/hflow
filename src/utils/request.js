@@ -1,5 +1,5 @@
 import request from 'umi-request';
-import {API_CONFIG} from '@/services/config';
+import { API_CONFIG } from '@/services/config';
 
 /**
  * @constant
@@ -97,7 +97,7 @@ function config({
       url: adoptUrlToAPI(url, direct),
       method,
       responseType,
-      headers: {...mergeHeaders(), ...headers}
+      headers: { ...mergeHeaders(), ...headers }
     },
     ...args
   };
@@ -125,12 +125,12 @@ function toBase64(file) {
  * @return {Q.Promise<any> | undefined}
  */
 function xhr(opts, errorMsg, fallbackUrl) {
-  const {pathname} = window.location;
-  const {url, method} = opts;
+  const { pathname } = window.location;
+  const { url, method } = opts;
   delete opts.url;
   delete opts.method;
 
-  return request[method](url, opts).then((res) => ({data: {...res}})).catch((error) => {
+  return request[method](url, opts).then((res) => ({ data: { ...res } })).catch((error) => {
     errorMsg && errorMsg(error?.data?.error);
     setTimeout(() => {
       if (fallbackUrl && !pathname.match(new RegExp(fallbackUrl))) {

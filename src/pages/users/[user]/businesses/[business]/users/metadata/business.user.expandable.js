@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {Col, Row} from 'antd';
-import {CalendarTwoTone, MailTwoTone} from '@ant-design/icons';
-import {tsToLocaleDateTime} from 'utils/timestamp';
+import React, { useState } from 'react';
+import { Col, Row } from 'antd';
+import { CalendarTwoTone, MailTwoTone } from '@ant-design/icons';
+import { tsToLocaleDateTime } from 'utils/timestamp';
 import EmailVerified from 'components/Profile/email.verified';
 
 import styles from 'pages/users/users.module.less';
@@ -26,9 +26,9 @@ export const expandable = (props) => {
 
   return {
     expandedRowRender(record) {
-      const {business = {}, metadata = {}} = record;
-      const {userRoles} = business;
-      const {pending, invitedAt, creationTime} = metadata;
+      const { business = {}, metadata = {} } = record;
+      const { userRoles } = business;
+      const { pending, invitedAt, creationTime } = metadata;
 
       return (
           <div className={styles.profileExpand}>
@@ -72,7 +72,7 @@ export const expandable = (props) => {
             </Row>
             {pending ? null : (
                 <Row gutter={[16, 16]}
-                     style={{marginTop: 10}}>
+                     style={{ marginTop: 10 }}>
                   <Col span={8}>
                     <EmailVerified data={record}
                                    verification={{

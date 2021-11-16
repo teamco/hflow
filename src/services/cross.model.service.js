@@ -1,5 +1,5 @@
-import {getUsers} from 'services/user.service';
-import {tsToLocaleDateTime} from 'utils/timestamp';
+import { getUsers } from 'services/user.service';
+import { tsToLocaleDateTime } from 'utils/timestamp';
 
 /**
  * @export
@@ -8,15 +8,15 @@ import {tsToLocaleDateTime} from 'utils/timestamp';
  * @param user
  * @return {Promise<*>}
  */
-export async function detailsInfo({entity, user}) {
+export async function detailsInfo({ entity, user }) {
 
   /**
    * @constant
    * @type {{data}}
    */
-  const users = await getUsers({user});
+  const users = await getUsers({ user });
 
-  const _metadata = {...entity.metadata};
+  const _metadata = { ...entity.metadata };
   const updatedBy = (await _metadata.updatedByRef.get()).data();
   const createdBy = (await _metadata.createdByRef.get()).data();
 

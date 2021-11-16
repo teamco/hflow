@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 
 import Page from 'components/Page';
 
 import styles from 'pages/home/home.module.less';
 
 export const home = (props) => {
-  const {t, pageModel, loading} = props;
+  const { t, pageModel, loading } = props;
 
   useEffect(() => {
   }, []);

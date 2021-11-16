@@ -1,14 +1,14 @@
 import React from 'react';
-import {Input, Select} from 'antd';
+import { Input, Select } from 'antd';
 
-import {emailProps} from 'components/partials/email.partial';
+import { emailProps } from 'components/partials/email.partial';
 import FormComponents from 'components/Form';
 import UploadFile from 'components/Upload';
-import {sortBy} from 'utils/array';
+import { sortBy } from 'utils/array';
 
-const {GenericPanel} = FormComponents;
-const {TextArea} = Input;
-const {Option} = Select;
+const { GenericPanel } = FormComponents;
+const { TextArea } = Input;
+const { Option } = Select;
 
 /**
  * @export
@@ -35,7 +35,7 @@ export const BusinessInfo = ({
                   form={formRef}
                   label={t('business:type')}
                   disabled={disabled}
-                  config={{rules: [{required: true}]}}>
+                  config={{ rules: [{ required: true }] }}>
             {sortBy(businessTypes, 'name').map((type, idx) => (
                 <Option key={idx}
                         value={type}>
@@ -51,13 +51,13 @@ export const BusinessInfo = ({
                  name={'name'}
                  form={formRef}
                  disabled={disabled}
-                 config={{rules: [{required: true}]}}/>
+                 config={{ rules: [{ required: true }] }}/>
           <Input type={'text'}
                  label={t('business:email')}
                  name={'email'}
                  form={formRef}
                  disabled={disabled}
-                 config={{...emailProps(t)}}/>
+                 config={{ ...emailProps(t) }}/>
         </div>
         <div>
           <TextArea type={'text'}

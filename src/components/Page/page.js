@@ -1,16 +1,16 @@
 import React from 'react';
-import {connect} from 'dva';
-import {Prompt} from 'umi';
-import {Layout, Row, Spin} from 'antd';
+import { connect } from 'dva';
+import { Prompt } from 'umi';
+import { Layout, Row, Spin } from 'antd';
 import classnames from 'classnames';
-import {withTranslation} from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import Page403 from 'pages/403';
-import {Can} from 'utils/auth/can';
+import { Can } from 'utils/auth/can';
 
 import styles from 'components/Page/page.module.less';
 
-const {Content} = Layout;
+const { Content } = Layout;
 
 function Page({
   t,
@@ -32,15 +32,15 @@ function Page({
       <Layout className={classnames(styles.layout)}>
         <Layout className={'site-layout'}>
           <Content className={classnames(styles.page, className)}>
-            <Row style={{height: '100%'}}>
+            <Row style={{ height: '100%' }}>
               <Spin spinning={spinning.length > 0}>
                 <Can I={'read'} a={component}>
                   {touched && (
                       <Prompt when={true}
                               message={location => {
-                        // TODO (teamco): Do something with location.
-                        return t('msg:unsaved');
-                      }}/>
+                                // TODO (teamco): Do something with location.
+                                return t('msg:unsaved');
+                              }}/>
                   )}
                   <div component={component}>
                     {children}
@@ -56,7 +56,7 @@ function Page({
 }
 
 export default connect(
-    ({pageModel, loading}) => {
+    ({ pageModel, loading }) => {
       return {
         pageModel,
         loading

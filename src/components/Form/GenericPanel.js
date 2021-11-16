@@ -1,16 +1,16 @@
-import React, {Component} from 'react';
-import {Collapse, Form} from 'antd';
-import {withTranslation} from 'react-i18next';
+import React, { Component } from 'react';
+import { Collapse, Form, Spin } from 'antd';
+import { withTranslation } from 'react-i18next';
 import classnames from 'classnames';
 
-import {getSuffix} from 'components/Form';
+import { getSuffix } from 'components/Form';
 import styles from 'components/Form/form.module.less';
 
 import Grid from 'components/Grid';
 import MandatoryTextarea from './MandatoryTextarea';
 
-const {AntHillRow} = Grid;
-const {Panel} = Collapse;
+const { AntHillRow } = Grid;
+const { Panel } = Collapse;
 
 /**
  * @constant
@@ -20,7 +20,7 @@ const {Panel} = Collapse;
  * @private
  */
 const _cleanProps = (_child, props = []) => {
-  const _props = {..._child.props};
+  const _props = { ..._child.props };
   props.forEach(prop => {
     delete _props[prop];
   });
@@ -38,6 +38,7 @@ class GenericPanel extends Component {
       header,
       name,
       inRow = true,
+      collapsible = 'header',
       className = ''
     } = this.props;
 
@@ -95,14 +96,14 @@ class GenericPanel extends Component {
           config = {}
         } = _child.props;
 
-        let {rules = [], valuePropName} = config;
+        let { rules = [], valuePropName } = config;
 
         const _isRequired = rules.find(rule => rule.required);
         if (_isRequired && !_isRequired.message) {
-          _isRequired.message = t('form:required', {field: label});
+          _isRequired.message = t('form:required', { field: label });
         }
         const _placeholder = label ?
-            _handleProps(placeholder, t('form:placeholder', {field: label})) :
+            _handleProps(placeholder, t('form:placeholder', { field: label })) :
             null;
 
         const _props = _cleanProps(_child, ['config', 'hasFeedback', 'form']);
@@ -122,7 +123,7 @@ class GenericPanel extends Component {
             configProps.key = `${idx}-${_key}`;
 
             return React.isValidElement(_child) ?
-                React.cloneElement(_child, {...configProps}) : null;
+                React.cloneElement(_child, { ...configProps }) : null;
           }
 
           /**
@@ -147,29 +148,34 @@ class GenericPanel extends Component {
                        key={`${idx}-${_key}`}
                        rules={rules}
                        {...rest}>
-              {React.cloneElement(_child, {...configProps})}
+              {React.cloneElement(_child, { ...configProps })}
             </Form.Item>
         ) : null;
       });
     };
 
     return (
-        <Collapse collapsible={'header'}
+        <Collapse collapsible={collapsible}
                   className={classnames(styles.collapsePanel, className)}
                   defaultActiveKey={defaultActiveKey}>
           <Panel header={header}
                  key={name}>
-            {_getChildren(children).map((_rowChild, idx) => {
-              return _rowChild ? inRow ? (
-                  <AntHillRow key={idx}>
-                    {_formItem(_rowChild, idx)}
-                  </AntHillRow>
-              ) : (
-                  <div key={idx}
-                       style={{
-                         display: 'flex',
-                         padding: '8px 0',
-                         flexFlow: 'wrap'
+            {collapsible === 'disabled' ? (
+                    <div className={styles.disabledPanel}>
+                      <Spin spinning={true}/>
+                    </div>
+                ) :
+                _getChildren(children).map((_rowChild, idx) => {
+                  return _rowChild ? inRow ? (
+                      <AntHillRow key={idx}>
+                        {_formItem(_rowChild, idx)}
+                      </AntHillRow>
+                  ) : (
+                      <div key={idx}
+                           style={{
+                             display: 'flex',
+                             padding: '8px 0',
+                             flexFlow: 'wrap'
                        }}>
                     {_formItem(_rowChild, idx)}
                   </div>

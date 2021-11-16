@@ -10,6 +10,7 @@ export default class MainInfo extends React.Component {
   render() {
     const {
       t,
+      touched,
       isEdit = false,
       info: {
         createdBy = {},
@@ -20,21 +21,22 @@ export default class MainInfo extends React.Component {
     } = this.props;
 
     return isEdit && (
-      <GenericPanel header={t('form:entityInfo', { entity: t('panel:details') })}
-                    name={'entityInfo'}>
-        <div>
-          <div label={t('form:createdBy')}>
-            <Link to={`/admin/users/${createdBy.id}`}>{createdBy.displayName}</Link>
+        <GenericPanel header={t('form:entityInfo', { entity: t('panel:details') })}
+                      collapsible={touched ? 'disabled' : 'header'}
+                      name={'entityInfo'}>
+          <div>
+            <div label={t('form:createdBy')}>
+              <Link to={`/admin/users/${createdBy.id}`}>{createdBy.displayName}</Link>
+            </div>
+            <div label={t('form:updatedBy')}>
+              <Link to={`/admin/users/${updatedBy.id}`}>{updatedBy.displayName}</Link>
+            </div>
           </div>
-          <div label={t('form:updatedBy')}>
-            <Link to={`/admin/users/${updatedBy.id}`}>{updatedBy.displayName}</Link>
+          <div>
+            <div label={t('form:createdAt')}>{createdAt}</div>
+            <div label={t('form:updatedAt')}>{updatedAt}</div>
           </div>
-        </div>
-        <div>
-          <div label={t('form:createdAt')}>{createdAt}</div>
-          <div label={t('form:updatedAt')}>{updatedAt}</div>
-        </div>
-      </GenericPanel>
+        </GenericPanel>
     );
   }
 }

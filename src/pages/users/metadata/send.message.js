@@ -1,11 +1,8 @@
-import React, {useState} from 'react';
-import {Button, Form, Input, Modal, Switch} from 'antd';
-import {
-  MessageTwoTone,
-  MailOutlined
-} from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Button, Form, Input, Modal, Switch } from 'antd';
+import { MailOutlined, MessageTwoTone } from '@ant-design/icons';
 
-import {withTranslation} from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import styles from 'pages/users/users.module.less';
 
@@ -36,7 +33,7 @@ const SendMessage = (props) => {
 
   /** @constant */
   const onCancel = () => {
-    setVisibleMessage({visible: false, props: {}});
+    setVisibleMessage({ visible: false, props: {} });
     setSendDisabled(true);
   };
 
@@ -46,7 +43,7 @@ const SendMessage = (props) => {
    * @param {number} [count]
    */
   const handleSend = (field, count = 2) => {
-    const _fields = {...fields, ...field};
+    const _fields = { ...fields, ...field };
     const values = Object.values(_fields).filter(v => !!v);
     setFields(_fields);
     setSendDisabled(values.length !== count);
@@ -54,7 +51,7 @@ const SendMessage = (props) => {
 
   const [form] = Form.useForm();
 
-  const {from, to, replyTo} = visibleMessage.props;
+  const { from, to, replyTo } = visibleMessage.props;
 
   return (
       <Modal visible={visibleMessage.visible}
@@ -109,15 +106,15 @@ const SendMessage = (props) => {
               </Form.Item>
           )}
           <Form.Item label={t('table:title')}
-                     tooltip={t('form:required', {field: t('table:title')})}
+                     tooltip={t('form:required', { field: t('table:title') })}
                      name={'title'}>
-            <Input onChange={e => handleSend({title: e.target.value})}/>
+            <Input onChange={e => handleSend({ title: e.target.value })}/>
           </Form.Item>
           <Form.Item label={t('table:description')}
-                     tooltip={t('form:required', {field: t('table:description')})}
+                     tooltip={t('form:required', { field: t('table:description') })}
                      name={'description'}>
             <Input.TextArea type={'textarea'}
-                            onChange={e => handleSend({description: e.target.value})}/>
+                            onChange={e => handleSend({ description: e.target.value })}/>
           </Form.Item>
           <Form.Item name={'isPrivate'}
                      valuePropName={'checked'}>
