@@ -6,10 +6,10 @@ import {fbDelete, fbReadBy} from 'services/firebase.service';
  * @return {{docId, data}}
  */
 export const getAllSubscriptionsByType = async ({type}) => {
-  const subscriptions = await  fbReadBy({
+  const subscriptions = await fbReadBy({
     collection: 'subscriptions',
     field: 'type',
-    value: type
+    value: type?.type
   });
 
   let data = [];
@@ -18,6 +18,7 @@ export const getAllSubscriptionsByType = async ({type}) => {
     const _data = doc.data();
     data.push(_.merge(_data, {id: doc.id}));
   });
+  return {data};
 
 }
 

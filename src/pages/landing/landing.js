@@ -38,9 +38,10 @@ export const landing = (props) => {
   return (
     <Spin spinning={loading.effects['landingModel/query']}>
       <Layout className={styles.landing}>
+        <HeaderSection {...headerProps} />
         <Content>
           <div className={styles.page}>
-            <HeaderSection {...headerProps} />
+            some page content
           </div>
         </Content>
         <Footer />

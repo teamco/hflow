@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Col, Row } from 'antd';
+import { Space, Card, Layout  } from 'antd';
 import Subscription from 'components/Subscription';
 import SignUp from 'components/Authentication/signUp.connect';
 import LandingPage from 'layouts/landing/page';
@@ -8,7 +9,6 @@ import styles from 'pages/subscription/subscription.module.less';
 
 export const subscription = (props) => {
   const {
-    t,
     authModel,
     subscriptionModel,
     onQuery,
@@ -17,7 +17,7 @@ export const subscription = (props) => {
   } = props;
 
   useEffect(() => {
-   // onQuery({type: 'application'});
+   onQuery({type: 'application'});
   }, []);
 
   const handleAssignSubscription = e => {
@@ -34,51 +34,61 @@ export const subscription = (props) => {
     onSignIn,
     isSignInAble: false
   };
-  debugger;
 
-  const subscriptionProps = {
-    className: styles.assign,
-    actions: [
-      <div className={styles.button}
-           onClick={handleAssignSubscription}>
-        Start with standard
-      </div>
-    ],
-    cover: (
-        <div className={styles.content}>
-          <h2>Standard</h2>
-          <h3>299<sup>$</sup></h3>
-          <span>per year</span>
+
+  const prepareLandingSubscriptions = () => {
+    const {subscriptions: {data}} = subscriptionModel;
+    const subscriptionsData = data?.map((item) => (
+
+        return (
+
+        )
+    ))
+  }
+
+  const prepareSubscriptionProps = (props) => {
+    return {
+      className: styles.assign,
+      actions: [
+        <div className={styles.button}
+             onClick={handleAssignSubscription}>
+          Start with standard
         </div>
-    ),
-    meta: {
-      description: <h5>Core course library, paths and skill assessments</h5>
+      ],
+      cover: (
+          <div className={styles.content}>
+            <h2>Standard</h2>
+            <h3>299<sup>$</sup></h3>
+            <span>per year</span>
+          </div>
+      ),
+      meta: {
+        description: <h5>Core course library, paths and skill assessments</h5>
+      }
     }
+
   };
-  const styless = {padding: '8px 0'};
 
   return (
       <LandingPage
-          pageStyles={styles.pageContent}
           spinEffects={[
         'subscriptionModel/query',
         'subscriptionModel/assignTo'
       ]}>
-        <div className={styles.subscription}>
-          <Row gutter={16}>
-            <Col className="gutter-row" span={6}>
+          <Row justify="center">
+            <Space direction="horizontal">
+            <Col span={8}>
               <Subscription {...subscriptionProps}/>
             </Col>
-            <Col className="gutter-row" span={6}>
-              <Subscription {...subscriptionProps}/>
-            </Col>
-            <Col className="gutter-row" span={6}>
+              <Col span={8}>
                 <Subscription {...subscriptionProps}/>
-            </Col>
+              </Col>
+              <Col span={8}>
+                <Subscription {...subscriptionProps}/>
+              </Col>
+            </Space>
           </Row>
-
           <SignUp {...signUpProps} />
-        </div>
-      </LandingPage>
+        </LandingPage>
   );
 };

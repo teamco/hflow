@@ -3,6 +3,7 @@ import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from 'models/common.model';
 import {getAllSubscriptionsByType} from '../services/subscription.service';
+import {monitorHistory} from '../utils/history';
 
 
 
@@ -13,9 +14,11 @@ export default dvaModelExtend(commonModel, {
   namespace: 'subscriptionModel',
   state: {
     subscriptions: []
+
   },
   subscriptions: {
-    setupHistory(setup) {
+    setupHistory({history, dispatch}) {
+      monitorHistory({history, dispatch}, 'subscriptionModel');
     },
     setup({ dispatch }) {
     }
@@ -24,11 +27,11 @@ export default dvaModelExtend(commonModel, {
 
     * query({ payload }, {call, put, select }) {
       const {type = 'application'} = payload;
-      const subscriptions = yield call(getAllSubscriptionsByType({type}))
+      const allSubscriptions = yield call(getAllSubscriptionsByType,{type})
 
       yield put({
         type: 'updateState',
-        payload: {subscriptions}
+        payload: {subscriptions: allSubscriptions}
       })
     }
 

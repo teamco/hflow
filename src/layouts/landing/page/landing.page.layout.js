@@ -58,15 +58,15 @@ export const LandingPage = (props) => {
   return (
       <Spin spinning={isSpinning}>
         <Layout className={styles.landing}>
+          <HeaderSection {...headerProps} />
           <Content>
             <div className={styles.page}>
-              <HeaderSection {...headerProps} />
               <div className={pageStyles}>
                 {children}
               </div>
             </div>
           </Content>
-          <Footer/>
+          <Footer />
         </Layout>
         <BackTop/>
       </Spin>
