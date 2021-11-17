@@ -68,7 +68,7 @@ export const LandingPage = (props) => {
               </div>
             </div>
           </Content>
-          <Footer />
+          <Footer>footer</Footer>
         </Layout>
         <BackTop/>
       </Spin>
