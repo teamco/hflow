@@ -4,6 +4,8 @@
 @search_width: 60%;
 
 .landing {
+  background-color: #fff;
+
   .page {
     height: 100%;
     position: relative;
@@ -16,5 +18,41 @@
   .contentFixed {
     position: relative;
     top: 48px;
+  }
+
+  .landingTabs {
+    .hr {
+      position: relative;
+      top: 1px;
+      height: 1px;
+      background-color: #f0f0f0;
+    }
+
+    :global {
+      .ant-tabs {
+        background-color: #fff;
+      }
+
+      .ant-tabs-tab {
+        border-radius: 0 !important;
+        margin-left: -1px !important;
+        background-color: #fff !important;
+        text-transform: lowercase;
+        font-variant: small-caps;
+
+        > * {
+          color: @landing-color !important;
+        }
+      }
+
+      .ant-tabs-tab-active {
+        background-color: rgb(241, 241, 241) !important;
+        border-bottom: 1px solid rgb(241, 241, 241) !important;
+
+        > * {
+          color: @landing-color !important;
+        }
+      }
+    }
   }
 }

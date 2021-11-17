@@ -94,12 +94,12 @@ const landingHeader = props => {
       <header className={classnames(styles.header, transform ? styles.transform : '')}
               style={{ position }}>
         <Row>
-          <Col span={8}>
+          <Col span={6}>
             <img src={icon}
                  className={styles.icon}
                  alt={t(title)}/>
           </Col>
-          <Col span={16}>
+          <Col span={18}>
             <Row justify={'end'}
                  gutter={[16, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
               <Col className={styles.headerText}>
@@ -113,16 +113,18 @@ const landingHeader = props => {
                         setForceSignInVisible={setForceSignInVisible}
                         className={styles.headerAuth}/>
                 {user ? (
-                    <div>
-                      <HeartTwoTone twoToneColor={'#ccc'}/>
-                      <NavLink to={`/admin/users/${user.id}/notifications`}>
-                        <BellTwoTone twoToneColor={'#ccc'}/>
-                      </NavLink>
-                      <NavLink to={`/admin/users/${user.id}/notifications`}
-                               className={styles.ads}>
-                        <PlusOutlined/>
-                        {t('landing:ads')}
-                      </NavLink>
+                    <div style={{ display: 'flex' }}>
+                      <div className={styles.actions}>
+                        <HeartTwoTone twoToneColor={'#ccc'}/>
+                        <NavLink to={`/admin/users/${user.id}/notifications`}>
+                          <BellTwoTone twoToneColor={'#ccc'}/>
+                        </NavLink>
+                        <NavLink to={`/admin/users/${user.id}/notifications`}
+                                 className={styles.ads}>
+                          <PlusOutlined/>
+                          {t('landing:ads')}
+                        </NavLink>
+                      </div>
                       <Dropdown overlay={menu}
                                 trigger={['click']}
                                 placement={'bottomRight'}>

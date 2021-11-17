@@ -11,6 +11,14 @@
   padding-right: 20px;
 
   .headerText {
+    white-space: nowrap;
+
+    @media (max-width: 600px) {
+      &:first-child {
+        display: none;
+      }
+    }
+
     span {
       color: @landing-color;
       font-size: 12px;
@@ -29,32 +37,29 @@
       transition: color 0.8s ease-in-out;
     }
 
-    .ads {
-      margin: auto 10px;
-      background-color: rgba(226, 238, 250, 0.6);
-      padding: 3px 10px 3px 0;
-      color: @landing-color;
-      transition: background-color 0.8s ease-in-out;
-      border-radius: 3px;
+    .actions {
+      .ads {
+        margin: auto 10px;
+        background-color: rgba(226, 238, 250, 0.6);
+        padding: 3px 10px 3px 0;
+        color: @landing-color;
+        transition: background-color 0.8s ease-in-out;
+        border-radius: 3px;
 
-      &:hover {
-        background-color: rgb(226, 238, 250);
-      }
+        &:hover {
+          background-color: rgb(226, 238, 250);
+        }
 
-      svg {
-        margin-right: 5px;
-        height: 10px;
-        width: 10px;
-        top: 0;
-      }
-    }
+        svg {
+          margin-right: 5px;
+          height: 10px;
+          width: 10px;
+          top: 0;
+        }
 
-    :global {
-      .ant-divider-vertical {
-        border-color: @landing-color;
-        border-width: 1px;
-        height: 1.9em;
-        transition: border-color 0.5s ease-in-out;
+        @media (max-width: 400px) {
+          display: none;
+        }
       }
     }
   }
