@@ -31,8 +31,9 @@ export const LandingPage = (props) => {
   }, []);
 
   const {
+    icon,
     topUnder,
-    swipeData
+    header: { position }
   } = landingModel;
 
   const {
@@ -40,10 +41,11 @@ export const LandingPage = (props) => {
   } = authModel;
 
   const headerProps = {
-    swipeProps: swipeData,
+    icon,
     user,
     topUnder,
-    onSignOut
+    onSignOut,
+    position
   };
 
   const spinning = Object.keys(loading.effects).
@@ -58,9 +60,9 @@ export const LandingPage = (props) => {
   return (
       <Spin spinning={isSpinning}>
         <Layout className={styles.landing}>
-          <HeaderSection {...headerProps} />
           <Content>
             <div className={styles.page}>
+              <HeaderSection {...headerProps} />
               <div className={pageStyles}>
                 {children}
               </div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Col, Row } from 'antd';
-import { Space, Card, Layout  } from 'antd';
+import { Col, Row, Space } from 'antd';
 import Subscription from 'components/Subscription';
 import SignUp from 'components/Authentication/signUp.connect';
 import LandingPage from 'layouts/landing/page';
@@ -17,7 +16,7 @@ export const subscription = (props) => {
   } = props;
 
   useEffect(() => {
-   onQuery({type: 'application'});
+    onQuery({ type: 'application' });
   }, []);
 
   const handleAssignSubscription = e => {
@@ -35,19 +34,17 @@ export const subscription = (props) => {
     isSignInAble: false
   };
 
-
   const prepareLandingSubscriptions = () => {
-    const {subscriptions: {data}} = subscriptionModel;
-    const subscriptionsData = data?.map((item) => {
+    const { subscriptions: { data } } = subscriptionModel;
+    return data?.map((item) => {
       const dataProps = prepareSubscriptionProps(item);
       return (
           <Col span={8}>
             <Subscription {...dataProps} />
           </Col>
-      )
-    })
-    return subscriptionsData;
-  }
+      );
+    });
+  };
 
   const prepareSubscriptionProps = (props) => {
     return {
@@ -68,22 +65,21 @@ export const subscription = (props) => {
       meta: {
         description: <h5>Core course library, paths and skill assessments</h5>
       }
-    }
+    };
 
   };
 
   return (
-      <LandingPage
-          spinEffects={[
+      <LandingPage spinEffects={[
         'subscriptionModel/query',
         'subscriptionModel/assignTo'
       ]}>
-          <Row justify="center">
-            <Space direction="horizontal">
-              {prepareLandingSubscriptions()}
-            </Space>
-          </Row>
-          <SignUp {...signUpProps} />
-        </LandingPage>
+        <Row justify={'center'}>
+          <Space direction={'horizontal'}>
+            {prepareLandingSubscriptions()}
+          </Space>
+        </Row>
+        <SignUp {...signUpProps} />
+      </LandingPage>
   );
 };
