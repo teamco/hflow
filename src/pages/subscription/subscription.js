@@ -38,12 +38,15 @@ export const subscription = (props) => {
 
   const prepareLandingSubscriptions = () => {
     const {subscriptions: {data}} = subscriptionModel;
-    const subscriptionsData = data?.map((item) => (
-
-        return (
-
-        )
-    ))
+    const subscriptionsData = data?.map((item) => {
+      const dataProps = prepareSubscriptionProps(item);
+      return (
+          <Col span={8}>
+            <Subscription {...dataProps} />
+          </Col>
+      )
+    })
+    return subscriptionsData;
   }
 
   const prepareSubscriptionProps = (props) => {
@@ -52,14 +55,14 @@ export const subscription = (props) => {
       actions: [
         <div className={styles.button}
              onClick={handleAssignSubscription}>
-          Start with standard
+          {props.buttonTitle}
         </div>
       ],
       cover: (
           <div className={styles.content}>
-            <h2>Standard</h2>
-            <h3>299<sup>$</sup></h3>
-            <span>per year</span>
+            <h2>{props.title}</h2>
+            <h3>{props.price}<sup>$</sup></h3>
+            <span>{props.priceTerm}</span>
           </div>
       ),
       meta: {
@@ -77,15 +80,7 @@ export const subscription = (props) => {
       ]}>
           <Row justify="center">
             <Space direction="horizontal">
-            <Col span={8}>
-              <Subscription {...subscriptionProps}/>
-            </Col>
-              <Col span={8}>
-                <Subscription {...subscriptionProps}/>
-              </Col>
-              <Col span={8}>
-                <Subscription {...subscriptionProps}/>
-              </Col>
+              {prepareLandingSubscriptions()}
             </Space>
           </Row>
           <SignUp {...signUpProps} />
