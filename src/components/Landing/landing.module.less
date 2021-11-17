@@ -1,44 +1,65 @@
-@import '~pages/landing/valiables';
+@import '~pages/landing/variables';
 
 .header {
   top: 0;
   z-index: 30;
-  padding: 15px 20px;
   width: 100%;
-  background-color: transparent;
+  background-color: #fff;
   transition: all 0.5s ease-in-out;
+  height: 48px;
+  padding-left: 20px;
+  padding-right: 20px;
 
   .headerText {
+    white-space: nowrap;
+
+    @media (max-width: 600px) {
+      &:first-child {
+        display: none;
+      }
+    }
+
     span {
-      color: rgba(255, 255, 255, 0.8);
-      text-transform: uppercase;
-      font-size: 14px;
-      line-height: 40px;
-      font-weight: bold;
+      color: @landing-color;
+      font-size: 12px;
+      line-height: 48px;
       margin-left: 10px;
       transition: color 0.5s ease-in-out;
       cursor: pointer;
     }
 
     svg {
-      color: rgba(255, 255, 255, 0.8);
-      width: 20px;
-      height: 20px;
+      color: @landing-color;
+      width: 16px;
+      height: 16px;
       position: relative;
       top: 2px;
-      transition: color 0.5s ease-in-out;
+      transition: color 0.8s ease-in-out;
     }
 
-    &:hover * {
-      color: #fff;
-    }
+    .actions {
+      .ads {
+        margin: auto 10px;
+        background-color: rgba(226, 238, 250, 0.6);
+        padding: 3px 10px 3px 0;
+        color: @landing-color;
+        transition: background-color 0.8s ease-in-out;
+        border-radius: 3px;
 
-    :global {
-      .ant-divider-vertical {
-        border-color: rgba(255, 255, 255, 0.8);
-        border-width: 1px;
-        height: 1.9em;
-        transition: border-color 0.5s ease-in-out;
+        &:hover {
+          background-color: rgb(226, 238, 250);
+        }
+
+        svg {
+          margin-right: 5px;
+          height: 10px;
+          width: 10px;
+          top: 0;
+        }
+
+        @media (max-width: 400px) {
+          display: none;
+        }
       }
     }
   }
@@ -62,27 +83,27 @@
   }
 
   &.transform {
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, .005);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .005);
 
     .headerText {
       span, svg {
-        color: #333;
+        color: @landing-color;
       }
 
       &:hover * {
-        color: #333;
+        color: @landing-color;
       }
 
       :global {
         .ant-divider-vertical {
-          border-color: #333;
+          border-color: @landing-color;
         }
       }
     }
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: @landing-color-hover;
     }
   }
 
@@ -103,83 +124,5 @@
 
   .headerAuth {
     display: none;
-  }
-}
-
-.swiperSlide {
-  > div {
-    width: 100%;
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-  }
-
-  .slogan {
-    position: absolute;
-    text-align: center;
-    top: calc(50% - 150px);
-    left: calc(50% - @curved-box / 2);
-    width: @curved-box;
-    height: @curved-box;
-    cursor: pointer;
-
-    h5 {
-      position: relative;
-      font-family: 'Berkshire Swash', cursive;
-      z-index: 20;
-      top: -23px;
-      font-weight: bold;
-      color: #fff;
-      font-size: 28px;
-      transition: text-shadow 0.5s ease-in-out;
-      cursor: pointer;
-
-      &:hover {
-        text-shadow: 0px 0 5px #333;
-      }
-    }
-
-    .curved {
-      position: absolute;
-      width: @curved-box;
-      height: @curved-box;
-      z-index: 1;
-
-      svg {
-        path {
-          fill: transparent;
-        }
-
-        text {
-          textPath {
-            fill: #fff;
-            font-family: 'Berkshire Swash', cursive;
-            font-style: normal;
-            font-weight: 900;
-            font-size: 32px;
-            text-shadow: 3px 0 5px #333;
-          }
-        }
-      }
-    }
-
-    img {
-      width: 200px;
-      height: 187px;
-      position: relative;
-      left: calc(@curved-box / 2 - 100px);
-      top: 40px;
-    }
-  }
-
-  .text {
-    h5 {
-      color: #fff;
-      padding: 0 20%;
-      display: contents;
-      font-size: 15px;
-    }
   }
 }

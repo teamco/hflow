@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { history, NavLink } from 'umi';
-import { Col, Divider, Dropdown, Menu, Row } from 'antd';
+import { Col, Dropdown, Menu, Row } from 'antd';
 import classnames from 'classnames';
 
-import { BellTwoTone, CommentOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
+import { BellTwoTone, CommentOutlined, HeartTwoTone, PlusOutlined } from '@ant-design/icons';
 
 import SignIn from 'components/Authentication/signIn.connect';
 
@@ -21,13 +21,11 @@ const landingHeader = props => {
   const {
     t,
     icon,
-    logoW,
-    logoB,
     title,
     topUnder,
     user,
     onSignOut,
-    position = 'fixed',
+    position = 'absolute',
     country = 'CA'
   } = props;
 
@@ -86,7 +84,6 @@ const landingHeader = props => {
       <Menu>
         <Menu.Item key={'signOut'}>
           <div onClick={handleSignOut}>
-            <LogoutOutlined style={{ marginRight: 10 }}/>
             {t('auth:signOut')}
           </div>
         </Menu.Item>
@@ -97,18 +94,12 @@ const landingHeader = props => {
       <header className={classnames(styles.header, transform ? styles.transform : '')}
               style={{ position }}>
         <Row>
-          <Col span={8}>
-            {icon && (
-                <img src={icon}
-                     className={styles.icon}
-                     alt={t(title)}/>
-            )}
-            <img src={transform ? logoB : logoW}
-                 onClick={handleHomeNavigation}
-                 className={styles.logo}
+          <Col span={6}>
+            <img src={icon}
+                 className={styles.icon}
                  alt={t(title)}/>
           </Col>
-          <Col span={16}>
+          <Col span={18}>
             <Row justify={'end'}
                  gutter={[16, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
               <Col className={styles.headerText}>
@@ -116,17 +107,24 @@ const landingHeader = props => {
                 <span>{t('landing:help')}</span>
               </Col>
               <Col className={styles.headerText}>
-                <Divider type={'vertical'}/>
                 <SignIn forceLogin={true}
                         closable={true}
                         signInVisible={forceSignInVisible}
                         setForceSignInVisible={setForceSignInVisible}
                         className={styles.headerAuth}/>
                 {user ? (
-                    <div>
-                      <NavLink to="/about">
-                        <BellTwoTone/>
-                      </NavLink>
+                    <div style={{ display: 'flex' }}>
+                      <div className={styles.actions}>
+                        <HeartTwoTone twoToneColor={'#ccc'}/>
+                        <NavLink to={`/admin/users/${user.id}/notifications`}>
+                          <BellTwoTone twoToneColor={'#ccc'}/>
+                        </NavLink>
+                        <NavLink to={`/admin/users/${user.id}/notifications`}
+                                 className={styles.ads}>
+                          <PlusOutlined/>
+                          {t('landing:ads')}
+                        </NavLink>
+                      </div>
                       <Dropdown overlay={menu}
                                 trigger={['click']}
                                 placement={'bottomRight'}>
@@ -137,7 +135,6 @@ const landingHeader = props => {
                     </div>
                 ) : (
                     <>
-                      <LoginOutlined/>
                       <span onClick={handleSignIn}>{t('auth:signIn')}</span>
                     </>
                 )}

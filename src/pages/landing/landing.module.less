@@ -1,9 +1,11 @@
-@import 'valiables';
+@import 'variables';
 
 @search_height: 50px;
 @search_width: 60%;
 
 .landing {
+  background-color: #fff;
+
   .page {
     height: 100%;
     position: relative;
@@ -14,479 +16,44 @@
     position: relative;
   }
 
-  .search {
-    position: absolute;
-    top: calc(50% - @search_height / 2);
-    left: calc(50% - @search_width / 2);
-    min-width: 400px;
-    width: @search_width;
-    height: 110px;
-    border-radius: 3px;
-    background-color: rgba(238, 91, 48, 0.8);
-    transition: background-color 1s ease-in-out;
+  .contentFixed {
+    position: relative;
+    top: 48px;
+  }
 
-    &:hover {
-      background-color: rgba(238, 91, 48, 0.9);
-    }
-
-    svg {
+  .landingTabs {
+    .hr {
       position: relative;
-      top: 2px;
-      margin: 7px;
-      height: 36px;
-      width: 36px;
-    }
-
-    input {
-      font-size: 20px;
-    }
-
-    .slogan {
-      color: #fff;
-      font-variant: small-caps;
-      text-transform: lowercase;
-      text-align: center;
-      width: 100%;
-
-      span, u {
-        font-size: 32px;
-        font-weight: bold;
-        cursor: pointer;
-      }
+      top: 1px;
+      height: 1px;
+      background-color: #f0f0f0;
     }
 
     :global {
-      .ant-input-group-wrapper {
+      .ant-tabs {
         background-color: #fff;
-        height: 63px;
       }
 
-      .ant-input-group-addon,
-      .ant-input-affix-wrapper {
-        border: none;
-      }
-
-      .ant-input-affix-wrapper {
-        border-left: 1px solid #dfdfdf;
-      }
-    }
-  }
-
-  .duration {
-    color: #999;
-
-    svg {
-      height: 10px;
-      width: 10px;
-    }
-
-    .durationText {
-      margin-left: 10px;
-      font-size: 10px;
-      text-transform: uppercase;
-      font-variant: small-caps;
-    }
-  }
-
-  .appSection {
-    background: rgb(27, 37, 46);
-    position: relative;
-
-    .mobile {
-      padding: 100px;
-      text-align: center;
-
-      img {
-        width: 100%;
-        max-width: 450px;
-      }
-    }
-
-    .download {
-      padding: 50px;
-
-      > div {
-        h2, h4 {
-          color: #fff;
-        }
-
-        h2 {
-          font-size: 32px;
-        }
-
-        h4 {
-          font-size: 16px;
-          max-width: 80%;
-        }
-
-        img.apple {
-          width: 120px;
-          margin-top: 20px;
-          cursor: pointer;
-        }
-
-        img.google {
-          width: 155px;
-          margin-top: 10px;
-          cursor: pointer;
-        }
-      }
-    }
-  }
-
-  .serviceNotice {
-    background-color: #fff;
-    padding: 50px 100px 50px 0;
-
-    .serviceBlock {
-      border-radius: 5px;
-      transition: box-shadow 1s ease-in-out;
-      text-align: center;
-      position: relative;
-      height: 300px;
-      background-repeat: no-repeat;
-      background-position: top left;
-      background-size: cover;
-      overflow: hidden;
-      margin-left: 100px;
-
-      p {
-        color: #333;
-        font-size: 18px;
-        font-style: normal;
-        font-weight: 400;
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        display: block;
-        background: rgba(255, 255, 255, 0.8);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding: 10px 20px;
-        min-height: 50px;
-        margin: 0;
-        white-space: nowrap;
-      }
-
-      img {
-      }
-
-      &:hover {
-        box-shadow: 0 0 5px #999;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .serviceBlock {
-        height: 150px;
-        margin-left: 50px;
-
-        p {
-          font-size: 12px;
-          overflow: auto;
-          text-overflow: initial;
-          white-space: normal;
-        }
-      }
-    }
-  }
-
-  div.diagonalWrapper {
-    display: flex;
-    position: relative;
-    height: 450px;
-    transition: all 0.5s ease-in-out;
-
-    @media (max-width: 768px) {
-      height: auto;
-    }
-
-    h3 {
-      //font-family: 'Berkshire Swash', cursive;
-      font-style: normal;
-      font-weight: 400;
-      width: 50%;
-      font-size: 32px;
-      padding: 100px 0 100px 100px;
-      text-transform: uppercase;
-      position: relative;
-      z-index: 1;
-      white-space: nowrap;
-
-      @media (max-width: 768px) {
-        width: 100%;
-      }
-
-      span {
-        position: relative;
-        top: 3px;
-        margin-right: 10px;
-
-        svg {
-          width: 32px;
-          height: 32px;
-        }
-      }
-
-      div {
-        margin-top: 30px;
-        font-style: normal;
-        font-weight: 400;
-        width: 100%;
-        font-size: 24px;
-        color: #666;
+      .ant-tabs-tab {
+        border-radius: 0 !important;
+        margin-left: -1px !important;
+        background-color: #fff !important;
         text-transform: lowercase;
         font-variant: small-caps;
-        margin-bottom: 50px;
-        line-height: 24px;
-        white-space: normal;
-      }
-    }
 
-    @media (max-width: 768px) {
-      h3 {
-        padding: 50px;
-      }
-    }
-
-    > div {
-      width: 50%;
-      background-color: transparent;
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: right bottom;
-
-      @media (max-width: 768px) {
-        display: none;
-      }
-    }
-
-    &:after {
-      content: " ";
-      position: absolute;
-      left: 50%;
-      top: 0;
-      width: 200px;
-      height: 150%;
-      transform: rotate(16deg);
-      margin-top: -50px;
-      margin-left: -140px;
-      background: #fff;
-
-      @media (max-width: 768px) {
-        display: none;
-      }
-    }
-  }
-
-  .discoverySection {
-    .diagonalCarousel {
-      background-color: #fff;
-
-      :global {
-        .slick-dots {
-          li button {
-            background-color: #333;
-          }
-        }
-      }
-    }
-  }
-
-  .missionSection {
-    background: rgb(27, 37, 46);
-    overflow: hidden;
-
-    div.diagonalWrapper {
-      height: 600px;
-
-      h3 {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
-        padding: 100px 50px 50px 0;
-        text-transform: uppercase;
-        color: #fff;
-
-        p {
-          color: #fff;
-          padding: 20px 0 0;
-          font-size: 14px;
-          text-transform: none;
-          white-space: initial;
+        > * {
+          color: @landing-color !important;
         }
       }
 
-      &:after {
-        content: " ";
-        position: absolute;
-        left: 50%;
-        top: 0;
-        width: 200px;
-        height: 150%;
-        transform: rotate(16deg);
-        margin-top: -50px;
-        margin-left: -140px;
-        background: rgb(27, 37, 46);
+      .ant-tabs-tab-active {
+        background-color: rgb(241, 241, 241) !important;
+        border-bottom: 1px solid rgb(241, 241, 241) !important;
 
-        @media (max-width: 768px) {
-          display: none;
+        > * {
+          color: @landing-color !important;
         }
       }
     }
-
-    @media (max-width: 768px) {
-      div.diagonalWrapper {
-        height: auto;
-
-        h3 {
-          padding: 50px;
-        }
-      }
-    }
-  }
-
-  .serviceSection {
-
-  }
-
-  .mapTooltip {
-    position: absolute;
-    padding: 5px 10px;
-    background-color: rgba(0, 0, 0, .5);
-    color: #fff;
-    border-radius: 3px;
-    height: auto !important;
-  }
-
-  .mapSection {
-    height: 500px;
-    background-color: #fff;
-    overflow: hidden;
-
-    div {
-      height: 100%;
-    }
-
-    @media (max-width: 768px) {
-      height: 400px;
-    }
-
-    .mapWrapper {
-      width: 1000px;
-      overflow: hidden;
-      margin: 0 auto;
-      position: relative;
-
-      @media (max-width: 768px) {
-        width: 600px;
-
-        svg {
-          bottom: 70px !important;
-        }
-      }
-
-      svg {
-        position: absolute;
-        bottom: 50px;
-
-        :global {
-          .svg-map__location {
-            fill: #f0ad99;
-            stroke: #fff;
-            cursor: pointer;
-            stroke-width: 5px;
-            stroke-linejoin: round;
-            transition: 0.2s;
-
-            &:focus,
-            &:hover {
-              fill: #f57b56;
-              outline: 0;
-            }
-
-            &[aria-checked=true] {
-              fill: #ee5c30;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-.stepsModal {
-  :global {
-    .ant-steps * {
-      display: none;
-    }
-  }
-
-  .stepTabs {
-    :global {
-      .ant-steps-icon {
-        position: relative;
-        top: -3px;
-      }
-
-      .ant-progress + span.ant-steps-icon {
-        top: -1px;
-      }
-    }
-  }
-
-  .stepsContent {
-    margin-top: 16px;
-    padding: 20px;
-    text-align: left;
-    background-color: #fafafa;
-    border: 1px dashed #e9e9e9;
-    border-radius: 2px;
-
-    h3 {
-      font-size: 14px;
-      margin-bottom: 20px;
-      text-transform: lowercase;
-      font-variant: small-caps;
-    }
-
-    .form {
-      width: 100%;
-    }
-
-    .input {
-      position: relative;
-      z-index: 1;
-    }
-
-    :global {
-      .ant-form-item-explain-error {
-        background-color: rgba(255, 0, 0, 0.1);
-        position: absolute;
-        border-radius: 3px;
-        overflow: hidden;
-        width: calc(100% + 20px);
-        height: calc(100% + 20px);
-        margin: -10px;
-        z-index: 0;
-
-        &:after {
-          content: '*';
-          position: absolute;
-          right: 10px;
-          font-size: 18px;
-          top: 5px;
-        }
-
-        div[role="alert"] {
-          display: none;
-          visibility: hidden;
-        }
-      }
-    }
-  }
-
-  .stepsAction {
-    margin-top: 24px;
   }
 }

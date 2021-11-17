@@ -244,6 +244,12 @@
     "assignedTo": "Assigned to Business"
   },
   "landing": {
+    "ads": "Advertise",
+    "realEstate": "Real Estate",
+    "lawyers": "Lawyers",
+    "consultants": "Consultants",
+    "agents": "Agents",
+    "banks": "Banks",
     "help": "Need Help?",
     "getStarted": "Get started",
     "duration": "Takes 2-3 minutes",

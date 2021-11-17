@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Layout, Spin } from 'antd';
 
 import HeaderSection from 'pages/landing/sections/header.section';
+import LandingContent from 'components/Landing/landing.content';
 import Footer from 'components/Footer';
 
 import styles from 'pages/landing/landing.module.less';
@@ -19,6 +20,7 @@ export const landing = (props) => {
   } = props;
 
   const {
+    icon,
     topUnder
   } = landingModel;
 
@@ -30,9 +32,15 @@ export const landing = (props) => {
   }, []);
 
   const headerProps = {
+    icon,
     user,
     topUnder,
-    onSignOut
+    onSignOut,
+    position: 'fixed'
+  };
+
+  const contentProps = {
+    className: headerProps.position === 'fixed' ? styles.contentFixed : null
   };
 
   return (

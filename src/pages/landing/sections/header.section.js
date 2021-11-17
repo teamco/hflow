@@ -14,16 +14,19 @@ const headerSection = props => {
 
   const {
     t,
+    icon,
     user,
     topUnder,
+    position,
     onSignOut
   } = props;
 
   const headerProps = {
-    position: 'absolute',
+    icon,
     user,
     topUnder,
-    onSignOut
+    onSignOut,
+    position
   };
 
   const [geolocation, setGeolocation] = useState(false);
