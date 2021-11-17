@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { history, NavLink } from 'umi';
-import { Col, Divider, Dropdown, Menu, Row } from 'antd';
+import { Col, Dropdown, Menu, Row } from 'antd';
 import classnames from 'classnames';
 
-import { BellTwoTone, CommentOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
+import { BellTwoTone, CommentOutlined, HeartTwoTone, PlusOutlined } from '@ant-design/icons';
 
 import SignIn from 'components/Authentication/signIn.connect';
 
@@ -21,13 +21,11 @@ const landingHeader = props => {
   const {
     t,
     icon,
-    logoW,
-    logoB,
     title,
     topUnder,
     user,
     onSignOut,
-    position = 'fixed',
+    position = 'absolute',
     country = 'CA'
   } = props;
 
@@ -86,7 +84,6 @@ const landingHeader = props => {
       <Menu>
         <Menu.Item key={'signOut'}>
           <div onClick={handleSignOut}>
-            <LogoutOutlined style={{ marginRight: 10 }}/>
             {t('auth:signOut')}
           </div>
         </Menu.Item>
@@ -98,14 +95,8 @@ const landingHeader = props => {
               style={{ position }}>
         <Row>
           <Col span={8}>
-            {icon && (
-                <img src={icon}
-                     className={styles.icon}
-                     alt={t(title)}/>
-            )}
-            <img src={transform ? logoB : logoW}
-                 onClick={handleHomeNavigation}
-                 className={styles.logo}
+            <img src={icon}
+                 className={styles.icon}
                  alt={t(title)}/>
           </Col>
           <Col span={16}>
@@ -116,7 +107,6 @@ const landingHeader = props => {
                 <span>{t('landing:help')}</span>
               </Col>
               <Col className={styles.headerText}>
-                <Divider type={'vertical'}/>
                 <SignIn forceLogin={true}
                         closable={true}
                         signInVisible={forceSignInVisible}
@@ -124,8 +114,14 @@ const landingHeader = props => {
                         className={styles.headerAuth}/>
                 {user ? (
                     <div>
-                      <NavLink to="/about">
-                        <BellTwoTone/>
+                      <HeartTwoTone twoToneColor={'#ccc'}/>
+                      <NavLink to={`/admin/users/${user.id}/notifications`}>
+                        <BellTwoTone twoToneColor={'#ccc'}/>
+                      </NavLink>
+                      <NavLink to={`/admin/users/${user.id}/notifications`}
+                               className={styles.ads}>
+                        <PlusOutlined/>
+                        {t('landing:ads')}
                       </NavLink>
                       <Dropdown overlay={menu}
                                 trigger={['click']}
@@ -137,7 +133,6 @@ const landingHeader = props => {
                     </div>
                 ) : (
                     <>
-                      <LoginOutlined/>
                       <span onClick={handleSignIn}>{t('auth:signIn')}</span>
                     </>
                 )}

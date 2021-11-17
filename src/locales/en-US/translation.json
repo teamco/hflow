@@ -244,6 +244,8 @@
     "assignedTo": "Assigned to Business"
   },
   "landing": {
+    "ads": "Advertise",
+    "realEstate": "Real Estate",
     "help": "Need Help?",
     "getStarted": "Get started",
     "duration": "Takes 2-3 minutes",
