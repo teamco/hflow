@@ -1,16 +1,17 @@
 import React from 'react';
 import { Layout } from 'antd';
+import classnames from 'classnames';
 
 import styles from 'components/Footer/footer.module.less';
 
 const { Footer } = Layout;
 
 export const footer = props => {
-  const { t, style, children } = props;
+  const { t, children, className, ...rest } = props;
 
   return (
-      <Footer className={styles.footer}
-              style={style}>
+      <Footer className={classnames(styles.footer, className)}
+              {...rest}>
         {children}
       </Footer>
   );

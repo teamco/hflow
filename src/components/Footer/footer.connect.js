@@ -10,4 +10,4 @@ export default connect(
     (dispatch) => ({
       dispatch
     })
-)(withTranslation()(footer()));
+)(withTranslation()(footer));
