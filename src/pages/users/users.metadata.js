@@ -90,23 +90,23 @@ export const metadata = ({
           };
 
           return (
-            <div className={classnames(styles.nowrap, styles.flex)}>
-              <Tooltip title={signed.title}>
+              <div className={classnames(styles.nowrap, styles.flex)}>
+                <Tooltip title={signed.title}>
                   <span className={classnames(styles.signed)}>
                     {signed.icon}
                   </span>
-              </Tooltip>
-              {data.metadata.photoURL ? (
-                  <div className={styles.avatarWrapper}>
-                    <img src={data.metadata.photoURL}
-                         referrerPolicy={'no-referrer'}
-                         alt={name}
-                         className={styles.gridImg}/>
-                  </div>
-                ) : (
-                    <Avatar src={'https://joeschmoe.io/api/v1/random'}
-                            className={styles.avatar}/>
-                )}
+                </Tooltip>
+                <div className={styles.avatarWrapper}>
+                  {data.metadata.photoURL ? (
+                      <img src={data.metadata.photoURL}
+                           referrerPolicy={'no-referrer'}
+                           alt={name}
+                           className={styles.gridImg}/>
+                  ) : (
+                      <Avatar src={'https://joeschmoe.io/api/v1/random'}
+                              className={styles.avatar}/>
+                  )}
+                </div>
                 {multiple ? (
                     <NavLink to={`/admin/users/${data.id}`}>
                       <span className={isCurrentStyle}>
