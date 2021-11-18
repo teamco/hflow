@@ -3,12 +3,14 @@ import { withTranslation } from 'react-i18next';
 import { Tabs } from 'antd';
 import classnames from 'classnames';
 
+import RealEstate from './content/real.estate';
+
 import styles from 'pages/landing/landing.module.less';
 
 const { TabPane } = Tabs;
 
 const LandingContent = props => {
-  const { t, className } = props;
+  const { t, className, data: { realEstate = [] } } = props;
 
   return (
       <div className={classnames(className, styles.landingTabs)}>
@@ -16,7 +18,7 @@ const LandingContent = props => {
         <Tabs type={'card'} centered>
           <TabPane tab={t('landing:realEstate')}
                    key={'realEstate'}>
-            <p>realEstate</p>
+            <RealEstate {...realEstate}/>
           </TabPane>
           <TabPane tab={t('landing:lawyers')}
                    key={'lawyers'}>

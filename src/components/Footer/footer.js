@@ -7,7 +7,7 @@ import styles from 'components/Footer/footer.module.less';
 const { Footer } = Layout;
 
 export const footer = props => {
-  const { t, children, className, ...rest } = props;
+  const { children, className, ...rest } = props;
 
   return (
       <Footer className={classnames(styles.footer, className)}

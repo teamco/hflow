@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import LandingPage from 'layouts/landing/page';
-import LandingContent from 'components/Landing/landing.content';
+import LandingContent from 'pages/landing/sections/landing.content';
 
 import styles from 'pages/landing/landing.module.less';
 
@@ -21,7 +21,8 @@ export const landing = (props) => {
   }, []);
 
   const contentProps = {
-    className: position === 'fixed' ? styles.contentFixed : null
+    className: position === 'fixed' ? styles.contentFixed : null,
+    data: {}
   };
 
   return (
