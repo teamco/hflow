@@ -37,6 +37,7 @@ const Border = props => {
 
   return (
       <div className={classnames(styles.border, styles[direction], className)}
+           data-testid={'border'}
            style={style}/>
   );
 };
