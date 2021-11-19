@@ -36,7 +36,7 @@ const landingHeader = props => {
    * @constant
    * @param event
    */
-  const handleScroll = function (event) {
+  const handleScroll = event => {
     event.preventDefault();
     let scrollTop = window.scrollY;
     setTransform(scrollTop > topUnder);
