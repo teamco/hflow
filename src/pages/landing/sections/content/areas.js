@@ -4,14 +4,14 @@ import classnames from 'classnames';
 
 import styles from 'pages/landing/landing.module.less';
 
-const Trends = props => {
+const Areas = props => {
   const { t, className, trends = [] } = props;
 
   return (
-      <div className={classnames(className, styles.trends)}>
-        <h1>{t('landing:trends')}</h1>
+      <div className={classnames(className, styles.areas)}>
+        <h1>{t('landing:areas')}</h1>
       </div>
   );
 };
 
-export default withTranslation()(Trends);
+export default withTranslation()(Areas);

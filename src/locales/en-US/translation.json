@@ -256,7 +256,12 @@
     "clickMe": "Click me",
     "termsOfUse": "Terms of Use",
     "privacyPolicy": "Privacy Policy",
-    "aboutUs": "About us"
+    "aboutUs": "About us",
+    "trends": "Trends",
+    "deals": "Deals",
+    "applications": "Useful Applications",
+    "areas": "Most Requested Areas",
+    "workFlow": "Work Flow"
   },
   "status": {
     "sent": "Sent",
