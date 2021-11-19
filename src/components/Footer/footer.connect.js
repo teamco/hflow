@@ -1,9 +1,9 @@
 import { connect } from 'dva';
-import { footer } from './footer';
+import { Footer } from './footer';
 
 export default connect(
     ({ loading }) => ({
       loading
     }),
     (dispatch) => ({})
-)(footer);
+)(Footer);

@@ -19,3 +19,23 @@ exports[`Components/Border Top 1`] = `
   />
 </DocumentFragment>
 `;
+
+exports[`components/Border Bottom 1`] = `
+<DocumentFragment>
+  <div
+    class="border bottom"
+    data-testid="border"
+    style="border-left-width: 45vw; border-right-width: 15vw; border-top-width: 15vh; border-top-color: rgb(241, 241, 241); border-top-style: solid;"
+  />
+</DocumentFragment>
+`;
+
+exports[`components/Border Top 1`] = `
+<DocumentFragment>
+  <div
+    class="border top"
+    data-testid="border"
+    style="border-left-width: 15vw; border-right-width: 45vw; border-bottom-width: 15vh; border-bottom-color: rgb(241, 241, 241); border-bottom-style: solid;"
+  />
+</DocumentFragment>
+`;

@@ -4,15 +4,14 @@ import classnames from 'classnames';
 
 import styles from 'components/Footer/footer.module.less';
 
-const { Footer } = Layout;
-
-export const footer = props => {
+export const Footer = props => {
   const { children, className, ...rest } = props;
 
   return (
-      <Footer className={classnames(styles.footer, className)}
-              {...rest}>
+      <Layout.Footer className={classnames(styles.footer, className)}
+                     data-testid={'footer'}
+                     {...rest}>
         {children}
-      </Footer>
+      </Layout.Footer>
   );
 };

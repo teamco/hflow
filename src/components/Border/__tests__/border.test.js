@@ -1,16 +1,14 @@
 import React from 'react';
 import { cleanup } from '@testing-library/react';
 
-import '@testing-library/jest-dom';
-import '@testing-library/jest-dom/extend-expect';
+import { expectations } from '../../../../__tests__/helper';
+import Border from '../border';
 
-import { expectations } from './helper';
+describe('components/Border', () => {
 
-// Note: running cleanup afterEach is done automatically for you in @testing-library/react@9.0.0 or higher
-// unmount and cleanup DOM after the test is finished.
-afterEach(cleanup);
-
-describe('Components/Border', () => {
+  // Note: running cleanup afterEach is done automatically for you in @testing-library/react@9.0.0 or higher
+  // unmount and cleanup DOM after the test is finished.
+  afterEach(cleanup);
 
   it('Top', () => {
     const topProps = {
@@ -22,7 +20,7 @@ describe('Components/Border', () => {
       }
     };
 
-    const _borderDom = expectations(topProps);
+    const _borderDom = expectations(Border, 'border', topProps);
 
     expect(_borderDom).toHaveClass('border top');
     expect(_borderDom).toHaveStyle(
@@ -39,7 +37,7 @@ describe('Components/Border', () => {
       }
     };
 
-    const _borderDom = expectations(bottomProps);
+    const _borderDom = expectations(Border, 'border', bottomProps);
 
     expect(_borderDom).toHaveClass('border bottom');
     expect(_borderDom).toHaveStyle(
