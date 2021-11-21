@@ -30,6 +30,7 @@ jobs:
     - name: Install npms & update
       run: |
           npm install --global yarn
+          yarn set version stable
           yarn install
           
     - name: Run unit tests
