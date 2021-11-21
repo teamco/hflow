@@ -112,3 +112,4 @@ dist
 **/*.css*
 
 .pnp.*
+.yarnrc.yml
