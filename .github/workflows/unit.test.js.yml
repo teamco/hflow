@@ -27,11 +27,15 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-    - name: Install npms & update
+    - name: Install yarn
       run: |
           npm install --global yarn
-          yarn set version stable
-          yarn install
+          yarn set version 3.1.0
+          yarn -v
+                    
+    - name: Install dependencies
+      run: |
+        yarn install
           
     - name: Run unit tests
       run: |
