@@ -31,8 +31,13 @@ jobs:
       run: |
           npm install --global yarn
           yarn set version 3.1.0
+                                      
+    - name: Check installed versions
+      run: |
+          node -v
+          npm -v
           yarn -v
-                    
+                         
     - name: Install dependencies
       run: |
         yarn install
