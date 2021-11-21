@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "hflow",
-  "version": "0.1",
+  "version": "0.0.1",
   "scripts": {
     "prestart": "yarn preinstall",
     "start": "cross-env PORT=8003 umi dev",
