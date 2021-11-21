@@ -92,7 +92,7 @@ export const userRoles = props => {
                       extra={[
                         <SaveButton key={'save'}
                                     isEdit={isEdit}
-                                    disabled={disabled}
+                                    disabled={disabled || !touched}
                                     formRef={formRef}
                                     loading={loading.effects['userRolesModel/prepareToSave']}/>
                       ]}>

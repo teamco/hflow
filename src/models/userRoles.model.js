@@ -72,6 +72,7 @@ export default dvaModelExtend(commonModel, {
       yield put({
         type: 'updateState',
         payload: {
+          touched: false,
           userRoles,
           businessRoles
         }
@@ -82,7 +83,10 @@ export default dvaModelExtend(commonModel, {
       const { userRoles } = yield select(state => state.userRolesModel);
       yield put({
         type: 'updateState',
-        payload: { userRoles: { ...userRoles, roles: payload.roles } }
+        payload: {
+          userRoles: { ...userRoles, roles: payload.roles },
+          touched: true
+        }
       });
     },
 
@@ -90,11 +94,14 @@ export default dvaModelExtend(commonModel, {
       const { businessRoles } = yield select(state => state.userRolesModel);
       yield put({
         type: 'updateState',
-        payload: { businessRoles: { ...businessRoles, roles: payload.roles } }
+        payload: {
+          businessRoles: { ...businessRoles, roles: payload.roles },
+          touched: true
+        }
       });
     },
 
-    * save({ payload }, { call, select }) {
+    * save({ payload }, { put, call, select }) {
       const { user, ability } = yield select(state => state.authModel);
       const state = yield select(state => state.userRolesModel);
 
@@ -141,6 +148,8 @@ export default dvaModelExtend(commonModel, {
             }
           });
         }
+
+        entity && (yield put({ type: 'updateState', payload: { touched: false } }));
       }
     },
 
