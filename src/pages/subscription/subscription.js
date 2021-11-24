@@ -17,9 +17,12 @@ export const subscription = (props) => {
   } = props;
 
   useEffect(() => {
-   onQuery({type: 'application'});
+    onQuery({ type: 'application' });
   }, []);
 
+  /**
+   * @constant
+   */
   const handleAssignSubscription = e => {
     e.preventDefault();
     // check if user registered then update subscription if not open register popup
@@ -33,6 +36,7 @@ export const subscription = (props) => {
       setIsUserExist(true);
     }
   };
+
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
   const [signInVisible, setIsSignInVisible] = useState(false);
   const [isUserExist, setIsUserExist] = useState(true);
@@ -47,10 +51,13 @@ export const subscription = (props) => {
     isSignInAble: false
   };
 
-
+  /**
+   * @constant
+   * @return {Array [JSX.Element] }
+   */
   const prepareLandingSubscriptions = () => {
-    const {subscriptions: {data}} = subscriptionModel;
-    const subscriptionsData = data?.map((item) => {
+    const { subscriptions: { data } } = subscriptionModel;
+    return data?.map((item) => {
       const dataProps = prepareSubscriptionProps(item);
       const {meta: {referenceId}} = item;
       return (
@@ -63,7 +70,6 @@ export const subscription = (props) => {
           </Row>
       )
     })
-    return subscriptionsData;
   }
 
   const prepareSubscriptionProps = (props) => {
@@ -88,12 +94,10 @@ export const subscription = (props) => {
       },
       id: {referenceId}
     }
-
   };
 
   return (
-      <LandingPage
-          spinEffects={[
+      <LandingPage spinEffects={[
         'subscriptionModel/query',
         'subscriptionModel/assignTo'
       ]}>
@@ -105,6 +109,6 @@ export const subscription = (props) => {
           {
             !isUserExist && <SignUp {...signUpProps} />
           }
-        </LandingPage>
+      </LandingPage>
   );
 };

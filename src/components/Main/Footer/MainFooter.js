@@ -1,12 +1,13 @@
 import React from 'react';
-import { Layout } from 'antd';
 
-const { Footer } = Layout;
+import Footer from 'components/Footer';
 
 export default class MainFooter extends React.Component {
   render() {
-    return <Footer style={{ textAlign: 'center' }}>
-      {this.props.author}
-    </Footer>;
+    return (
+        <Footer style={{ textAlign: 'center' }}>
+          {this.props.author}
+        </Footer>
+    );
   }
 }

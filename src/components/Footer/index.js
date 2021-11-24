@@ -1,3 +1,3 @@
-import footer from './footer';
+import Footer from './footer.connect';
 
-export default footer;
+export default Footer;

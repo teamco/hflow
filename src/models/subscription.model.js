@@ -2,10 +2,8 @@
 import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from 'models/common.model';
-import {getAllSubscriptionsByType} from '../services/subscription.service';
-import {monitorHistory} from '../utils/history';
-
-
+import { getAllSubscriptionsByType } from 'services/subscription.service';
+import { monitorHistory } from 'utils/history';
 
 /**
  * @export

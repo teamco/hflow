@@ -9,7 +9,7 @@
   .page {
     height: 100%;
     position: relative;
-    minHeight: 100vh
+    min-height: 100vh;
   }
 
   .headerSection {
@@ -53,6 +53,108 @@
         > * {
           color: @landing-color !important;
         }
+      }
+    }
+  }
+
+  .realEstate {
+    margin: 50px 20%;
+  }
+
+  .trends {
+    h1 {
+      font-size: 32px;
+      text-align: center;
+      margin: 50px auto;
+    }
+  }
+
+  .areas {
+    margin-top: 50px;
+
+    h1 {
+      font-size: 32px;
+      text-align: center;
+      margin: 50px auto;
+    }
+  }
+
+  .applications {
+    margin-top: 50px;
+
+    h1 {
+      font-size: 32px;
+      text-align: center;
+      margin: 50px auto;
+    }
+
+  }
+
+  .workFlowWrapper {
+    margin-top: 50px;
+
+    .workFlow {
+      background-color: rgb(241, 241, 241);
+      padding: 0 50px 50px 50px;
+      overflow: hidden;
+      color: @landing-color;
+      position: relative;
+
+      h1 {
+        font-size: 32px;
+        text-align: center;
+        margin: 50px auto;
+      }
+
+      h3 {
+        font-size: 20px;
+        position: absolute;
+        top: 30%;
+
+        p {
+          font-size: 14px;
+        }
+
+        &.textLeft {
+          left: 20px;
+          text-align: left;
+        }
+
+        &.textRight {
+          right: 20px;
+          text-align: right;
+        }
+      }
+
+      img {
+        max-width: 300px;
+        width: 100%;
+      }
+
+      .textWrapperLeft {
+        margin-right: 20px;
+      }
+
+      .textWrapperRight {
+        margin-left: 20px;
+      }
+    }
+  }
+
+  .dealsWrapper {
+    margin-top: 50px;
+
+    .deals {
+      background-color: rgb(241, 241, 241);
+      padding: 0 50px 50px 50px;
+      overflow: hidden;
+      color: @landing-color;
+      position: relative;
+
+      h1 {
+        font-size: 32px;
+        text-align: center;
+        margin: 50px auto;
       }
     }
   }

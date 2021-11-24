@@ -2,12 +2,12 @@
 import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from 'models/common.model';
-import { getNotifications } from '../services/notification.service';
+import { getNotifications } from 'services/notification.service';
 import { message } from 'antd';
-import i18n from '../utils/i18n';
+import i18n from 'utils/i18n';
 import { history } from 'umi';
-import { fbAdd, fbFindById, fbUpdate, getRef } from '../services/firebase.service';
-import { STATUS } from '../utils/message';
+import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
+import { STATUS } from 'utils/message';
 
 /**
  * @export

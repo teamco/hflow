@@ -111,6 +111,5 @@ dist
 **/*.module.css*
 **/*.css*
 
+.pnp.*
 .yarnrc.yml
-.pnp.cjs
-.pnp.loader.mjs
