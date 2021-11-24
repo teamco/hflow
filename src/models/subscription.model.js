@@ -33,7 +33,17 @@ export default dvaModelExtend(commonModel, {
         type: 'updateState',
         payload: {subscriptions: allSubscriptions}
       })
+    },
+    // check if user exist and already subscribed then change plan , if not then show SignUp . Sin in Popup
+    * assignTo({ payload }, {call, put, select }) {
+      let { user, ability } = yield select(state => state.authModel);
+      const { userId } = payload;
+
+      const {subscriptionId} =  payload;
+
+
     }
+
   },
   reducers: {}
 });

@@ -12,7 +12,8 @@ export const Subscription = props => {
     className,
     cover,
     hoverable = false,
-    meta = {}
+    meta = {},
+    id
   } = props;
 
   const {
@@ -26,7 +27,8 @@ export const Subscription = props => {
             className={classnames(styles.subscription, className)}
             cover={cover}
             bordered
-            actions={actions}>
+            actions={actions}
+            id={id}>
         <Meta avatar={avatar}
               title={title}
               description={description}/>
