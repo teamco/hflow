@@ -49,15 +49,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ant-design/pro-layout@npm:^6.27.2":
-  version: 6.29.1
-  resolution: "@ant-design/pro-layout@npm:6.29.1"
+"@ant-design/pro-layout@npm:^6.31.2":
+  version: 6.31.2
+  resolution: "@ant-design/pro-layout@npm:6.31.2"
   dependencies:
     "@ant-design/icons": ^4.0.0
     "@ant-design/pro-provider": 1.4.20
-    "@ant-design/pro-utils": 1.28.1
+    "@ant-design/pro-utils": 1.28.4
     "@umijs/route-utils": ^2.0.1
-    "@umijs/use-params": ^1.0.2
+    "@umijs/use-params": ^1.0.9
     classnames: ^2.2.6
     lodash.merge: ^4.6.2
     omit.js: ^2.0.2
@@ -72,7 +72,7 @@ __metadata:
   peerDependencies:
     antd: 4.x
     react: ">=16.9.0"
-  checksum: e62d22a53165160847028d04a13679e4311e5d42cfb60fdbb7a3ee2c3ff2187a21b1e9e3d02551603d866c1f7e08dd3ef9f20c67a278d4f297ba9106ecebadba
+  checksum: 2b90ec043120c111c9248e702293bf2e199d31d3f02de736880bc0beb374830390d3a1064b15fd0b84c5524c18e846be989b26f75a420926cefca3946caf45bd
   languageName: node
   linkType: hard
 
@@ -88,9 +88,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ant-design/pro-utils@npm:1.28.1":
-  version: 1.28.1
-  resolution: "@ant-design/pro-utils@npm:1.28.1"
+"@ant-design/pro-utils@npm:1.28.4":
+  version: 1.28.4
+  resolution: "@ant-design/pro-utils@npm:1.28.4"
   dependencies:
     "@ant-design/icons": ^4.3.0
     "@ant-design/pro-provider": 1.4.20
@@ -103,7 +103,7 @@ __metadata:
     antd: 4.x
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 30fa873e5cf034a26feb00006f4ea729d30f5b3d00111fb1cd7d40a3194ec82eeefa5fe22e8b1f763736bc1bd7e7b8cb302d25ef7a5cbd0ffa12b06f09959fa5
+  checksum: 1f2b1c2b5206b41da71756b925c8bf563c7255769be6aae5b633ab30fa2d3ed337d90123fd19d37132421a8918e4a35d09a8341b7587db5e825e470f36e310aa
   languageName: node
   linkType: hard
 
@@ -2439,12 +2439,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@umijs/use-params@npm:^1.0.2":
-  version: 1.0.7
-  resolution: "@umijs/use-params@npm:1.0.7"
+"@umijs/use-params@npm:^1.0.9":
+  version: 1.0.9
+  resolution: "@umijs/use-params@npm:1.0.9"
   peerDependencies:
     react: "*"
-  checksum: e52c7c426d1e32feac659cd2df0ed59ac8090c584cfac4bec498725d135cd27fad9fa1dc63c1bdbd6742fe65b133d9341e19027a287400f75a48deda13658043
+  checksum: 7f72436440dff0e1911ee916340bd26c6c9a510bad4af536d3ec9a5a175d37255d42dbd1cb0dc996daf4d0c3b76e44816ac423ac73e6b3c1655b6b839fed175c
   languageName: node
   linkType: hard
 
@@ -2711,7 +2711,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:^4.1.2, antd@npm:^4.1.3, antd@npm:^4.16.13":
+"antd@npm:^4.1.2, antd@npm:^4.1.3":
   version: 4.17.0
   resolution: "antd@npm:4.17.0"
   dependencies:
@@ -2761,6 +2761,59 @@ __metadata:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
   checksum: 7ea041e252226e5be982d919359f289fc387dd06aed91c8034812a342a502d4b4101d5f47de38c63c21d926947199bc8df0ed0cf8712ab1a44f5627fcdeeb2fe
+  languageName: node
+  linkType: hard
+
+"antd@npm:^4.17.1":
+  version: 4.17.1
+  resolution: "antd@npm:4.17.1"
+  dependencies:
+    "@ant-design/colors": ^6.0.0
+    "@ant-design/icons": ^4.7.0
+    "@ant-design/react-slick": ~0.28.1
+    "@babel/runtime": ^7.12.5
+    "@ctrl/tinycolor": ^3.4.0
+    array-tree-filter: ^2.1.0
+    classnames: ^2.2.6
+    copy-to-clipboard: ^3.2.0
+    lodash: ^4.17.21
+    moment: ^2.25.3
+    rc-cascader: ~2.1.0
+    rc-checkbox: ~2.3.0
+    rc-collapse: ~3.1.0
+    rc-dialog: ~8.6.0
+    rc-drawer: ~4.4.2
+    rc-dropdown: ~3.2.0
+    rc-field-form: ~1.21.0
+    rc-image: ~5.2.5
+    rc-input-number: ~7.3.0
+    rc-mentions: ~1.6.1
+    rc-menu: ~9.0.12
+    rc-motion: ^2.4.4
+    rc-notification: ~4.5.7
+    rc-pagination: ~3.1.9
+    rc-picker: ~2.5.17
+    rc-progress: ~3.1.0
+    rc-rate: ~2.9.0
+    rc-resize-observer: ^1.0.0
+    rc-select: ~13.1.0-alpha.0
+    rc-slider: ~9.7.4
+    rc-steps: ~4.1.0
+    rc-switch: ~3.2.0
+    rc-table: ~7.19.0
+    rc-tabs: ~11.10.0
+    rc-textarea: ~0.3.0
+    rc-tooltip: ~5.1.1
+    rc-tree: ~5.2.0
+    rc-tree-select: ~4.6.0
+    rc-trigger: ^5.2.10
+    rc-upload: ~4.3.0
+    rc-util: ^5.14.0
+    scroll-into-view-if-needed: ^2.2.25
+  peerDependencies:
+    react: ">=16.9.0"
+    react-dom: ">=16.9.0"
+  checksum: 36a03048fa3890b144e5722e1fa5bc1577e4ebb15b3f0c4df5964813e73e6b8243c03302aa7a210a6806f223fef9058b0b8592ed9b1b7d0470d4e816e88c6597
   languageName: node
   linkType: hard
 
@@ -5891,7 +5944,7 @@ __metadata:
   resolution: "hflow@workspace:."
   dependencies:
     "@ant-design/icons": ^4.7.0
-    "@ant-design/pro-layout": ^6.27.2
+    "@ant-design/pro-layout": ^6.31.2
     "@casl/ability": ^5.4.3
     "@casl/react": ^2.3.0
     "@fortawesome/fontawesome-free": ^5.15.4
@@ -5906,7 +5959,7 @@ __metadata:
     "@types/react": ^17.0.34
     "@umijs/preset-react": ^1.8.25
     "@umijs/test": ^3.5.20
-    antd: ^4.16.13
+    antd: ^4.17.1
     antd-img-crop: ^3.16.0
     caller-id: ^0.1.0
     capitalize-first-letter: ^1.0.0
@@ -5922,7 +5975,7 @@ __metadata:
     firebase: ^8.10.0
     generate-password: ^1.7.0
     gravatar: ^1.8.2
-    i18next: ^21.4.2
+    i18next: ^21.5.3
     i18next-browser-languagedetector: ^6.1.2
     i18next-xhr-backend: ^3.2.2
     lint-staged: ^11.2.6
@@ -5935,7 +5988,7 @@ __metadata:
     query-string: ^7.0.1
     react: ^17.0.2
     react-dom: ^17.0.2
-    react-i18next: ^11.14.1
+    react-i18next: ^11.14.3
     react-interval: ^2.1.2
     react-json-view: ^1.21.3
     react-router: ^6.0.2
@@ -6176,12 +6229,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^21.4.2":
-  version: 21.5.2
-  resolution: "i18next@npm:21.5.2"
+"i18next@npm:^21.5.3":
+  version: 21.5.3
+  resolution: "i18next@npm:21.5.3"
   dependencies:
     "@babel/runtime": ^7.12.0
-  checksum: 1968c334acee1167a7efb80304c273d425bdd6d5bb0018949e93f8f2af86d0712362f4486e825fd94ccc5a947a2839d2970ade99c56e772683708486bf1f3a07
+  checksum: f08b25fd9d029da759b25c4c436ea90c0cca49784de516d699f1e6ba4a4f0fb515b0f65c57e41b0306ab200aefaca4f822d39e51938f08f13151ea6b06a24b04
   languageName: node
   linkType: hard
 
@@ -10620,16 +10673,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^11.14.1":
-  version: 11.14.2
-  resolution: "react-i18next@npm:11.14.2"
+"react-i18next@npm:^11.14.3":
+  version: 11.14.3
+  resolution: "react-i18next@npm:11.14.3"
   dependencies:
     "@babel/runtime": ^7.14.5
     html-parse-stringify: ^3.0.1
   peerDependencies:
     i18next: ">= 19.0.0"
     react: ">= 16.8.0"
-  checksum: 336051bda04f381b309a6737044038cd9b7b90077bb080f90860c683286bf88b1d774d40f4c2655ee66c4ab03267990a6ad562169430bf4b2d436b1064963814
+  checksum: aaf2092a71c32330fd4398e6ac5b2804a2b99d80f7f9d6e37d5a280537b1a681618c1bb4d66c630a51a1cf60d95d3380653a733c5b86305f7defae83acc6325f
   languageName: node
   linkType: hard
 
