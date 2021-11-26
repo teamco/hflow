@@ -52,7 +52,7 @@ export const users = (props) => {
   data = selectedUser ? [selectedUser] : data;
 
   useEffect(() => {
-    onQuery();
+    !selectedUser && onQuery();
     onRolesQuery();
   }, [authModel.user]);
 

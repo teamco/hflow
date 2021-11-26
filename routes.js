@@ -46,6 +46,15 @@ export const routes = [
           },
           {
             exact: true,
+            path: '/admin/profile',
+            component: '@/pages/users/[user]/profile',
+            breadcrumb: 'route:userProfile',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
             path: '/admin/users/:user',
             component: '@/pages/users/[user]/profile',
             breadcrumb: 'route:userProfile',
@@ -64,6 +73,15 @@ export const routes = [
           },
           {
             exact: true,
+            path: '/admin/businesses',
+            component: '@/pages/users/[user]/businesses',
+            breadcrumb: 'route:businesses',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
             path: '/admin/users/:user/businesses',
             component: '@/pages/users/[user]/businesses',
             breadcrumb: 'route:businesses',
@@ -73,9 +91,36 @@ export const routes = [
           },
           {
             exact: true,
-            path: '/admin/users/:user/businesses/:business',
+            path: '/admin/businesses/:business/edit',
             component: '@/pages/users/[user]/businesses/[business]',
-            breadcrumb: 'route:business',
+            breadcrumb: 'route:businessEdit',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
+            path: '/admin/businesses/:business',
+            component: '@/pages/users/[user]/businesses/[business]/show',
+            breadcrumb: 'route:businessShow',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
+            path: '/admin/users/:user/businesses/:business/edit',
+            component: '@/pages/users/[user]/businesses/[business]',
+            breadcrumb: 'route:businessEdit',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
+            path: '/admin/users/:user/businesses/:business',
+            component: '@/pages/users/[user]/businesses/[business]/show',
+            breadcrumb: 'route:businessShow',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]

@@ -22,6 +22,11 @@ export const menus = [
       {
         key: 'menu:users',
         url: '/admin/users',
+        icon: <TeamOutlined/>
+      },
+      {
+        key: 'menu:userProfile',
+        url: '/admin/profile',
         icon: <UserOutlined/>
       },
       {
@@ -35,6 +40,11 @@ export const menus = [
     key: 'menu:business',
     icon: <TrademarkOutlined/>,
     items: [
+      {
+        key: 'menu:businesses',
+        url: '/admin/businesses',
+        icon: <TrademarkOutlined/>
+      },
       {
         key: 'menu:businessTypes',
         url: '/admin/businessTypes',

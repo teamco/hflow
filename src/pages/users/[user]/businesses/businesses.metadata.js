@@ -3,7 +3,7 @@ import { NavLink, useParams } from 'umi';
 import classnames from 'classnames';
 import { Can } from 'utils/auth/can';
 import { Button, Dropdown, Tooltip } from 'antd';
-import { DownOutlined, ProfileTwoTone, SettingOutlined, ShopTwoTone } from '@ant-design/icons';
+import { DownOutlined, EyeTwoTone, ProfileTwoTone, SettingOutlined, ShopTwoTone } from '@ant-design/icons';
 
 import { tsToLocaleDateTime } from 'utils/timestamp';
 import { COLORS } from 'utils/colors';
@@ -85,11 +85,22 @@ export const metadata = ({
       {
         title: t('table:action'),
         render(record) {
+          const businessUrl = params?.user ?
+              `/admin/users/${params.user}/businesses/${record.id}` :
+              `/admin/businesses/${record.id}`;
           return data.length ? (
               <div className={styles.nowrap}>
+                <Can I={'read'} a={'businesses'}>
+                  <Tooltip title={t('actions:show', { type: t('route:businessShow') })}>
+                    <NavLink to={`${businessUrl}`}>
+                      <EyeTwoTone className={tableStyles.action}
+                                  twoToneColor={COLORS.success}/>
+                    </NavLink>
+                  </Tooltip>
+                </Can>
                 <Can I={'update'} a={'businesses'}>
                   <Tooltip title={t('actions:edit', { type: t('menu:business') })}>
-                    <NavLink to={`/admin/users/${params.user}/businesses/${record.id}`}>
+                    <NavLink to={`${businessUrl}/edit`}>
                       <ProfileTwoTone className={tableStyles.action}
                                       twoToneColor={COLORS.success}/>
                     </NavLink>

@@ -21,7 +21,7 @@ export default class MainHeader extends React.Component {
           {user && (
               <div className={'site-layout-header-info'}>
                 {t('auth:welcome')}
-                <NavLink to={`/admin/users/${user.id}`}>
+                <NavLink to={`/admin/profile`}>
                   {user?.displayName}
                 </NavLink>
               </div>

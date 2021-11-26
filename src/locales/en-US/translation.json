@@ -117,6 +117,7 @@
     "manageUsers": "Manage Users",
     "manageRoles": "Manage Roles",
     "businessTypes": "Business Types",
+    "businesses": "Businesses",
     "business": "Business",
     "notifications": "User Notifications",
     "systemLogs": "System Logs",
@@ -186,6 +187,8 @@
     "userProfile": "Profile",
     "businesses": "Businesses",
     "business": "Business",
+    "businessShow": "Business Profile",
+    "businessEdit": "Edit",
     "notifications": "Notifications",
     "businessUsers": "Assigned Users"
   },

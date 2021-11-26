@@ -219,14 +219,13 @@ export default dvaModelExtend(commonModel, {
       }
     },
 
-    * defineAbilities({ payload }, { call, put, select }) {
+    * defineAbilities({ payload = {} }, { call, put, select }) {
       const { user } = yield select(state => state.authModel);
-      const ability = yield call(defineAbilityFor, { user, userId: user?.id });
+      const { userId = user?.id } = payload;
 
-      yield put({
-        type: 'updateState',
-        payload: { ability }
-      });
+      const ability = yield call(defineAbilityFor, { user, userId });
+
+      yield put({ type: 'updateState', payload: { ability } });
     },
 
     * signOut({ payload }, { call, put, select }) {
