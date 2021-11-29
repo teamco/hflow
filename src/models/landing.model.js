@@ -33,15 +33,15 @@ export default dvaModelExtend(commonModel, {
     
     * getContent({ payload }, { put, select }) {
       // TODO (teamco): Write code here.
-      const { data } = yield select(sate => state.landingModel);
-      const { user } = yield select(sate => state.authModel);
+      const { data } = yield select(state => state.landingModel);
+      const { user } = yield select(state => state.authModel);
       
       // const realEstate = yield call(... in services);
-      
-      yeild put({
+
+      yield put({
         type: 'updateState',
         payload: {
-          ...data,
+          ...data
           // realEstate
         }
       });
