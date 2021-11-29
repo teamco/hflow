@@ -43,6 +43,22 @@ export const menus = [
     ]
   },
   {
+    key: 'menu:subscriptions',
+    icon: <TrademarkOutlined/>,
+    items: [
+      {
+        key: 'menu:subscriptionsTypes',
+        url: '/admin/subscriptionsTypes',
+        icon: <FontSizeOutlined/>
+      },
+      {
+        key: 'menu:subscriptionsList',
+        url: '/admin/subscriptionsList',
+        icon: <FontSizeOutlined/>
+      }
+    ]
+  },
+  {
     key: 'menu:systemLogs',
     icon: <InfoCircleOutlined/>,
     items: [

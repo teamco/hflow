@@ -5,12 +5,12 @@ import Subscription from 'components/Subscription';
 import SignUp from 'components/Authentication/signUp.connect';
 import LandingPage from 'layouts/landing/page';
 
-import styles from 'pages/subscription/subscription.module.less';
+import styles from 'pages/subscriptions/subscriptions.module.less';
 
-export const subscription = (props) => {
+export const subscriptions = (props) => {
   const {
     authModel,
-    subscriptionModel,
+    subscriptionsModel,
     onQuery,
     onSignIn,
     loading
@@ -56,16 +56,16 @@ export const subscription = (props) => {
    * @return {Array [JSX.Element] }
    */
   const prepareLandingSubscriptions = () => {
-    const { subscriptions: { data } } = subscriptionModel;
+    const { subscriptions: { data } } = subscriptionsModel;
     return data?.map((item) => {
       const dataProps = prepareSubscriptionProps(item);
       const {meta: {referenceId}} = item;
       return (
-          <Row gutter={8} key={referenceId}>
-            <Col span={8}>
-              <Space size={8} direction="horizontal">
+          <Row key={referenceId}>
+            <Col span={6} xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+              {/*<Space size={2} direction="horizontal">*/}
                 <Subscription {...dataProps} />
-              </Space>
+              {/*</Space>*/}
             </Col>
           </Row>
       )
@@ -98,8 +98,8 @@ export const subscription = (props) => {
 
   return (
       <LandingPage spinEffects={[
-        'subscriptionModel/query',
-        'subscriptionModel/assignTo'
+        'subscriptionsModel/query',
+        'subscriptionsModel/assignTo'
       ]}>
             <Carousel
                 slidesToShow={3}

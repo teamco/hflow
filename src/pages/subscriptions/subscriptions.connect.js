@@ -1,12 +1,12 @@
 import { connect } from 'dva';
 import { withTranslation } from 'react-i18next';
 
-import { subscription } from './subscription';
+import { subscriptions } from './subscriptions';
 
 export default connect(
-    ({ authModel, subscriptionModel, loading }) => ({
+    ({ authModel, subscriptionsModel, loading }) => ({
       authModel,
-      subscriptionModel,
+      subscriptionsModel,
       loading
     }),
     (dispatch) => ({
@@ -15,10 +15,10 @@ export default connect(
         dispatch({ type: 'authModel/signIn', payload: { user } });
       },
       onQuery(type) {
-        dispatch({ type: 'subscriptionModel/query', payload: { type } });
+        dispatch({ type: 'subscriptionsModel/query', payload: { type } });
       },
       onAssignSubscription(subscription) {
-        dispatch({ type: 'subscriptionModel/assignTo', payload: { subscription } });
+        dispatch({ type: 'subscriptionsModel/assignTo', payload: { subscription } });
       }
     })
-)(withTranslation()(subscription));
+)(withTranslation()(subscriptions));

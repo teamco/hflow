@@ -2,21 +2,21 @@
 import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from 'models/common.model';
-import { getAllSubscriptionsByType } from 'services/subscription.service';
+import { getAllSubscriptionsByType } from 'services/subscriptions.service';
 import { monitorHistory } from 'utils/history';
 
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'subscriptionModel',
+  namespace: 'subscriptionsModel',
   state: {
     subscriptions: []
 
   },
   subscriptions: {
     setupHistory({history, dispatch}) {
-      monitorHistory({history, dispatch}, 'subscriptionModel');
+      monitorHistory({history, dispatch}, 'subscriptionsModel');
     },
     setup({ dispatch }) {
     }

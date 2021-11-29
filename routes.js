@@ -11,9 +11,9 @@ export const routes = [
       },
       {
         exact: true,
-        path: '/subscription',
-        breadcrumb: 'route:subscription',
-        component: '@/pages/subscription'
+        path: '/subscriptions',
+        breadcrumb: 'route:subscriptions',
+        component: '@/pages/subscriptions'
       },
       {
         exact: false,
@@ -103,6 +103,15 @@ export const routes = [
             path: '/admin/businessTypes',
             component: '@/pages/business/types',
             breadcrumb: 'route:businessTypes',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
+            path: '/admin/subscriptionsTypes',
+            component: '@/pages/subscriptions/types',
+            breadcrumb: 'route:subscriptionsTypes',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]

@@ -121,7 +121,10 @@
     "notifications": "User Notifications",
     "systemLogs": "System Logs",
     "errorLogs": "Error Logs",
-    "userLogs": "User Logs"
+    "userLogs": "User Logs",
+    "subscriptions": "Subscriptions",
+    "subscriptionsTypes": "Subscriptions Types",
+    "subscriptionsList": "Subscriptions List"
   },
   "msg": {
     "deleteConfirm": "Are you sure to delete this {{instance}}?",
@@ -183,6 +186,7 @@
     "users": "Users",
     "manageRoles": "Manage Roles",
     "businessTypes": "Business Types",
+    "subscriptionsTypes": "Subscriptions Types",
     "userProfile": "Profile",
     "businesses": "Businesses",
     "business": "Business",
@@ -199,6 +203,7 @@
     "userRoles": "User Roles",
     "businessRoles": "Business Roles",
     "businessConfig": "Business Config",
+    "subscriptionsConfig": "Subscriptions Config",
     "businessTypes": "Types"
   },
   "address": {
