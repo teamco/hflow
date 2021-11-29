@@ -14,7 +14,8 @@ export const landing = (props) => {
   } = props;
 
   const {
-    header: { position }
+    header: { position },
+    data: {}
   } = landingModel;
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export const landing = (props) => {
 
   const contentProps = {
     className: position === 'fixed' ? styles.contentFixed : null,
-    data: {}
+    data
   };
 
   return (
