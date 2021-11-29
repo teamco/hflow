@@ -15,7 +15,7 @@ export const landing = (props) => {
 
   const {
     header: { position },
-    data: {}
+    data
   } = landingModel;
 
   useEffect(() => {
