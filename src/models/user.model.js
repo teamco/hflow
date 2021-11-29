@@ -132,29 +132,18 @@ export default dvaModelExtend(commonModel, {
 
     * getUser({ payload }, { put, call, select }) {
       const { user } = yield select(state => state.authModel);
-      const { userId } = payload;
+      const { userId = user?.id } = payload;
 
-      if (user?.uid) {
+      if (user?.id) {
         const ability = yield call(defineAbilityFor, { user, userId });
-
-        yield put({
-          type: 'authModel/updateState',
-          payload: { ability }
-        });
+        yield put({ type: 'authModel/updateState', payload: { ability } });
 
         if (ability.can('read', 'profile')) {
-          const _user = yield call(fbFindById, {
-            collection: 'users',
-            doc: userId
-          });
+          const _user = yield call(fbFindById, { collection: 'users', doc: userId });
 
           if (_user.exists) {
             const selectedUser = { ..._user.data(), ...{ id: _user.id } };
-
-            return yield put({
-              type: 'updateState',
-              payload: { selectedUser }
-            });
+            return yield put({ type: 'updateState', payload: { selectedUser } });
           }
 
           yield put({

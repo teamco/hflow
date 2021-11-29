@@ -62,33 +62,42 @@ export default dvaModelExtend(commonModel, {
   effects: {
 
     * query({ payload }, { put, call, select }) {
-      const { ability } = yield select(state => state.authModel);
-      const { selectedUser, userId } = payload;
+      let { user, ability } = yield select(state => state.authModel);
+      const { userId = user?.id } = payload;
 
-      if (ability.can('read', 'profile')) {
-        const user = yield call(fbFindById, {
-          collection: 'users',
-          doc: userId
-        });
-
-        if (user.exists && ability.can('read', 'businesses')) {
-          const _user = user.data();
-
-          // TODO (teamco): Fix business user.
-          const businessUser = false;//isBusiness(_user);
-          let businesses = { data: [] };
-
-          if (businessUser) {
-            businesses.data = yield call(getBusinessByRef, { businessRef: _user.business?.metadata?.businessRef });
+      if (ability.can('read', 'profile') && ability.can('read', 'businesses')) {
+        if (userId === user?.id) {
+          // TODO (teamco): Do nothing.
+        } else {
+          const _user = yield call(fbFindById, { collection: 'users', doc: userId });
+          if (_user.exists) {
+            user = _user.data();
           } else {
-            businesses = yield call(getBusinesses, { userId: _user.id });
-          }
 
-          yield put({
-            type: 'updateState',
-            payload: { data: businesses.data }
-          });
+            return yield put({
+              type: 'raiseCondition',
+              payload: {
+                message: i18n.t('error:notFound', { entity: 'User' }),
+                key: 'selectedUser'
+              }
+            });
+          }
         }
+
+        // TODO (teamco): Fix business user.
+        const businessUser = false;//isBusiness(_user);
+        let businesses = { data: [] };
+
+        if (businessUser) {
+          businesses.data = yield call(getBusinessByRef, { businessRef: user.business?.metadata?.businessRef });
+        } else {
+          businesses = yield call(getBusinesses, { userId: user.id });
+        }
+
+        yield put({
+          type: 'updateState',
+          payload: { data: businesses.data }
+        });
       }
     },
 

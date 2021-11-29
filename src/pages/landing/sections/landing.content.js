@@ -10,7 +10,7 @@ import styles from 'pages/landing/landing.module.less';
 const { TabPane } = Tabs;
 
 const LandingContent = props => {
-  const { t, className, data: { realEstate = [] } } = props;
+  const { t, className, data: { realEstate = {} } } = props;
 
   return (
       <div className={classnames(className, styles.landingTabs)}>

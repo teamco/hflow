@@ -58,7 +58,7 @@
   }
 
   .realEstate {
-    margin: 50px 20%;
+    margin: -16px 20% 50px 20%;
   }
 
   .trends {
@@ -156,6 +156,24 @@
         text-align: center;
         margin: 50px auto;
       }
+    }
+  }
+
+  .searchWrapper {
+    height: 560px;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("/assets/main_bg.png");
+    background-color: transparent;
+    clip-path: polygon(0% 0%, 100% 0, 100% 70%, 15vh 45vw, 0 70%);
+
+    .search {
+      height: 60%;
+      padding: 0 50px 50px 50px;
+      overflow: hidden;
+      color: @landing-color;
+      position: relative;
     }
   }
 }

@@ -10,19 +10,24 @@ export const landing = (props) => {
     authModel,
     landingModel,
     watch = true,
-    loading
+    loading,
+    onGetLandingData
   } = props;
 
+  const { user } = authModel;
+  
   const {
-    header: { position }
+    header: { position },
+    data
   } = landingModel;
 
   useEffect(() => {
-  }, []);
+    onGetLandingData();
+  }, [user]);
 
   const contentProps = {
     className: position === 'fixed' ? styles.contentFixed : null,
-    data: {}
+    data
   };
 
   return (
