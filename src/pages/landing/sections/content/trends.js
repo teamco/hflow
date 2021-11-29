@@ -10,6 +10,11 @@ const Trends = props => {
   return (
       <div className={classnames(className, styles.trends)}>
         <h1>{t('landing:trends')}</h1>
+        {trends?.map((trend, idx) => (
+          <div key={idx}>
+          {trend.name}  
+          </div>
+        )}     
       </div>
   );
 };
