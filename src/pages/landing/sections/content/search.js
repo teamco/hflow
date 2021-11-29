@@ -2,6 +2,8 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 import classnames from 'classnames';
 
+import Border from 'components/Border';
+
 import styles from 'pages/landing/landing.module.less';
 
 const Search = props => {
