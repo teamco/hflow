@@ -16,8 +16,8 @@ export default connect(
       onSignOut() {
         dispatch({ type: 'authModel/signOut', payload: {} });
       },
-      onGetLandingData(user) {
-        dispatch({ type: 'landingModel/getContent', payload: { user } });
+      onGetLandingData() {
+        dispatch({ type: 'landingModel/getContent' });
       }
     })
 )(withTranslation()(landing));
