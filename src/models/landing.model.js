@@ -25,7 +25,14 @@ export default dvaModelExtend(commonModel, {
     }
   },
   effects: {
+    
     * query({ payload }, { put, select }) {
+    },
+    
+    * getContent({ payload }, { put, select }) {
+      // TODO (teamco): Write code here.
+      const { user } = yield select(sate => state.authModel);
+      
     }
   },
   reducers: {}
