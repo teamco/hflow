@@ -22,7 +22,7 @@ export const landing = (props) => {
   } = landingModel;
 
   useEffect(() => {
-    onGetLandingData(user);
+    onGetLandingData();
   }, [user]);
 
   const contentProps = {
