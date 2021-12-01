@@ -4,21 +4,18 @@ import { withTranslation } from 'react-i18next';
 import { subscriptions } from './subscriptions';
 
 export default connect(
-    ({ authModel, subscriptionsModel, loading }) => ({
+    ({ authModel, subscriptionModel, loading }) => ({
       authModel,
-      subscriptionsModel,
+      subscriptionModel,
       loading
     }),
     (dispatch) => ({
       dispatch,
-      onSignIn(user) {
-        dispatch({ type: 'authModel/signIn', payload: { user } });
+      onNew() {
+        dispatch({ type: `subscriptionModel/newSubscription` });
       },
-      onQuery(type) {
-        dispatch({ type: 'subscriptionsModel/query', payload: { type } });
-      },
-      onAssignSubscription(subscription) {
-        dispatch({ type: 'subscriptionsModel/assignTo', payload: { subscription } });
+      onQuery() {
+        dispatch({ type: 'subscriptionModel/query' });
       }
     })
 )(withTranslation()(subscriptions));

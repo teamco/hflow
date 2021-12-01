@@ -252,11 +252,11 @@ export default dvaModelExtend(commonModel, {
 
     * businessTypes(_, { call, put }) {
       const fbTypes = yield call(fbFindById, {
-        collection: 'businessConfig',
-        doc: 'types'
+        collection: 'mainBusiness',
+        doc: 'businessTypes'
       });
 
-      let businessTypes = { types: [] };
+      let businessTypes = { tags: [] };
 
       if (fbTypes.exists) {
         businessTypes = fbTypes.data();
@@ -264,7 +264,7 @@ export default dvaModelExtend(commonModel, {
 
       yield put({
         type: 'updateState',
-        payload: { businessTypes: [...businessTypes?.types] }
+        payload: { businessTypes: [...businessTypes?.tags] }
       });
     },
 
