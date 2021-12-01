@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Breadcrumb } from 'antd';
 import { withTranslation } from 'react-i18next';
 import { NavLink } from 'umi';
-import withBreadcrumbs from 'react-router-breadcrumbs-hoc';
+import { withBreadcrumbs } from 'utils/breadcrumbs';
 
 import { routes } from '/routes';
 
@@ -16,23 +16,30 @@ import { routes } from '/routes';
  * @param breadcrumbs
  * @param meta
  * @param onUpdateDocumentMeta
+ * @param onUpdate404
  * @param props
  * @return {JSX.Element}
  * @constructor
  */
-const Breadcrumbs = ({ breadcrumbs, meta, onUpdateDocumentMeta, ...props }) => {
-  const { t } = props;
-  const title = breadcrumbs.map(({ breadcrumb }) => t(breadcrumb.props.children)).join(' / ');
+const Breadcrumbs = ({ breadcrumbs, meta, onUpdateDocumentMeta, onUpdate404, ...props }) => {
+  const { t, is404 } = props;
+  const title = breadcrumbs?.map(({ breadcrumb }) => t(breadcrumb))?.join(' / ');
+
   useEffect(() => {
     onUpdateDocumentMeta({ title });
-  }, [title !== meta.title]);
+  }, [title && (title !== meta.title)]);
+
+  useEffect(() => {
+    onUpdate404(is404);
+  }, [is404]);
 
   return (
       <Breadcrumb className={'site-breadcrumbs'}>
-        {breadcrumbs.map(({ match, breadcrumb }) => {
-          return breadcrumb.props.children && (
+        {breadcrumbs?.map((data = {}) => {
+          const { match, breadcrumb } = data;
+          return (
               <Breadcrumb.Item key={match.url}>
-                <NavLink to={match.url}>{t(breadcrumb.props.children)}</NavLink>
+                <NavLink to={match.url}>{t(breadcrumb)}</NavLink>
               </Breadcrumb.Item>
           );
         })}

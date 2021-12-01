@@ -4,8 +4,11 @@ import { Form, Layout } from 'antd';
 import * as queryString from 'querystring';
 
 import Login from 'pages/login';
+import Page404 from 'pages/404';
+
 import Loader from 'components/Loader';
 import Main from 'components/Main';
+
 import { delayedFn } from 'utils/timestamp';
 
 import 'utils/i18n';
@@ -33,11 +36,13 @@ export const AppLayout = (props) => {
     notificationModel,
     loading,
     onToggleMenu,
+    onUpdate404,
     onUpdateDocumentMeta,
     onRoute
   } = props;
 
   const {
+    is404,
     language,
     menus,
     collapsedMenu,
@@ -86,9 +91,12 @@ export const AppLayout = (props) => {
                 <Form.Provider>
                   {pageBreadcrumbs && mode !== 'signIn' && (
                       <Main.Breadcrumbs meta={meta}
+                                        onUpdate404={onUpdate404}
                                         onUpdateDocumentMeta={onUpdateDocumentMeta}/>
                   )}
-                  <div className="site-layout-content">{children}</div>
+                  <div className={'site-layout-content'}>
+                    {is404 ? (<Page404/>) : children}
+                  </div>
                 </Form.Provider>
               </Content>
               {mainFooter && <Main.Footer author={t('author', { year: 2020 })}/>}

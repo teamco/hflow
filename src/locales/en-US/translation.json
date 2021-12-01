@@ -183,6 +183,7 @@
     "newTag": "New Tag"
   },
   "route": {
+    "home": "Home",
     "admin": "Admin",
     "users": "Users",
     "manageRoles": "Manage Roles",

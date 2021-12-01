@@ -19,6 +19,7 @@ const appMeta = {
 export default dvaModelExtend(commonModel, {
   namespace: 'appModel',
   state: {
+    is404: false,
     interval: {
       timeout: 60000,
       enabled: true
@@ -89,6 +90,10 @@ export default dvaModelExtend(commonModel, {
           meta: { ...meta, ...payload.meta }
         }
       });
+    },
+
+    * update404({ payload }, { put }) {
+      yield put({ type: 'updateState', payload: { is404: payload?.is404 } });
     },
 
     * updateReferrer({ payload }, { put }) {

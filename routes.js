@@ -7,6 +7,7 @@ export const routes = [
       {
         exact: true,
         path: '/',
+        breadcrumb: 'route:home',
         component: '@/pages/landing'
       },
       {
@@ -19,6 +20,7 @@ export const routes = [
         exact: false,
         path: '/admin',
         component: '@/layouts/app',
+        breadcrumb: 'route:admin',
         routes: [
           {
             exact: true,
@@ -180,11 +182,6 @@ export const routes = [
             ]
           }
         ]
-      },
-      {
-        component: '@/pages/404',
-        breadcrumb: 'route:page404',
-        path: '/errors/404'
       }
     ]
   }

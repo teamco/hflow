@@ -29,3 +29,29 @@ export function useFocus() {
 
   return [htmlElRef, setFocus];
 }
+
+/**
+ * React 💘 localStorage: persisting state with a custom hook.
+ * @link https://levelup.gitconnected.com/react-localstorage-persisting-state-with-a-custom-hook-98f9a88ae7a9
+ * @export
+ * @param defaultValue
+ * @param localStorageKey
+ */
+export const usePersistedState = (defaultValue, localStorageKey) => {
+  const [value, setValue] = useState(() => {
+    const localStorageItem = localStorage.getItem(localStorageKey);
+    if (localStorageItem === null) return defaultValue;
+    try {
+      return JSON.parse(localStorageItem);
+    } catch (err) {
+      return defaultValue;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(value));
+  }, [value]);
+
+  // Expose the value and the updater function.
+  return [value, setValue];
+};
