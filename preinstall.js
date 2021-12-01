@@ -1,9 +1,8 @@
 const fs = require('fs');
-const path = require('path');
 
 const dir = './src/.umi';
 
-fs.rm(dir, { recursive: true, force: true }, (err) => {
+fs.rmdir(dir, { recursive: true, force: true }, (err) => {
   if (err) {
     return console.warn('Error occurred in deleting directory', err);
   }
