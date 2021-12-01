@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card } from 'antd';
-import { withTranslation } from 'react-i18next';
+import { Card, Empty } from 'antd';
 import classnames from 'classnames';
+import { withTranslation } from 'react-i18next';
 
 import styles from './mainCard.module.less';
 
@@ -12,12 +12,18 @@ const MainCard = props => {
     avatar,
     actions,
     className,
-    cover,
     style,
     title,
     description,
-    hoverable = true
+    hoverable = true,
+    noData = false
   } = props;
+
+  let { cover } = props;
+
+  if (noData) {
+    cover = (<Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>);
+  }
 
   return (
       <Card style={style}
