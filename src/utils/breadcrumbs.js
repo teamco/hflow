@@ -77,7 +77,6 @@ export const generateRoutes = routes => {
 
 /**
  * Provides path from root to the element
- *
  * @param route
  * @returns {any[]}
  */
@@ -89,10 +88,19 @@ export const pathTo = route => {
   return [...pathTo(route.parent), route];
 };
 
+/**
+ * @constant
+ * @type {{exact: boolean}}
+ */
 const DEFAULT_MATCH_OPTIONS = { exact: true };
 
-// if user is passing a function (component) as a breadcrumb, make sure we
-// pass the match object into it. Else just return the string.
+/**
+ * If user is passing a function (component) as a breadcrumb, make sure we
+ * pass the match object into it. Else just return the string.
+ * @param breadcrumb
+ * @param match
+ * @return {*}
+ */
 const renderer = ({ breadcrumb, match }) => {
   if (typeof breadcrumb === 'function') { return breadcrumb({ match }); }
   return breadcrumb;
@@ -149,6 +157,11 @@ export const getBreadcrumbs = ({ routes, pathname }) => {
   return { matches, _isRouted };
 };
 
+/**
+ * @export
+ * @param routes
+ * @return {function(*): *}
+ */
 export const withBreadcrumbs = routes => Component => withRouter(props => {
 
   /**
