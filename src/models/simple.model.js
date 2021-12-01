@@ -10,11 +10,11 @@ import { monitorHistory } from 'utils/history';
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'mainBusinessModel',
+  namespace: 'simpleModel',
   state: {},
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      monitorHistory({ history, dispatch }, 'mainBusinessModel');
+      monitorHistory({ history, dispatch }, 'simpleModel');
     },
     setup({ dispatch }) {
     }
@@ -23,13 +23,13 @@ export default dvaModelExtend(commonModel, {
 
     * query({ payload }, { call, put, select, take }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { doc, component, isEdit = false } = payload;
+      const { doc, component } = payload;
 
       let businessEntities = { tags: [] };
 
       if (user && ability.can('read', component)) {
 
-        const fbEntities = yield call(fbFindById, { collection: 'mainBusiness', doc });
+        const fbEntities = yield call(fbFindById, { collection: 'simpleEntities', doc });
 
         let data = {};
 
@@ -43,7 +43,7 @@ export default dvaModelExtend(commonModel, {
         yield put({
           type: 'toForm',
           payload: {
-            model: 'mainBusinessModel',
+            model: 'simpleModel',
             form: { ...data }
           }
         });
@@ -63,10 +63,10 @@ export default dvaModelExtend(commonModel, {
 
     * prepareToSave({ payload }, { call, put, select }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { tags } = yield select(state => state.mainBusinessModel);
+      const { tags } = yield select(state => state.simpleModel);
       const { doc, component, ...rest } = payload;
 
-      const _db = { collection: 'mainBusiness', doc };
+      const _db = { collection: 'simpleEntities', doc };
 
       if (user && ability.can('update', component)) {
         let entity = yield call(fbFindById, _db);

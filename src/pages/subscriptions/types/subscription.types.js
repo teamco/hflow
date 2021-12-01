@@ -24,7 +24,7 @@ export const subscriptionTypes = props => {
 
   const {
     t,
-    mainBusinessModel,
+    simpleModel,
     authModel,
     loading,
     onQuery,
@@ -37,7 +37,7 @@ export const subscriptionTypes = props => {
     entityForm,
     tags,
     touched
-  } = mainBusinessModel;
+  } = simpleModel;
 
   useEffect(() => {
     onQuery();
@@ -81,7 +81,7 @@ export const subscriptionTypes = props => {
   const disabled = ability.cannot('update', component);
 
   return (
-      <Page spinEffects={['mainBusinessModel/query']}
+      <Page spinEffects={['simpleModel/query']}
             touched={touched}
             component={component}>
         <div className={styles.preparationWrapper}>
@@ -92,7 +92,7 @@ export const subscriptionTypes = props => {
                                     isEdit={isEdit}
                                     disabled={disabled || !touched}
                                     formRef={formRef}
-                                    loading={loading.effects['mainBusinessModel/prepareToSave']}/>
+                                    loading={loading.effects['simpleModel/prepareToSave']}/>
                       ]}>
           </PageHeader>
           <Form layout={'vertical'}

@@ -4,16 +4,16 @@ import { withTranslation } from 'react-i18next';
 import { businessTypes } from './businessTypes';
 
 export default connect(
-    ({ authModel, mainBusinessModel, loading }) => ({
+    ({ authModel, simpleModel, loading }) => ({
       loading,
       authModel,
-      mainBusinessModel
+      simpleModel
     }),
     (dispatch) => ({
       dispatch,
       onQuery() {
         dispatch({
-          type: `mainBusinessModel/query`,
+          type: `simpleModel/query`,
           payload: {
             component: 'businessTypes',
             doc: 'businessTypes'
@@ -21,11 +21,11 @@ export default connect(
         });
       },
       onUpdateTags(tags) {
-        dispatch({ type: 'mainBusinessModel/updateTags', payload: { tags } });
+        dispatch({ type: 'simpleModel/updateTags', payload: { tags } });
       },
       onSave() {
         dispatch({
-          type: 'mainBusinessModel/prepareToSave',
+          type: 'simpleModel/prepareToSave',
           payload: {
             component: 'businessTypes',
             doc: 'businessTypes'

@@ -111,7 +111,7 @@ export default dvaModelExtend(commonModel, {
 
     * subscriptionTypes(_, { call, put }) {
       const fbTypes = yield call(fbFindById, {
-        collection: 'mainBusiness',
+        collection: 'simpleEntities',
         doc: 'subscriptionTypes'
       });
 
