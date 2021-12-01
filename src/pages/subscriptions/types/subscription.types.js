@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Form, PageHeader } from 'antd';
-import { FontSizeOutlined } from '@ant-design/icons';
+import { ControlOutlined } from '@ant-design/icons';
 
 import Page from 'components/Page';
 import SaveButton from 'components/Buttons/save.button';
@@ -9,7 +9,7 @@ import Main from 'components/Main';
 
 import { fromForm } from 'utils/object';
 
-import styles from 'pages/subscriptions/types/subscriptionsTypes.module.less';
+import styles from 'pages/subscriptions/types/subscription.types.module.less';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;
@@ -19,12 +19,12 @@ const { Info } = Main;
  * @param props
  * @return {JSX.Element}
  */
-export const subscriptionsTypes = props => {
+export const subscriptionTypes = props => {
   const [formRef] = Form.useForm();
 
   const {
     t,
-    subscriptionsTypesModel,
+    mainBusinessModel,
     authModel,
     loading,
     onQuery,
@@ -37,7 +37,7 @@ export const subscriptionsTypes = props => {
     entityForm,
     tags,
     touched
-  } = subscriptionsTypesModel;
+  } = mainBusinessModel;
 
   useEffect(() => {
     onQuery();
@@ -52,8 +52,8 @@ export const subscriptionsTypes = props => {
 
   const subTitle = (
       <>
-        <FontSizeOutlined style={{ marginRight: 10 }}/>
-        {t('panel:subscriptionsConfig')}
+        <ControlOutlined style={{ marginRight: 10 }}/>
+        {t('panel:subscriptionConfig')}
       </>
   );
 
@@ -77,11 +77,11 @@ export const subscriptionsTypes = props => {
   };
 
   const { ability } = authModel;
-  const component = 'roles';
+  const component = 'subscriptionTypes';
   const disabled = ability.cannot('update', component);
 
   return (
-      <Page spinEffects={['subscriptionsTypesModel/query']}
+      <Page spinEffects={['mainBusinessModel/query']}
             touched={touched}
             component={component}>
         <div className={styles.preparationWrapper}>
@@ -92,7 +92,7 @@ export const subscriptionsTypes = props => {
                                     isEdit={isEdit}
                                     disabled={disabled || !touched}
                                     formRef={formRef}
-                                    loading={loading.effects['subscriptionsTypes/prepareToSave']}/>
+                                    loading={loading.effects['mainBusinessModel/prepareToSave']}/>
                       ]}>
           </PageHeader>
           <Form layout={'vertical'}
@@ -100,9 +100,9 @@ export const subscriptionsTypes = props => {
                 form={formRef}
                 fields={entityForm}
                 onFinish={onFinish}>
-            <GenericPanel header={t('menu:subscriptionsTypes')}
-                          name={'subscriptionsTypes'}
-                          defaultActiveKey={['subscriptionsTypes']}>
+            <GenericPanel header={t('panel:subscriptionTypes')}
+                          name={'subscriptionTypes'}
+                          defaultActiveKey={['subscriptionTypes']}>
               <div>
                 <EditableTags label={false}
                               name={'tags'}
@@ -112,6 +112,7 @@ export const subscriptionsTypes = props => {
                               tags={tags}/>
               </div>
             </GenericPanel>
+            <Info {...infoProps} />
           </Form>
         </div>
       </Page>

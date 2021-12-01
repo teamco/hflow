@@ -7,7 +7,10 @@ import {
   SolutionOutlined,
   TeamOutlined,
   TrademarkOutlined,
-  UserOutlined
+  UserOutlined,
+  ApiOutlined,
+  ShoppingCartOutlined,
+  ControlOutlined
 } from '@ant-design/icons';
 
 /**
@@ -54,17 +57,17 @@ export const menus = [
   },
   {
     key: 'menu:subscriptions',
-    icon: <TrademarkOutlined/>,
+    icon: <ApiOutlined/>,
     items: [
       {
-        key: 'menu:subscriptionsTypes',
-        url: '/admin/subscriptionsTypes',
-        icon: <FontSizeOutlined/>
+        key: 'menu:subscriptions',
+        url: '/admin/subscriptions',
+        icon: <ShoppingCartOutlined/>
       },
       {
-        key: 'menu:subscriptionsList',
-        url: '/admin/subscriptionsList',
-        icon: <FontSizeOutlined/>
+        key: 'menu:subscriptionTypes',
+        url: '/admin/subscriptionTypes',
+        icon: <ControlOutlined/>
       }
     ]
   },

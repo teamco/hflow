@@ -1,7 +1,7 @@
 import { connect } from 'dva';
 import { withTranslation } from 'react-i18next';
 
-import { businessTypes } from './businessTypes';
+import { subscriptionTypes } from './subscription.types';
 
 export default connect(
     ({ authModel, mainBusinessModel, loading }) => ({
@@ -15,8 +15,8 @@ export default connect(
         dispatch({
           type: `mainBusinessModel/query`,
           payload: {
-            component: 'businessTypes',
-            doc: 'businessTypes'
+            component: 'subscriptionTypes',
+            doc: 'subscriptionTypes'
           }
         });
       },
@@ -27,10 +27,10 @@ export default connect(
         dispatch({
           type: 'mainBusinessModel/prepareToSave',
           payload: {
-            component: 'businessTypes',
-            doc: 'businessTypes'
+            component: 'subscriptionTypes',
+            doc: 'subscriptionTypes'
           }
         });
       }
     })
-)(withTranslation()(businessTypes));
+)(withTranslation()(subscriptionTypes));

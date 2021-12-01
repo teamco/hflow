@@ -156,9 +156,9 @@ export const routes = [
           },
           {
             exact: true,
-            path: '/admin/subscriptionsTypes',
+            path: '/admin/subscriptionTypes',
             component: '@/pages/subscriptions/types',
-            breadcrumb: 'route:subscriptionsTypes',
+            breadcrumb: 'route:subscriptionTypes',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]

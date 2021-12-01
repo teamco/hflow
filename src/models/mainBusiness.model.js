@@ -5,49 +5,45 @@ import { commonModel } from 'models/common.model';
 import { detailsInfo } from 'services/cross.model.service';
 import { fbFindById, fbUpdate, fbWrite, getRef } from 'services/firebase.service';
 import { monitorHistory } from 'utils/history';
-import { subscriptions } from '../pages/subscriptions/subscriptions';
 
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'subscriptionsTypesModel',
+  namespace: 'mainBusinessModel',
   state: {},
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      monitorHistory({ history, dispatch }, 'subscriptionsTypesModel');
+      monitorHistory({ history, dispatch }, 'mainBusinessModel');
     },
     setup({ dispatch }) {
     }
   },
   effects: {
 
-    * query({ payload }, { call, put, select }) {
+    * query({ payload }, { call, put, select, take }) {
       const { user, ability } = yield select(state => state.authModel);
-      let businessTypes = { types: [] };
+      const { doc, component, isEdit = false } = payload;
 
-      if (user && ability.can('read', 'subscriptionsTypes')) {
+      let businessEntities = { tags: [] };
 
-        const fbTypes = yield call(fbFindById, {
-          collection: 'subscriptionsConfig',
-          doc: 'types'
-        });
+      if (user && ability.can('read', component)) {
+
+        const fbEntities = yield call(fbFindById, { collection: 'mainBusiness', doc });
 
         let data = {};
 
-        if (fbTypes.exists) {
-          const subscriptionsTypes = fbTypes.data();
-          data = subscriptionsTypes?.metadata ? subscriptionsTypes : {};
+        if (fbEntities.exists) {
+          businessEntities = fbEntities.data();
+          data = businessEntities?.metadata ? businessEntities : {};
         }
-        if (!data) {
-          data.metadata = yield call(detailsInfo, { entity: data, user })
-        };
 
+        data.metadata = yield call(detailsInfo, { entity: data, user });
 
         yield put({
           type: 'toForm',
           payload: {
-            model: 'subscriptionsTypesModel',
+            model: 'mainBusinessModel',
             form: { ...data }
           }
         });
@@ -55,22 +51,24 @@ export default dvaModelExtend(commonModel, {
         yield put({
           type: 'updateState',
           payload: {
-            tags: [...businessTypes?.types],
-            isEdit: !!(fbTypes.exists)
+            touched: false,
+            tags: [...businessEntities?.tags],
+            isEdit: !!(fbEntities.exists)
           }
         });
       }
 
-      yield put({ type: 'updateState', payload: { businessTypes } });
+      yield put({ type: 'updateState', payload: { businessEntities } });
     },
 
     * prepareToSave({ payload }, { call, put, select }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { tags } = yield select(state => state.subscriptionsTypesModel);
+      const { tags } = yield select(state => state.mainBusinessModel);
+      const { doc, component, ...rest } = payload;
 
-      const _db = { collection: 'subscriptionsConfig', doc: 'types' };
+      const _db = { collection: 'mainBusiness', doc };
 
-      if (user && ability.can('update', 'subscriptionsTypes')) {
+      if (user && ability.can('update', component)) {
         let entity = yield call(fbFindById, _db);
 
         const userRef = getRef({
@@ -94,13 +92,14 @@ export default dvaModelExtend(commonModel, {
                 ...entity.metadata,
                 ...metadata
               },
-              types: [...tags]
+              tags: [...tags],
+              ...rest
             }
           });
 
         } else {
 
-          entity = yield call(fbWrite, {
+          yield call(fbWrite, {
             ..._db,
             data: {
               metadata: {
@@ -108,23 +107,13 @@ export default dvaModelExtend(commonModel, {
                 createdByRef: userRef,
                 ...metadata
               },
-              types: [...tags]
+              tags: [...tags],
+              ...rest
             }
           });
-
-          yield put({ type: 'updateState', payload: { isEdit: true } });
         }
 
-        let data = {};
-        data.metadata = yield call(detailsInfo, { entity, user });
-
-        yield put({
-          type: 'toForm',
-          payload: {
-            model: 'subscriptionsTypesModel',
-            form: { ...data }
-          }
-        });
+        yield put({ type: 'query', payload });
       }
     }
   },

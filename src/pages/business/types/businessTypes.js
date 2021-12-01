@@ -24,7 +24,7 @@ export const businessTypes = props => {
 
   const {
     t,
-    businessTypesModel,
+    mainBusinessModel,
     authModel,
     loading,
     onQuery,
@@ -37,7 +37,7 @@ export const businessTypes = props => {
     entityForm,
     tags,
     touched
-  } = businessTypesModel;
+  } = mainBusinessModel;
 
   useEffect(() => {
     onQuery();
@@ -77,11 +77,11 @@ export const businessTypes = props => {
   };
 
   const { ability } = authModel;
-  const component = 'roles';
+  const component = 'businessTypes';
   const disabled = ability.cannot('update', component);
 
   return (
-      <Page spinEffects={['businessTypesModel/query']}
+      <Page spinEffects={['mainBusinessModel/query']}
             touched={touched}
             component={component}>
         <div className={styles.preparationWrapper}>
@@ -92,7 +92,7 @@ export const businessTypes = props => {
                                     isEdit={isEdit}
                                     disabled={disabled || !touched}
                                     formRef={formRef}
-                                    loading={loading.effects['businessTypesModel/prepareToSave']}/>
+                                    loading={loading.effects['mainBusinessModel/prepareToSave']}/>
                       ]}>
           </PageHeader>
           <Form layout={'vertical'}

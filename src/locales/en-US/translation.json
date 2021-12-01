@@ -6,7 +6,8 @@
     "author": "__TITLE__, {{year}}",
     "loading": "Loading",
     "address": "Address",
-    "business": "Business"
+    "business": "Business",
+    "currency": "USD"
   },
   "error": {
     "errorNum": "Error: {{number}}",
@@ -117,15 +118,14 @@
     "manageUsers": "Manage Users",
     "manageRoles": "Manage Roles",
     "businessTypes": "Business Types",
-    "businesses": "Businesses",
+    "subscriptions": "Subscriptions",
+    "subscriptionTypes": "Subscription Types",
     "business": "Business",
+    "businessWizard": "Wizard",
     "notifications": "User Notifications",
     "systemLogs": "System Logs",
     "errorLogs": "Error Logs",
-    "userLogs": "User Logs",
-    "subscriptions": "Subscriptions",
-    "subscriptionsTypes": "Subscriptions Types",
-    "subscriptionsList": "Subscriptions List"
+    "userLogs": "User Logs"
   },
   "msg": {
     "deleteConfirm": "Are you sure to delete this {{instance}}?",
@@ -180,17 +180,21 @@
     "cancel": "Cancel",
     "select": "Select",
     "new": "New",
-    "newTag": "New Tag"
+    "newTag": "New Tag",
+    "yes": "Yes",
+    "no": "No"
   },
   "route": {
     "home": "Home",
     "admin": "Admin",
     "users": "Users",
     "manageRoles": "Manage Roles",
-    "businessTypes": "Business Types",
-    "subscriptionsTypes": "Subscriptions Types",
+    "businessTypes": "Types",
     "userProfile": "Profile",
     "businesses": "Businesses",
+    "subscriptions": "Subscriptions",
+    "subscription": "Subscription",
+    "subscriptionTypes": "Subscription Types",
     "business": "Business",
     "businessShow": "Business Profile",
     "businessEdit": "Edit",
@@ -207,7 +211,8 @@
     "userRoles": "User Roles",
     "businessRoles": "Business Roles",
     "businessConfig": "Business Config",
-    "subscriptionsConfig": "Subscriptions Config",
+    "subscriptionConfig": "Subscription Config",
+    "subscriptionTypes": "Types",
     "businessTypes": "Types"
   },
   "address": {
@@ -296,6 +301,12 @@
     "message": "Message",
     "sentInvitation": "Sent business user invitation",
     "reSentInvitation": "Resent business user invitation"
+  },
+  "subscription": {
+    "type": "Subscription Type",
+    "name": "Name",
+    "price": "Price",
+    "users": "Maximum of Business users"
   },
   "pages": {
   }
