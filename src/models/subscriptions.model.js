@@ -13,6 +13,10 @@ const DEFAULT_STATE = {
   subscriptions: [],
   businessUsers: {
     dims: { min: 1, max: 5 }
+  },
+  discountTypes: {
+    percentage: '%',
+    currency: i18n.t('currency')
   }
 };
 

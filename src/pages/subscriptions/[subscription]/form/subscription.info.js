@@ -18,6 +18,7 @@ export const SubscriptionInfo = (props) => {
     t,
     formRef,
     disabled,
+    discountTypes,
     businessUsers: { dims },
     subscriptionTypes = []
   } = props;
@@ -26,6 +27,31 @@ export const SubscriptionInfo = (props) => {
   for (let i = dims.min; i <= dims.max; i++) {
     marks[i] = i;
   }
+
+  /**
+   * @constant
+   * @param {string} value
+   */
+  const handleFormUpdate = value => {
+    formRef.setFieldsValue({ discountType: value });
+  };
+
+  /**
+   * @constant
+   * @type {JSX.Element}
+   */
+  const selectDiscountBefore = (
+      <Select style={{ width: 90 }}
+              disabled={disabled}
+              onChange={handleFormUpdate}>
+        <Option key={'percentage'} value={discountTypes?.percentage}>
+          {discountTypes?.percentage}
+        </Option>
+        <Option key={'currency'} value={discountTypes?.currency}>
+          {discountTypes?.currency}
+        </Option>
+      </Select>
+  );
 
   return (
       <GenericPanel header={t('subscription:info')}
@@ -52,13 +78,19 @@ export const SubscriptionInfo = (props) => {
                  config={{ rules: [{ required: true }] }}/>
         </div>
         <div>
-          <InputNumber type={'text'}
-                       addonBefore={t('currency')}
+          <InputNumber addonBefore={t('currency')}
                        label={t('subscription:price')}
                        name={'price'}
                        form={formRef}
                        disabled={disabled}
                        config={{ rules: [{ required: true }] }}/>
+          <InputNumber addonBefore={selectDiscountBefore}
+                       label={t('subscription:discount')}
+                       name={'discount'}
+                       form={formRef}
+                       disabled={disabled}/>
+        </div>
+        <div>
           <Slider marks={marks}
                   label={t('subscription:users')}
                   name={'users'}
@@ -66,8 +98,6 @@ export const SubscriptionInfo = (props) => {
                   min={dims.min}
                   max={dims.max}
                   disabled={disabled}/>
-        </div>
-        <div>
           <TextArea type={'text'}
                     label={t('form:description')}
                     name={'description'}
@@ -76,7 +106,12 @@ export const SubscriptionInfo = (props) => {
                     maxLength={300}
                     disabled={disabled}
                     form={formRef}/>
-          <></>
+        </div>
+        <div>
+          <Input type={'hidden'}
+                 name={'discountType'}
+                 form={formRef}
+                 disabled={disabled}/>
         </div>
       </GenericPanel>
   );

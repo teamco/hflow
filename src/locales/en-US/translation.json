@@ -305,6 +305,9 @@
   "subscription": {
     "type": "Subscription Type",
     "name": "Name",
+    "tags": "Subscription Tags",
+    "discount": "Discount",
+    "info": "Subscription Info",
     "price": "Price",
     "users": "Maximum of Business users"
   },

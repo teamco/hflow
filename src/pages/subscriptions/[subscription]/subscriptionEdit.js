@@ -48,6 +48,7 @@ export const subscriptionEdit = (props) => {
     entityForm,
     selectedSubscription,
     subscriptionTypes,
+    discountTypes,
     businessUsers,
     tags,
     isEdit,
@@ -80,6 +81,7 @@ export const subscriptionEdit = (props) => {
     formRef,
     disabled,
     subscriptionTypes,
+    discountTypes,
     businessUsers
   };
 
@@ -169,7 +171,10 @@ export const subscriptionEdit = (props) => {
                 fields={entityForm}
                 scrollToFirstError={true}
                 onFinish={onFinish}
-                onFieldsChange={onFieldsChange}>
+                onFieldsChange={onFieldsChange}
+                initialValues={{
+                  discountType: t('currency')
+                }}>
             <SubscriptionInfo {...subscriptionInfoProps} />
             <SubscriptionTags {...tagsProps} />
             <Info {...infoProps} />
