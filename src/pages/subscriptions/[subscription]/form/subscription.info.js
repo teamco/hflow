@@ -1,7 +1,7 @@
-import { Input, InputNumber, Select, Slider } from 'antd';
+import React, { useState } from 'react';
 
+import { Input, InputNumber, Select, Slider } from 'antd';
 import FormComponents from 'components/Form';
-import React from 'react';
 
 const { GenericPanel } = FormComponents;
 const { TextArea } = Input;
@@ -23,6 +23,8 @@ export const SubscriptionInfo = (props) => {
     subscriptionTypes = []
   } = props;
 
+  const [discountType, setDiscountType] = useState(formRef.getFieldValue('discountType'));
+
   let marks = {};
   for (let i = dims.min; i <= dims.max; i++) {
     marks[i] = i;
@@ -34,6 +36,7 @@ export const SubscriptionInfo = (props) => {
    */
   const handleFormUpdate = value => {
     formRef.setFieldsValue({ discountType: value });
+    setDiscountType(value);
   };
 
   /**
@@ -42,6 +45,7 @@ export const SubscriptionInfo = (props) => {
    */
   const selectDiscountBefore = (
       <Select style={{ width: 90 }}
+              defaultValue={discountType}
               disabled={disabled}
               onChange={handleFormUpdate}>
         <Option key={'percentage'} value={discountTypes?.percentage}>
@@ -88,7 +92,8 @@ export const SubscriptionInfo = (props) => {
                        label={t('subscription:discount')}
                        name={'discount'}
                        form={formRef}
-                       disabled={disabled}/>
+                       disabled={disabled}
+                       config={{ rules: [{ required: true }] }}/>
         </div>
         <div>
           <Slider marks={marks}
@@ -97,7 +102,8 @@ export const SubscriptionInfo = (props) => {
                   form={formRef}
                   min={dims.min}
                   max={dims.max}
-                  disabled={disabled}/>
+                  disabled={disabled}
+                  config={{ rules: [{ required: true }] }}/>
           <TextArea type={'text'}
                     label={t('form:description')}
                     name={'description'}
@@ -105,7 +111,8 @@ export const SubscriptionInfo = (props) => {
                     showCount
                     maxLength={300}
                     disabled={disabled}
-                    form={formRef}/>
+                    form={formRef}
+                    config={{ rules: [{ required: true }] }}/>
         </div>
         <div>
           <Input type={'hidden'}
