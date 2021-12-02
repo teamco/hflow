@@ -27,6 +27,7 @@ export const SubscriptionTags = ({
         <div>
           <EditableTags label={t('form:tags')}
                         name={'tags'}
+                        form={formRef}
                         disabled={disabled}
                         newTag={t('actions:new')}
                         onChange={onUpdateTags}
