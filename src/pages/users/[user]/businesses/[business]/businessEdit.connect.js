@@ -53,7 +53,10 @@ export default connect(
         dispatch({ type: 'businessModel/prepareToSave', payload, params });
       },
       onClose(userId) {
-        history.push(`/admin/users/${userId}/businesses`);
+        const url = userId ?
+            `/admin/users/${userId}/businesses` :
+            `/admin/businesses`;
+        history.push(url);
       },
       onUpdateTags(tags) {
         dispatch({ type: 'businessModel/updateTags', payload: { tags } });
