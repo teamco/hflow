@@ -119,6 +119,8 @@ export const metadata = ({
       },
       {
         title: t('table:action'),
+        fixed: 'right',
+        width: 150,
         render: record => data.length ? (
             <div className={styles.nowrap}>
               <Dropdown overlay={<BusinessUserMenu record={record} {...menuProps} />}

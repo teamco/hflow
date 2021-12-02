@@ -150,6 +150,8 @@ export const metadata = ({
       },
       {
         title: t('table:action'),
+        fixed: 'right',
+        width: 200,
         render: record =>
             data.length ? (
                 <div className={styles.nowrap}>
