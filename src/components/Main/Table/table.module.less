@@ -5,10 +5,23 @@
     margin-right: 10px;
   }
 
+  th {
+    padding: 12px 20px !important;
+
+    &:last-child {
+      text-align: center !important;
+    }
+  }
+
   :global {
     .ant-table-footer {
       padding: 5px 10px !important;
       text-align: right;
+    }
+
+    .ant-table-cell-fix-right-first:after,
+    .ant-table-cell-fix-right-last:after {
+      box-shadow: inset -10px 0 8px -8px #00000026;
     }
   }
 }

@@ -70,6 +70,7 @@ function MainTable(props) {
 
   return (
       <Table className={styles.grid}
+             scroll={props.scroll}
              expandable={gridProps.expandable}
              footer={() => `${props.t('table:total')}: ${total}`}
              columns={columns}

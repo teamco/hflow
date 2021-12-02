@@ -84,6 +84,8 @@ export const metadata = ({
       },
       {
         title: t('table:action'),
+        fixed: 'right',
+        width: 200,
         render(record) {
           const businessUrl = params?.user ?
               `/admin/users/${params.user}/businesses/${record.id}` :
