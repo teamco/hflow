@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import { Input, InputNumber, Select, Slider } from 'antd';
 import FormComponents from 'components/Form';
 
-const { GenericPanel } = FormComponents;
-const { TextArea } = Input;
+const { GenericPanel, MandatoryTextarea } = FormComponents;
 const { Option } = Select;
 
 /**
@@ -104,15 +103,15 @@ export const SubscriptionInfo = (props) => {
                   max={dims.max}
                   disabled={disabled}
                   config={{ rules: [{ required: true }] }}/>
-          <TextArea type={'text'}
-                    label={t('form:description')}
-                    name={'description'}
-                    rows={4}
-                    showCount
-                    maxLength={300}
-                    disabled={disabled}
-                    form={formRef}
-                    config={{ rules: [{ required: true }] }}/>
+          <MandatoryTextarea type={'text'}
+                             label={t('form:description')}
+                             name={'description'}
+                             rows={4}
+                             showCount
+                             maxLength={300}
+                             disabled={disabled}
+                             form={formRef}
+                             config={{ rules: [{ required: true }] }}/>
         </div>
         <div>
           <Input type={'hidden'}
