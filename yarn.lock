@@ -6014,6 +6014,7 @@ __metadata:
     redux: ^4.1.2
     redux-logger: ^3.0.6
     resource-loader: ^4.0.0-rc4
+    rimraf: ^3.0.2
     short-uuid: ^4.2.0
     umi: ^3.5.20
     umi-request: ^1.4.0
