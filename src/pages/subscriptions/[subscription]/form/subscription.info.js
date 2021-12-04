@@ -74,11 +74,20 @@ export const SubscriptionInfo = (props) => {
             ))}
           </Select>
           <Input type={'text'}
-                 label={t('subscription:name')}
-                 name={'name'}
+                 label={t('subscription:title')}
+                 name={'title'}
                  form={formRef}
                  disabled={disabled}
                  config={{ rules: [{ required: true }] }}/>
+        </div>
+        <div>
+          <Input type={'text'}
+                 label={t('subscription:notice')}
+                 name={'notice'}
+                 form={formRef}
+                 disabled={disabled}
+                 config={{ rules: [{ required: true }] }}/>
+          <></>
         </div>
         <div>
           <InputNumber addonBefore={t('currency')}

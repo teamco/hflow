@@ -304,11 +304,12 @@
   },
   "subscription": {
     "type": "Subscription Type",
-    "name": "Name",
+    "title": "Title",
     "tags": "Subscription Tags",
     "discount": "Discount",
     "info": "Subscription Info",
     "price": "Price",
+    "notice": "Notice",
     "users": "Maximum of Business users"
   },
   "pages": {

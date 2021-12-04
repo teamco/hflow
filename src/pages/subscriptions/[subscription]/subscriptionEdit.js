@@ -173,7 +173,9 @@ export const subscriptionEdit = (props) => {
                 onFinish={onFinish}
                 onFieldsChange={onFieldsChange}
                 initialValues={{
-                  discountType: t('currency')
+                  discountType: t('currency'),
+                  discount: 0,
+                  users: 1
                 }}>
             <SubscriptionInfo {...subscriptionInfoProps} />
             <SubscriptionTags {...tagsProps} />
