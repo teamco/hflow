@@ -56,7 +56,7 @@ export const menus = [
     ]
   },
   {
-    key: 'menu:subscriptions',
+    key: 'menu:subscription',
     icon: <ApiOutlined/>,
     items: [
       {
