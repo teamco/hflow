@@ -311,7 +311,19 @@
     "info": "Subscription Info",
     "price": "Price",
     "notice": "Notice",
-    "users": "Maximum of Business users"
+    "users": "Maximum of Business users",
+    "profile": "Profile",
+    "basicProfile": "Basic",
+    "fullProfile": "Full",
+    "analytics": "Analytics",
+    "basicAnalytics": "Basic",
+    "fullAnalytics": "Full",
+    "placementOnMap": "Placement on Map",
+    "accessToMessages": "Access to Messages",
+    "dashboard": "Dashboard",
+    "notifications": "Notifications",
+    "requestList": "Access to Full Request list",
+    "logoOnPartnersPage": "Logo on Partners Page"
   },
   "pages": {
   }

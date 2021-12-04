@@ -9,6 +9,7 @@ import Page from 'components/Page';
 
 import { SubscriptionInfo } from 'pages/subscriptions/[subscription]/form/subscription.info';
 import { SubscriptionTags } from 'pages/subscriptions/[subscription]/form/subscription.tags';
+import { SubscriptionPreferences } from 'pages/subscriptions/[subscription]/form/subscription.preferences';
 import SubscriptionMenu from 'pages/subscriptions/metadata/subscriptions.menu';
 
 import { isNew } from 'services/common.service';
@@ -83,6 +84,12 @@ export const subscriptionEdit = (props) => {
     subscriptionTypes,
     discountTypes,
     businessUsers
+  };
+
+  const subscriptionPrefsProps = {
+    t,
+    formRef,
+    disabled
   };
 
   const tagsProps = {
@@ -176,9 +183,14 @@ export const subscriptionEdit = (props) => {
                   discountType: t('currency'),
                   price: 0,
                   discount: 0,
-                  users: 1
+                  users: 1,
+                  accessToMessages: true,
+                  notifications: true,
+                  dashboard: true,
+                  placementOnMap: true
                 }}>
             <SubscriptionInfo {...subscriptionInfoProps} />
+            <SubscriptionPreferences {...subscriptionPrefsProps} />
             <SubscriptionTags {...tagsProps} />
             <Info {...infoProps} />
           </Form>
