@@ -93,6 +93,7 @@ class GenericPanel extends Component {
           suffixIcon,
           disabled,
           dependencies,
+          tooltip,
           config = {}
         } = _child.props;
 
@@ -143,6 +144,7 @@ class GenericPanel extends Component {
             <Form.Item label={label}
                        name={name}
                        span={span}
+                       tooltip={tooltip}
                        shouldUpdate
                        dependencies={dependencies}
                        key={`${idx}-${_key}`}
