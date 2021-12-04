@@ -305,6 +305,7 @@
   },
   "subscription": {
     "type": "Subscription Type",
+    "preferences": "Preferences",
     "title": "Title",
     "tags": "Subscription Tags",
     "discount": "Discount",
