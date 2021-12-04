@@ -313,6 +313,7 @@
     "notice": "Notice",
     "users": "Maximum of Business users",
     "profile": "Profile",
+    "profileTooltip": "Includes the business contact information/logo and a small written description",
     "basicProfile": "Basic",
     "fullProfile": "Full",
     "analytics": "Analytics",

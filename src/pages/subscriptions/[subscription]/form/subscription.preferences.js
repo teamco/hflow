@@ -26,6 +26,7 @@ export const SubscriptionPreferences = (props) => {
           <Switch label={t('subscription:profile')}
                   disabled={disabled}
                   form={formRef}
+                  tooltip={t('subscription:profileTooltip')}
                   config={{ valuePropName: 'checked' }}
                   checkedChildren={t('subscription:fullProfile')}
                   unCheckedChildren={t('subscription:basicProfile')}
