@@ -17,12 +17,12 @@ export const subscriptionCardMetadata = (t, props) => {
     ...rest
   } = props;
 
-  const { metadata, displayName } = props.user;
+  const { metaData, displayName } = props.subscription;
 
   const menuProps = { currentUser, ...rest };
 
-  const cover = metadata.photoURL ? (
-      <img src={metadata.photoURL}
+  const cover = metaData.photoURL ? (
+      <img src={metaData.photoURL}
            referrerPolicy={'no-referrer'}
            alt={displayName}
            className={styles.cardImg}/>
@@ -31,8 +31,8 @@ export const subscriptionCardMetadata = (t, props) => {
               className={styles.cardImg}/>
   );
 
-  const isCurrentStyle = currentUser?.id === props.user.id ? styles.currentUser : null;
-  const isSignedIn = metadata.signedIn;
+  const isCurrentStyle = currentUser?.id === props.subscription.id ? styles.currentUser : null;
+  const isSignedIn = metaData.signedIn;
   const color = isSignedIn ? COLORS.success : COLORS.disabled;
   const signed = {
     status: t(isSignedIn ? 'auth:signedIn' : 'auth:signedOut'),
@@ -50,14 +50,14 @@ export const subscriptionCardMetadata = (t, props) => {
         </Tooltip>
     ),
     description: (
-        <NavLink to={`/admin/users/${props.user.id}`}>
+        <NavLink to={`/admin/users/${props.subscription.id}`}>
           <span className={isCurrentStyle}>
             {displayName}
           </span>
         </NavLink>
     ),
     actions: [
-      <Dropdown overlay={<SubscriptionMenu record={props.user} {...menuProps} />}
+      <Dropdown overlay={<SubscriptionMenu record={props.subscription} {...menuProps} />}
                 overlayClassName={menuStyles.customActionMenu}
                 trigger={['click']}
                 key={'custom'}>

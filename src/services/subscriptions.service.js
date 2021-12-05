@@ -1,4 +1,4 @@
-import {fbDelete, fbReadBy} from 'services/firebase.service';
+import { fbDelete, fbReadAll, fbReadBy } from 'services/firebase.service';
 
 /**
  * @export
@@ -10,6 +10,21 @@ export const getAllSubscriptionsByType = async ({type}) => {
     collection: 'subscriptions',
     field: 'type',
     value: type?.type
+  });
+
+  let data = [];
+
+  subscriptions.forEach(doc => {
+    const _data = doc.data();
+    data.push(_.merge(_data, {id: doc.id}));
+  });
+  return {data};
+
+}
+
+export const getAllSubscriptions = async () => {
+  const subscriptions = await fbReadAll({
+    collection: 'subscriptions'
   });
 
   let data = [];

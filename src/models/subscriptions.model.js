@@ -8,6 +8,8 @@ import { fbFindById } from 'services/firebase.service';
 import { history } from 'umi';
 import { monitorHistory } from 'utils/history';
 import i18n from 'utils/i18n';
+import { getNotifications } from '../services/notification.service';
+import { getAllSubscriptions, getAllSubscriptionsByType } from '../services/subscriptions.service';
 
 const DEFAULT_STATE = {
   subscriptions: [],
@@ -37,12 +39,12 @@ export default dvaModelExtend(commonModel, {
   },
   effects: {
 
-    * query({ payload }, { put, select }) {
-      const { subscriptions } = yield select(state => state.subscriptionModel);
+    * query({ payload }, {call,  put, select }) {
+      const {data = []} = yield call(getAllSubscriptions);
 
       yield put({
         type: 'updateState',
-        payload: { subscriptions }
+        payload: { subscriptions: data }
       });
     },
 

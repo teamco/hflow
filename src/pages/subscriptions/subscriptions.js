@@ -30,7 +30,7 @@ export const subscriptions = (props) => {
   } = props;
 
   const {
-    data = []
+    subscriptions = []
   } = subscriptionModel;
 
   useEffect(() => {
@@ -78,10 +78,10 @@ export const subscriptions = (props) => {
                       ]}>
           </PageHeader>
           <div className={styles.subscriptionCards}>
-            {data?.length ? data?.map((user, idx) => {
+            {subscriptions?.length ? subscriptions?.map((subscription, idx) => {
               const props = {
                 ...subscriptionCardMetadata(t, {
-                  user,
+                  subscription,
                   className: styles.subscriptionCard,
                   ...subscriptionProps
                 })

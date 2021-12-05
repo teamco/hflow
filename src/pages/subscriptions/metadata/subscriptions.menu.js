@@ -39,7 +39,7 @@ export const SubscriptionMenu = props => {
   const {
     isLocked,
     signedIn
-  } = record.metadata;
+  } = record.metaData;
 
   return (
       <Menu>
