@@ -184,8 +184,7 @@ export default dvaModelExtend(commonModel, {
             metadata: {
               ...metadata,
               createdAt: metadata.updatedAt,
-              createdByRef: userRef,
-              belongsToRef: userRef
+              createdByRef: userRef
             }
           };
 
