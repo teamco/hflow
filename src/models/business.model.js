@@ -235,8 +235,7 @@ export default dvaModelExtend(commonModel, {
       const { params } = payload;
       const { business } = params;
 
-      yield put({ type: 'cleanForm' });
-
+      yield put({ type: 'cleanForm', payload: { isEdit: !isNew(business) } });
       yield put({
         type: 'validateBusiness',
         payload: {
@@ -247,7 +246,6 @@ export default dvaModelExtend(commonModel, {
 
       yield put({ type: 'businessAddress' });
       yield put({ type: 'businessTypes' });
-      yield put({ type: 'updateState', payload: { isEdit: params.business !== 'new' } });
     },
 
     * businessTypes(_, { call, put }) {
@@ -301,7 +299,7 @@ export default dvaModelExtend(commonModel, {
         });
 
         const metadata = {
-          ...selectedBusiness.metadata,
+          ...selectedBusiness?.metadata,
           updatedAt: +(new Date),
           updatedByRef: userRef
         };
@@ -514,7 +512,7 @@ export default dvaModelExtend(commonModel, {
 
         data.metadata.pending = false;
 
-        // TODO (kudenv.work): Need fetch roles from API and apply them to App.
+        // TODO (teamco): Need fetch roles from API and apply them to App.
         data.roles = ['Business User'];
 
         yield call(fbUpdate, {

@@ -61,7 +61,7 @@ export const AppLayout = (props) => {
     ts: waitBeforeLogin
   });
 
-  const { user } = authModel;
+  const { user, ability } = authModel;
   const { badge } = notificationModel;
 
   const headerProps = { t, user, badge };
@@ -70,46 +70,43 @@ export const AppLayout = (props) => {
   const isAuth = user || mode === 'signIn';
 
   return isAuth ? (
-      <div className={'admin'}>
-        <Helmet>
-          <meta charSet={meta.charSet}/>
-          <title>{`${meta.name} ${meta.title}`}</title>
-        </Helmet>
-        <Suspense fallback={<Loader fullScreen spinning={loading.effects['appModel/query']}/>}>
-          {/* Have to refresh for production environment */}
-          <Layout style={{ minHeight: '100vh' }} key={language ? language : 'en-US'}>
-            {mainMenu && (
-                <Main.Menu data={menus}
-                           onRoute={onRoute}
-                           model={appModel}
-                           collapsed={collapsedMenu}
-                           onCollapse={onToggleMenu}/>
-            )}
-            <Layout className={'site-layout'}>
-              {mainHeader && <Main.Header {...headerProps}/>}
-              <Content>
-                <Form.Provider>
-                  {pageBreadcrumbs && mode !== 'signIn' && (
-                      <Main.Breadcrumbs meta={meta}
-                                        onUpdate404={onUpdate404}
-                                        onUpdateDocumentMeta={onUpdateDocumentMeta}/>
-                  )}
-                  <div className={'site-layout-content'}>
-                    {is404 ? (<Page404/>) : children}
-                  </div>
-                </Form.Provider>
-              </Content>
-              {mainFooter && <Main.Footer author={t('author', { year: 2020 })}/>}
-            </Layout>
-          </Layout>
-        </Suspense>
-      </div>
-  ) : (
-      <>
-        {isSignInVisible ?
-            <Login/> :
-            <Loader fullScreen spinning={true}/>
-        }
-      </>
-  );
+          <div className={'admin'}>
+            <Helmet>
+              <meta charSet={meta.charSet}/>
+              <title>{`${meta.name} ${meta.title}`}</title>
+            </Helmet>
+            <Suspense fallback={<Loader fullScreen spinning={loading.effects['appModel/query']}/>}>
+              {/* Have to refresh for production environment */}
+              <Layout style={{ minHeight: '100vh' }} key={language}>
+                {mainMenu && (
+                    <Main.Menu data={menus}
+                               ability={ability}
+                               onRoute={onRoute}
+                               model={appModel}
+                               collapsed={collapsedMenu}
+                               onCollapse={onToggleMenu}/>
+                )}
+                <Layout className={'site-layout'}>
+                  {mainHeader && <Main.Header {...headerProps}/>}
+                  <Content>
+                    <Form.Provider>
+                      {pageBreadcrumbs && mode !== 'signIn' && (
+                          <Main.Breadcrumbs meta={meta}
+                                            onUpdate404={onUpdate404}
+                                            onUpdateDocumentMeta={onUpdateDocumentMeta}/>
+                      )}
+                      <div className={'site-layout-content'}>
+                        {is404 ? (<Page404/>) : children}
+                      </div>
+                    </Form.Provider>
+                  </Content>
+                  {mainFooter && <Main.Footer author={t('author', { year: 2020 })}/>}
+                </Layout>
+              </Layout>
+            </Suspense>
+          </div>
+      ) :
+      isSignInVisible ?
+          (<Login/>) :
+          (<Loader fullScreen spinning={true}/>);
 };

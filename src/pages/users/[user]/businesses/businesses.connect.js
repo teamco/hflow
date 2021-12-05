@@ -4,13 +4,11 @@ import { withTranslation } from 'react-i18next';
 import { businesses } from './businesses';
 
 export default connect(
-    ({ authModel, businessModel, loading }) => {
-      return {
-        authModel,
-        businessModel,
-        loading
-      };
-    },
+    ({ authModel, businessModel, loading }) => ({
+      authModel,
+      businessModel,
+      loading
+    }),
     (dispatch) => ({
       dispatch,
       onNew(userId) {

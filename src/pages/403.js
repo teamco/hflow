@@ -16,16 +16,18 @@ import { Can } from 'utils/auth/can';
  */
 function page403({ t, component, errorModel }) {
 
-  return (
-      <Can not I={'read'} a={component}>
+  const _403 = (
         <Page component={'page403'}>
           <Result status={'403'}
                   title={'403'}
                   className={styles.page403}
                   subTitle={t('error:page403')}/>
         </Page>
-      </Can>
   );
+
+  return component ? (
+      <Can not I={'read'} a={component}>{_403}</Can>
+  ) : _403;
 }
 
 export default connect(({ errorModel, loading }) => ({

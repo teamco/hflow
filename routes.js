@@ -198,6 +198,16 @@ export const routes = [
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]
+          },
+          {
+            component: '@/pages/403',
+            breadcrumb: 'route:page403',
+            path: '/admin/errors/403'
+          },
+          {
+            component: '@/pages/404',
+            breadcrumb: 'route:page404',
+            path: '/admin/errors/404'
           }
         ]
       }

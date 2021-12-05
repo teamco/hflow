@@ -1,31 +1,12 @@
+import _ from 'lodash';
 import { fbDelete, fbReadAll, fbReadBy } from 'services/firebase.service';
 
 /**
  * @export
- * @param type
- * @return {{docId, data}}
+ * @return {Promise<{data: *[]}>}
  */
-export const getAllSubscriptionsByType = async ({type}) => {
-  const subscriptions = await fbReadBy({
-    collection: 'subscriptions',
-    field: 'type',
-    value: type?.type
-  });
-
-  let data = [];
-
-  subscriptions.forEach(doc => {
-    const _data = doc.data();
-    data.push(_.merge(_data, {id: doc.id}));
-  });
-  return {data};
-
-}
-
 export const getAllSubscriptions = async () => {
-  const subscriptions = await fbReadAll({
-    collection: 'subscriptions'
-  });
+  const subscriptions = await fbReadAll({ collection: 'subscriptions' });
 
   let data = [];
 
@@ -34,16 +15,36 @@ export const getAllSubscriptions = async () => {
     data.push(_.merge(_data, {id: doc.id}));
   });
   return {data};
-
-}
+};
 
 /**
  * @export
+ * @param {string} [field]
+ * @param value
+ * @return {{docId, data}}
  */
-export const deleteSubscriptionById = async ({subscriptionId}) => {
-   await fbDelete({
+export const getAllSubscriptionsBy = async ({ field = 'subscriptionType', value }) => {
+  const subscriptions = await fbReadBy({
     collection: 'subscriptions',
-    doc: subscriptionId
+    field,
+    value
   });
-}
+
+  let data = [];
+
+  subscriptions.forEach(doc => {
+    const _data = doc.data();
+    data.push(_.merge(_data, {id: doc.id}));
+  });
+  return {data};
+};
+
+/**
+ * @export
+ * @param doc
+ * @return {Promise<void>}
+ */
+export const deleteSubscription = async ({ doc }) => {
+  await fbDelete({ collection: 'subscriptions', doc });
+};
 

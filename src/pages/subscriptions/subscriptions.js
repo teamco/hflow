@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react';
-import { AppstoreAddOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, PageHeader } from 'antd';
+import { AppstoreAddOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
+import Page from 'components/Page';
 import { Can } from 'utils/auth/can';
 
-import Main from 'components/Main';
-import Page from 'components/Page';
+import SubscriptionCard from 'pages/subscriptions/subscriptionCard';
 import { subscriptionCardMetadata } from 'pages/subscriptions/subscriptions.metadata';
 
 import styles from 'pages/subscriptions/subscriptions.module.less';
 import userStyles from 'pages/users/users.module.less';
-
-const { Card } = Main;
 
 /**
  * @export
@@ -25,12 +23,15 @@ export const subscriptions = (props) => {
     subscriptionModel,
     onQuery,
     onNew,
+    onDeleteSubscription,
     style,
     loading
   } = props;
 
   const {
-    subscriptions = []
+    subscriptions = { data: [] },
+    subscriptionPeriod,
+    colorsToType
   } = subscriptionModel;
 
   useEffect(() => {
@@ -53,6 +54,14 @@ export const subscriptions = (props) => {
     ability
   };
 
+  const menuProps = {
+    isEdit: false,
+    ability,
+    loading,
+    component,
+    onDeleteSubscription
+  };
+
   return (
       <Page className={userStyles.users}
             component={component}
@@ -67,7 +76,7 @@ export const subscriptions = (props) => {
                       extra={[
                         <Can I={'create'} a={component} key={'add'}>
                           <Button size={'small'}
-                                  loading={loading.effects['subscriptionModel/newSubscription']}
+                                  loading={loading.effects['businessModel/newBusiness']}
                                   disabled={disabled}
                                   icon={<AppstoreAddOutlined/>}
                                   onClick={() => onNew()}
@@ -78,17 +87,22 @@ export const subscriptions = (props) => {
                       ]}>
           </PageHeader>
           <div className={styles.subscriptionCards}>
-            {subscriptions?.length ? subscriptions?.map((subscription, idx) => {
+            {subscriptions?.data?.length ? subscriptions?.data?.map((data, idx) => {
               const props = {
+                t,
+                isEdit: true,
+                subscriptionPeriod,
+                colorsToType,
                 ...subscriptionCardMetadata(t, {
-                  subscription,
+                  data,
                   className: styles.subscriptionCard,
+                  menuProps,
                   ...subscriptionProps
                 })
               };
 
-              return (<Card key={idx} {...props} />);
-            }) : (<Card noData/>)}
+              return (<SubscriptionCard key={idx} {...props} />);
+            }) : null}
           </div>
         </div>
       </Page>

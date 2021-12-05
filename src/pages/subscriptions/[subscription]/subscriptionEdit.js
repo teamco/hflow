@@ -24,6 +24,11 @@ import userStyles from 'pages/users/users.module.less';
 
 const { Info } = Main;
 
+/**
+ * @export
+ * @param props
+ * @return {JSX.Element}
+ */
 export const subscriptionEdit = (props) => {
   const [formRef] = Form.useForm();
 
@@ -49,6 +54,7 @@ export const subscriptionEdit = (props) => {
     entityForm,
     selectedSubscription,
     subscriptionTypes,
+    subscriptionPeriod,
     discountTypes,
     businessUsers,
     tags,
@@ -59,15 +65,11 @@ export const subscriptionEdit = (props) => {
   const { ability } = authModel;
   const component = 'subscriptions';
   const disabled = ability.cannot('update', component);
-  const update = ability.can('update', component);
+  const canUpdate = ability.can('update', component);
 
   useEffect(() => {
-    if (update) {
-      onEditSubscription(params);
-    } else if (isNew(params.subscription)) {
-      onEditSubscription(params);
-    }
-  }, [authModel.user, update]);
+    canUpdate && onEditSubscription(params);
+  }, [authModel.user, canUpdate]);
 
   /**
    * @constant
@@ -82,6 +84,7 @@ export const subscriptionEdit = (props) => {
     formRef,
     disabled,
     subscriptionTypes,
+    subscriptionPeriod,
     discountTypes,
     businessUsers
   };
@@ -120,9 +123,11 @@ export const subscriptionEdit = (props) => {
   };
 
   const menuProps = {
+    ability,
     isEdit,
     loading,
     params,
+    component,
     onDeleteSubscription
   };
 

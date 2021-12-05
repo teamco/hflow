@@ -303,18 +303,26 @@
     "sentInvitation": "Sent business user invitation",
     "reSentInvitation": "Resent business user invitation"
   },
+  "period": {
+    "daily": "per Day",
+    "monthly": "per Month",
+    "yearly": "per Year"
+  },
   "subscription": {
     "type": "Subscription Type",
     "preferences": "Preferences",
+    "select": "Select",
     "title": "Title",
+    "period": "Period",
     "tags": "Subscription Tags",
     "discount": "Discount",
+    "discountInfo": "Discount {{discount}}",
     "info": "Subscription Info",
     "price": "Price",
     "notice": "Notice",
     "users": "Maximum of Business users",
+    "usersInfo": "Upto to {{users}} users",
     "profile": "Profile",
-    "profileTooltip": "Includes the business contact information/logo and a small written description",
     "basicProfile": "Basic",
     "fullProfile": "Full",
     "analytics": "Analytics",

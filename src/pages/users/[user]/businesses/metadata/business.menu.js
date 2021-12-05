@@ -1,8 +1,18 @@
 import React from 'react';
-import { NavLink } from 'umi';
+import {
+  DeleteTwoTone,
+  FileDoneOutlined,
+  PauseCircleOutlined,
+  UsergroupAddOutlined
+} from '@ant-design/icons';
 import { Menu, Popconfirm } from 'antd';
-import { DeleteOutlined, FileDoneOutlined, PauseCircleOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 import { withTranslation } from 'react-i18next';
+import { NavLink } from 'umi';
+
+import { abilityMenuItem } from 'utils/abilityComponent/abilityMenuItem';
+import { COLORS } from 'utils/colors';
+
+import tableStyles from 'components/Main/Table/table.module.less';
 
 /**
  * @export
@@ -13,6 +23,7 @@ const BusinessMenu = props => {
   const {
     t,
     isEdit,
+    ability,
     loading,
     params,
     record,
@@ -21,42 +32,57 @@ const BusinessMenu = props => {
     onDeleteBusiness
   } = props;
 
-  return (
-      <Menu>
-        <Menu.Item key={'users'}
-                   loading={loading.effects['businessModel/manageBusinessUsers']}
-                   disabled={!isEdit}
-                   icon={<UsergroupAddOutlined/>}>
+  const businessUsersProps = {
+    key: 'users',
+    loading: loading.effects['businessModel/manageBusinessUsers'],
+    canI: isEdit && ability?.can('read', 'businessUsers'),
+    icon: <UsergroupAddOutlined />,
+    children: (
           <NavLink to={`/admin/users/${params.user}/businesses/${record.id}/users`}>
             {t('actions:manage', { type: t('auth:users') })}
           </NavLink>
-        </Menu.Item>
-        <Menu.Item key={'activate'}
-                   loading={loading.effects['businessModel/activateBusiness']}
-                   disabled={!isEdit}
-                   icon={<FileDoneOutlined/>}
-                   onClick={() => onActivateBusiness(params.business)}>
-          {t('actions:activate')}
-        </Menu.Item>
-        <Menu.Item key={'hold'}
-                   loading={loading.effects['businessModel/holdBusiness']}
-                   disabled={!isEdit}
-                   icon={<PauseCircleOutlined/>}
-                   onClick={() => onHoldBusiness(params.business)}>
-          {t('actions:hold')}
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item key={'delete'}
-                   danger
-                   loading={loading.effects['businessModel/prepareToSave']}
-                   disabled={!isEdit}
-                   icon={<DeleteOutlined/>}>
+    )
+  };
+
+  const activateProps = {
+    key: 'activate',
+    loading: loading.effects['businessModel/activateBusiness'],
+    canI: isEdit && ability?.can('activate', 'business'),
+    icon: <FileDoneOutlined />,
+    onClick: () => onActivateBusiness(params.business),
+    children: t('actions:activate')
+  };
+
+  const holdProps = {
+    key: 'hold',
+    loading: loading.effects['businessModel/holdBusiness'],
+    canI: isEdit && ability?.can('hold', 'business'),
+    icon: <PauseCircleOutlined />,
+    onClick: () => onHoldBusiness(params.business),
+    children: t('actions:hold')
+  };
+
+  const deleteProps = {
+    key: 'delete',
+    canI: isEdit && ability?.can('delete', 'business'),
+    icon: <DeleteTwoTone className={tableStyles.action}
+                         twoToneColor={COLORS.danger} />,
+    children: (
           <Popconfirm title={t('msg:deleteConfirm', { instance: t('business') })}
                       placement={'topRight'}
                       onConfirm={() => onDeleteBusiness(params.business)}>
             {t('actions:delete')}
           </Popconfirm>
-        </Menu.Item>
+    )
+  };
+
+  return (
+      <Menu>
+        {abilityMenuItem(businessUsersProps)}
+        {abilityMenuItem(activateProps)}
+        {abilityMenuItem(holdProps)}
+        <Menu.Divider />
+        {abilityMenuItem(deleteProps)}
       </Menu>
   );
 };

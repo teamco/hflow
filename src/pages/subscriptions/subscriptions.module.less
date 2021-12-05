@@ -4,20 +4,106 @@
 }
 
 .subscriptionCards {
-  display: block;
   margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
 
   .subscriptionCard {
-    float: left;
-    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
     margin-right: 10px;
     margin-bottom: 10px;
+    position: relative;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+
+    .cardMenu {
+      position: absolute;
+      right: 10px;
+      top: 20px;
+      cursor: pointer;
+    }
+
+    h1 {
+      margin-top: 20px;
+      font-size: 36px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 16px;
+    }
+
+    h3 {
+      margin: 0;
+      padding: 0;
+
+      div, span {
+        font-size: 16px;
+        color: #999;
+      }
+
+      div {
+        margin-right: 10px;
+      }
+
+      &.active {
+        div, span {
+          color: #333;
+        }
+      }
+    }
+
+    button {
+      width: 200px;
+      margin: 20px auto;
+    }
+
+    p {
+      text-align: center;
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        display: flex;
+      }
+    }
+
+    h4 {
+      font-size: 14px;
+      text-align: center;
+      margin-top: -20px;
+    }
+
+    span[role="img"] {
+      margin-right: 16px;
+
+      svg {
+        height: 16px;
+        width: 16px;
+        position: relative;
+        top: 5px;
+      }
+    }
 
     .cardImg {
       margin: 10px;
       border-radius: 4px;
       width: 130px;
       height: 130px;
+    }
+
+    .cardBg {
+      background-repeat: no-repeat;
     }
 
     :global {

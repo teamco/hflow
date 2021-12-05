@@ -17,7 +17,6 @@ import SaveButton from 'components/Buttons/save.button';
 
 import { fromForm } from 'utils/object';
 import { isLoading } from 'utils/state';
-import { isNew } from 'services/common.service';
 
 import styles from 'pages/users/[user]/businesses/businesses.module.less';
 import menuStyles from 'components/menu.less';
@@ -31,6 +30,7 @@ export const businessEdit = (props) => {
     t,
     authModel,
     businessModel,
+    simpleModel,
     loading,
     onEditBusiness,
     onFieldsChange,
@@ -58,6 +58,7 @@ export const businessEdit = (props) => {
     businessTypes,
     states,
     selectedCountry,
+    selectedBusiness,
     uploadedFiles,
     tags,
     isEdit,
@@ -67,19 +68,11 @@ export const businessEdit = (props) => {
   const { ability } = authModel;
   const component = 'businesses';
   const disabled = ability.cannot('update', component);
-  const update = ability.can('update', component);
+  const canUpdate = ability.can('update', component);
 
   useEffect(() => {
-    if (update) {
-      onEditBusiness(params);
-    } else if (isNew(params.business)) {
-      onEditBusiness(params);
-    }
-  }, [
-    authModel.user,
-    update,
-    params.user
-  ]);
+    canUpdate && onEditBusiness(params);
+  }, [authModel.user, params.user, canUpdate]);
 
   /**
    * @constant
@@ -165,6 +158,7 @@ export const businessEdit = (props) => {
   };
 
   const menuProps = {
+    ability,
     isEdit,
     loading,
     params,
@@ -188,6 +182,7 @@ export const businessEdit = (props) => {
             component={component}
             touched={!disabled && touched}
             spinEffects={[
+              'simpleModel/query',
               'businessModel/editBusiness',
               'businessModel/prepareToSave'
             ]}>
@@ -206,10 +201,11 @@ export const businessEdit = (props) => {
                                     disabled={!touched || disabled}
                                     formRef={formRef}
                                     loading={
-                                      loading.effects['businessModel/query'] ||
-                                      loading.effects['businessModel/prepareToSave']
+                                        loading.effects['simpleModel/query'] ||
+                                        loading.effects['businessModel/query'] ||
+                                        loading.effects['businessModel/prepareToSave']
                                     }/>,
-                        <Dropdown overlay={<BusinessMenu {...menuProps} />}
+                        <Dropdown overlay={<BusinessMenu record={selectedBusiness} {...menuProps} />}
                                   disabled={!isEdit || disabled}
                                   trigger={['click']}
                                   overlayClassName={menuStyles.customActionMenu}

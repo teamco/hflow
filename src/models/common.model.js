@@ -46,11 +46,9 @@ const commonModel = {
       });
     },
 
-    * cleanForm({ payload }, { put }) {
-      yield put({
-        type: 'updateState',
-        payload: { ...DEFAULT_STATE }
-      });
+    * cleanForm({ payload }, { put, take }) {
+      yield put({ type: 'updateState', payload: { ...DEFAULT_STATE, ...payload } });
+      yield take('updateState');
     },
 
     * toForm({ payload }, { call, put, select }) {

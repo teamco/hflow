@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Input, InputNumber, Select, Slider } from 'antd';
 import FormComponents from 'components/Form';
@@ -19,7 +19,8 @@ export const SubscriptionInfo = (props) => {
     disabled,
     discountTypes,
     businessUsers: { dims },
-    subscriptionTypes = []
+    subscriptionTypes = [],
+    subscriptionPeriod = {}
   } = props;
 
   const [discountType, setDiscountType] = useState(formRef.getFieldValue('discountType'));
@@ -28,6 +29,12 @@ export const SubscriptionInfo = (props) => {
   for (let i = dims.min; i <= dims.max; i++) {
     marks[i] = i;
   }
+
+  const _discountType = formRef.getFieldValue('discountType');
+
+  useEffect(() => {
+    setDiscountType(_discountType);
+  }, [_discountType]);
 
   /**
    * @constant
@@ -44,7 +51,7 @@ export const SubscriptionInfo = (props) => {
    */
   const selectDiscountBefore = (
       <Select style={{ width: 90 }}
-              defaultValue={discountType}
+              value={discountType}
               disabled={disabled}
               onChange={handleFormUpdate}>
         <Option key={'percentage'} value={discountTypes?.percentage}>
@@ -73,21 +80,32 @@ export const SubscriptionInfo = (props) => {
                 </Option>
             ))}
           </Select>
+          <Select name={'subscriptionPeriod'}
+                  form={formRef}
+                  label={t('subscription:period')}
+                  disabled={disabled}
+                  config={{ rules: [{ required: true }] }}>
+            {[...Object.keys(subscriptionPeriod)].sort().map((period, idx) => (
+                <Option key={idx}
+                        value={period}>
+                  {subscriptionPeriod[period]}
+                </Option>
+            ))}
+          </Select>
+        </div>
+        <div>
           <Input type={'text'}
                  label={t('subscription:title')}
                  name={'title'}
                  form={formRef}
                  disabled={disabled}
                  config={{ rules: [{ required: true }] }}/>
-        </div>
-        <div>
           <Input type={'text'}
                  label={t('subscription:notice')}
                  name={'notice'}
                  form={formRef}
                  disabled={disabled}
                  config={{ rules: [{ required: true }] }}/>
-          <></>
         </div>
         <div>
           <InputNumber addonBefore={t('currency')}

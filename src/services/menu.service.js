@@ -25,16 +25,19 @@ export const menus = [
       {
         key: 'menu:users',
         url: '/admin/users',
+        component: 'users',
         icon: <TeamOutlined/>
       },
       {
         key: 'menu:userProfile',
         url: '/admin/profile',
+        component: 'profile',
         icon: <UserOutlined/>
       },
       {
         key: 'menu:manageRoles',
         url: '/admin/manageRoles',
+        component: 'roles',
         icon: <SolutionOutlined/>
       }
     ]
@@ -46,11 +49,13 @@ export const menus = [
       {
         key: 'menu:businesses',
         url: '/admin/businesses',
+        component: 'businesses',
         icon: <TrademarkOutlined/>
       },
       {
         key: 'menu:businessTypes',
         url: '/admin/businessTypes',
+        component: 'businessTypes',
         icon: <FontSizeOutlined/>
       }
     ]
@@ -62,11 +67,13 @@ export const menus = [
       {
         key: 'menu:subscriptions',
         url: '/admin/subscriptions',
+        component: 'subscriptions',
         icon: <ShoppingCartOutlined/>
       },
       {
         key: 'menu:subscriptionTypes',
         url: '/admin/subscriptionTypes',
+        component: 'subscriptionTypes',
         icon: <ControlOutlined/>
       }
     ]
@@ -78,18 +85,21 @@ export const menus = [
       {
         key: 'menu:notifications',
         url: '/admin/notifications',
+        component: 'notifications',
         icon: <NotificationOutlined/>
-      },
-      {
-        key: 'menu:userLogs',
-        url: '/admin/logs',
-        icon: <TeamOutlined/>
-      },
-      {
-        key: 'menu:errorLogs',
-        url: '/admin/errors',
-        icon: <BugOutlined/>
       }
+      // {
+      //   key: 'menu:userLogs',
+      //   url: '/admin/logs',
+      //   component: 'userLogs',
+      //   icon: <TeamOutlined />
+      // },
+      // {
+      //   key: 'menu:errorLogs',
+      //   url: '/admin/errors',
+      //   component: 'errorLogs',
+      //   icon: <BugOutlined />
+      // }
     ]
   }
 ];

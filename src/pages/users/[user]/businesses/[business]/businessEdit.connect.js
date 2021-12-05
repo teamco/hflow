@@ -7,6 +7,7 @@ import { businessEdit } from './businessEdit';
 export default connect(
     ({
       authModel,
+      simpleModel,
       businessServiceModel,
       businessPreparationModel,
       businessModel,
@@ -15,6 +16,7 @@ export default connect(
       loading
     }) => ({
       authModel,
+      simpleModel,
       businessServiceModel,
       businessPreparationModel,
       businessModel,

@@ -1,22 +1,12 @@
-import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { DeleteTwoTone, ShoppingCartOutlined } from '@ant-design/icons';
 import { Menu, Popconfirm } from 'antd';
-import {
-  ApiTwoTone,
-  DeleteTwoTone,
-  LockTwoTone,
-  MessageTwoTone,
-  NotificationTwoTone,
-  ProfileTwoTone,
-  TrademarkCircleTwoTone,
-  UnlockTwoTone
-} from '@ant-design/icons';
-
-import { NavLink } from 'umi';
-
-import { COLORS } from 'utils/colors';
+import { abilityMenuItem } from 'utils/abilityComponent/abilityMenuItem';
 
 import tableStyles from 'components/Main/Table/table.module.less';
+import React from 'react';
+import { withTranslation } from 'react-i18next';
+import { NavLink } from 'umi';
+import { COLORS } from 'utils/colors';
 
 /**
  * @export
@@ -27,47 +17,50 @@ export const SubscriptionMenu = props => {
   const {
     t,
     ability,
-    loading,
+    isEdit,
+    component,
     record,
-    onSignOutUser,
-    onLockUser,
-    onUnlockUser,
-    onDeleteUser,
-    setVisibleMessage
+    onDeleteSubscription
   } = props;
 
-  const {
-    isLocked,
-    signedIn
-  } = record.metaData;
+  const canEdit = ability.can('edit', component);
+  const canDelete = ability.can('delete', component);
+
+  const editProps = {
+    key: 'edit',
+    canI: canEdit,
+    icon: <ShoppingCartOutlined className={tableStyles.action}
+                                twoToneColor={COLORS.success} />,
+    children: (
+        <NavLink to={`/admin/subscriptions/${record.id}`}>
+          {t('actions:edit', { type: t('route:subscription') })}
+        </NavLink>
+    )
+  };
+
+  const deleteProps = {
+    key: 'delete',
+    canI: canDelete,
+    icon: <DeleteTwoTone className={tableStyles.action}
+                         twoToneColor={COLORS.danger} />,
+    children: (
+        <Popconfirm title={t('msg:deleteConfirm', { instance: t('menu:subscription') })}
+                    placement={'topRight'}
+                    onConfirm={() => onDeleteSubscription(record)}>
+          {t('actions:delete')}
+        </Popconfirm>
+    )
+  };
 
   return (
       <Menu>
-        <Menu.Item key={'businesses'}
-                   icon={<TrademarkCircleTwoTone className={tableStyles.action}
-                                                 twoToneColor={COLORS.success}/>}>
-          <NavLink to={`/admin/users/${record.id}/businesses`}>
-            {t('route:businesses')}
-          </NavLink>
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item key={'notifications'}
-                   icon={<NotificationTwoTone className={tableStyles.action}
-                                              twoToneColor={COLORS.warning}/>}>
-          <NavLink to={`/admin/users/${record.id}/notifications`}>
-            {t('route:notifications')}
-          </NavLink>
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item key={'delete'}
-                   icon={<DeleteTwoTone className={tableStyles.action}
-                                        twoToneColor={COLORS.danger}/>}>
-          <Popconfirm title={t('msg:deleteConfirm', { instance: record.email })}
-                      placement={'topRight'}
-                      onConfirm={() => onDeleteUser(record)}>
-            {t('actions:delete')}
-          </Popconfirm>
-        </Menu.Item>
+        {!isEdit && (
+            <>
+              {abilityMenuItem(editProps)}
+              <Menu.Divider key={'divider'} />
+            </>
+        )}
+        {abilityMenuItem(deleteProps)}
       </Menu>
   );
 };
