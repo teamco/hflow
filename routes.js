@@ -183,6 +183,24 @@ export const routes = [
           },
           {
             exact: true,
+            path: '/admin/subscriptionPrefs',
+            component: '@/pages/subscriptions/preferences',
+            breadcrumb: 'route:subscriptionPrefs',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
+            path: '/admin/subscriptionPrefs/:preferences',
+            component: '@/pages/subscriptions/preferences/[preference]',
+            breadcrumb: 'route:subscriptionPref',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
             path: '/admin/notifications',
             component: '@/pages/notifications',
             breadcrumb: 'route:notifications',

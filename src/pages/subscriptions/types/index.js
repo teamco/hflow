@@ -1,3 +1,3 @@
-import subscriptionTypes from './subscription.types.connect';
+import subscriptionTypes from './subscriptionTypes.connect';
 
 export default subscriptionTypes;

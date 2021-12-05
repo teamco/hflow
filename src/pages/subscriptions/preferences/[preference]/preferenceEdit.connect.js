@@ -2,43 +2,43 @@ import { connect } from 'dva';
 import { withTranslation } from 'react-i18next';
 import { history } from 'umi';
 
-import { subscriptionEdit } from './subscriptionEdit';
+import { preferenceEdit } from './preferenceEdit';
 
 export default connect(
     ({
       authModel,
-      subscriptionModel,
+      subscriptionPrefsModel,
       loading
     }) => ({
       authModel,
-      subscriptionModel,
+      subscriptionPrefsModel,
       loading
     }),
     (dispatch) => ({
       dispatch,
       onFieldsChange(changedFields, allFields) {
         dispatch({
-          type: 'subscriptionModel/updateFields',
+          type: 'subscriptionPrefsModel/updateFields',
           payload: {
             changedFields,
             allFields,
-            model: 'subscriptionModel'
+            model: 'subscriptionPrefsModel'
           }
         });
       },
       onSave(payload, params) {
-        dispatch({ type: 'subscriptionModel/prepareToSave', payload, params });
+        dispatch({ type: 'subscriptionPrefsModel/prepareToSave', payload, params });
       },
       onClose() {
-        history.push(`/admin/subscriptions`);
+        history.push(`/admin/subscriptionPrefs`);
       },
       onUpdateTags(tags) {
-        dispatch({ type: 'subscriptionModel/updateTags', payload: { tags } });
+        dispatch({ type: 'subscriptionPrefsModel/updateTags', payload: { tags } });
       },
       onEditSubscription(params) {
-        dispatch({ type: `subscriptionModel/editSubscription`, payload: { params } });
+        dispatch({ type: `subscriptionPrefsModel/editSubscription`, payload: { params } });
       },
       onDeleteSubscription() {
       }
     })
-)(withTranslation()(subscriptionEdit));
+)(withTranslation()(preferenceEdit));

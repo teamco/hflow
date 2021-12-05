@@ -7,19 +7,18 @@ import SaveButton from 'components/Buttons/save.button';
 import Main from 'components/Main';
 import Page from 'components/Page';
 
-import { SubscriptionInfo } from 'pages/subscriptions/[subscription]/form/subscription.info';
-import { SubscriptionTags } from 'pages/subscriptions/[subscription]/form/subscription.tags';
-import { SubscriptionPreferences } from 'pages/subscriptions/[subscription]/form/subscription.preferences';
-import SubscriptionMenu from 'pages/subscriptions/metadata/subscriptions.menu';
-
 import { useParams } from 'umi';
 
 import { fromForm } from 'utils/object';
 import { isLoading } from 'utils/state';
 
+import { PreferenceTags } from './form/preference.tags';
+import { PreferenceMenu } from 'pages/subscriptions/preferences/metadata/preference.menu';
+
 import menuStyles from 'components/menu.less';
-import styles from 'pages/subscriptions/subscriptions.module.less';
+import styles from 'pages/subscriptions/preferences/subscriptionPrefs.module.less';
 import userStyles from 'pages/users/users.module.less';
+import { PreferenceInfo } from './form/preference.info';
 
 const { Info } = Main;
 
@@ -28,7 +27,7 @@ const { Info } = Main;
  * @param props
  * @return {JSX.Element}
  */
-export const subscriptionEdit = (props) => {
+export const preferenceEdit = (props) => {
   const [formRef] = Form.useForm();
 
   const {
@@ -36,12 +35,12 @@ export const subscriptionEdit = (props) => {
     authModel,
     subscriptionModel,
     loading,
-    onEditSubscription,
+    onEditPreference,
     onFieldsChange,
     onUpdateTags,
     onSave,
     onClose,
-    onDeleteSubscription
+    onDeletePreference
   } = props;
 
   /**
@@ -51,7 +50,7 @@ export const subscriptionEdit = (props) => {
 
   const {
     entityForm,
-    selectedSubscription,
+    selectedPreference,
     subscriptionTypes,
     subscriptionPeriod,
     discountTypes,
@@ -67,7 +66,7 @@ export const subscriptionEdit = (props) => {
   const canUpdate = ability.can('update', component);
 
   useEffect(() => {
-    canUpdate && onEditSubscription(params);
+    canUpdate && onEditPreference(params);
   }, [authModel.user, canUpdate]);
 
   /**
@@ -76,22 +75,6 @@ export const subscriptionEdit = (props) => {
    */
   const onFinish = formValues => {
     onSave(formValues, params);
-  };
-
-  const subscriptionInfoProps = {
-    t,
-    formRef,
-    disabled,
-    subscriptionTypes,
-    subscriptionPeriod,
-    discountTypes,
-    businessUsers
-  };
-
-  const subscriptionPrefsProps = {
-    t,
-    formRef,
-    disabled
   };
 
   const tagsProps = {
@@ -127,7 +110,7 @@ export const subscriptionEdit = (props) => {
     loading,
     params,
     component,
-    onDeleteSubscription
+    onDeletePreference
   };
 
   const subTitle = (
@@ -145,17 +128,16 @@ export const subscriptionEdit = (props) => {
             component={component}
             touched={!disabled && touched}
             spinEffects={[
-              'subscriptionModel/editSubscription',
-              'subscriptionModel/subscriptionTypes',
-              'subscriptionModel/prepareToSave'
+              'subscriptionPrefsModel/editPreference',
+              'subscriptionPrefsModel/prepareToSave'
             ]}>
-        <div className={styles.subscriptionWrapper}>
+        <div className={styles.preferenceWrapper}>
           <PageHeader ghost={false}
                       subTitle={subTitle}
                       extra={[
                         <Button key={'close'}
                                 size={'small'}
-                                loading={isLoading(loading.effects['subscriptionModel/prepareToSave'])}
+                                loading={isLoading(loading.effects['subscriptionPrefsModel/prepareToSave'])}
                                 onClick={() => onClose()}>
                           {t('actions:close')}
                         </Button>,
@@ -163,8 +145,8 @@ export const subscriptionEdit = (props) => {
                                     isEdit={isEdit}
                                     disabled={!touched || disabled}
                                     formRef={formRef}
-                                    loading={loading.effects['subscriptionModel/prepareToSave']}/>,
-                        <Dropdown overlay={<SubscriptionMenu record={selectedSubscription} {...menuProps} />}
+                                    loading={loading.effects['subscriptionPrefsModel/prepareToSave']}/>,
+                        <Dropdown overlay={<PreferenceMenu record={selectedPreference} {...menuProps} />}
                                   disabled={!isEdit || disabled}
                                   trigger={['click']}
                                   overlayClassName={menuStyles.customActionMenu}
@@ -183,19 +165,9 @@ export const subscriptionEdit = (props) => {
                 scrollToFirstError={true}
                 onFinish={onFinish}
                 onFieldsChange={onFieldsChange}
-                initialValues={{
-                  discountType: t('currency'),
-                  price: 0,
-                  discount: 0,
-                  users: 1,
-                  accessToMessages: true,
-                  notifications: true,
-                  dashboard: true,
-                  placementOnMap: true
-                }}>
-            <SubscriptionInfo {...subscriptionInfoProps} />
-            <SubscriptionPreferences {...subscriptionPrefsProps} />
-            <SubscriptionTags {...tagsProps} />
+                initialValues={{}}>
+            <PreferenceInfo {...infoProps} />
+            <PreferenceTags {...tagsProps} />
             <Info {...infoProps} />
           </Form>
         </div>

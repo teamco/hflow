@@ -71,10 +71,16 @@ export const menus = [
         icon: <ShoppingCartOutlined/>
       },
       {
+        key: 'menu:subscriptionPrefs',
+        url: '/admin/subscriptionPrefs',
+        component: 'subscriptionPrefs',
+        icon: <ControlOutlined/>
+      },
+      {
         key: 'menu:subscriptionTypes',
         url: '/admin/subscriptionTypes',
         component: 'subscriptionTypes',
-        icon: <ControlOutlined/>
+        icon: <FontSizeOutlined />
       }
     ]
   },

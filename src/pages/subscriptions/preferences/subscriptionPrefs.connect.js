@@ -1,7 +1,7 @@
 import { connect } from 'dva';
 import { withTranslation } from 'react-i18next';
 
-import { subscriptionTypes } from './subscription.types';
+import { subscriptionPrefs } from './subscriptionPrefs';
 
 export default connect(
     ({ authModel, simpleModel, loading }) => ({
@@ -33,4 +33,4 @@ export default connect(
         });
       }
     })
-)(withTranslation()(subscriptionTypes));
+)(withTranslation()(subscriptionPrefs));

@@ -9,7 +9,7 @@ import Main from 'components/Main';
 
 import { fromForm } from 'utils/object';
 
-import styles from 'pages/subscriptions/types/subscription.types.module.less';
+import styles from 'pages/subscriptions/preferences/subscriptionPrefs.module.less';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;
@@ -19,7 +19,7 @@ const { Info } = Main;
  * @param props
  * @return {JSX.Element}
  */
-export const subscriptionTypes = props => {
+export const subscriptionPrefs = props => {
   const [formRef] = Form.useForm();
 
   const {
@@ -77,7 +77,7 @@ export const subscriptionTypes = props => {
   };
 
   const { ability } = authModel;
-  const component = 'subscriptionTypes';
+  const component = 'subscriptionPrefs';
   const disabled = ability.cannot('update', component);
 
   return (
@@ -100,17 +100,10 @@ export const subscriptionTypes = props => {
                 form={formRef}
                 fields={entityForm}
                 onFinish={onFinish}>
-            <GenericPanel header={t('panel:subscriptionTypes')}
-                          name={'subscriptionTypes'}
-                          defaultActiveKey={['subscriptionTypes']}>
-              <div>
-                <EditableTags label={false}
-                              name={'tags'}
-                              disabled={disabled}
-                              newTag={t('actions:new')}
-                              onChange={onUpdateTags}
-                              tags={tags}/>
-              </div>
+            <GenericPanel header={t('panel:subscriptionPrefs')}
+                          name={'subscriptionPrefs'}
+                          defaultActiveKey={['subscriptionPrefs']}>
+
             </GenericPanel>
             <Info {...infoProps} />
           </Form>
