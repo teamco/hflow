@@ -136,7 +136,7 @@ const commonModel = {
       const { redirect = true, type = 404, key } = payload;
       message.warning(payload.message).then();
 
-      yield put({ type: 'updateState', payload: { [key]: null, touch: false } });
+      yield put({ type: 'updateState', payload: { [key]: null, touched: false } });
       yield take('updateState');
 
       redirect && history.push(`/admin/errors/${type}`);

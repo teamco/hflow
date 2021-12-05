@@ -118,10 +118,11 @@
     "manageUsers": "Manage Users",
     "manageRoles": "Manage Roles",
     "businessTypes": "Business Types",
-    "subscription": "Subscription",
     "subscriptions": "Subscriptions",
+    "subscription": "Subscription",
     "subscriptionTypes": "Subscription Types",
     "business": "Business",
+    "businesses": "Businesses",
     "businessWizard": "Wizard",
     "notifications": "User Notifications",
     "systemLogs": "System Logs",
@@ -186,6 +187,8 @@
     "no": "No"
   },
   "route": {
+    "page403": "Page 403",
+    "page404": "Page 404",
     "home": "Home",
     "admin": "Admin",
     "users": "Users",
