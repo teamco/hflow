@@ -4,12 +4,16 @@ import dvaModelExtend from 'dva-model-extend';
 import { commonModel } from 'models/common.model';
 import { isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
-import { fbFindById } from 'services/firebase.service';
+import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
 import { history } from 'umi';
 import { monitorHistory } from 'utils/history';
 import i18n from 'utils/i18n';
 import { getNotifications } from '../services/notification.service';
 import { getAllSubscriptions, getAllSubscriptionsByType } from '../services/subscriptions.service';
+import { isAdmin } from '../services/userRoles.service';
+import { toFile } from '../utils/file';
+import { setAs } from '../utils/object';
+import { errorSaveMsg } from '../utils/message';
 
 const DEFAULT_STATE = {
   subscriptions: [],
@@ -63,6 +67,75 @@ export default dvaModelExtend(commonModel, {
           }
         }
       });
+    },
+
+    * prepareToSave({ payload, params }, { call, select, put }) {
+      const { user, ability } = yield select(state => state.authModel);
+      const { selectedSubscription, isEdit } = yield select(state => state.subscriptionModel);
+
+      let entity;
+      const manageByAdmin = isAdmin(user.roles);
+
+      if (user && ability.can('update', 'businesses')) {
+
+        const userRef = getRef({
+          collection: 'users',
+          doc:  user.id
+        });
+
+        let data = {};
+
+        data.description = setAs(payload.description);
+        data.displayName = setAs(payload.title, false);
+        data.price = setAs(payload.price, false);
+        data.type = setAs(payload.subscriptionType, false);
+
+        if (isEdit) {
+          const metadata = {
+            ...selectedSubscription.metadata,
+            updatedAt: +(new Date),
+            updatedByRef: userRef
+          };
+
+          data = { ...payload, metadata };
+
+          // Not mandatory fields preparation before saving.
+
+          selectedSubscription && params.subscription === selectedSubscription.id ?
+              yield call(fbUpdate, { collection: 'subscriptions', doc: selectedSubscription.id, data }) :
+              errorSaveMsg(true, 'Business');
+          yield put({ type: 'updateState', payload: { touched: false } });
+
+        } else {
+
+          data = {
+            ...data,
+            metadata: {
+              createdAt: +(new Date),
+              createdByRef: userRef,
+              belongsToRef: userRef
+            }
+          };
+
+          entity = yield call(fbAdd, { collection: 'subscriptions', data });
+
+          if (entity?.docId) {
+
+            yield put({
+              type: 'updateState',
+              payload: {
+                touched: false,
+                isEdit: true
+              }
+            });
+
+            history.push(`/admin/users/${user.id}/subscriptions/${entity.docId}`);
+
+          } else {
+            errorSaveMsg(false, 'Business');
+          }
+        }
+      }
     },
 
     * validateSubscription({ payload }, { call, put, select }) {
