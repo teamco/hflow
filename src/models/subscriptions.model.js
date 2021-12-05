@@ -207,6 +207,7 @@ export default dvaModelExtend(commonModel, {
         yield put({
           type: 'raiseCondition',
           payload: {
+            type: 403,
             message: i18n.t('error:noPermissions'),
             key: 'selectedSubscription'
           }

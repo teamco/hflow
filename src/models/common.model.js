@@ -132,15 +132,14 @@ const commonModel = {
       yield put({ type: 'toForm', payload: { form: { license: null }, model } });
     },
 
-    * raiseCondition({ payload }, { put }) {
+    * raiseCondition({ payload }, { put, take }) {
+      const { redirect = true, type = 404, key } = payload;
       message.warning(payload.message).then();
 
-      yield put({
-        type: 'updateState',
-        payload: { [payload.key]: null }
-      });
+      yield put({ type: 'updateState', payload: { [key]: null, touch: false } });
+      yield take('updateState');
 
-      history.push(`/errors/404`);
+      redirect && history.push(`/admin/errors/${type}`);
     }
   },
   reducers: {
