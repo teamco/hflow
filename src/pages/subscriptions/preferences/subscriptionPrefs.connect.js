@@ -4,31 +4,34 @@ import { withTranslation } from 'react-i18next';
 import { subscriptionPrefs } from './subscriptionPrefs';
 
 export default connect(
-    ({ authModel, simpleModel, loading }) => ({
+    ({ authModel, subscriptionPrefsModel, loading }) => ({
       loading,
       authModel,
-      simpleModel
+      subscriptionPrefsModel
     }),
     (dispatch) => ({
       dispatch,
       onQuery() {
         dispatch({
-          type: `simpleModel/query`,
+          type: `subscriptionPrefsModel/query`,
           payload: {
             component: 'subscriptionTypes',
             doc: 'subscriptionTypes'
           }
         });
       },
+      onNew() {
+        dispatch({ type: `subscriptionPrefsModel/newPreference` });
+      },
       onUpdateTags(tags) {
-        dispatch({ type: 'simpleModel/updateTags', payload: { tags } });
+        dispatch({ type: 'subscriptionPrefsModel/updateTags', payload: { tags } });
       },
       onSave() {
         dispatch({
-          type: 'simpleModel/prepareToSave',
+          type: 'subscriptionPrefsModel/prepareToSave',
           payload: {
-            component: 'subscriptionTypes',
-            doc: 'subscriptionTypes'
+            component: 'subscriptionPrefs',
+            doc: 'subscriptionPrefs'
           }
         });
       }

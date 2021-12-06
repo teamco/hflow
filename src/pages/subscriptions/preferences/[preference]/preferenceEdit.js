@@ -33,7 +33,7 @@ export const preferenceEdit = (props) => {
   const {
     t,
     authModel,
-    subscriptionModel,
+    subscriptionPrefsModel,
     loading,
     onEditPreference,
     onFieldsChange,
@@ -58,7 +58,7 @@ export const preferenceEdit = (props) => {
     tags,
     isEdit,
     touched
-  } = subscriptionModel;
+  } = subscriptionPrefsModel;
 
   const { ability } = authModel;
   const component = 'subscriptions';

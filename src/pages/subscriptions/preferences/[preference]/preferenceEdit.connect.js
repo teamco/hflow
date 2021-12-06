@@ -35,10 +35,10 @@ export default connect(
       onUpdateTags(tags) {
         dispatch({ type: 'subscriptionPrefsModel/updateTags', payload: { tags } });
       },
-      onEditSubscription(params) {
-        dispatch({ type: `subscriptionPrefsModel/editSubscription`, payload: { params } });
+      onEditPreference(params) {
+        dispatch({ type: `subscriptionPrefsModel/editPreference`, payload: { params } });
       },
-      onDeleteSubscription() {
+      onDeletePreference() {
       }
     })
 )(withTranslation()(preferenceEdit));

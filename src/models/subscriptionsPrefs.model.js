@@ -62,24 +62,24 @@ export default dvaModelExtend(commonModel, {
         // TODO (teamco): Do something.
       } else if (ability.can('read', 'subscriptionPrefs')) {
 
-        const subscription = yield call(fbFindById, {
+        const preference = yield call(fbFindById, {
           collection: 'subscriptionPrefs',
           doc: preferenceId
         });
 
-        if (subscription.exists) {
-          const selectedPreference = { ...subscription.data(), ...{ id: subscription.id } };
+        if (preference.exists) {
+          const selectedPreference = { ...preference.data(), ...{ id: preference.id } };
 
           yield put({ type: 'updateState', payload: { selectedPreference } });
 
-          const _subscription = { ...selectedPreference };
-          _subscription.metadata = yield call(detailsInfo, { entity: _subscription, user });
+          const _preference = { ...selectedPreference };
+          _preference.metadata = yield call(detailsInfo, { entity: _preference, user });
 
           return yield put({
             type: 'toForm',
             payload: {
-              model: 'subscriptionModel',
-              form: { ..._subscription }
+              model: 'subscriptionPrefsModel',
+              form: { ..._preference }
             }
           });
         }
@@ -96,15 +96,15 @@ export default dvaModelExtend(commonModel, {
 
     * editPreference({ payload }, { put }) {
       const { params } = payload;
-      const { subscription } = params;
+      const { preference } = params;
 
-      yield put({ type: 'cleanForm', payload: { isEdit: !isNew(subscription) } });
-      yield put({ type: 'validatePreference', payload: { preferenceId: subscription } });
+      yield put({ type: 'cleanForm', payload: { isEdit: !isNew(preference) } });
+      yield put({ type: 'validatePreference', payload: { preferenceId: preference } });
     },
 
     * prepareToSave({ payload, params }, { call, select, put }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { selectedPreference, isEdit } = yield select(state => state.subscriptionModel);
+      const { selectedPreference, isEdit } = yield select(state => state.subscriptionPrefsModel);
 
       if (user && ability.can('update', 'subscriptionPrefs')) {
 
@@ -129,7 +129,7 @@ export default dvaModelExtend(commonModel, {
         data.tags = setAs(data.tags, []);
 
         if (isEdit) {
-          selectedPreference && params.subscription === selectedPreference.id ?
+          selectedPreference && params.preference === selectedPreference.id ?
               yield call(fbUpdate, { collection: 'subscriptionPrefs', doc: selectedPreference.id, data }) :
               errorSaveMsg(true, 'Preference');
 

@@ -67,7 +67,7 @@ export const subscriptions = (props) => {
             component={component}
             spinEffects={[
               'subscriptionModel/query',
-              'subscriptionModel/save'
+              'subscriptionModel/prepareToSave'
             ]}>
         <div className={styles.subscriptionWrapper}
              style={style}>
@@ -76,7 +76,7 @@ export const subscriptions = (props) => {
                       extra={[
                         <Can I={'create'} a={component} key={'add'}>
                           <Button size={'small'}
-                                  loading={loading.effects['businessModel/newBusiness']}
+                                  loading={loading.effects['subscriptionModel/newSubscription']}
                                   disabled={disabled}
                                   icon={<AppstoreAddOutlined/>}
                                   onClick={() => onNew()}

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Form, PageHeader } from 'antd';
-import { ControlOutlined } from '@ant-design/icons';
+import { Button, Form, PageHeader } from 'antd';
+import { AppstoreAddOutlined, ControlOutlined } from '@ant-design/icons';
 
 import Page from 'components/Page';
 import SaveButton from 'components/Buttons/save.button';
@@ -8,6 +8,7 @@ import FormComponents from 'components/Form';
 import Main from 'components/Main';
 
 import { fromForm } from 'utils/object';
+import { Can } from 'utils/auth/can';
 
 import styles from 'pages/subscriptions/preferences/subscriptionPrefs.module.less';
 
@@ -24,20 +25,19 @@ export const subscriptionPrefs = props => {
 
   const {
     t,
-    simpleModel,
     authModel,
+    subscriptionPrefsModel,
     loading,
     onQuery,
-    onUpdateTags,
-    onSave
+    onSave,
+    onNew
   } = props;
 
   const {
     isEdit,
     entityForm,
-    tags,
     touched
-  } = simpleModel;
+  } = subscriptionPrefsModel;
 
   useEffect(() => {
     onQuery();
@@ -81,18 +81,26 @@ export const subscriptionPrefs = props => {
   const disabled = ability.cannot('update', component);
 
   return (
-      <Page spinEffects={['simpleModel/query']}
-            touched={touched}
-            component={component}>
-        <div className={styles.preparationWrapper}>
+      <Page touched={touched}
+            component={component}
+            spinEffects={[
+              'subscriptionPrefsModel/query',
+              'subscriptionPrefsModel/prepareToSave'
+            ]}>
+        <div className={styles.preferenceWrapper}>
           <PageHeader ghost={false}
                       subTitle={subTitle}
                       extra={[
-                        <SaveButton key={'save'}
-                                    isEdit={isEdit}
-                                    disabled={disabled || !touched}
-                                    formRef={formRef}
-                                    loading={loading.effects['simpleModel/prepareToSave']}/>
+                        <Can I={'create'} a={component} key={'add'}>
+                          <Button size={'small'}
+                                  loading={loading.effects['subscriptionPrefsModel/newPreference']}
+                                  disabled={disabled}
+                                  icon={<AppstoreAddOutlined/>}
+                                  onClick={() => onNew()}
+                                  type={'primary'}>
+                            {t('actions:new')}
+                          </Button>
+                        </Can>
                       ]}>
           </PageHeader>
           <Form layout={'vertical'}

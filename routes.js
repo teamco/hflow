@@ -192,7 +192,7 @@ export const routes = [
           },
           {
             exact: true,
-            path: '/admin/subscriptionPrefs/:preferences',
+            path: '/admin/subscriptionPrefs/:preference',
             component: '@/pages/subscriptions/preferences/[preference]',
             breadcrumb: 'route:subscriptionPref',
             wrappers: [
