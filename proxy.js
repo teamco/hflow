@@ -9,13 +9,44 @@
 //   console.log('\nUI SERVER:          ', apiServer);
 // }
 
+import { API_CONFIG } from './src/services/config/api.config';
+
+/**
+ * @constant
+ * @type {{
+ *  SERVER_URL,
+ *  ADMIN_URL,
+ *  UI_URL,
+ *  SERVER_PORT,
+ *  ADMIN_PORT,
+ *  UI_PORT,
+ *  API
+ * }}
+ */
+const apiConfig = API_CONFIG();
+
+const { SERVER_URL, API_NS } = apiConfig;
+
 export const proxy = {
-  // '/path': {
-  //   'target': apiServer,
-  //   'changeOrigin': true,
-  //   'secure': false,
-  //   onProxyRes(proxyRes, req, res) {
-  //     // console.log(uisServer, proxyRes, req, res);
-  //   }
-  // }
+  '/api/v1/authenticate': {
+    target: SERVER_URL,
+    changeOrigin: true,
+    secure: false,
+    logLevel: 'debug',
+    ws: false,
+    pathRewrite(path, req) {
+      console.info(path, req);
+    },
+    onError(err, req, res) {
+      console.error(err);
+      res.status(500);
+      res.json({ error: 'Error when connecting to remote server.' });
+    },
+    onProxyReq(proxyReq, req, res) {
+      console.info('onProxyReq', proxyReq.headers);
+    },
+    onProxyRes(proxyRes, req, res) {
+      console.log('onProxyRes', proxyRes);
+    }
+  }
 };

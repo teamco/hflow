@@ -12,6 +12,7 @@ import { monitorHistory } from 'utils/history';
 import i18n from 'utils/i18n';
 import { errorSaveMsg } from 'utils/message';
 import { setAs } from 'utils/object';
+import { getXHRToken1,getXHRToken2,getXHRToken3 } from '../services/authentication.service';
 
 const DEFAULT_STATE = {
   subscriptions: [],
@@ -53,6 +54,12 @@ export default dvaModelExtend(commonModel, {
 
     * query({ payload }, { put, call, select }) {
       const subscriptions = yield call(getAllSubscriptions);
+
+      const token1 = yield call(getXHRToken1, {});
+      const token2 = yield call(getXHRToken2, {});
+      const token3 = yield call(getXHRToken3, {});
+
+
 
       yield put({
         type: 'updateState',

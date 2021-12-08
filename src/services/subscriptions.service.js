@@ -12,9 +12,9 @@ export const getAllSubscriptions = async () => {
 
   subscriptions.forEach(doc => {
     const _data = doc.data();
-    data.push(_.merge(_data, {id: doc.id}));
+    data.push(_.merge(_data, { id: doc.id }));
   });
-  return {data};
+  return { data };
 };
 
 /**
@@ -34,9 +34,9 @@ export const getAllSubscriptionsBy = async ({ field = 'subscriptionType', value 
 
   subscriptions.forEach(doc => {
     const _data = doc.data();
-    data.push(_.merge(_data, {id: doc.id}));
+    data.push(_.merge(_data, { id: doc.id }));
   });
-  return {data};
+  return { data };
 };
 
 /**
