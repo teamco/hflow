@@ -31,7 +31,7 @@ export const getXHRToken2 = ({ username = 'andrewp', password = 'password' }) =>
     url: API.auth.getToken,
     method: 'post',
     headers: {
-      'Content-Type': request.CONTENT_TYPE.multipart
+      'Content-Type': undefined
     }
   });
 

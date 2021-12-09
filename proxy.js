@@ -35,7 +35,7 @@ export const proxy = {
     logLevel: 'debug',
     ws: false,
     pathRewrite(path, req) {
-      console.info(path, req);
+      console.info(path, req.url);
     },
     onError(err, req, res) {
       console.error(err);
@@ -43,7 +43,7 @@ export const proxy = {
       res.json({ error: 'Error when connecting to remote server.' });
     },
     onProxyReq(proxyReq, req, res) {
-      console.info('onProxyReq', proxyReq.headers);
+      console.info('onProxyReq', proxyReq.host);
     },
     onProxyRes(proxyRes, req, res) {
       console.log('onProxyRes', proxyRes);
