@@ -23,17 +23,10 @@ export const API_CONFIG = () => {
    *  SERVER_PORT,
    *  ADMIN_PORT,
    *  UI_PORT,
-   *  METHODS,
    *  API_NS
    * }}
    */
   const {
-    METHODS = {
-      get: 'GET',
-      delete: 'DELETE',
-      post: 'POST',
-      put: 'PUT'
-    },
     SERVER_URL = 'https://get-me-home-searcher.herokuapp.com',
     ADMIN_URL = 'http://localhost',
     UI_URL = 'http://localhost',
@@ -50,7 +43,6 @@ export const API_CONFIG = () => {
     SERVER_PORT,
     ADMIN_PORT,
     UI_PORT,
-    METHODS,
     API_NS
   };
 };

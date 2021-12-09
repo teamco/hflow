@@ -29,7 +29,10 @@ export const getXHRToken1 = ({ username = 'andrewp', password = 'password' }) =>
 export const getXHRToken2 = ({ username = 'andrewp', password = 'password' }) => {
   const opts = request.config({
     url: API.auth.getToken,
-    method: 'post'
+    method: 'post',
+    headers: {
+      'Content-Type': request.CONTENT_TYPE.multipart
+    }
   });
 
   const data = new FormData();
@@ -49,8 +52,9 @@ export const getXHRToken3 = ({ username = 'andrewp', password = 'password' }) =>
   const opts = request.config({
     url: API.auth.getToken,
     method: 'post',
-    username,
-    password
+    headers: {
+      'Content-Type': request.CONTENT_TYPE.urlencoded
+    }
   });
 
   const params = new URLSearchParams();
@@ -58,7 +62,7 @@ export const getXHRToken3 = ({ username = 'andrewp', password = 'password' }) =>
   params.append('password', password);
 
   return request.xhr({
-        ...opts, ...{params}
+        ...opts, ...{ params }
       }, (error) => {
         console.log(error);
       }

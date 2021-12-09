@@ -3,9 +3,9 @@ import { API_CONFIG } from 'services/config/api.config';
 
 /**
  * @constant
- * @type {{METHODS, API_NS}}
+ * @type {{API_NS}}
  */
-const { METHODS, API_NS } = API_CONFIG();
+const { API_NS } = API_CONFIG();
 
 /**
  * @function
@@ -27,29 +27,40 @@ function _csrfToken() {
   return meta.getAttribute('content');
 }
 
+const METHOD = {
+  get: 'GET',
+  delete: 'DELETE',
+  options: 'OPTIONS',
+  post: 'POST',
+  patch: 'PATCH',
+  put: 'PUT'
+};
+
 /**
  * @constant
  * @type {{urlencoded: string, multipart: (function({_boundary: string}): string), json: string}}
  */
-const HEADERS = {
+const CONTENT_TYPE = {
   json: 'application/json;charset=UTF-8',
   urlencoded: 'application/x-www-form-urlencoded',
 
   /**
-   * @function
    * @example
    * const form = new FormData();
    * form.append(item.name, fs.createReadStream(pathToFile));
-   * @param {{_boundary: string}} form
-   * @return {`multipart/form-data; boundary=${*}`}
    */
-  multipart: (form) => `multipart/form-data; boundary=${form._boundary}`
+  multipart: `multipart/form-data`
+};
+
+const ACCEPT_TYPE = {
+  all: '*/*',
+  json: 'application/json'
 };
 
 const DEFAULT_HEADERS = {
-  'Content-Type': HEADERS.json,
+  'Content-Type': CONTENT_TYPE.json,
   'Access-Control-Allow-Origin': '*',
-  accept: 'application/json'
+  accept: ACCEPT_TYPE.json
 };
 
 /**
@@ -100,7 +111,7 @@ function adoptUrlToAPI(url, direct = false) {
  */
 function config({
   url = '',
-  method = METHODS.get,
+  method = METHOD.get,
   headers = {},
   direct = false,
   responseType = 'json',
@@ -208,5 +219,7 @@ export default {
   config,
   toBase64,
   isSuccess,
-  HEADERS
+  METHOD,
+  ACCEPT_TYPE,
+  CONTENT_TYPE
 };
