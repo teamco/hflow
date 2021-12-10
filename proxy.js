@@ -39,5 +39,3 @@ export const proxy = {
     ...proxyPops
   }
 };
-
-console.log(proxy)
