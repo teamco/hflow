@@ -3,10 +3,11 @@
   "name": "hflow",
   "version": "0.0.1",
   "scripts": {
-    "prestart": "yarn preinstall",
-    "start": "cross-env PORT=8003 umi dev",
+    "start:linux": "cross-env PORT=8003 umi dev",
+    "start:windows": "cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider PORT=8003 umi dev",
+    "yarn:update": "yarn set version 3.1.0",
+    "umi:clean": "node ./preinstall.js",
     "build": "umi build",
-    "preinstall": "yarn set version 3.1.0 && node ./preinstall.js",
     "postinstall": "umi generate tmp",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage"
@@ -59,6 +60,7 @@
     "@testing-library/react": "^12.1.2",
     "@types/react": "^17.0.37",
     "@umijs/preset-react": "^1.8.30",
+    "@umijs/babel-preset-umi":"^3.5.20",
     "@umijs/test": "^3.5.20",
     "cross-env": "^7.0.3",
     "dayjs": "^1.10.7",

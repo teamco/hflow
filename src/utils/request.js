@@ -1,11 +1,11 @@
 import request from 'umi-request';
-import { API_CONFIG } from '@/services/config';
+import { API_CONFIG } from 'services/config/api.config';
 
 /**
  * @constant
- * @type {{SERVER_PORT: number, API: string, SERVER_URL: string, ANTHILL_KEY: string}}
+ * @type {{API_NS}}
  */
-const apiConfig = API_CONFIG();
+const { API_NS } = API_CONFIG();
 
 /**
  * @function
@@ -27,15 +27,45 @@ function _csrfToken() {
   return meta.getAttribute('content');
 }
 
-const DEFAULT_HEADERS = {
-  'Content-Type': 'application/json;charset=UTF-8',
-  'Access-Control-Allow-Origin': '*',
-  accept: 'application/json'
+const METHOD = {
+  get: 'get',
+  delete: 'post',
+  options: 'options',
+  post: 'post',
+  patch: 'patch',
+  put: 'put'
 };
 
 /**
  * @constant
- * @return {{'Access-Control-Allow-Origin': string, 'Content-Type': string, accept: string}}
+ * @type {{urlencoded: string, multipart: (function({_boundary: string}): string), json: string}}
+ */
+const CONTENT_TYPE = {
+  json: 'application/json;charset=UTF-8',
+  urlencoded: 'application/x-www-form-urlencoded',
+
+  /**
+   * @example
+   * const form = new FormData();
+   * form.append(item.name, fs.createReadStream(pathToFile));
+   */
+  multipart: `multipart/form-data`
+};
+
+const ACCEPT_TYPE = {
+  all: '*/*',
+  json: 'application/json'
+};
+
+const DEFAULT_HEADERS = {
+  // 'Content-Type': CONTENT_TYPE.json,
+  'Access-Control-Allow-Origin': '*',
+  accept: ACCEPT_TYPE.json
+};
+
+/**
+ * @constant
+ * @return {{'Access-Control-Allow-Origin': string, accept: string}}
  */
 const mergeHeaders = () => {
   // DEFAULT_HEADERS['X-CSRF-Token'] = _csrfToken();
@@ -66,7 +96,7 @@ function adaptUrlToParams(url = '', args) {
  * @return {string}
  */
 function adoptUrlToAPI(url, direct = false) {
-  return direct ? `/${url}` : `/${apiConfig.API}/${url}`;
+  return direct ? `/${url}` : `/${API_NS}/${url}`;
 }
 
 /**
@@ -81,7 +111,7 @@ function adoptUrlToAPI(url, direct = false) {
  */
 function config({
   url = '',
-  method = 'get',
+  method = METHOD.get,
   headers = {},
   direct = false,
   responseType = 'json',
@@ -89,12 +119,12 @@ function config({
 }) {
 
   if (url.match(/:(\w+)Key/)) {
-    url = adaptUrlToParams(url, args);
+    //url = adaptUrlToParams(url, args);
   }
 
   return {
     ...{
-      url: adoptUrlToAPI(url, direct),
+      url: `http://localhost:8003/api/v1/${url}`,//: adoptUrlToAPI(url, direct),
       method,
       responseType,
       headers: { ...mergeHeaders(), ...headers }
@@ -131,14 +161,14 @@ function xhr(opts, errorMsg, fallbackUrl) {
   delete opts.method;
 
   return request[method](url, opts).then((res) => ({ data: { ...res } })).catch((error) => {
-    errorMsg && errorMsg(error?.data?.error);
-    setTimeout(() => {
+    const _st = setTimeout(() => {
       if (fallbackUrl && !pathname.match(new RegExp(fallbackUrl))) {
         //history.replace(`${fallbackUrl}?ref=${encodeURIComponent(pathname)}`);
       }
+      clearTimeout(_st);
     }, 2000);
 
-    return error?.response;
+    return error;
   });
 }
 
@@ -151,11 +181,45 @@ function isSuccess(status) {
   return [200, 201, 202, 203, 204].indexOf(status) > -1;
 }
 
+/**
+ * @constant
+ * @param json
+ * @param Handler
+ * @return {*}
+ * @private
+ */
+const _xhrData = (json, Handler) => {
+  const data = new Handler();
+  Object.keys(json).forEach(key => (data.append(key, json[key])));
+  return data;
+};
+
+/**
+ * @export
+ * @param json
+ * @return {FormData}
+ */
+const formData = json => {
+  return _xhrData(json, FormData);
+};
+
+/**
+ * @export
+ * @param json
+ * @return {URLSearchParams}
+ */
+const paramsData = json => {
+  return _xhrData(json, URLSearchParams);
+};
+
 export default {
   xhr,
+  formData,
+  paramsData,
   config,
   toBase64,
   isSuccess,
-  apiConfig,
-  adoptUrlToAPI
+  METHOD,
+  ACCEPT_TYPE,
+  CONTENT_TYPE
 };

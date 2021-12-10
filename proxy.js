@@ -1,21 +1,41 @@
-// const fs = require('fs');
+import { API_CONFIG } from './src/services/config/api.config';
 
-// const defaultConfig = JSON.parse(fs.readFileSync('./public/config/data.json', 'utf8'));
-// const NODE_ENV = defaultConfig['NODE_ENV'];
+/**
+ * @constant
+ * @type {{
+ *  SERVER_URL,
+ *  SERVER_PORT,
+ *  API_NS
+ * }}
+ */
+const apiConfig = API_CONFIG();
 
-// const apiServer = defaultConfig['API_SERVER'];
+const { SERVER_URL, SERVER_PORT, API_NS } = apiConfig;
 
-// if (NODE_ENV === 'development') {
-//   console.log('\nUI SERVER:          ', apiServer);
-// }
+const proxyPops = {
+  changeOrigin: true,
+  secure: false,
+  logLevel: 'debug',
+  ws: false,
+  pathRewrite(path, req) {
+    console.info(path, req.url);
+  },
+  onError(err, req, res) {
+    console.error(err);
+    res.status(500);
+    res.json({ error: 'Error when connecting to remote server.' });
+  },
+  onProxyReq(proxyReq, req, res) {
+    console.info('onProxyReq', proxyReq.host);
+  },
+  onProxyRes(proxyRes, req, res) {
+    console.log('onProxyRes', proxyRes.host);
+  }
+}
 
 export const proxy = {
-  // '/path': {
-  //   'target': apiServer,
-  //   'changeOrigin': true,
-  //   'secure': false,
-  //   onProxyRes(proxyRes, req, res) {
-  //     // console.log(uisServer, proxyRes, req, res);
-  //   }
-  // }
+  [`${API_NS}/authenticate`]: {
+    target: `${SERVER_URL}`,
+    ...proxyPops
+  }
 };
