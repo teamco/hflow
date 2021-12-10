@@ -118,6 +118,8 @@
     "manageUsers": "Manage Users",
     "manageRoles": "Manage Roles",
     "businessTypes": "Business Types",
+    "campaigns": "Campaigns",
+    "campaign": "Campaign",
     "subscriptions": "Subscriptions",
     "subscription": "Subscription",
     "subscriptionTypes": "Subscription Types",
@@ -199,6 +201,8 @@
     "subscriptions": "Subscriptions",
     "subscription": "Subscription",
     "subscriptionTypes": "Subscription Types",
+    "campaigns": "Campaigns",
+    "campaign": "Campaign",
     "business": "Business",
     "businessShow": "Business Profile",
     "businessEdit": "Edit",
@@ -310,6 +314,8 @@
     "daily": "per Day",
     "monthly": "per Month",
     "yearly": "per Year"
+  },
+  "campaign": {
   },
   "subscription": {
     "type": "Subscription Type",

@@ -85,6 +85,18 @@ export const menus = [
     ]
   },
   {
+    key: 'menu:campaign',
+    icon: <ApiOutlined/>,
+    items: [
+      {
+        key: 'menu:campaigns',
+        url: '/admin/campaigns',
+        component: 'campaigns',
+        icon: <FontSizeOutlined />
+      }
+    ],
+  },
+  {
     key: 'menu:systemLogs',
     icon: <InfoCircleOutlined/>,
     items: [

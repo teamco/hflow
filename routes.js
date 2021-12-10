@@ -156,6 +156,24 @@ export const routes = [
           },
           {
             exact: true,
+            path: '/admin/campaigns',
+            component: '@/pages/campaigns',
+            breadcrumb: 'route:campaigns',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
+            path: '/admin/campaigns/:campaign',
+            component: '@/pages/campaigns/[campaign]',
+            breadcrumb: 'route:campaign',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
             path: '/admin/subscriptions',
             component: '@/pages/subscriptions',
             breadcrumb: 'route:subscriptions',
