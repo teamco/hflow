@@ -33,7 +33,7 @@ export const API_CONFIG = () => {
     SERVER_PORT = 80,
     ADMIN_PORT = 8001,
     UI_PORT = 8003,
-    API_NS = 'api/v1'
+    API_NS = '/api/v1'
   } = process.env;
 
   return {

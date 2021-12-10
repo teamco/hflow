@@ -146,7 +146,7 @@ export const getBreadcrumbs = ({ routes, pathname }) => {
             return true;
           }
 
-          return true;
+          return false;
         });
 
         breadcrumbMatch && matches.push(breadcrumbMatch);

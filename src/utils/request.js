@@ -28,12 +28,12 @@ function _csrfToken() {
 }
 
 const METHOD = {
-  get: 'GET',
-  delete: 'DELETE',
-  options: 'OPTIONS',
-  post: 'POST',
-  patch: 'PATCH',
-  put: 'PUT'
+  get: 'get',
+  delete: 'post',
+  options: 'options',
+  post: 'post',
+  patch: 'patch',
+  put: 'put'
 };
 
 /**
@@ -58,14 +58,14 @@ const ACCEPT_TYPE = {
 };
 
 const DEFAULT_HEADERS = {
-  'Content-Type': CONTENT_TYPE.json,
+  // 'Content-Type': CONTENT_TYPE.json,
   'Access-Control-Allow-Origin': '*',
   accept: ACCEPT_TYPE.json
 };
 
 /**
  * @constant
- * @return {{'Access-Control-Allow-Origin': string, 'Content-Type': string, accept: string}}
+ * @return {{'Access-Control-Allow-Origin': string, accept: string}}
  */
 const mergeHeaders = () => {
   // DEFAULT_HEADERS['X-CSRF-Token'] = _csrfToken();
