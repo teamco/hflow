@@ -13,11 +13,7 @@ export default connect(
       dispatch,
       onQuery() {
         dispatch({
-          type: `subscriptionPrefsModel/query`,
-          payload: {
-            component: 'subscriptionTypes',
-            doc: 'subscriptionTypes'
-          }
+          type: `subscriptionPrefsModel/query`
         });
       },
       onNew() {

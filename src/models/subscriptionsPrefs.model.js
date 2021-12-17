@@ -11,6 +11,8 @@ import { monitorHistory } from 'utils/history';
 import i18n from 'utils/i18n';
 import { errorSaveMsg } from 'utils/message';
 import { setAs } from 'utils/object';
+import { getAllSubscriptions } from '../services/subscriptions.service';
+import { getAllPreferences } from '../services/subscriptionsPrefs.service';
 
 const DEFAULT_STATE = {
   
@@ -34,7 +36,12 @@ export default dvaModelExtend(commonModel, {
   effects: {
 
     * query({ payload }, { put, call, select }) {
-      
+        const { data = [] } = yield call(getAllPreferences);
+
+        yield put({
+          type: 'updateState',
+          payload: { data }
+        });
     },
 
     * newPreference({ payload }, { put }) {

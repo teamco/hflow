@@ -3,17 +3,14 @@ import { Button, Form, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ControlOutlined } from '@ant-design/icons';
 
 import Page from 'components/Page';
-import SaveButton from 'components/Buttons/save.button';
-import FormComponents from 'components/Form';
 import Main from 'components/Main';
-
-import { fromForm } from 'utils/object';
 import { Can } from 'utils/auth/can';
 
-import styles from 'pages/subscriptions/preferences/subscriptionPrefs.module.less';
+import { metadata } from 'pages/subscriptions/preferences/preference.metadata';
 
-const { GenericPanel, EditableTags } = FormComponents;
-const { Info } = Main;
+import styles from 'pages/subscriptions/preferences/subscriptionPrefs.module.less';
+const { Table } = Main;
+// import { Table, Tag, Space } from 'antd';
 
 /**
  * @export
@@ -21,34 +18,28 @@ const { Info } = Main;
  * @return {JSX.Element}
  */
 export const subscriptionPrefs = props => {
-  const [formRef] = Form.useForm();
-
   const {
     t,
     authModel,
     subscriptionPrefsModel,
     loading,
     onQuery,
-    onSave,
     onNew
   } = props;
 
   const {
-    isEdit,
-    entityForm,
-    touched
+    touched,
+    data
   } = subscriptionPrefsModel;
+
+  const tableProps = {
+    pagination: false
+  }
 
   useEffect(() => {
     onQuery();
   }, [authModel.user]);
 
-  /**
-   * @constant
-   */
-  const onFinish = () => {
-    onSave();
-  };
 
   const subTitle = (
       <>
@@ -57,28 +48,14 @@ export const subscriptionPrefs = props => {
       </>
   );
 
-  const {
-    createdBy,
-    updatedBy,
-    createdAt,
-    updatedAt
-  } = fromForm(entityForm, 'metadata') || {};
-
-  const infoProps = {
-    t,
-    isEdit,
-    touched,
-    info: {
-      createdBy,
-      updatedBy,
-      createdAt,
-      updatedAt
-    }
-  };
-
   const { ability } = authModel;
   const component = 'subscriptionPrefs';
   const disabled = ability.cannot('update', component);
+
+  const userProps = {
+    loading,
+    ability
+  };
 
   return (
       <Page touched={touched}
@@ -103,18 +80,13 @@ export const subscriptionPrefs = props => {
                         </Can>
                       ]}>
           </PageHeader>
-          <Form layout={'vertical'}
-                className={styles.form}
-                form={formRef}
-                fields={entityForm}
-                onFinish={onFinish}>
-            <GenericPanel header={t('panel:subscriptionPrefs')}
-                          name={'subscriptionPrefs'}
-                          defaultActiveKey={['subscriptionPrefs']}>
-
-            </GenericPanel>
-            <Info {...infoProps} />
-          </Form>
+          <Table data={data}
+                 {...tableProps}
+                 {...metadata({
+                       t,
+                       ...userProps
+                     }
+                 )} />
         </div>
       </Page>
   );
