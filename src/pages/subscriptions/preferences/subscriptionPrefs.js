@@ -53,7 +53,7 @@ export const subscriptionPrefs = props => {
   const subTitle = (
       <>
         <ControlOutlined style={{ marginRight: 10 }}/>
-        {t('panel:subscriptionConfig')}
+        {t('panel:preferenceConfig')}
       </>
   );
 

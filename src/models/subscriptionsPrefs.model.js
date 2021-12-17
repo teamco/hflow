@@ -119,14 +119,18 @@ export default dvaModelExtend(commonModel, {
           updatedByRef: userRef
         };
 
-        let data = { ...payload, metadata };
-
         // Not mandatory/defined fields preparation before saving.
-        data.analytics = setAs(data.analytics, false);
-        data.logoOnPartnersPage = setAs(data.logoOnPartnersPage, false);
-        data.profile = setAs(data.profile, false);
-        data.requestList = setAs(data.requestList, false);
-        data.tags = setAs(data.tags, []);
+        const data = {
+          name: payload.name,
+          description: setAs(payload.Description, false),
+          translate: {
+            title: payload.title,
+            description: setAs(payload.trDescription, ''),
+            on: setAs(payload.translateOn, 'Yes'),
+            of: setAs(payload.translateOff, 'No')
+          },
+          status: setAs(payload.status, false)
+        }
 
         if (isEdit) {
           selectedPreference && params.preference === selectedPreference.id ?
@@ -137,14 +141,12 @@ export default dvaModelExtend(commonModel, {
 
         } else {
 
-          data = {
-            ...data,
-            metadata: {
-              ...metadata,
-              createdAt: metadata.updatedAt,
-              createdByRef: userRef
-            }
+          data.metadata = {
+            ...metadata,
+            createdAt: metadata.updatedAt,
+            createdByRef: userRef
           };
+
 
           const entity = yield call(fbAdd, { collection: 'subscriptionPrefs', data });
 

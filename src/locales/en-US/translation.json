@@ -123,6 +123,8 @@
     "subscriptions": "Subscriptions",
     "subscription": "Subscription",
     "subscriptionTypes": "Subscription Types",
+    "subscriptionPrefs": "Subscription Preferences",
+    "preference": "Preference",
     "business": "Business",
     "businesses": "Businesses",
     "businessWizard": "Wizard",
@@ -201,6 +203,8 @@
     "subscriptions": "Subscriptions",
     "subscription": "Subscription",
     "subscriptionTypes": "Subscription Types",
+    "subscriptionPrefs": "Subscription Preferences",
+    "subscriptionPref": "Preference",
     "campaigns": "Campaigns",
     "campaign": "Campaign",
     "business": "Business",
@@ -220,6 +224,8 @@
     "businessRoles": "Business Roles",
     "businessConfig": "Business Config",
     "subscriptionConfig": "Subscription Config",
+    "subscriptionPrefs": "Subscription Preferences",
+    "preferenceConfig": "Preference Configuration",
     "subscriptionTypes": "Types",
     "businessTypes": "Types"
   },
@@ -343,6 +349,19 @@
     "notifications": "Notifications",
     "requestList": "Access to Full Request list",
     "logoOnPartnersPage": "Logo on Partners Page"
+  },
+  "preference": {
+    "info": "Preference Info",
+    "tags": "Tags",
+    "name": "Name Key",
+    "description": "Description",
+    "status": "Default Status",
+    "true": "yes",
+    "false": "no",
+    "translate": "Preference Translate",
+    "title": "Title",
+    "translateOn": "On Key",
+    "translateOff": "Off Key"
   },
   "pages": {
   }

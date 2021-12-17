@@ -12,13 +12,15 @@ import { useParams } from 'umi';
 import { fromForm } from 'utils/object';
 import { isLoading } from 'utils/state';
 
-import { PreferenceTags } from './form/preference.tags';
+import { PreferenceInfo } from './form/preference.info';
+import { PreferenceTranslate } from './form/preference.translate';
 import { PreferenceMenu } from 'pages/subscriptions/preferences/metadata/preference.menu';
 
 import menuStyles from 'components/menu.less';
 import styles from 'pages/subscriptions/preferences/subscriptionPrefs.module.less';
 import userStyles from 'pages/users/users.module.less';
-import { PreferenceInfo } from './form/preference.info';
+
+
 
 const { Info } = Main;
 
@@ -96,6 +98,8 @@ export const preferenceEdit = (props) => {
     t,
     isEdit,
     touched,
+    formRef,
+    disabled,
     info: {
       createdBy,
       updatedBy,
@@ -117,8 +121,8 @@ export const preferenceEdit = (props) => {
       <>
         <TrademarkOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
-            t('actions:edit', { type: t('menu:subscription') }) :
-            t('actions:addNew', { type: t('menu:subscription') })
+            t('actions:edit', { type: t('menu:preference') }) :
+            t('actions:addNew', { type: t('menu:preference') })
         }
       </>
   );
@@ -154,7 +158,7 @@ export const preferenceEdit = (props) => {
                           <Button size={'small'}
                                   icon={<SettingOutlined/>}
                                   className={menuStyles.customAction}>
-                            {t('actions:manage', { type: t('menu:subscription') })} <DownOutlined/>
+                            {t('actions:manage', { type: t('menu:preference') })} <DownOutlined/>
                           </Button>
                         </Dropdown>
                       ]}/>
@@ -165,11 +169,14 @@ export const preferenceEdit = (props) => {
                 scrollToFirstError={true}
                 onFinish={onFinish}
                 onFieldsChange={onFieldsChange}
-                initialValues={{}}>
+                initialValues={{
+                  description: true,
+                  status: true
+                }}>
             <PreferenceInfo {...infoProps} />
-            <PreferenceTags {...tagsProps} />
-            <Info {...infoProps} />
+            <PreferenceTranslate {...infoProps} />
           </Form>
+
         </div>
       </Page>
   );
