@@ -9,11 +9,12 @@ export const getAllPreferences = async () => {
   const preferences = await fbReadAll({ collection: 'subscriptionPrefs' });
 
   let data = [];
-  console.log(preferences);
+
   preferences.forEach(doc => {
     const _data = doc.data();
     data.push(_.merge(_data, { id: doc.id }));
   });
+
   return { data };
 };
 

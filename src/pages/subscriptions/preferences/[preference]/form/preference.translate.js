@@ -77,7 +77,7 @@ export const PreferenceTranslate = (props) => {
                  form={formRef}
                  disabled={disabled || disabledHelper}
                  onChange={e => handleValue(e, setDescription)}
-                 config={{ rules: [{ required: true }] }}/>
+                 config={{ rules: [{ required: showHelper }] }}/>
         </div>
         <div>
           <Input type={'text'}

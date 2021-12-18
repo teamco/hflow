@@ -172,8 +172,10 @@ export const preferenceEdit = (props) => {
                 initialValues={{
                   helper: true,
                   defaultState: true,
-                  trOn: 'actions:yes',
-                  trOff: 'actions:no'
+                  translate: {
+                    on: 'actions:yes',
+                    off: 'actions:no'
+                  }
                 }}>
             <PreferenceInfo {...infoProps} />
             <PreferenceTranslate {...infoProps} />

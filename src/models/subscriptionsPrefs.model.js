@@ -8,9 +8,9 @@ import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
 import { history } from 'umi';
 
 import { monitorHistory } from 'utils/history';
-import i18n from 'utils/i18n';
 import { errorSaveMsg } from 'utils/message';
 import { getAllPreferences } from 'services/subscriptionsPrefs.service';
+import { setAs } from '../utils/object';
 
 const DEFAULT_STATE = {};
 
@@ -32,7 +32,7 @@ export default dvaModelExtend(commonModel, {
   },
   effects: {
 
-    * query({ payload }, { put, call, select }) {
+    * query({ payload }, { put, call }) {
       const { data = [] } = yield call(getAllPreferences);
 
       yield put({
@@ -108,10 +108,12 @@ export default dvaModelExtend(commonModel, {
       const {
         helper,
         defaultState,
-        title,
-        description,
-        on,
-        off
+        translate: {
+          title,
+          description,
+          on,
+          off
+        }
       } = payload;
 
       if (user && ability.can('update', 'subscriptionPrefs')) {
@@ -132,10 +134,8 @@ export default dvaModelExtend(commonModel, {
           helper,
           status: defaultState,
           translate: {
-            title,
-            description,
-            on,
-            off
+            description: setAs(description, null),
+            title, on, off
           }
         };
 
