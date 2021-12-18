@@ -76,7 +76,7 @@ export const metadata = ({
                   <Button size={'small'}
                           icon={<SettingOutlined/>}
                           className={menuStyles.customAction}>
-                    {t('actions:manage', { type: t('subscription:feature') })} <DownOutlined/>
+                    {t('actions:manage', { type: t('menu:preference') })} <DownOutlined/>
                   </Button>
                 </Dropdown>
               </div>

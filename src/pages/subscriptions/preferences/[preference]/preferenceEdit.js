@@ -108,6 +108,7 @@ export const preferenceEdit = (props) => {
   };
 
   const menuProps = {
+    t,
     ability,
     isEdit,
     loading,

@@ -54,10 +54,20 @@ export const getSuffix = (t, form, name, label) => {
       </Tooltip>
   );
 
-  const ns = name.split('.');
+  /**
+   * @function
+   * @param {string} name
+   * @return {*}
+   * @private
+   */
+  function _getNs(name) {
+    return name.split('.');
+  }
+
+  const ns = typeof name === 'string' ? _getNs(name) : name;
   let condition = values[name];
 
-  if (ns.length > 1) {
+  if (ns.length > 1 || Array.isArray(name)) {
     condition = findObjectValue(values, ns, 0);
   }
 

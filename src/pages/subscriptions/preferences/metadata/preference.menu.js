@@ -32,7 +32,7 @@ export const PreferenceMenu = props => {
                                 twoToneColor={COLORS.success} />,
     children: (
         <NavLink to={`/admin/subscriptionPrefs/${record.id}`}>
-          {t('actions:edit', { type: t('route:preference') })}
+          {t('actions:edit', { type: t('menu:preference') })}
         </NavLink>
     )
   };

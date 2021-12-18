@@ -108,10 +108,10 @@ export default dvaModelExtend(commonModel, {
       const {
         helper,
         defaultState,
-        trTitle,
-        trDescription,
-        trOn,
-        trOff
+        title,
+        description,
+        on,
+        off
       } = payload;
 
       if (user && ability.can('update', 'subscriptionPrefs')) {
@@ -132,10 +132,10 @@ export default dvaModelExtend(commonModel, {
           helper,
           status: defaultState,
           translate: {
-            title: trTitle,
-            description: trDescription,
-            on: trOn,
-            off: trOff
+            title,
+            description,
+            on,
+            off
           }
         };
 
