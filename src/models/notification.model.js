@@ -46,13 +46,7 @@ export default dvaModelExtend(commonModel, {
           if (_user.exists) {
             user = _user.data();
           } else {
-            return yield put({
-              type: 'raiseCondition',
-              payload: {
-                message: i18n.t('error:notFound', { entity: 'User' }),
-                key: 'selectedUser'
-              }
-            });
+            return yield put({ type: 'notFound', payload: { entity: 'User', key: 'selectedUser' } });
           }
         }
 

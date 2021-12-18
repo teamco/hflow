@@ -107,13 +107,7 @@ export default dvaModelExtend(commonModel, {
           });
         }
 
-        yield put({
-          type: 'raiseCondition',
-          payload: {
-            message: i18n.t('error:notFound', { entity: 'Subscription' }),
-            key: 'selectedSubscription'
-          }
-        });
+        yield put({ type: 'notFound', payload: { entity: 'Subscription', key: 'selectedSubscription' } });
       }
     },
 
@@ -204,14 +198,7 @@ export default dvaModelExtend(commonModel, {
         }
       } else {
 
-        yield put({
-          type: 'raiseCondition',
-          payload: {
-            type: 403,
-            message: i18n.t('error:noPermissions'),
-            key: 'selectedSubscription'
-          }
-        });
+        yield put({ type: 'noPermissions', payload: { key: 'selectedSubscription' } });
       }
     }
   },

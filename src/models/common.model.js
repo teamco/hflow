@@ -2,6 +2,7 @@ import { getEntityFormIdx } from 'services/common.service';
 import { message } from 'antd';
 import { history } from 'umi';
 import { merge } from 'lodash';
+import i18n from '../utils/i18n';
 
 const DEFAULT_FORM = [
   {
@@ -134,14 +135,47 @@ const commonModel = {
 
     * raiseCondition({ payload }, { put, take }) {
       const { redirect = true, type = 404, key } = payload;
+
+      if (!key) {
+        throw new Error('Key must be defined');
+      }
+
       message.warning(payload.message).then();
 
       yield put({ type: 'updateState', payload: { [key]: null, touched: false } });
       yield take('updateState');
 
       redirect && history.push(`/admin/errors/${type}`);
+    },
+
+    * notFound({ payload }, { put }) {
+      const { entity = 'Entity', key, redirect } = payload;
+
+      yield put({
+        type: 'raiseCondition',
+        payload: {
+          key,
+          redirect,
+          type: 404,
+          message: i18n.t('error:notFound', { entity })
+        }
+      });
+    },
+
+    * noPermissions({ payload }, { put }) {
+      const { key, redirect } = payload;
+      yield put({
+        type: 'raiseCondition',
+        payload: {
+          key,
+          redirect,
+          type: 403,
+          message: i18n.t('error:noPermissions')
+        }
+      });
     }
   },
+
   reducers: {
 
     updateState(state, { payload }) {

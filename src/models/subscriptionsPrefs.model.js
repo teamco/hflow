@@ -12,9 +12,7 @@ import i18n from 'utils/i18n';
 import { errorSaveMsg } from 'utils/message';
 import { getAllPreferences } from 'services/subscriptionsPrefs.service';
 
-const DEFAULT_STATE = {
-  
-};
+const DEFAULT_STATE = {};
 
 /**
  * @export
@@ -35,12 +33,12 @@ export default dvaModelExtend(commonModel, {
   effects: {
 
     * query({ payload }, { put, call, select }) {
-        const { data = [] } = yield call(getAllPreferences);
+      const { data = [] } = yield call(getAllPreferences);
 
-        yield put({
-          type: 'updateState',
-          payload: { data }
-        });
+      yield put({
+        type: 'updateState',
+        payload: { data }
+      });
     },
 
     * newPreference({ payload }, { put }) {
@@ -63,6 +61,8 @@ export default dvaModelExtend(commonModel, {
     * validatePreference({ payload }, { call, put, select }) {
       const { user, ability } = yield select(state => state.authModel);
       const { preferenceId } = payload;
+
+      yield put({ type: 'query' });
 
       if (isNew(preferenceId)) {
         // TODO (teamco): Do something.
@@ -90,13 +90,7 @@ export default dvaModelExtend(commonModel, {
           });
         }
 
-        yield put({
-          type: 'raiseCondition',
-          payload: {
-            message: i18n.t('error:notFound', { entity: 'Preference' }),
-            key: 'selectedPreference'
-          }
-        });
+        yield put({ type: 'notFound', payload: { entity: 'Preference', key: 'selectedPreference' } });
       }
     },
 
@@ -145,7 +139,7 @@ export default dvaModelExtend(commonModel, {
             of: trOff
           },
           status: defaultState
-        }
+        };
 
         if (isEdit) {
           selectedPreference && params.preference === selectedPreference.id ?
@@ -161,7 +155,6 @@ export default dvaModelExtend(commonModel, {
             createdAt: metadata.updatedAt,
             createdByRef: userRef
           };
-
 
           const entity = yield call(fbAdd, { collection: 'subscriptionPrefs', data });
 
@@ -179,14 +172,7 @@ export default dvaModelExtend(commonModel, {
         }
       } else {
 
-        yield put({
-          type: 'raiseCondition',
-          payload: {
-            type: 403,
-            message: i18n.t('error:noPermissions'),
-            key: 'selectedPreference'
-          }
-        });
+        yield put({ type: 'noPermissions', payload: { key: 'selectedPreference' } });
       }
     }
   },

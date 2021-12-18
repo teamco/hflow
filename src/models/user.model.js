@@ -146,13 +146,7 @@ export default dvaModelExtend(commonModel, {
             return yield put({ type: 'updateState', payload: { selectedUser } });
           }
 
-          yield put({
-            type: 'raiseCondition',
-            payload: {
-              message: i18n.t('error:notFound', { entity: 'User' }),
-              key: 'selectedUser'
-            }
-          });
+          yield put({ type: 'notFound', payload: { entity: 'User', key: 'selectedUser' } });
         }
       }
     },
@@ -182,13 +176,7 @@ export default dvaModelExtend(commonModel, {
 
       } else {
 
-        yield put({
-          type: 'raiseCondition',
-          payload: {
-            message: i18n.t('error:noPermissions'),
-            key: 'selectedUser'
-          }
-        });
+        yield put({ type: 'noPermissions', payload: { key: 'selectedUser' } });
       }
     },
 
