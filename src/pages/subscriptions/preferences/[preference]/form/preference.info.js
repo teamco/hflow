@@ -24,13 +24,6 @@ export const PreferenceInfo = (props) => {
                     name={'info'}
                     defaultActiveKey={['info']}>
         <div>
-          <Input type={'text'}
-                 label={t('preference:name')}
-                 name={'name'}
-                 form={formRef}
-                 disabled={disabled}
-                 config={{ rules: [{ required: true }] }} />
-
           <Switch label={t('preference:helper')}
                   disabled={disabled}
                   form={formRef}
@@ -38,7 +31,6 @@ export const PreferenceInfo = (props) => {
                   checkedChildren={t('actions:yes')}
                   unCheckedChildren={t('actions:no')}
                   name={'helper'}/>
-
           <Switch label={t('preference:status')}
                   disabled={disabled}
                   form={formRef}

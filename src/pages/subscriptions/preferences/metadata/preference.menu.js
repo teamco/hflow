@@ -1,12 +1,11 @@
-import { DeleteTwoTone, ShoppingCartOutlined } from '@ant-design/icons';
+import React from 'react';
+import { NavLink } from 'umi';
+import { COLORS } from 'utils/colors';
+import { DeleteTwoTone, ControlOutlined } from '@ant-design/icons';
 import { Menu, Popconfirm } from 'antd';
 import { abilityMenuItem } from 'utils/abilityComponent/abilityMenuItem';
 
 import tableStyles from 'components/Main/Table/table.module.less';
-import React from 'react';
-import { withTranslation } from 'react-i18next';
-import { NavLink } from 'umi';
-import { COLORS } from 'utils/colors';
 
 /**
  * @export
@@ -29,7 +28,7 @@ export const PreferenceMenu = props => {
   const editProps = {
     key: 'edit',
     canI: canEdit,
-    icon: <ShoppingCartOutlined className={tableStyles.action}
+    icon: <ControlOutlined className={tableStyles.action}
                                 twoToneColor={COLORS.success} />,
     children: (
         <NavLink to={`/admin/subscriptionPrefs/${record.id}`}>
@@ -65,4 +64,4 @@ export const PreferenceMenu = props => {
   );
 };
 
-export default withTranslation()(PreferenceMenu);
+export default PreferenceMenu;

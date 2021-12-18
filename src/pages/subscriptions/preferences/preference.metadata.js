@@ -1,31 +1,17 @@
-import React, { useEffect } from 'react';
-import { NavLink } from 'umi';
-import {
-  ContactsTwoTone,
-  DownOutlined,
-  PauseCircleTwoTone,
-  PlayCircleTwoTone,
-  SettingOutlined
-} from '@ant-design/icons';
+import React from 'react';
+import { Button, Dropdown, Form, Switch } from 'antd';
+import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 
-import { Avatar, Button, Dropdown, Tag, Tooltip } from 'antd';
+import { PreferenceMenu } from './metadata/preference.menu';
 
-import classnames from 'classnames';
-import { tsToLocaleDateTime } from 'utils/timestamp';
-import { COLORS } from 'utils/colors';
-import { BRANDS } from 'utils/brands';
-
-import styles from 'pages/users/users.module.less';
-import tableStyles from 'components/Main/Table/table.module.less';
+import styles from './subscriptionPrefs.module.less';
 import menuStyles from 'components/menu.less';
 
 /**
  * @export
  * @param t
  * @param ability
- * @param data
  * @param loading
- * @param multiple
  * @return {*}
  */
 export const metadata = ({
@@ -34,32 +20,68 @@ export const metadata = ({
   loading
 }) => {
 
-  useEffect(() => {
-  }, []);
-
-  const menuProps = {
-    loading,
-    ability
-  };
+  const menuProps = { t, loading, ability };
 
   return {
     width: '100%',
     size: 'middle',
+    scroll: { x: 600, y: 500 },
     columns: [
       {
-        title: t('preference:name'),
-        dataIndex: 'name',
-        key: 'name'
-      },
-      {
-        title: t('preference:description'),
-        dataIndex: 'description',
-        key: 'description'
+        title: t('preference:example'),
+        dataIndex: 'translate',
+        key: 'translate',
+        render(translate) {
+          return (
+              <div className={styles.example}>
+                <Form.Item label={t(translate.title)}
+                           tooltip={t(translate.description)}>
+                  <Switch checkedChildren={t(translate.on)}
+                          unCheckedChildren={t(translate.off)}/>
+                </Form.Item>
+              </div>
+          );
+        }
       },
       {
         title: t('preference:status'),
-        dataIndex: 'defaultState',
-        key: 'defaultState'
+        dataIndex: 'status',
+        key: 'status',
+        align: 'center',
+        width: 150,
+        render(status, record) {
+          const { translate } = record;
+          return (
+              <div className={styles.example}>
+                <Switch defaultChecked={status}
+                        disabled
+                        checkedChildren={t(translate.on)}
+                        unCheckedChildren={t(translate.off)}/>
+              </div>
+          );
+        }
+      },
+      {
+        title: t('table:action'),
+        align: 'center',
+        fixed: 'right',
+        width: 200,
+        render(record) {
+          return (
+              <div className={styles.nowrap}>
+                <Dropdown overlay={<PreferenceMenu record={record} {...menuProps} />}
+                          trigger={['click']}
+                          overlayClassName={menuStyles.customActionMenu}
+                          key={'custom'}>
+                  <Button size={'small'}
+                          icon={<SettingOutlined/>}
+                          className={menuStyles.customAction}>
+                    {t('actions:manage', { type: t('subscription:feature') })} <DownOutlined/>
+                  </Button>
+                </Dropdown>
+              </div>
+          );
+        }
       }
     ]
   };

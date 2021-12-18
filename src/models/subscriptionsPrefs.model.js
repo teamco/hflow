@@ -106,7 +106,6 @@ export default dvaModelExtend(commonModel, {
       const { user, ability } = yield select(state => state.authModel);
       const { selectedPreference, isEdit } = yield select(state => state.subscriptionPrefsModel);
       const {
-        name,
         helper,
         defaultState,
         trTitle,
@@ -130,15 +129,14 @@ export default dvaModelExtend(commonModel, {
 
         // Not mandatory/defined fields preparation before saving.
         const data = {
-          name,
           helper,
+          status: defaultState,
           translate: {
             title: trTitle,
             description: trDescription,
             on: trOn,
-            of: trOff
-          },
-          status: defaultState
+            off: trOff
+          }
         };
 
         if (isEdit) {

@@ -6,3 +6,33 @@
     }
   }
 }
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.example {
+  :global {
+    .ant-row {
+      margin: 0;
+    }
+
+    .ant-form-item .ant-form-item-label {
+      padding: 0;
+    }
+  }
+
+  label {
+    margin-left: 10px;
+
+    span[role="img"] {
+      svg {
+        margin-right: 10px;
+      }
+    }
+
+    &::after {
+      display: none;
+    }
+  }
+}
