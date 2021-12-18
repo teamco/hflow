@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { Input, InputNumber, Select, Slider, Switch } from 'antd';
+import { Input } from 'antd';
 import FormComponents from 'components/Form';
 
-const { GenericPanel, MandatoryTextarea } = FormComponents;
-const { Option } = Select;
+const { GenericPanel } = FormComponents;
 
 /**
  * @export
@@ -18,6 +17,14 @@ export const PreferenceTranslate = (props) => {
     formRef,
     disabled
   } = props;
+
+  const showHelper = !!(formRef?.getFieldValue('helper'));
+  const [disabledHelper, setDisabledHelper] = useState(!showHelper);
+
+  useEffect(() => {
+    setDisabledHelper(!showHelper);
+  }, [showHelper]);
+
 
   return (
       <GenericPanel header={t('preference:translate')}
@@ -35,23 +42,23 @@ export const PreferenceTranslate = (props) => {
                  label={t('preference:description')}
                  name={'trDescription'}
                  form={formRef}
-                 disabled={disabled}
-                 config={{ rules: [{ required: false }] }} />
+                 disabled={disabled || disabledHelper}
+                 config={{ rules: [{ required: true }] }} />
         </div>
         <div>
           <Input type={'text'}
                  label={t('preference:translateOn')}
-                 name={'translateOn'}
+                 name={'trOn'}
                  form={formRef}
                  disabled={disabled}
-                 config={{ rules: [{ required: false }] }} />
+                 config={{ rules: [{ required: true }] }} />
 
           <Input type={'text'}
                  label={t('preference:translateOff')}
-                 name={'translateOff'}
+                 name={'trOff'}
                  form={formRef}
                  disabled={disabled}
-                 config={{ rules: [{ required: false }] }} />
+                 config={{ rules: [{ required: true }] }} />
         </div>
       </GenericPanel>
   );

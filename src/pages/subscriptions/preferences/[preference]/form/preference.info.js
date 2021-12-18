@@ -31,21 +31,21 @@ export const PreferenceInfo = (props) => {
                  disabled={disabled}
                  config={{ rules: [{ required: true }] }} />
 
-          <Switch label={t('preference:description')}
+          <Switch label={t('preference:helper')}
                   disabled={disabled}
                   form={formRef}
                   config={{ valuePropName: 'checked' }}
-                  checkedChildren={t('preference:true')}
-                  unCheckedChildren={t('preference:false')}
-                  name={'description'}/>
+                  checkedChildren={t('actions:yes')}
+                  unCheckedChildren={t('actions:no')}
+                  name={'helper'}/>
 
           <Switch label={t('preference:status')}
                   disabled={disabled}
                   form={formRef}
                   config={{ valuePropName: 'checked' }}
-                  checkedChildren={t('preference:true')}
-                  unCheckedChildren={t('preference:false')}
-                  name={'status'}/>
+                  checkedChildren={t('actions:yes')}
+                  unCheckedChildren={t('actions:no')}
+                  name={'defaultState'}/>
         </div>
       </GenericPanel>
   );

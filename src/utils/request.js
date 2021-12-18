@@ -80,8 +80,7 @@ const mergeHeaders = () => {
  */
 function adaptUrlToParams(url = '', args) {
   const matchers = url.match(/:\w+/g);
-  matchers &&
-  matchers.forEach((matcher) => {
+  matchers && matchers.forEach((matcher) => {
     const instance = matcher.replace(':', '');
     url = url.replace(new RegExp(matcher), args[instance]);
   });
@@ -119,12 +118,12 @@ function config({
 }) {
 
   if (url.match(/:(\w+)Key/)) {
-    //url = adaptUrlToParams(url, args);
+    url = adaptUrlToParams(url, args);
   }
 
   return {
     ...{
-      url: `http://localhost:8003/api/v1/${url}`,//: adoptUrlToAPI(url, direct),
+      url: adoptUrlToAPI(url, direct),
       method,
       responseType,
       headers: { ...mergeHeaders(), ...headers }

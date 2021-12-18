@@ -20,8 +20,6 @@ import menuStyles from 'components/menu.less';
 import styles from 'pages/subscriptions/preferences/subscriptionPrefs.module.less';
 import userStyles from 'pages/users/users.module.less';
 
-
-
 const { Info } = Main;
 
 /**
@@ -170,8 +168,10 @@ export const preferenceEdit = (props) => {
                 onFinish={onFinish}
                 onFieldsChange={onFieldsChange}
                 initialValues={{
-                  description: true,
-                  status: true
+                  helper: true,
+                  defaultState: true,
+                  trOn: 'actions:yes',
+                  trOff: 'actions:no'
                 }}>
             <PreferenceInfo {...infoProps} />
             <PreferenceTranslate {...infoProps} />

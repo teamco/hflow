@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Form, PageHeader } from 'antd';
+import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ControlOutlined } from '@ant-design/icons';
 
 import Page from 'components/Page';
@@ -9,6 +9,7 @@ import { Can } from 'utils/auth/can';
 import { metadata } from 'pages/subscriptions/preferences/preference.metadata';
 
 import styles from 'pages/subscriptions/preferences/subscriptionPrefs.module.less';
+
 const { Table } = Main;
 // import { Table, Tag, Space } from 'antd';
 
@@ -34,12 +35,11 @@ export const subscriptionPrefs = props => {
 
   const tableProps = {
     pagination: false
-  }
+  };
 
   useEffect(() => {
     onQuery();
   }, [authModel.user]);
-
 
   const subTitle = (
       <>
@@ -82,11 +82,7 @@ export const subscriptionPrefs = props => {
           </PageHeader>
           <Table data={data}
                  {...tableProps}
-                 {...metadata({
-                       t,
-                       ...userProps
-                     }
-                 )} />
+                 {...metadata({ t, ...userProps })} />
         </div>
       </Page>
   );

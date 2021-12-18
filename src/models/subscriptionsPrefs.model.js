@@ -10,9 +10,7 @@ import { history } from 'umi';
 import { monitorHistory } from 'utils/history';
 import i18n from 'utils/i18n';
 import { errorSaveMsg } from 'utils/message';
-import { setAs } from 'utils/object';
-import { getAllSubscriptions } from '../services/subscriptions.service';
-import { getAllPreferences } from '../services/subscriptionsPrefs.service';
+import { getAllPreferences } from 'services/subscriptionsPrefs.service';
 
 const DEFAULT_STATE = {
   
@@ -24,7 +22,8 @@ const DEFAULT_STATE = {
 export default dvaModelExtend(commonModel, {
   namespace: 'subscriptionPrefsModel',
   state: {
-    ...DEFAULT_STATE
+    ...DEFAULT_STATE,
+    data: []
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
@@ -112,6 +111,15 @@ export default dvaModelExtend(commonModel, {
     * prepareToSave({ payload, params }, { call, select, put }) {
       const { user, ability } = yield select(state => state.authModel);
       const { selectedPreference, isEdit } = yield select(state => state.subscriptionPrefsModel);
+      const {
+        name,
+        description,
+        defaultState,
+        trTitle,
+        trDescription,
+        trOn,
+        trOff
+      } = payload;
 
       if (user && ability.can('update', 'subscriptionPrefs')) {
 
@@ -128,15 +136,15 @@ export default dvaModelExtend(commonModel, {
 
         // Not mandatory/defined fields preparation before saving.
         const data = {
-          name: payload.name,
-          description: setAs(payload.Description, false),
+          name,
+          description,
           translate: {
-            title: payload.title,
-            description: setAs(payload.trDescription, ''),
-            on: setAs(payload.translateOn, 'Yes'),
-            of: setAs(payload.translateOff, 'No')
+            title: trTitle,
+            description: trDescription,
+            on: trOn,
+            of: trOff
           },
-          status: setAs(payload.status, false)
+          status: defaultState
         }
 
         if (isEdit) {

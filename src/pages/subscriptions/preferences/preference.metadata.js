@@ -58,8 +58,8 @@ export const metadata = ({
       },
       {
         title: t('preference:status'),
-        dataIndex: 'status',
-        key: 'status'
+        dataIndex: 'defaultState',
+        key: 'defaultState'
       }
     ]
   };

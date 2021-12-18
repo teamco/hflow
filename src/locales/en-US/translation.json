@@ -353,15 +353,14 @@
   "preference": {
     "info": "Preference Info",
     "tags": "Tags",
-    "name": "Name Key",
+    "name": "Unique Name",
     "description": "Description",
-    "status": "Default Status",
-    "true": "yes",
-    "false": "no",
+    "helper": "Show Helper",
+    "status": "Default State",
     "translate": "Preference Translate",
     "title": "Title",
-    "translateOn": "On Key",
-    "translateOff": "Off Key"
+    "translateOn": "On",
+    "translateOff": "Off"
   },
   "pages": {
   }
