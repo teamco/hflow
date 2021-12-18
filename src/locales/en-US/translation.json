@@ -336,8 +336,24 @@
     "price": "Price",
     "notice": "Notice",
     "users": "Maximum of Business users",
-    "usersInfo": "Upto to {{users}} users",
+    "usersInfo": "Upto to {{users}} users"
+  },
+  "preference": {
+    "info": "Preference Info",
+    "tags": "Tags",
+    "name": "Unique Name",
+    "description": "Description",
+    "helper": "Show Helper",
+    "status": "Default State",
+    "translate": "Preference Translate",
+    "example": "Example",
+    "title": "Title",
+    "translateOn": "On",
+    "translateOff": "Off"
+  },
+  "feature": {
     "profile": "Profile",
+    "profileHelper": "Includes the business contact information/logo and a small written description of the provided service",
     "basicProfile": "Basic",
     "fullProfile": "Full",
     "analytics": "Analytics",
@@ -349,18 +365,6 @@
     "notifications": "Notifications",
     "requestList": "Access to Full Request list",
     "logoOnPartnersPage": "Logo on Partners Page"
-  },
-  "preference": {
-    "info": "Preference Info",
-    "tags": "Tags",
-    "name": "Unique Name",
-    "description": "Description",
-    "helper": "Show Helper",
-    "status": "Default State",
-    "translate": "Preference Translate",
-    "title": "Title",
-    "translateOn": "On",
-    "translateOff": "Off"
   },
   "pages": {
   }

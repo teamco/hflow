@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Input } from 'antd';
+import { Divider, Form, Input, Switch } from 'antd';
 import FormComponents from 'components/Form';
 
 const { GenericPanel } = FormComponents;
@@ -18,13 +18,35 @@ export const PreferenceTranslate = (props) => {
     disabled
   } = props;
 
-  const showHelper = !!(formRef?.getFieldValue('helper'));
+  /**
+   * @constant
+   * @param {string} key
+   * @return {*}
+   */
+  const getValue = key => formRef?.getFieldValue(key);
+
+  const showHelper = !!(getValue('helper'));
+  const title = getValue('trTitle');
+  const description = getValue('trDescription');
+  const on = getValue('trOn');
+  const off = getValue('trOff');
+
   const [disabledHelper, setDisabledHelper] = useState(!showHelper);
+  const [trTitle, setTitle] = useState(title);
+  const [trDescription, setDescription] = useState(description);
+  const [trOn, setOn] = useState(on);
+  const [trOff, setOff] = useState(off);
 
   useEffect(() => {
     setDisabledHelper(!showHelper);
+    setDescription(showHelper ? getValue('trDescription') : null);
   }, [showHelper]);
 
+  const handleValue = (e, handler) => {
+    const { value } = e.target;
+    e.preventDefault();
+    handler(value);
+  };
 
   return (
       <GenericPanel header={t('preference:translate')}
@@ -33,17 +55,19 @@ export const PreferenceTranslate = (props) => {
         <div>
           <Input type={'text'}
                  label={t('preference:title')}
-                 name={'title'}
+                 name={'trTitle'}
                  form={formRef}
                  disabled={disabled}
-                 config={{ rules: [{ required: true }] }} />
+                 onChange={e => handleValue(e, setTitle)}
+                 config={{ rules: [{ required: true }] }}/>
 
           <Input type={'text'}
                  label={t('preference:description')}
                  name={'trDescription'}
                  form={formRef}
                  disabled={disabled || disabledHelper}
-                 config={{ rules: [{ required: true }] }} />
+                 onChange={e => handleValue(e, setDescription)}
+                 config={{ rules: [{ required: true }] }}/>
         </div>
         <div>
           <Input type={'text'}
@@ -51,14 +75,26 @@ export const PreferenceTranslate = (props) => {
                  name={'trOn'}
                  form={formRef}
                  disabled={disabled}
-                 config={{ rules: [{ required: true }] }} />
+                 onChange={e => handleValue(e, setOn)}
+                 config={{ rules: [{ required: true }] }}/>
 
           <Input type={'text'}
                  label={t('preference:translateOff')}
                  name={'trOff'}
                  form={formRef}
                  disabled={disabled}
-                 config={{ rules: [{ required: true }] }} />
+                 onChange={e => handleValue(e, setOff)}
+                 config={{ rules: [{ required: true }] }}/>
+        </div>
+        <div>
+          <>
+            <Divider orientation={'left'}>{t('preference:example')}</Divider>
+            <Form.Item label={t(trTitle)}
+                       tooltip={t(trDescription)}>
+              <Switch checkedChildren={t(trOn)}
+                      unCheckedChildren={t(trOff)}/>
+            </Form.Item>
+          </>
         </div>
       </GenericPanel>
   );
