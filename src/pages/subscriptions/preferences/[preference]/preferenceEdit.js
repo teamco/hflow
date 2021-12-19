@@ -52,10 +52,8 @@ export const preferenceEdit = (props) => {
   const {
     entityForm,
     selectedPreference,
-    subscriptionTypes,
-    subscriptionPeriod,
-    discountTypes,
-    businessUsers,
+    preferenceTypes,
+    currencies,
     tags,
     isEdit,
     touched
@@ -99,6 +97,8 @@ export const preferenceEdit = (props) => {
     t,
     formRef,
     disabled,
+    preferenceTypes,
+    currencies,
     setDisabledDescription
   }
 
@@ -188,6 +188,8 @@ export const preferenceEdit = (props) => {
                 initialValues={{
                   helper: true,
                   defaultState: true,
+                  currency: currencies[0],
+                  preferenceType: preferenceTypes[0],
                   translate: {
                     on: 'actions:yes',
                     off: 'actions:no'

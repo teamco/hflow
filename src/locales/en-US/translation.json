@@ -340,7 +340,9 @@
   },
   "preference": {
     "info": "Preference Info",
+    "price": "Feature Price",
     "tags": "Tags",
+    "type": "Feature Type",
     "name": "Unique Name",
     "description": "Description",
     "helper": "Show Helper",

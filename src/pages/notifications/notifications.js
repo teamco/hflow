@@ -10,7 +10,7 @@ import { notificationsMetadata } from 'pages/notifications/notifications.metadat
 import { expendableNotification } from 'pages/notifications/metadata/notification.expendable';
 
 import styles from 'pages/notifications/notifications.module.less';
-import SendMessage from '../users/metadata/send.message';
+import SendMessage from 'pages/users/metadata/send.message';
 
 const { Table } = Main;
 const { TabPane } = Tabs;

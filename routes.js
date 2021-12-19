@@ -201,6 +201,15 @@ export const routes = [
           },
           {
             exact: true,
+            path: '/admin/preferenceTypes',
+            component: '@/pages/subscriptions/preferences/types',
+            breadcrumb: 'route:preferenceTypes',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
             path: '/admin/subscriptionPrefs',
             component: '@/pages/subscriptions/preferences',
             breadcrumb: 'route:subscriptionPrefs',

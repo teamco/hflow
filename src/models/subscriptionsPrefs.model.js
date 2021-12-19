@@ -7,7 +7,6 @@ import { detailsInfo } from 'services/cross.model.service';
 import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
 import { history } from 'umi';
 
-import i18n from 'utils/i18n';
 import { monitorHistory } from 'utils/history';
 import { errorSaveMsg } from 'utils/message';
 import { getAllPreferences } from 'services/subscriptionsPrefs.service';
@@ -22,7 +21,9 @@ export default dvaModelExtend(commonModel, {
   namespace: 'subscriptionPrefsModel',
   state: {
     ...DEFAULT_STATE,
-    data: []
+    data: [],
+    preferenceTypes: [],
+    currencies: ['USD']
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
@@ -99,6 +100,25 @@ export default dvaModelExtend(commonModel, {
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(preference) } });
       yield put({ type: 'validatePreference', payload: { preferenceId: preference } });
+      yield put({ type: 'preferenceTypes' });
+    },
+
+    * preferenceTypes(_, { call, put }) {
+      const fbTypes = yield call(fbFindById, {
+        collection: 'simpleEntities',
+        doc: 'preferenceTypes'
+      });
+
+      let preferenceTypes = { tags: [] };
+
+      if (fbTypes.exists) {
+        preferenceTypes = fbTypes.data();
+      }
+
+      yield put({
+        type: 'updateState',
+        payload: { preferenceTypes: [...preferenceTypes?.tags] }
+      });
     },
 
     * prepareToSave({ payload, params }, { call, select, put }) {
