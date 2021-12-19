@@ -15,7 +15,8 @@ export const PreferenceTranslate = (props) => {
   const {
     t,
     formRef,
-    disabled
+    disabled,
+    disabledDescription
   } = props;
 
   /**
@@ -68,9 +69,9 @@ export const PreferenceTranslate = (props) => {
                  label={t('preference:description')}
                  name={['translateKeys', 'description']}
                  form={formRef}
-                 disabled={disabled}
+                 disabled={disabled || disabledDescription}
                  onChange={e => handleValue(e, setDescription)}
-                 config={{ rules: [{ required: true }] }}/>
+                 config={{ rules: [{ required: !disabledDescription }] }}/>
         </div>
         <div>
           <Input type={'text'}

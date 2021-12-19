@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
@@ -66,6 +66,8 @@ export const preferenceEdit = (props) => {
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
 
+  const [disabledDescription, setDisabledDescription] = useState(false);
+
   useEffect(() => {
     canUpdate && onEditPreference(params);
   }, [authModel.user, canUpdate]);
@@ -92,6 +94,20 @@ export const preferenceEdit = (props) => {
     createdAt,
     updatedAt
   } = fromForm(entityForm, 'metadata') || {};
+
+  const prefsProps = {
+    t,
+    formRef,
+    disabled,
+    setDisabledDescription
+  }
+
+  const translateProps = {
+    t,
+    formRef,
+    disabled,
+    disabledDescription
+  }
 
   const infoProps = {
     t,
@@ -177,8 +193,8 @@ export const preferenceEdit = (props) => {
                     off: 'actions:no'
                   }
                 }}>
-            <PreferenceInfo {...infoProps} />
-            <PreferenceTranslate {...infoProps} />
+            <PreferenceInfo {...prefsProps} />
+            <PreferenceTranslate {...translateProps} />
             <PreferenceTags {...tagsProps} />
             <Info {...infoProps} />
           </Form>

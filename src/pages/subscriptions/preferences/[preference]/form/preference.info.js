@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Switch } from 'antd';
+import { Form, Switch } from 'antd';
 import FormComponents from 'components/Form';
 
 const { GenericPanel } = FormComponents;
@@ -15,20 +15,27 @@ export const PreferenceInfo = (props) => {
   const {
     t,
     formRef,
-    disabled
+    disabled,
+    setDisabledDescription
   } = props;
 
   const translate = formRef?.getFieldValue('translateKeys');
   const { description } = translate || {};
 
+  const [enableHelper, setEnableHelper] = useState(false);
+
   useEffect(() => {
-    if (!description?.length) {
-      console.log(12);
-    }
+    const _desc = description?.length;
+    setEnableHelper(_desc);
+    setDisabledDescription(!_desc);
   }, [translate]);
 
-  const handleHelper = e => {
-    console.log(e);
+  /**
+   * @constant
+   * @param {boolean} value
+   */
+  const handleHelper = value => {
+    setDisabledDescription(!value);
   };
 
   return (
@@ -37,13 +44,14 @@ export const PreferenceInfo = (props) => {
                     defaultActiveKey={['info']}>
         <div>
           <>
-            <Switch label={t('preference:helper')}
-                    disabled={disabled}
-                    form={formRef}
-                    onChange={handleHelper}
-                    config={{ valuePropName: 'checked' }}
-                    checkedChildren={t('actions:yes')}
-                    unCheckedChildren={t('actions:no')}/>
+            <Form.Item label={t('preference:helper')}
+                       valuePropName={'checked'}>
+              <Switch disabled={disabled}
+                      checked={enableHelper}
+                      onChange={handleHelper}
+                      checkedChildren={t('actions:yes')}
+                      unCheckedChildren={t('actions:no')}/>
+            </Form.Item>
           </>
           <Switch label={t('preference:status')}
                   disabled={disabled}
