@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
-import { Input, InputNumber, Select, Slider, Switch } from 'antd';
+import { Switch } from 'antd';
 import FormComponents from 'components/Form';
 
-const { GenericPanel, MandatoryTextarea } = FormComponents;
-const { Option } = Select;
+const { GenericPanel } = FormComponents;
 
 /**
  * @export
@@ -19,25 +18,40 @@ export const PreferenceInfo = (props) => {
     disabled
   } = props;
 
+  const translate = formRef?.getFieldValue('translateKeys');
+  const { description } = translate || {};
+
+  useEffect(() => {
+    if (!description?.length) {
+      console.log(12);
+    }
+  }, [translate]);
+
+  const handleHelper = e => {
+    console.log(e);
+  };
+
   return (
       <GenericPanel header={t('preference:info')}
                     name={'info'}
                     defaultActiveKey={['info']}>
         <div>
-          <Switch label={t('preference:helper')}
-                  disabled={disabled}
-                  form={formRef}
-                  config={{ valuePropName: 'checked' }}
-                  checkedChildren={t('actions:yes')}
-                  unCheckedChildren={t('actions:no')}
-                  name={'helper'}/>
+          <>
+            <Switch label={t('preference:helper')}
+                    disabled={disabled}
+                    form={formRef}
+                    onChange={handleHelper}
+                    config={{ valuePropName: 'checked' }}
+                    checkedChildren={t('actions:yes')}
+                    unCheckedChildren={t('actions:no')}/>
+          </>
           <Switch label={t('preference:status')}
                   disabled={disabled}
                   form={formRef}
                   config={{ valuePropName: 'checked' }}
                   checkedChildren={t('actions:yes')}
                   unCheckedChildren={t('actions:no')}
-                  name={'defaultState'}/>
+                  name={'selectedByDefault'}/>
         </div>
       </GenericPanel>
   );

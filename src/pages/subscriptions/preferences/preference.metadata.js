@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Dropdown, Form, Switch } from 'antd';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
+import { NavLink } from 'umi';
 
 import { PreferenceMenu } from './metadata/preference.menu';
 
@@ -29,15 +30,19 @@ export const metadata = ({
     columns: [
       {
         title: t('preference:example'),
-        dataIndex: 'translate',
-        key: 'translate',
-        render(translate) {
+        dataIndex: 'translateKeys',
+        key: 'translateKeys',
+        render(translateKeys, record) {
           return (
               <div className={styles.example}>
-                <Form.Item label={t(translate.title)}
-                           tooltip={t(translate.description)}>
-                  <Switch checkedChildren={t(translate.on)}
-                          unCheckedChildren={t(translate.off)}/>
+                <Form.Item tooltip={t(translateKeys.description)}
+                           label={(
+                               <NavLink to={`/admin/subscriptionPrefs/${record.id}`}>
+                                 {t(translateKeys.title)}
+                               </NavLink>
+                           )}>
+                  <Switch checkedChildren={t(translateKeys.on)}
+                          unCheckedChildren={t(translateKeys.off)}/>
                 </Form.Item>
               </div>
           );
@@ -45,18 +50,18 @@ export const metadata = ({
       },
       {
         title: t('preference:status'),
-        dataIndex: 'status',
-        key: 'status',
+        dataIndex: 'selectedByDefault',
+        key: 'selectedByDefault',
         align: 'center',
         width: 150,
-        render(status, record) {
-          const { translate } = record;
+        render(selectedByDefault, record) {
+          const { translateKeys } = record;
           return (
               <div className={styles.example}>
-                <Switch defaultChecked={status}
+                <Switch defaultChecked={selectedByDefault}
                         disabled
-                        checkedChildren={t(translate.on)}
-                        unCheckedChildren={t(translate.off)}/>
+                        checkedChildren={t(translateKeys.on)}
+                        unCheckedChildren={t(translateKeys.off)}/>
               </div>
           );
         }

@@ -25,20 +25,13 @@ export const PreferenceTranslate = (props) => {
    */
   const getValue = key => formRef?.getFieldValue(key);
 
-  const showHelper = !!(getValue('helper'));
-  const translate = getValue('translate');
+  const translate = getValue('translateKeys');
   const { title, description, on, off } = translate || {};
 
-  const [disabledHelper, setDisabledHelper] = useState(!showHelper);
   const [trTitle, setTitle] = useState(title);
   const [trDescription, setDescription] = useState(description);
   const [trOn, setOn] = useState(on);
   const [trOff, setOff] = useState(off);
-
-  useEffect(() => {
-    setDisabledHelper(!showHelper);
-    setDescription(showHelper ? getValue('trDescription') : null);
-  }, [showHelper]);
 
   useEffect(() => {
     setTitle(title);
@@ -65,7 +58,7 @@ export const PreferenceTranslate = (props) => {
         <div>
           <Input type={'text'}
                  label={t('preference:title')}
-                 name={['translate', 'title']}
+                 name={['translateKeys', 'title']}
                  form={formRef}
                  disabled={disabled}
                  onChange={e => handleValue(e, setTitle)}
@@ -73,16 +66,16 @@ export const PreferenceTranslate = (props) => {
 
           <Input type={'text'}
                  label={t('preference:description')}
-                 name={['translate', 'description']}
+                 name={['translateKeys', 'description']}
                  form={formRef}
-                 disabled={disabled || disabledHelper}
+                 disabled={disabled}
                  onChange={e => handleValue(e, setDescription)}
-                 config={{ rules: [{ required: showHelper }] }}/>
+                 config={{ rules: [{ required: true }] }}/>
         </div>
         <div>
           <Input type={'text'}
                  label={t('preference:translateOn')}
-                 name={['translate', 'on']}
+                 name={['translateKeys', 'on']}
                  form={formRef}
                  disabled={disabled}
                  onChange={e => handleValue(e, setOn)}
@@ -90,7 +83,7 @@ export const PreferenceTranslate = (props) => {
 
           <Input type={'text'}
                  label={t('preference:translateOff')}
-                 name={['translate', 'off']}
+                 name={['translateKeys', 'off']}
                  form={formRef}
                  disabled={disabled}
                  onChange={e => handleValue(e, setOff)}

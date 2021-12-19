@@ -3,6 +3,8 @@ import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
 import Page from 'components/Page';
+import EmptyData from 'components/EmptyData';
+
 import { Can } from 'utils/auth/can';
 
 import SubscriptionCard from 'pages/subscriptions/subscriptionCard';
@@ -29,7 +31,7 @@ export const subscriptions = (props) => {
   } = props;
 
   const {
-    subscriptions = { data: [] },
+    subscriptions = [],
     subscriptionPeriod,
     colorsToType
   } = subscriptionModel;
@@ -87,7 +89,7 @@ export const subscriptions = (props) => {
                       ]}>
           </PageHeader>
           <div className={styles.subscriptionCards}>
-            {subscriptions?.data?.length ? subscriptions?.data?.map((data, idx) => {
+            {subscriptions?.length ? subscriptions?.map((data, idx) => {
               const props = {
                 t,
                 isEdit: true,
@@ -102,7 +104,9 @@ export const subscriptions = (props) => {
               };
 
               return (<SubscriptionCard key={idx} {...props} />);
-            }) : null}
+            }) : (
+                <EmptyData />
+            )}
           </div>
         </div>
       </Page>

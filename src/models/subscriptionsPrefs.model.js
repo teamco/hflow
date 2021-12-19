@@ -62,8 +62,6 @@ export default dvaModelExtend(commonModel, {
       const { user, ability } = yield select(state => state.authModel);
       const { preferenceId } = payload;
 
-      yield put({ type: 'query' });
-
       if (isNew(preferenceId)) {
         // TODO (teamco): Do something.
       } else if (ability.can('read', 'subscriptionPrefs')) {
@@ -106,9 +104,8 @@ export default dvaModelExtend(commonModel, {
       const { user, ability } = yield select(state => state.authModel);
       const { selectedPreference, isEdit } = yield select(state => state.subscriptionPrefsModel);
       const {
-        helper,
-        defaultState,
-        translate: {
+        selectedByDefault,
+        translateKeys: {
           title,
           description,
           on,
@@ -131,9 +128,8 @@ export default dvaModelExtend(commonModel, {
 
         // Not mandatory/defined fields preparation before saving.
         const data = {
-          helper,
-          status: defaultState,
-          translate: {
+          selectedByDefault,
+          translateKeys: {
             description: setAs(description, null),
             title, on, off
           }

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
+import React from 'react';
+import { DownOutlined, SettingOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
 import SaveButton from 'components/Buttons/save.button';
@@ -51,6 +51,7 @@ export const subscriptionEdit = (props) => {
 
   const {
     entityForm,
+    preferences,
     selectedSubscription,
     subscriptionTypes,
     subscriptionPeriod,
@@ -91,7 +92,8 @@ export const subscriptionEdit = (props) => {
   const subscriptionPrefsProps = {
     t,
     formRef,
-    disabled
+    disabled,
+    preferences
   };
 
   const tagsProps = {
@@ -132,7 +134,7 @@ export const subscriptionEdit = (props) => {
 
   const subTitle = (
       <>
-        <TrademarkOutlined style={{ marginRight: 10 }}/>
+        <ShoppingCartOutlined style={{ marginRight: 10 }} />
         {isEdit ?
             t('actions:edit', { type: t('menu:subscription') }) :
             t('actions:addNew', { type: t('menu:subscription') })

@@ -6,6 +6,7 @@ import { isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
 import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
 import { getAllSubscriptions } from 'services/subscriptions.service';
+import { getAllPreferences } from 'services/subscriptionsPrefs.service';
 import { history } from 'umi';
 import { COLORS } from 'utils/colors';
 import { monitorHistory } from 'utils/history';
@@ -15,6 +16,7 @@ import { setAs } from 'utils/object';
 
 const DEFAULT_STATE = {
   subscriptions: [],
+  preferences: [],
   colorsToType: {
     basic: COLORS.tags.orange,
     standard: COLORS.tags.cyan,
@@ -54,9 +56,24 @@ export default dvaModelExtend(commonModel, {
     * query({ payload }, { put, call, select }) {
       const subscriptions = yield call(getAllSubscriptions);
 
+      const _subscriptions = [...subscriptions?.data];
+
+      for (let sub of _subscriptions) {
+        sub.preferenceData = [];
+        for (let pref in (sub?.preferences || {})) {
+          sub.preferenceData.push({
+            preference: (yield call(fbFindById, {
+              collection: 'subscriptionPrefs',
+              doc: pref
+            })).data(),
+            value: sub?.preferences[pref]
+          });
+        }
+      }
+
       yield put({
         type: 'updateState',
-        payload: { subscriptions }
+        payload: { subscriptions: _subscriptions }
       });
     },
 
@@ -117,7 +134,13 @@ export default dvaModelExtend(commonModel, {
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(subscription) } });
       yield put({ type: 'subscriptionTypes' });
+      yield put({ type: 'subscriptionPrefs' });
       yield put({ type: 'validateSubscription', payload: { subscriptionId: subscription } });
+    },
+
+    * subscriptionPrefs(_, { call, put }) {
+      const { data = [] } = yield call(getAllPreferences);
+      yield put({ type: 'updateState', payload: { preferences: data } });
     },
 
     * subscriptionTypes(_, { call, put }) {
@@ -158,10 +181,6 @@ export default dvaModelExtend(commonModel, {
         let data = { ...payload, metadata };
 
         // Not mandatory/defined fields preparation before saving.
-        data.analytics = setAs(data.analytics, false);
-        data.logoOnPartnersPage = setAs(data.logoOnPartnersPage, false);
-        data.profile = setAs(data.profile, false);
-        data.requestList = setAs(data.requestList, false);
         data.tags = setAs(data.tags, []);
 
         if (isEdit) {

@@ -5,6 +5,7 @@ import { Button } from 'antd';
 import { COLORS } from 'utils/colors';
 import { currencyFormat } from 'utils/currency';
 import { stub } from 'utils/function';
+import { sortBy } from 'utils/array';
 
 import styles from 'pages/subscriptions/subscriptions.module.less';
 
@@ -62,34 +63,6 @@ const SubscriptionCard = (props) => {
         <CloseOutlined style={{ color: COLORS.danger }} />;
   };
 
-  /**
-   * @constant
-   * @param {string} key
-   * @param {boolean} [complex]
-   * @param {array} [complexKeys]
-   * @return {JSX.Element}
-   */
-  const li = (key, complex = false, complexKeys = ['', '']) => {
-    const isActive = data[key];
-    const icon = isTrue(isActive);
-
-    return (
-        <li>
-          {complex ? isTrue(true) : icon}
-          <h3 className={complex ? styles.active : isActive ? styles.active : null}>
-            {complex ? (
-                <div>
-                  {t(`subscription:${isActive ? complexKeys[1] : complexKeys[0]}`)}
-                  <span>{t(`subscription:${key}`)}</span>
-                </div>
-            ) : (
-                <span>{t(`subscription:${key}`)}</span>
-            )}
-          </h3>
-        </li>
-    );
-  };
-
   return (
       <div style={style}
            className={className}>
@@ -107,14 +80,30 @@ const SubscriptionCard = (props) => {
         </h1>
         <p>{t('subscription:usersInfo', { users })}</p>
         <ul>
-          {li('accessToMessages')}
-          {li('dashboard')}
-          {li('profile', true, ['basicProfile', 'upgradedProfile'])}
-          {li('analytics', true, ['basicAnalytics', 'fullAnalytics'])}
-          {li('logoOnPartnersPage')}
-          {li('notifications')}
-          {li('placementOnMap')}
-          {li('requestList')}
+          {sortBy(data?.preferenceData, 'preference.translate.title', t).map((_data, idx) => {
+            const preference = _data.preference;
+            const isActive = _data.value;
+
+            const { title, helper, description, on, off } = preference.translate;
+            const icon = isTrue(isActive);
+            const simple = on.match(/yes/);
+
+            return (
+                <li key={idx}>
+                  {simple ? icon : isTrue(true)}
+                  <h3 className={simple ? (isActive ? styles.active : null) : styles.active}>
+                    {simple ? (
+                        <span>{t(title)}</span>
+                    ) : (
+                        <div className={isActive ? styles.complex : null}>
+                          {t(isActive ? on : off)}
+                          <span>{t(title)}</span>
+                        </div>
+                    )}
+                  </h3>
+                </li>
+            );
+          })}
         </ul>
         <h1>{currencyFormat({ price: _price })}</h1>
         <h4>{subscriptionPeriod[data?.subscriptionPeriod]}</h4>

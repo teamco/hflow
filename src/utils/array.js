@@ -2,10 +2,34 @@
  * @export
  * @param list
  * @param {string} value
+ * @param [t]
  * @return {*}
  */
-export const sortBy = (list = [], value) => {
-  return [...list].sort((a, b) => (a[value] > b[value]) ? 1 : (a[value] < b[value]) ? -1 : 0);
+export const sortBy = (list = [], value, t = false) => {
+
+  /**
+   * @private
+   * @param object
+   * @param value
+   * @return {*}
+   */
+  const _complexValue = (object, value) => {
+    const matchers = value.split(/\./);
+    let _value;
+    if (matchers.length > 1) {
+      matchers.forEach(cv => {
+        _value = _value ? _value[cv] : object[cv];
+      });
+    }
+
+    return t ? t(_value) : _value;
+  };
+
+  return [...list].sort((a, b) => {
+    const _a = _complexValue(a, value);
+    const _b = _complexValue(b, value);
+    return (_a > _b) ? 1 : (_a < _b) ? -1 : 0;
+  });
 };
 
 /**
