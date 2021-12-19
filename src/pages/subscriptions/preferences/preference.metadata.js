@@ -26,7 +26,7 @@ export const metadata = ({
   return {
     width: '100%',
     size: 'middle',
-    scroll: { x: 600, y: 500 },
+    scroll: { x: 600 },
     columns: [
       {
         title: t('preference:example'),
@@ -35,18 +35,18 @@ export const metadata = ({
         render(translateKeys, record) {
           return (
               <div className={styles.example}>
-                <Form.Item tooltip={t(translateKeys.description)}
-                           label={(
-                               <NavLink to={`/admin/subscriptionPrefs/${record.id}`}>
-                                 {t(translateKeys.title)}
-                               </NavLink>
-                           )}>
-                  <Switch checkedChildren={t(translateKeys.on)}
-                          unCheckedChildren={t(translateKeys.off)}/>
-                </Form.Item>
+                <NavLink to={`/admin/subscriptionPrefs/${record.id}`}>
+                  {t(translateKeys.title)}
+                </NavLink>
               </div>
           );
         }
+      },
+      {
+        title: t('preference:type'),
+        dataIndex: 'type',
+        key: 'type',
+        width: 100
       },
       {
         title: t('preference:status'),
