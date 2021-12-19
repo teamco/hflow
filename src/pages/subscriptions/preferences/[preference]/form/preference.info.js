@@ -81,7 +81,7 @@ export const PreferenceInfo = (props) => {
                     name={'info'}
                     defaultActiveKey={['info']}>
         <div>
-          <Select name={'preferenceType'}
+          <Select name={'type'}
                   form={formRef}
                   label={t('preference:type')}
                   disabled={disabled}
