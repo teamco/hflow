@@ -26,7 +26,7 @@ export const PreferenceInfo = (props) => {
 
   useEffect(() => {
     const _desc = description?.length;
-    setEnableHelper(_desc);
+    setEnableHelper(!!_desc);
     setDisabledDescription(!_desc);
   }, [translate]);
 
@@ -34,8 +34,9 @@ export const PreferenceInfo = (props) => {
    * @constant
    * @param {boolean} value
    */
-  const handleHelper = value => {
+  const toggleHelper = value => {
     setDisabledDescription(!value);
+    setEnableHelper(value);
   };
 
   return (
@@ -48,7 +49,7 @@ export const PreferenceInfo = (props) => {
                        valuePropName={'checked'}>
               <Switch disabled={disabled}
                       checked={enableHelper}
-                      onChange={handleHelper}
+                      onChange={toggleHelper}
                       checkedChildren={t('actions:yes')}
                       unCheckedChildren={t('actions:no')}/>
             </Form.Item>
