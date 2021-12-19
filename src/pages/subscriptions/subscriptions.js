@@ -33,7 +33,8 @@ export const subscriptions = (props) => {
   const {
     subscriptions = [],
     subscriptionPeriod,
-    colorsToType
+    colorsToType,
+    preferences
   } = subscriptionModel;
 
   useEffect(() => {
@@ -95,6 +96,10 @@ export const subscriptions = (props) => {
                 isEdit: true,
                 subscriptionPeriod,
                 colorsToType,
+                preferences: {
+                  all: preferences,
+                  selected: data.preferences
+                },
                 ...subscriptionCardMetadata(t, {
                   data,
                   className: styles.subscriptionCard,

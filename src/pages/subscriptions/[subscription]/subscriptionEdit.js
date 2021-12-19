@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { DownOutlined, SettingOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
@@ -91,9 +91,11 @@ export const subscriptionEdit = (props) => {
 
   const subscriptionPrefsProps = {
     t,
+    isEdit,
     formRef,
     disabled,
-    preferences
+    preferences,
+    selectedSubscription
   };
 
   const tagsProps = {
@@ -134,7 +136,7 @@ export const subscriptionEdit = (props) => {
 
   const subTitle = (
       <>
-        <ShoppingCartOutlined style={{ marginRight: 10 }} />
+        <ShoppingCartOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
             t('actions:edit', { type: t('menu:subscription') }) :
             t('actions:addNew', { type: t('menu:subscription') })

@@ -23,6 +23,7 @@ const SubscriptionCard = (props) => {
     style,
     className,
     colorsToType,
+    preferences,
     subscriptionPeriod,
     onSelectSubscription = stub
   } = props;
@@ -80,11 +81,10 @@ const SubscriptionCard = (props) => {
         </h1>
         <p>{t('subscription:usersInfo', { users })}</p>
         <ul>
-          {sortBy(data?.preferenceData, 'preference.translate.title', t).map((_data, idx) => {
-            const preference = _data.preference;
-            const isActive = _data.value;
+          {sortBy(preferences.all, 'translateKeys.title', t).map((_pref, idx) => {
+            const isActive = preferences.selected.includes(_pref.id);
 
-            const { title, helper, description, on, off } = preference.translate;
+            const { title, helper, description, on, off } = _pref.translateKeys;
             const icon = isTrue(isActive);
             const simple = on.match(/yes/);
 

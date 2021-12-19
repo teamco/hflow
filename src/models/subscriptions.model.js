@@ -53,28 +53,11 @@ export default dvaModelExtend(commonModel, {
   },
   effects: {
 
-    * query({ payload }, { put, call, select }) {
-      const subscriptions = yield call(getAllSubscriptions);
+    * query({ payload }, { put, call }) {
+      const { data } = yield call(getAllSubscriptions);
 
-      const _subscriptions = [...subscriptions?.data];
-
-      for (let sub of _subscriptions) {
-        sub.preferenceData = [];
-        for (let pref in (sub?.preferences || {})) {
-          sub.preferenceData.push({
-            preference: (yield call(fbFindById, {
-              collection: 'subscriptionPrefs',
-              doc: pref
-            })).data(),
-            value: sub?.preferences[pref]
-          });
-        }
-      }
-
-      yield put({
-        type: 'updateState',
-        payload: { subscriptions: _subscriptions }
-      });
+      yield put({ type: 'subscriptionPrefs' });
+      yield put({ type: 'updateState', payload: { subscriptions: data } });
     },
 
     * newSubscription({ payload }, { put }) {
@@ -113,13 +96,21 @@ export default dvaModelExtend(commonModel, {
           yield put({ type: 'updateState', payload: { selectedSubscription } });
 
           const _subscription = { ...selectedSubscription };
+          const _preferences = {};
+
           _subscription.metadata = yield call(detailsInfo, { entity: _subscription, user });
+          _subscription.preferences?.forEach(pref => {
+            _preferences[pref] = true;
+          });
 
           return yield put({
             type: 'toForm',
             payload: {
               model: 'subscriptionModel',
-              form: { ..._subscription }
+              form: {
+                ..._subscription,
+                preferences: { ..._preferences }
+              }
             }
           });
         }
@@ -182,6 +173,7 @@ export default dvaModelExtend(commonModel, {
 
         // Not mandatory/defined fields preparation before saving.
         data.tags = setAs(data.tags, []);
+        data.preferences = Object.keys(payload.preferences).filter(key => payload.preferences[key]);
 
         if (isEdit) {
           selectedSubscription && params.subscription === selectedSubscription.id ?

@@ -15,32 +15,34 @@ const { GenericPanel } = FormComponents;
 export const SubscriptionPreferences = (props) => {
   const {
     t,
+    isEdit,
     formRef,
     disabled,
-    preferences = []
+    preferences = [],
+    selectedSubscription
   } = props;
 
   useEffect(() => {
     [...preferences].forEach(pref => {
       const value = (formRef.getFieldValue('preferences') || {})[pref.id];
       if (typeof value === 'undefined') {
-        formRef.setFieldsValue({ preferences: { [pref.id]: pref.status } });
+        formRef.setFieldsValue({ preferences: { [pref.id]: isEdit ? false : pref.selectedByDefault } });
       }
     });
-  }, [preferences]);
+  }, [preferences, selectedSubscription]);
 
   return (
       <GenericPanel header={t('subscription:preferences')}
                     name={'preferences'}
                     defaultActiveKey={['preferences']}>
         <div>
-          {sortBy(preferences, 'translate.title', t).map((pref, idx) => {
+          {sortBy(preferences, 'translateKeys.title', t).map((pref, idx) => {
             const {
               title,
               description,
               on,
               off
-            } = pref.translate;
+            } = pref.translateKeys;
 
             const _helper = description ? t(description) : null;
 

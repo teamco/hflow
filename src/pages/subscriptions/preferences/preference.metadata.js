@@ -60,6 +60,7 @@ export const metadata = ({
               <div className={styles.example}>
                 <Switch defaultChecked={selectedByDefault}
                         disabled
+                        size={'small'}
                         checkedChildren={t(translateKeys.on)}
                         unCheckedChildren={t(translateKeys.off)}/>
               </div>
