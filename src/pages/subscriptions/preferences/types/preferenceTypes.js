@@ -9,7 +9,7 @@ import Main from 'components/Main';
 
 import { fromForm } from 'utils/object';
 
-import styles from 'pages/subscriptions/types/subscriptionTypes.module.less';
+import styles from 'pages/subscriptions/preferences/types/preferenceTypes.module.less';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;
@@ -19,7 +19,7 @@ const { Info } = Main;
  * @param props
  * @return {JSX.Element}
  */
-export const subscriptionTypes = props => {
+export const preferenceTypes = props => {
   const [formRef] = Form.useForm();
 
   const {
@@ -53,7 +53,7 @@ export const subscriptionTypes = props => {
   const subTitle = (
       <>
         <FontSizeOutlined style={{ marginRight: 10 }}/>
-        {t('panel:subscriptionConfig')}
+        {t('panel:preferenceConfig')}
       </>
   );
 
@@ -77,7 +77,7 @@ export const subscriptionTypes = props => {
   };
 
   const { ability } = authModel;
-  const component = 'subscriptionTypes';
+  const component = 'preferenceTypes';
   const disabled = ability.cannot('update', component);
 
   return (
@@ -100,9 +100,9 @@ export const subscriptionTypes = props => {
                 form={formRef}
                 fields={entityForm}
                 onFinish={onFinish}>
-            <GenericPanel header={t('panel:subscriptionTypes')}
-                          name={'subscriptionTypes'}
-                          defaultActiveKey={['subscriptionTypes']}>
+            <GenericPanel header={t('panel:preferenceTypes')}
+                          name={'preferenceTypes'}
+                          defaultActiveKey={['preferenceTypes']}>
               <div>
                 <EditableTags label={false}
                               name={'tags'}

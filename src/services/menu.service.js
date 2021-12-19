@@ -1,16 +1,15 @@
 import React from 'react';
 import {
-  BugOutlined,
+  ApiOutlined,
+  ControlOutlined,
   FontSizeOutlined,
   InfoCircleOutlined,
   NotificationOutlined,
+  ShoppingCartOutlined,
   SolutionOutlined,
   TeamOutlined,
   TrademarkOutlined,
-  UserOutlined,
-  ApiOutlined,
-  ShoppingCartOutlined,
-  ControlOutlined
+  UserOutlined
 } from '@ant-design/icons';
 
 /**
@@ -71,16 +70,23 @@ export const menus = [
         icon: <ShoppingCartOutlined/>
       },
       {
+        key: 'menu:subscriptionTypes',
+        url: '/admin/subscriptionTypes',
+        component: 'subscriptionTypes',
+        icon: <FontSizeOutlined/>
+      },
+      { divider: true },
+      {
         key: 'menu:subscriptionPrefs',
         url: '/admin/subscriptionPrefs',
         component: 'subscriptionPrefs',
         icon: <ControlOutlined/>
       },
       {
-        key: 'menu:subscriptionTypes',
-        url: '/admin/subscriptionTypes',
-        component: 'subscriptionTypes',
-        icon: <FontSizeOutlined />
+        key: 'menu:preferenceTypes',
+        url: '/admin/preferenceTypes',
+        component: 'preferenceTypes',
+        icon: <FontSizeOutlined/>
       }
     ]
   },
@@ -92,9 +98,9 @@ export const menus = [
         key: 'menu:campaigns',
         url: '/admin/campaigns',
         component: 'campaigns',
-        icon: <FontSizeOutlined />
+        icon: <FontSizeOutlined/>
       }
-    ],
+    ]
   },
   {
     key: 'menu:systemLogs',

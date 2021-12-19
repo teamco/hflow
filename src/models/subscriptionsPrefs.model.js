@@ -7,10 +7,11 @@ import { detailsInfo } from 'services/cross.model.service';
 import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
 import { history } from 'umi';
 
+import i18n from 'utils/i18n';
 import { monitorHistory } from 'utils/history';
 import { errorSaveMsg } from 'utils/message';
 import { getAllPreferences } from 'services/subscriptionsPrefs.service';
-import { setAs } from '../utils/object';
+import { setAs } from 'utils/object';
 
 const DEFAULT_STATE = {};
 

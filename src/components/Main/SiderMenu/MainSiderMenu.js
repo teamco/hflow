@@ -35,27 +35,32 @@ const MainSiderMenu = props => {
     )
   });
 
-    return (
-        <Sider collapsible
-               collapsed={collapsed}
-               onCollapse={onCollapse}
-               style={{ position: 'relative' }}>
-          <div className={'logo'}/>
-          <Menu mode={'inline'}
+  return (
+      <Sider collapsible
+             collapsed={collapsed}
+             onCollapse={onCollapse}
+             style={{ position: 'relative' }}>
+        <div className={'logo'}/>
+        <Menu mode={'inline'}
               selectedKeys={[model?.location?.pathname]}>
           {data?.map((menu, idx_m) =>
               menu?.url ?
                   _menu(`${menu?.key}_${idx_m}`, menu) : (
-                    <SubMenu key={idx_m}
+                      <SubMenu key={idx_m}
                                icon={menu?.icon}
                                title={t(menu?.key)}>
-                        {menu?.items?.map((s_menu, idx_i) => _menu(`${s_menu?.url}_${idx_m}_${idx_i}`, s_menu))}
-                    </SubMenu>
-                )
-            )}
-          </Menu>
-        </Sider>
-    );
+                        {menu?.items?.map((s_menu, idx_i) => {
+                          return s_menu.divider ? (
+                                  <Menu.Divider key={`${s_menu?.url}_${idx_m}_${idx_i}`}/>
+                              ) :
+                              _menu(`${s_menu?.url}_${idx_m}_${idx_i}`, s_menu);
+                        })}
+                      </SubMenu>
+                  )
+          )}
+        </Menu>
+      </Sider>
+  );
 };
 
 export default withTranslation()(MainSiderMenu);
