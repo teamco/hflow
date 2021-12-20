@@ -1,5 +1,6 @@
 import request from 'umi-request';
 import { API_CONFIG } from 'services/config/api.config';
+import { stub } from './function';
 
 /**
  * @constant
@@ -57,9 +58,14 @@ const ACCEPT_TYPE = {
   json: 'application/json'
 };
 
+const HEADER_TYPE = {
+  contentType: 'Content-Type',
+  allowOrigin: 'Access-Control-Allow-Origin',
+  authorization: 'Authorization'
+};
+
 const DEFAULT_HEADERS = {
-  // 'Content-Type': CONTENT_TYPE.json,
-  'Access-Control-Allow-Origin': '*',
+  [HEADER_TYPE.allowOrigin]: '*',
   accept: ACCEPT_TYPE.json
 };
 
@@ -95,7 +101,7 @@ function adaptUrlToParams(url = '', args) {
  * @return {string}
  */
 function adoptUrlToAPI(url, direct = false) {
-  return direct ? `/${url}` : `/${API_NS}/${url}`;
+  return direct ? `/${url}` : `${API_NS}/${url}`;
 }
 
 /**
@@ -149,11 +155,11 @@ function toBase64(file) {
 /**
  * @function
  * @param opts
- * @param [errorMsg]
+ * @param [errorHandler]
  * @param [fallbackUrl]
  * @return {Q.Promise<any> | undefined}
  */
-function xhr(opts, errorMsg, fallbackUrl) {
+function xhr(opts, errorHandler = stub, fallbackUrl) {
   const { pathname } = window.location;
   const { url, method } = opts;
   delete opts.url;
@@ -162,12 +168,14 @@ function xhr(opts, errorMsg, fallbackUrl) {
   return request[method](url, opts).then((res) => ({ data: { ...res } })).catch((error) => {
     const _st = setTimeout(() => {
       if (fallbackUrl && !pathname.match(new RegExp(fallbackUrl))) {
-        //history.replace(`${fallbackUrl}?ref=${encodeURIComponent(pathname)}`);
+        history.replace(`${fallbackUrl}?referrer=${encodeURIComponent(pathname)}`);
       }
       clearTimeout(_st);
     }, 2000);
 
-    return error;
+    errorHandler(error);
+    console.error(error.response);
+    throw new Error(error);
   });
 }
 
@@ -220,5 +228,6 @@ export default {
   isSuccess,
   METHOD,
   ACCEPT_TYPE,
-  CONTENT_TYPE
+  CONTENT_TYPE,
+  HEADER_TYPE
 };

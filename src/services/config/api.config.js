@@ -54,6 +54,10 @@ export const API = {
   },
   users: {
     getUser: 'users/:userKey'
+  },
+  features: {
+    get: 'features/:featureKey',
+    save: 'features'
   }
 };
 

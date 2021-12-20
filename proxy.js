@@ -1,4 +1,8 @@
-import { API_CONFIG } from './src/services/config/api.config';
+import colors from 'colors';
+
+import { API, API_CONFIG } from './src/services/config/api.config';
+
+const { NODE_ENV, UMI_VERSION } = process.env;
 
 /**
  * @constant
@@ -12,30 +16,51 @@ const apiConfig = API_CONFIG();
 
 const { SERVER_URL, SERVER_PORT, API_NS } = apiConfig;
 
+/**
+ * @constant
+ * @param {boolean} [debug]
+ * @return {{onProxyRes(*, *, *): void, onError(*, *, *): void, logLevel: string, pathRewrite(*, *): void,
+ *     onProxyReq(*, *, *): void}}
+ */
+const debugProps = (debug = true) => {
+  return debug ? {
+    logLevel: 'debug',
+    pathRewrite(path, req) {
+      console.info(path, req.url);
+    },
+    onError(err, req, res) {
+      console.error(err);
+      res.status(500);
+      res.json({ error: 'Error when connecting to remote server.' });
+    },
+    onProxyReq(proxyReq, req, res) {
+      console.info('onProxyReq', proxyReq.host);
+    },
+    onProxyRes(proxyRes, req, res) {
+      console.log('onProxyRes', proxyRes.host);
+    }
+  } : {};
+};
+
+const isDevelopment = NODE_ENV === 'development';
+
 const proxyPops = {
   changeOrigin: true,
   secure: false,
-  logLevel: 'debug',
   ws: false,
-  pathRewrite(path, req) {
-    console.info(path, req.url);
-  },
-  onError(err, req, res) {
-    console.error(err);
-    res.status(500);
-    res.json({ error: 'Error when connecting to remote server.' });
-  },
-  onProxyReq(proxyReq, req, res) {
-    console.info('onProxyReq', proxyReq.host);
-  },
-  onProxyRes(proxyRes, req, res) {
-    console.log('onProxyRes', proxyRes.host);
-  }
-}
+  target: `${SERVER_URL}`,
+  ...debugProps(isDevelopment)
+};
 
 export const proxy = {
-  [`${API_NS}/authenticate`]: {
-    target: `${SERVER_URL}`,
-    ...proxyPops
-  }
+  [`${API_NS}/${API.auth.getToken}`]: { ...proxyPops },
+  [`${API_NS}/${API.features.save}`]: { ...proxyPops }
 };
+
+console.log('\n\n==== CONFIG =====\n');
+console.log(colors.green('NODE_ENV:'), NODE_ENV);
+console.log(colors.green('UMI_VERSION:'), UMI_VERSION);
+isDevelopment && console.log(colors.green('PROXY:'), proxy);
+console.log('\n==== /CONFIG =====\n\n');
+
+

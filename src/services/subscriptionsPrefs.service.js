@@ -1,5 +1,10 @@
 import _ from 'lodash';
+
+import request from 'utils/request';
+
 import { fbDelete, fbReadAll, fbReadBy } from 'services/firebase.service';
+import { xhrRequest } from 'services/authentication.service';
+import { API } from 'services/config/api.config';
 
 /**
  * @export
@@ -49,3 +54,26 @@ export const deleteSubscription = async ({ doc }) => {
   await fbDelete({ collection: 'subscriptions', doc });
 };
 
+/**
+ * @async
+ * @export
+ * @param data
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ */
+export const getFeature = async ({ id }) => {
+  return await xhrRequest({
+    url: API.features.get,
+    method: request.METHOD.get,
+    featureKey: id
+  });
+};
+
+/**
+ * @async
+ * @export
+ * @param data
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ */
+export const addFeature = async ({ data }) => {
+  return await xhrRequest({ url: API.features.save, data });
+};

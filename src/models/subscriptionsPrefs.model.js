@@ -7,9 +7,10 @@ import { detailsInfo } from 'services/cross.model.service';
 import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
 import { history } from 'umi';
 
+import i18n from 'utils/i18n';
 import { monitorHistory } from 'utils/history';
 import { errorSaveMsg } from 'utils/message';
-import { getAllPreferences } from 'services/subscriptionsPrefs.service';
+import { addFeature, getAllPreferences, getFeature } from 'services/subscriptionsPrefs.service';
 import { setAs } from 'utils/object';
 
 const DEFAULT_STATE = {};
@@ -68,10 +69,7 @@ export default dvaModelExtend(commonModel, {
         // TODO (teamco): Do something.
       } else if (ability.can('read', 'subscriptionPrefs')) {
 
-        const preference = yield call(fbFindById, {
-          collection: 'subscriptionPrefs',
-          doc: preferenceId
-        });
+        const preference = yield call(getFeature, {id: preferenceId});
 
         if (preference.exists) {
           const selectedPreference = { ...preference.data(), ...{ id: preference.id } };
@@ -90,7 +88,7 @@ export default dvaModelExtend(commonModel, {
           });
         }
 
-        yield put({ type: 'notFound', payload: { entity: 'Preference', key: 'selectedPreference' } });
+        //yield put({ type: 'notFound', payload: { entity: 'Preference', key: 'selectedPreference' } });
       }
     },
 
@@ -139,19 +137,15 @@ export default dvaModelExtend(commonModel, {
 
       if (user && ability.can('update', 'subscriptionPrefs')) {
 
-        const userRef = getRef({
-          collection: 'users',
-          doc: user.id
-        });
-
         const metadata = {
           ...selectedPreference?.metadata,
           updatedAt: +(new Date),
-          updatedByRef: userRef
+          updatedByRef: user.id
         };
 
         // Not mandatory/defined fields preparation before saving.
         const data = {
+          name: i18n.t(title),
           selectedByDefault,
           price, type, currency,
           translateKeys: {
@@ -172,12 +166,12 @@ export default dvaModelExtend(commonModel, {
           data.metadata = {
             ...metadata,
             createdAt: metadata.updatedAt,
-            createdByRef: userRef
+            createdByRef: user.id
           };
 
-          const entity = yield call(fbAdd, { collection: 'subscriptionPrefs', data });
+          const entity = yield call(addFeature, { data });
 
-          if (entity?.docId) {
+          if (entity?.data?.id) {
             yield put({
               type: 'updateState',
               payload: {
@@ -186,7 +180,7 @@ export default dvaModelExtend(commonModel, {
               }
             });
 
-            history.push(`/admin/subscriptionPrefs/${entity.docId}`);
+            history.push(`/admin/subscriptionPrefs/${entity?.data?.id}`);
           }
         }
       } else {

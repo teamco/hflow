@@ -97,6 +97,7 @@ export const PreferenceInfo = (props) => {
                        label={t('preference:price')}
                        name={'price'}
                        form={formRef}
+                       min={0}
                        disabled={disabled}
                        config={{ rules: [{ required: true }] }}/>
         </div>
