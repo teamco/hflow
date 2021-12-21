@@ -39,6 +39,9 @@ export default connect(
         dispatch({ type: `campaignModel/editCampaign`, payload: { params } });
       },
       onDeleteCampaign() {
+      },
+      onSubscriptions() {
+        dispatch({ type: 'campaignModel/campaignSubscriptions' });
       }
     })
 )(withTranslation()(campaignEdit));

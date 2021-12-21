@@ -40,7 +40,8 @@ export const campaignEdit = (props) => {
     onUpdateTags,
     onSave,
     onClose,
-    onDeleteCampaign
+    onDeleteCampaign,
+    onSubscriptions
   } = props;
 
   /**
@@ -67,6 +68,7 @@ export const campaignEdit = (props) => {
 
   useEffect(() => {
     canUpdate && onEditCampaign(params);
+    onSubscriptions()
   }, [authModel.user, canUpdate]);
 
   /**

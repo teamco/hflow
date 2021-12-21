@@ -15,7 +15,6 @@ import { isLoading } from 'utils/state';
 import { PreferenceInfo } from './form/preference.info';
 import { PreferenceTranslate } from './form/preference.translate';
 import { PreferenceMenu } from 'pages/subscriptions/preferences/metadata/preference.menu';
-import { PreferenceTags } from './form/preference.tags';
 
 import menuStyles from 'components/menu.less';
 import styles from 'pages/subscriptions/preferences/subscriptionPrefs.module.less';

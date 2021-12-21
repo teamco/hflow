@@ -3,14 +3,14 @@ import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
 import Page from 'components/Page';
+import Main from '../../components/Main';
 import { Can } from 'utils/auth/can';
-
-import CampaignCard from 'pages/campaigns/templates/campaignCard';
-import { campaignCardMetadata } from 'pages/campaigns/campaigns.metadata';
 
 import styles from 'pages/campaigns/campaigns.module.less';
 import userStyles from 'pages/users/users.module.less';
-import {cardProps} from './data';
+import { metadata } from 'pages/campaigns/campaigns.metadata';
+
+const { Table } = Main;
 
 /**
  * @export
@@ -24,18 +24,16 @@ export const campaigns = (props) => {
     campaignModel,
     onQuery,
     onNew,
-    onDeleteCampaign,
     style,
     loading
   } = props;
 
   const {
-    campaigns = { data: [] },
-    colorsToType
+    data,
   } = campaignModel;
 
   useEffect(() => {
-    // onQuery();
+    onQuery();
   }, [authModel.user]);
 
   const { ability } = authModel;
@@ -53,22 +51,10 @@ export const campaigns = (props) => {
     ability
   };
 
-  const menuProps = {
-    isEdit: false,
-    ability,
-    loading,
-    component,
-    onDeleteCampaign
+  const tableProps = {
+    pagination: false
   };
 
-  const campaignsTemp =
-      {
-        t,
-        menuProps,
-        iEdit: true,
-        ...campaignProps,
-        data: cardProps
-      };
   return (
       <Page className={userStyles.users}
             component={component}
@@ -92,22 +78,9 @@ export const campaigns = (props) => {
                         </Can>
                       ]}>
           </PageHeader>
-          <div className={styles.campaignCards}>
-          {campaignsTemp?.data?.length ? campaignsTemp?.data?.map((data, idx) => {
-            const props = {
-              t,
-              isEdit: true,
-              colorsToType,
-              ...campaignCardMetadata(t, {
-                data,
-                className: styles.campaignCard,
-                menuProps,
-                ...campaignProps
-              })
-            };
-            return (<CampaignCard key={idx} {...props} />);
-          }) : null}
-        </div>
+          <Table data={data}
+                 {...tableProps}
+                 {...metadata({ t, ...campaignProps })} />
         </div>
       </Page>
   );

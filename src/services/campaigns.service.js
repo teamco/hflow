@@ -6,7 +6,7 @@ import { fbDelete, fbReadAll, fbReadBy } from 'services/firebase.service';
  * @return {Promise<{data: *[]}>}
  */
 export const getAllCampaigns = async () => {
-  const subscriptions = await fbReadAll({ collection: 'Campaigns' });
+  const subscriptions = await fbReadAll({ collection: 'campaigns' });
 
   let data = [];
 

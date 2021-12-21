@@ -11,6 +11,8 @@ import { monitorHistory } from 'utils/history';
 import i18n from 'utils/i18n';
 import { errorSaveMsg } from 'utils/message';
 import { setAs } from 'utils/object';
+import { getAllSubscriptions } from '../services/subscriptions.service';
+import { getAllPreferences } from '../services/subscriptionsPrefs.service';
 
 const DEFAULT_STATE = {
   campaigns: []
@@ -22,7 +24,9 @@ const DEFAULT_STATE = {
 export default dvaModelExtend(commonModel, {
   namespace: 'campaignModel',
   state: {
-    ...DEFAULT_STATE
+    ...DEFAULT_STATE,
+    subscriptions: [],
+    data: []
   },
   campaigns: {
     setupHistory({ history, dispatch }) {
@@ -34,15 +38,33 @@ export default dvaModelExtend(commonModel, {
   effects: {
 
     * query({ payload }, { put, call, select }) {
-      const campaigns = yield call(getAllCampaigns);
+      const { data = [] } = yield call(getAllCampaigns);
 
       yield put({
         type: 'updateState',
-        payload: { campaigns }
+        payload: { data }
       });
     },
 
-    * newCampaigns({ payload }, { put }) {
+    * campaignSubscriptions({ payload }, {put, call}) {
+        const {data: subscriptions = []}  = yield call(getAllSubscriptions);
+        const {data: preferences = [] } = yield call(getAllPreferences);
+
+        const preIds = preferences.map(pref => pref.id);
+
+        const subscriptionsTypes = subscriptions.map((item) => {
+          const tempIds = preIds.filter(filterPref => !item.preferences.includes(filterPref))
+          return tempIds;
+        })
+
+        yield put({
+          type: 'updateState',
+          payload: { subscriptions }
+        });
+
+    },
+
+    * newCampaign({ payload }, { put }) {
       yield put({ type: 'cleanForm' });
 
       history.push(`/admin/campaigns/new`);
@@ -61,7 +83,7 @@ export default dvaModelExtend(commonModel, {
 
     * validateCampaign({ payload }, { call, put, select }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { subscriptionId } = payload;
+      const { campaignId } = payload;
 
       if (isNew(campaignId)) {
         // TODO (teamco): Do something.
