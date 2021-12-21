@@ -17,24 +17,48 @@ export const CampaignInfo = (props) => {
     t,
     formRef,
     disabled,
-    subscriptionModel = [],
+    subscriptions
   } = props;
 
-  const {
-    subscriptions = []
-  } = subscriptionModel;
+  // const {
+  //   subscriptions = []
+  // } = subscriptionModel;
 
   useEffect(() => {
+
   });
+
+  const [subscriptionId, setSubscriptionId] = useState(false);
+  const [preferencesList, setPreferencesList] = useState([]);
 
   /**
    * @constant
    * @param {string} value
    */
-  const handleFormUpdate = value => {
-    formRef.setFieldsValue({ discountType: value });
-    setDiscountType(value);
-  };
+  // const handleFormUpdate = value => {
+  //   formRef.setFieldsValue({ discountType: value });
+  //   setDiscountType(value);
+  // };
+
+  const handleSubscriptionType = (id) => {
+      setSubscriptionId(id);
+  }
+
+  const handlePreferenceList = (list) => {
+    setPreferencesList(list);
+  }
+
+  const getOptions = () => {
+    const subscription = [...subscriptions]
+                            .find(el => el.id === subscriptionId)
+                            .preferences.map((item, idx) => (
+        <Option key={idx}
+                value={item.id}>
+          {t(item.translateKeys.title)}
+        </Option>
+    ));
+    return subscription;
+  }
 
   return (
       <GenericPanel header={t('campaign:info')}
@@ -45,32 +69,49 @@ export const CampaignInfo = (props) => {
                   form={formRef}
                   label={t('subscription:type')}
                   disabled={disabled}
+                  onChange={(id) => handleSubscriptionType(id)}
                   config={{ rules: [{ required: true }] }}>
-            {[...subscriptions].sort().map((type, idx) => (
+            {[...subscriptions].map((item, idx) => (
                 <Option key={idx}
-                        value={type}>
-                  {type}
+                        value={item.id}>
+                  {item.type}
                 </Option>
             ))}
           </Select>
+          <Select
+              name={'subscriptionPref'}
+              mode="multiple"
+              label={t('subscription:preferences')}
+              allowClear
+              style={{ width: '100%' }}
+              placeholder="Please select preferences "
+              onChange={handlePreferenceList}
+          >
+            {subscriptionId && getOptions()}
+          </Select>
         </div>
         <div>
-          {/*<Switch disabled={disabled}*/}
-          {/*        checked={enableHelper}*/}
-          {/*        onChange={toggleHelper}*/}
-          {/*        checkedChildren={t('actions:yes')}*/}
-          {/*        unCheckedChildren={t('actions:no')}/>*/}
+
+        </div>
+        <div>
+          <Switch disabled={disabled}
+                  checkedChildren={t('actions:yes')}
+                  unCheckedChildren={t('actions:no')}/>
           <Input type={'text'}
-                 label={t('campaign:title')}
-                 name={'title'}
+                 label={t('campaign:duration')}
+                 name={'duration'}
                  form={formRef}
                  disabled={disabled}
                  config={{ rules: [{ required: true }] }}/>
         </div>
         <div>
+          <Switch
+                  disabled={disabled}
+                  checkedChildren={t('actions:yes')}
+                  unCheckedChildren={t('actions:no')}/>
           <Input type={'text'}
-                 label={t('campaign:notice')}
-                 name={'notice'}
+                 label={t('campaign:startAt')}
+                 name={'statDay'}
                  form={formRef}
                  disabled={disabled}
                  config={{ rules: [{ required: true }] }}/>

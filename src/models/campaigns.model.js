@@ -50,16 +50,16 @@ export default dvaModelExtend(commonModel, {
         const {data: subscriptions = []}  = yield call(getAllSubscriptions);
         const {data: preferences = [] } = yield call(getAllPreferences);
 
-        const preIds = preferences.map(pref => pref.id);
-
-        const subscriptionsTypes = subscriptions.map((item) => {
-          const tempIds = preIds.filter(filterPref => !item.preferences.includes(filterPref))
-          return tempIds;
+        const subscriptionPreferences = subscriptions.map((item) => {
+          const prefsNotIncluded = preferences.filter(filterPref => {
+            return !item.preferences.includes(filterPref.id);
+          });
+          return {type: item.subscriptionType, preferences: prefsNotIncluded, id: item.id};
         })
 
         yield put({
           type: 'updateState',
-          payload: { subscriptions }
+          payload: { subscriptions: subscriptionPreferences }
         });
 
     },

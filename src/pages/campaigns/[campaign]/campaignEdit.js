@@ -52,6 +52,7 @@ export const campaignEdit = (props) => {
   const {
     entityForm,
     selectedCampaign,
+    subscriptions,
     campaignTypes,
     campaignPeriod,
     discountTypes,
@@ -86,7 +87,8 @@ export const campaignEdit = (props) => {
     campaignTypes,
     campaignPeriod,
     discountTypes,
-    businessUsers
+    businessUsers,
+    subscriptions
   };
 
   const campaignPrefsProps = {
@@ -183,20 +185,8 @@ export const campaignEdit = (props) => {
                 fields={entityForm}
                 scrollToFirstError={true}
                 onFinish={onFinish}
-                onFieldsChange={onFieldsChange}
-                initialValues={{
-                  discountType: t('currency'),
-                  price: 0,
-                  discount: 0,
-                  users: 1,
-                  accessToMessages: true,
-                  notifications: true,
-                  dashboard: true,
-                  placementOnMap: true
-                }}>
+                onFieldsChange={onFieldsChange}>
             <CampaignInfo {...campaignInfoProps} />
-            {/*<CampaignPreferences {...campaignPrefsProps} />*/}
-            {/*<CampaignTags {...tagsProps} />*/}
             <Info {...infoProps} />
           </Form>
         </div>
