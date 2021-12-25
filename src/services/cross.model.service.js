@@ -1,5 +1,22 @@
 import { getUsers } from 'services/user.service';
+import { getRef } from 'services/firebase.service';
+
 import { tsToLocaleDateTime } from 'utils/timestamp';
+
+/**
+ * @constant
+ * @param byRef
+ * @return {Promise<*>}
+ * @private
+ */
+const _getUserRef = async (byRef) => {
+  if (typeof byRef === 'string') {
+    // Handle server stored Id.
+    byRef = getRef({ collection: 'users', doc: byRef });
+  }
+
+  return (await byRef?.get())?.data();
+};
 
 /**
  * @export
@@ -17,8 +34,13 @@ export async function detailsInfo(props = {}) {
   const users = await getUsers({ user });
 
   const _metadata = { ...entity?.metadata };
-  const updatedBy = (await _metadata?.updatedByRef?.get())?.data();
-  const createdBy = (await _metadata?.createdByRef?.get())?.data();
+  const { updatedByRef, createdByRef } = _metadata;
+
+  const updatedBy = await _getUserRef(updatedByRef);
+
+  // Reduce round trip to firebase.
+  const createdBy = createdByRef?.id === updatedByRef?.id ?
+      updatedBy : await _getUserRef(createdByRef);
 
   _metadata.updatedBy = users?.data?.find(user => user.uid === updatedBy?.uid);
   _metadata.createdBy = users?.data?.find(user => user.uid === createdBy?.uid);

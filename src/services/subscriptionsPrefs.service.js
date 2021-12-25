@@ -71,6 +71,22 @@ export const getFeature = async ({ id }) => {
 /**
  * @async
  * @export
+ * @param {string} id
+ * @param data
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ */
+export const updateFeature = async ({ id, data }) => {
+  return await xhrRequest({
+    url: API.features.get,
+    method: request.METHOD.put,
+    featureKey: id,
+    data
+  });
+};
+
+/**
+ * @async
+ * @export
  * @param data
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */

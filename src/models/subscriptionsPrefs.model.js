@@ -4,13 +4,13 @@ import dvaModelExtend from 'dva-model-extend';
 import { commonModel } from 'models/common.model';
 import { isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
-import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
+import { fbFindById } from 'services/firebase.service';
 import { history } from 'umi';
 
 import i18n from 'utils/i18n';
 import { monitorHistory } from 'utils/history';
 import { errorSaveMsg } from 'utils/message';
-import { addFeature, getAllPreferences, getFeature } from 'services/subscriptionsPrefs.service';
+import { addFeature, getAllPreferences, getFeature, updateFeature } from 'services/subscriptionsPrefs.service';
 import { setAs } from 'utils/object';
 
 const DEFAULT_STATE = {};
@@ -69,10 +69,10 @@ export default dvaModelExtend(commonModel, {
         // TODO (teamco): Do something.
       } else if (ability.can('read', 'subscriptionPrefs')) {
 
-        const preference = yield call(getFeature, {id: preferenceId});
+        const preference = yield call(getFeature, { id: preferenceId });
 
         if (preference.exists) {
-          const selectedPreference = { ...preference.data(), ...{ id: preference.id } };
+          const selectedPreference = { ...preference.data };
 
           yield put({ type: 'updateState', payload: { selectedPreference } });
 
@@ -88,7 +88,7 @@ export default dvaModelExtend(commonModel, {
           });
         }
 
-        //yield put({ type: 'notFound', payload: { entity: 'Preference', key: 'selectedPreference' } });
+        yield put({ type: 'notFound', payload: { entity: 'Preference', key: 'selectedPreference' } });
       }
     },
 
@@ -139,27 +139,40 @@ export default dvaModelExtend(commonModel, {
 
         const metadata = {
           ...selectedPreference?.metadata,
-          updatedAt: +(new Date),
           updatedByRef: user.id
         };
 
         // Not mandatory/defined fields preparation before saving.
         const data = {
+          id: selectedPreference.id,
           name: i18n.t(title),
           selectedByDefault,
           price, type, currency,
           translateKeys: {
             description: setAs(description, null),
             title, on, off
-          }
+          },
+          metadata
         };
 
         if (isEdit) {
-          selectedPreference && params.preference === selectedPreference.id ?
-              yield call(fbUpdate, { collection: 'subscriptionPrefs', doc: selectedPreference.id, data }) :
-              errorSaveMsg(true, 'Preference');
+          if (selectedPreference && params.preference === selectedPreference.id) {
+            data.version = selectedPreference.version;
+            const entity = yield call(updateFeature, { id: params.preference, data });
 
-          yield put({ type: 'updateState', payload: { touched: false } });
+            yield put({
+              type: 'isSaved',
+              payload: {
+                entity, isEdit,
+                entityType: i18n.t('route:subscriptionPref'),
+                * callback() {
+                  yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });
+                }
+              }
+            });
+          } else {
+            errorSaveMsg(isEdit, i18n.t('route:subscriptionPref'));
+          }
 
         } else {
 
@@ -171,17 +184,17 @@ export default dvaModelExtend(commonModel, {
 
           const entity = yield call(addFeature, { data });
 
-          if (entity?.data?.id) {
-            yield put({
-              type: 'updateState',
-              payload: {
-                touched: false,
-                isEdit: true
+          yield put({
+            type: 'isSaved',
+            payload: {
+              entity, isEdit,
+              entityType: i18n.t('route:subscriptionPref'),
+              * callback() {
+                yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });
+                history.push(`/admin/subscriptionPrefs/${entity?.data?.id}`);
               }
-            });
-
-            history.push(`/admin/subscriptionPrefs/${entity?.data?.id}`);
-          }
+            }
+          });
         }
       } else {
 
