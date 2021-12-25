@@ -54,7 +54,7 @@ const proxyPops = {
 
 const _proxy = {
   [`${API_NS}/${API.auth.getToken}`]: { ...proxyPops },
-  [`${API_NS}/${API.features.save}`]: { ...proxyPops }
+  [`${API_NS}/${API.features.store}`]: { ...proxyPops }
 };
 
 /**

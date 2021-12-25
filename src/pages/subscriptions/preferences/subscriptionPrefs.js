@@ -80,7 +80,7 @@ export const subscriptionPrefs = props => {
                         </Can>
                       ]}>
           </PageHeader>
-          <Table data={data}
+          <Table data={Object.values(data)}
                  {...tableProps}
                  {...metadata({ t, ...userProps })} />
         </div>

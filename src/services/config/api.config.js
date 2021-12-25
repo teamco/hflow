@@ -57,7 +57,7 @@ export const API = {
   },
   features: {
     get: 'features/:featureKey',
-    save: 'features'
+    store: 'features'
   }
 };
 

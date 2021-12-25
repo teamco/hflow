@@ -3,7 +3,6 @@ import { message } from 'antd';
 import { history } from 'umi';
 import { merge } from 'lodash';
 import i18n from 'utils/i18n';
-import { errorSaveMsg } from '../utils/message';
 
 const DEFAULT_FORM = [
   {
@@ -174,16 +173,6 @@ const commonModel = {
           message: i18n.t('error:noPermissions')
         }
       });
-    },
-
-    * isSaved({ payload }, { put }) {
-      const {isEdit, entity, entityType, callback} = payload;
-
-      if (entity.exists) {
-        return callback();
-      }
-
-      errorSaveMsg(isEdit, entityType);
     }
   },
 

@@ -1,57 +1,17 @@
-import _ from 'lodash';
-
 import request from 'utils/request';
-
-import { fbDelete, fbReadAll, fbReadBy } from 'services/firebase.service';
 import { xhrRequest } from 'services/authentication.service';
 import { API } from 'services/config/api.config';
 
 /**
+ * @async
  * @export
- * @return {Promise<{data: *[]}>}
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const getAllPreferences = async () => {
-  const preferences = await fbReadAll({ collection: 'subscriptionPrefs' });
-
-  let data = [];
-
-  preferences.forEach(doc => {
-    const _data = doc.data();
-    data.push(_.merge(_data, { id: doc.id }));
+export const getFeatures = async () => {
+  return await xhrRequest({
+    url: API.features.store,
+    method: request.METHOD.get
   });
-
-  return { data };
-};
-
-/**
- * @export
- * @param {string} [field]
- * @param value
- * @return {{docId, data}}
- */
-export const getAllSubscriptionsBy = async ({ field = 'subscriptionType', value }) => {
-  const subscriptions = await fbReadBy({
-    collection: 'subscriptions',
-    field,
-    value
-  });
-
-  let data = [];
-
-  subscriptions.forEach(doc => {
-    const _data = doc.data();
-    data.push(_.merge(_data, { id: doc.id }));
-  });
-  return { data };
-};
-
-/**
- * @export
- * @param doc
- * @return {Promise<void>}
- */
-export const deleteSubscription = async ({ doc }) => {
-  await fbDelete({ collection: 'subscriptions', doc });
 };
 
 /**
@@ -91,5 +51,5 @@ export const updateFeature = async ({ id, data }) => {
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
 export const addFeature = async ({ data }) => {
-  return await xhrRequest({ url: API.features.save, data });
+  return await xhrRequest({ url: API.features.store, data });
 };

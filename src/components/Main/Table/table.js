@@ -16,7 +16,7 @@ function MainTable(props) {
    * Add keys to dataSource
    * @type {[]}
    */
-  const dataSource = props.data.map((entity, idx) => ({ ...entity, ...{ key: idx } }));
+  const dataSource = props?.data?.map((entity, idx) => ({ ...entity, ...{ key: idx } }));
 
   /**
    * @constant
@@ -24,7 +24,7 @@ function MainTable(props) {
    * @return {{text: *, value: *}[]}
    */
   const filterBy = key => {
-    const _filter = dataSource.map(data => ({
+    const _filter = dataSource?.map(data => ({
       text: data[key],
       value: data[key]
     }));
@@ -60,7 +60,7 @@ function MainTable(props) {
   });
 
   const gridProps = { ...props };
-  gridProps.dataSource = dataSource;
+  gridProps.dataSource = dataSource || [];
 
   const total = gridProps.data.length;
 

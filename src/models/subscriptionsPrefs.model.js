@@ -10,16 +10,25 @@ import { history } from 'umi';
 import i18n from 'utils/i18n';
 import { monitorHistory } from 'utils/history';
 import { errorSaveMsg } from 'utils/message';
-import { addFeature, getAllPreferences, getFeature, updateFeature } from 'services/subscriptionsPrefs.service';
+import {
+  addFeature,
+  getFeature,
+  getFeatures,
+  updateFeature
+} from 'services/subscriptionsPrefs.service';
 import { setAs } from 'utils/object';
 
 const DEFAULT_STATE = {};
+
+const MODEL_NAME = 'subscriptionPrefsModel';
+const BASE_URL = '/admin/subscriptionPrefs';
+const ABILITY_FOR = 'subscriptionPrefs';
 
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'subscriptionPrefsModel',
+  namespace: MODEL_NAME,
   state: {
     ...DEFAULT_STATE,
     data: [],
@@ -28,7 +37,7 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      monitorHistory({ history, dispatch }, 'subscriptionPrefsModel');
+      monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
     }
@@ -36,18 +45,14 @@ export default dvaModelExtend(commonModel, {
   effects: {
 
     * query({ payload }, { put, call }) {
-      const { data = [] } = yield call(getAllPreferences);
-
-      yield put({
-        type: 'updateState',
-        payload: { data }
-      });
+      const { data = [] } = yield call(getFeatures);
+      yield put({ type: 'updateState', payload: { data } });
     },
 
     * newPreference({ payload }, { put }) {
       yield put({ type: 'cleanForm' });
 
-      history.push(`/admin/subscriptionPrefs/new`);
+      history.push(`${BASE_URL}/new`);
 
       yield put({
         type: 'updateState',
@@ -67,7 +72,7 @@ export default dvaModelExtend(commonModel, {
 
       if (isNew(preferenceId)) {
         // TODO (teamco): Do something.
-      } else if (ability.can('read', 'subscriptionPrefs')) {
+      } else if (ability.can('read', ABILITY_FOR)) {
 
         const preference = yield call(getFeature, { id: preferenceId });
 
@@ -82,7 +87,7 @@ export default dvaModelExtend(commonModel, {
           return yield put({
             type: 'toForm',
             payload: {
-              model: 'subscriptionPrefsModel',
+              model: MODEL_NAME,
               form: { ..._preference }
             }
           });
@@ -121,7 +126,7 @@ export default dvaModelExtend(commonModel, {
 
     * prepareToSave({ payload, params }, { call, select, put }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { selectedPreference, isEdit } = yield select(state => state.subscriptionPrefsModel);
+      const { selectedPreference, isEdit } = yield select(state => state[MODEL_NAME]);
       const {
         selectedByDefault,
         price,
@@ -135,7 +140,7 @@ export default dvaModelExtend(commonModel, {
         }
       } = payload;
 
-      if (user && ability.can('update', 'subscriptionPrefs')) {
+      if (user && ability.can('update', ABILITY_FOR)) {
 
         const metadata = {
           ...selectedPreference?.metadata,
@@ -160,18 +165,11 @@ export default dvaModelExtend(commonModel, {
             data.version = selectedPreference.version;
             const entity = yield call(updateFeature, { id: params.preference, data });
 
-            yield put({
-              type: 'isSaved',
-              payload: {
-                entity, isEdit,
-                entityType: i18n.t('route:subscriptionPref'),
-                * callback() {
-                  yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });
-                }
-              }
-            });
+            if (entity.exists) {
+              yield put({ type: 'updateState', payload: { touched: false } });
+            }
           } else {
-            errorSaveMsg(isEdit, i18n.t('route:subscriptionPref'));
+            errorSaveMsg(true, 'Preference');
           }
 
         } else {
@@ -184,17 +182,11 @@ export default dvaModelExtend(commonModel, {
 
           const entity = yield call(addFeature, { data });
 
-          yield put({
-            type: 'isSaved',
-            payload: {
-              entity, isEdit,
-              entityType: i18n.t('route:subscriptionPref'),
-              * callback() {
-                yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });
-                history.push(`/admin/subscriptionPrefs/${entity?.data?.id}`);
-              }
-            }
-          });
+          if (entity.exists) {
+            yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });
+
+            history.push(`${BASE_URL}/${entity?.data?.id}`);
+          }
         }
       } else {
 
