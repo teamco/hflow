@@ -52,15 +52,23 @@ const proxyPops = {
   ...debugProps(isDevelopment)
 };
 
-export const proxy = {
+const _proxy = {
   [`${API_NS}/${API.auth.getToken}`]: { ...proxyPops },
   [`${API_NS}/${API.features.save}`]: { ...proxyPops }
 };
 
-console.log('\n\n==== CONFIG =====\n');
-console.log(colors.green('NODE_ENV:'), NODE_ENV);
-console.log(colors.green('UMI_VERSION:'), UMI_VERSION);
-isDevelopment && console.log(colors.green('PROXY:'), proxy);
-console.log('\n==== /CONFIG =====\n\n');
+/**
+ * @export
+ * @constant
+ * @return {{[p: string]: {onProxyRes(*, *, *): void, onError(*, *, *): void, logLevel: string, changeOrigin: boolean, secure: boolean, ws: boolean, pathRewrite(*, *): void, onProxyReq(*, *, *): void, target: string}|{onProxyRes(*, *, *): void, onError(*, *, *): void, logLevel: string, changeOrigin: boolean, secure: boolean, ws: boolean, pathRewrite(*, *): void, onProxyReq(*, *, *): void, target: string}}}
+ */
+export const getProxy = () => {
+  console.log('\n\n==== CONFIG =====\n');
+  console.log(colors.green('NODE_ENV:'), NODE_ENV);
+  console.log(colors.green('UMI_VERSION:'), UMI_VERSION);
+  isDevelopment && console.log(colors.green('PROXY:'), _proxy);
+  console.log('\n==== /CONFIG =====\n\n');
 
+  return _proxy;
+};
 
