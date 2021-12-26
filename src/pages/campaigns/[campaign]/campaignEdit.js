@@ -185,6 +185,11 @@ export const campaignEdit = (props) => {
                 fields={entityForm}
                 scrollToFirstError={true}
                 onFinish={onFinish}
+                initialValues={{
+                  discountType: t('currency'),
+                  discount: 0,
+                  durationType: "week"
+                }}
                 onFieldsChange={onFieldsChange}>
             <CampaignInfo {...campaignInfoProps} />
             <Info {...infoProps} />

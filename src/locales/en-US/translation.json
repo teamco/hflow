@@ -324,7 +324,14 @@
     "type": "Campaign Type",
     "feature": "Feature",
     "startAt": "Start At",
-    "duration": "Duration"
+    "duration": "Duration",
+    "activated": "Activated",
+    "hold": "Hold",
+    "activate": "Activate Duration",
+    "title": "Title",
+    "description": "Description",
+    "isDiscount": "Activate Discount"
+
   },
   "subscription": {
     "type": "Subscription Type",
