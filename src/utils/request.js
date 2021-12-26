@@ -165,7 +165,12 @@ function xhr(opts, errorHandler = stub, fallbackUrl) {
   delete opts.url;
   delete opts.method;
 
-  return request[method](url, opts).then((res) => ({ data: { ...res }, exists: !!res?.id })).catch((error) => {
+  return request[method](url, opts).then((res) => {
+    return {
+      data: res,
+      exists: !!res?.id
+    };
+  }).catch((error) => {
     const _st = setTimeout(() => {
       if (fallbackUrl && !pathname.match(new RegExp(fallbackUrl))) {
         history.replace(`${fallbackUrl}?referrer=${encodeURIComponent(pathname)}`);
