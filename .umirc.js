@@ -1,7 +1,7 @@
-import {defineConfig} from 'umi';
-import {routes} from './routes';
-import {getProxy} from './proxy';
-import {alias} from './alias';
+import { defineConfig } from 'umi';
+import { routes } from './routes';
+import { getProxy } from './proxy';
+import { alias } from './alias';
 
 export default defineConfig({
   crossorigin: true,

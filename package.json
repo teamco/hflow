@@ -5,6 +5,7 @@
   "scripts": {
     "start:linux": "cross-env PORT=8003 umi dev",
     "start:windows": "cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider PORT=8003 umi dev",
+    "yarn:latest": "yarn set version latest",
     "yarn:update": "yarn set version 3.1.0",
     "umi:clean": "node ./preinstall.js",
     "build": "umi build",

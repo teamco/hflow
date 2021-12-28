@@ -1,14 +1,13 @@
-import { withRouter, connect } from 'umi';
+import { connect } from 'umi';
 import { LandingLayout } from './landing.layout';
 
-export default withRouter(connect(
+export default connect(
     ({ appModel, authModel, loading }) => ({
       appModel,
       authModel,
       loading
     }),
     (dispatch) => ({
-      dispatch,
       onNotification() {
         dispatch({ type: 'appModel/notification' });
       },
@@ -18,5 +17,5 @@ export default withRouter(connect(
       onUpdateDocumentMeta(meta) {
         dispatch({ type: 'appModel/updateDocumentMeta', payload: { meta } });
       }
-    }))(LandingLayout)
+    })(LandingLayout)
 );
