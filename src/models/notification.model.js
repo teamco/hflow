@@ -8,6 +8,7 @@ import i18n from 'utils/i18n';
 import { history } from 'umi';
 import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
 import { STATUS } from 'utils/message';
+import { monitorHistory } from 'utils/history';
 
 /**
  * @export
@@ -25,9 +26,11 @@ export default dvaModelExtend(commonModel, {
     }
   },
   subscriptions: {
-    setupHistory(setup) {
+    setupHistory({ history, dispatch }) {
+      return monitorHistory({ history, dispatch }, 'notificationModel');
     },
     setup({ dispatch }) {
+      // TODO (teamco): Do something.
     }
   },
   effects: {

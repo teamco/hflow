@@ -1,51 +1,55 @@
-import _ from 'lodash';
-import { fbDelete, fbReadAll, fbReadBy } from 'services/firebase.service';
+import request from 'utils/request';
+import { xhrRequest } from 'services/authentication.service';
+import { API } from 'services/config/api.config';
 
 /**
+ * @async
  * @export
- * @return {Promise<{data: *[]}>}
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const getAllPreferences = async () => {
-  const preferences = await fbReadAll({ collection: 'subscriptionPrefs' });
-
-  let data = [];
-
-  preferences.forEach(doc => {
-    const _data = doc.data();
-    data.push(_.merge(_data, { id: doc.id }));
+export const getFeatures = async () => {
+  return await xhrRequest({
+    url: API.features.store,
+    method: request.METHOD.get
   });
-
-  return { data };
 };
 
 /**
+ * @async
  * @export
- * @param {string} [field]
- * @param value
- * @return {{docId, data}}
+ * @param data
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const getAllSubscriptionsBy = async ({ field = 'subscriptionType', value }) => {
-  const subscriptions = await fbReadBy({
-    collection: 'subscriptions',
-    field,
-    value
+export const getFeature = async ({ id }) => {
+  return await xhrRequest({
+    url: API.features.get,
+    method: request.METHOD.get,
+    featureKey: id
   });
-
-  let data = [];
-
-  subscriptions.forEach(doc => {
-    const _data = doc.data();
-    data.push(_.merge(_data, { id: doc.id }));
-  });
-  return { data };
 };
 
 /**
+ * @async
  * @export
- * @param doc
- * @return {Promise<void>}
+ * @param {string} id
+ * @param data
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const deleteSubscription = async ({ doc }) => {
-  await fbDelete({ collection: 'subscriptions', doc });
+export const updateFeature = async ({ id, data }) => {
+  return await xhrRequest({
+    url: API.features.get,
+    method: request.METHOD.put,
+    featureKey: id,
+    data
+  });
 };
 
+/**
+ * @async
+ * @export
+ * @param data
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ */
+export const addFeature = async ({ data }) => {
+  return await xhrRequest({ url: API.features.store, data });
+};

@@ -16,6 +16,7 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setup({ dispatch }) {
+      // TODO (teamco): Do something.
     }
   },
   effects: {

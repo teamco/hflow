@@ -1,13 +1,13 @@
-import {defineConfig} from 'umi';
-import {routes} from './routes';
-import {proxy} from './proxy';
-import {alias} from './alias';
+import { defineConfig } from 'umi';
+import { routes } from './routes';
+import { getProxy } from './proxy';
+import { alias } from './alias';
 
 export default defineConfig({
   crossorigin: true,
   alias,
   routes,
-  proxy,
+  proxy: getProxy(),
   favicon: '/assets/favicon.png',
   dynamicImport: {
     loading: '@/components/Loader'

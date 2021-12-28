@@ -2,6 +2,7 @@
 import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from 'models/common.model';
+import { monitorHistory } from 'utils/history';
 
 /**
  * @export
@@ -12,7 +13,8 @@ export default dvaModelExtend(commonModel, {
     data: []
   },
   subscriptions: {
-    setupHistory(setup) {
+    setupHistory({ history, dispatch }) {
+      return monitorHistory({ history, dispatch }, 'pageModel');
     },
     setup({ dispatch }) {
       dispatch({ type: 'query' });
@@ -20,6 +22,7 @@ export default dvaModelExtend(commonModel, {
   },
   effects: {
     * query({ payload }, { put, select }) {
+      // TODO (teamco): Do something.
     }
   },
   reducers: {}

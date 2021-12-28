@@ -45,20 +45,23 @@ export default dvaModelExtend(commonModel, {
     waitBeforeLogin: 5000
   },
   subscriptions: {
+
     setupHistory(setup) {
       const { dispatch, history } = setup;
 
-      history.listen(data => {
+      return history.listen(data => {
         // In case of route replace
         const location = data.pathname ? { ...data } : { ...data.location };
 
         dispatch({ type: 'updateState', payload: { location } });
       });
     },
+
     setup({ dispatch }) {
       dispatch({ type: 'query' });
     }
   },
+
   effects: {
 
     * query({ payload }, { put }) {

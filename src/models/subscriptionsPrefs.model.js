@@ -4,21 +4,31 @@ import dvaModelExtend from 'dva-model-extend';
 import { commonModel } from 'models/common.model';
 import { isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
-import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
+import { fbFindById } from 'services/firebase.service';
 import { history } from 'umi';
 
+import i18n from 'utils/i18n';
 import { monitorHistory } from 'utils/history';
 import { errorSaveMsg } from 'utils/message';
-import { getAllPreferences } from 'services/subscriptionsPrefs.service';
+import {
+  addFeature,
+  getFeature,
+  getFeatures,
+  updateFeature
+} from 'services/subscriptionsPrefs.service';
 import { setAs } from 'utils/object';
 
 const DEFAULT_STATE = {};
+
+const MODEL_NAME = 'subscriptionPrefsModel';
+const BASE_URL = '/admin/subscriptionPrefs';
+const ABILITY_FOR = 'subscriptionPrefs';
 
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'subscriptionPrefsModel',
+  namespace: MODEL_NAME,
   state: {
     ...DEFAULT_STATE,
     data: [],
@@ -27,26 +37,23 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      monitorHistory({ history, dispatch }, 'subscriptionPrefsModel');
+      return monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
+      // TODO (teamco): Do something.
     }
   },
   effects: {
 
     * query({ payload }, { put, call }) {
-      const { data = [] } = yield call(getAllPreferences);
-
-      yield put({
-        type: 'updateState',
-        payload: { data }
-      });
+      const { data = [] } = yield call(getFeatures);
+      yield put({ type: 'updateState', payload: { data } });
     },
 
     * newPreference({ payload }, { put }) {
       yield put({ type: 'cleanForm' });
 
-      history.push(`/admin/subscriptionPrefs/new`);
+      history.push(`${BASE_URL}/new`);
 
       yield put({
         type: 'updateState',
@@ -66,15 +73,12 @@ export default dvaModelExtend(commonModel, {
 
       if (isNew(preferenceId)) {
         // TODO (teamco): Do something.
-      } else if (ability.can('read', 'subscriptionPrefs')) {
+      } else if (ability.can('read', ABILITY_FOR)) {
 
-        const preference = yield call(fbFindById, {
-          collection: 'subscriptionPrefs',
-          doc: preferenceId
-        });
+        const preference = yield call(getFeature, { id: preferenceId });
 
         if (preference.exists) {
-          const selectedPreference = { ...preference.data(), ...{ id: preference.id } };
+          const selectedPreference = { ...preference.data };
 
           yield put({ type: 'updateState', payload: { selectedPreference } });
 
@@ -84,7 +88,7 @@ export default dvaModelExtend(commonModel, {
           return yield put({
             type: 'toForm',
             payload: {
-              model: 'subscriptionPrefsModel',
+              model: MODEL_NAME,
               form: { ..._preference }
             }
           });
@@ -123,7 +127,7 @@ export default dvaModelExtend(commonModel, {
 
     * prepareToSave({ payload, params }, { call, select, put }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { selectedPreference, isEdit } = yield select(state => state.subscriptionPrefsModel);
+      const { selectedPreference, isEdit } = yield select(state => state[MODEL_NAME]);
       const {
         selectedByDefault,
         price,
@@ -137,56 +141,52 @@ export default dvaModelExtend(commonModel, {
         }
       } = payload;
 
-      if (user && ability.can('update', 'subscriptionPrefs')) {
-
-        const userRef = getRef({
-          collection: 'users',
-          doc: user.id
-        });
+      if (user && ability.can('update', ABILITY_FOR)) {
 
         const metadata = {
           ...selectedPreference?.metadata,
-          updatedAt: +(new Date),
-          updatedByRef: userRef
+          updatedByRef: user.id
         };
 
         // Not mandatory/defined fields preparation before saving.
         const data = {
+          id: selectedPreference.id,
+          name: i18n.t(title),
           selectedByDefault,
           price, type, currency,
           translateKeys: {
             description: setAs(description, null),
             title, on, off
-          }
+          },
+          metadata
         };
 
         if (isEdit) {
-          selectedPreference && params.preference === selectedPreference.id ?
-              yield call(fbUpdate, { collection: 'subscriptionPrefs', doc: selectedPreference.id, data }) :
-              errorSaveMsg(true, 'Preference');
+          if (selectedPreference && params.preference === selectedPreference.id) {
+            data.version = selectedPreference.version;
+            const entity = yield call(updateFeature, { id: params.preference, data });
 
-          yield put({ type: 'updateState', payload: { touched: false } });
+            if (entity.exists) {
+              yield put({ type: 'updateState', payload: { touched: false } });
+            }
+          } else {
+            errorSaveMsg(true, 'Preference');
+          }
 
         } else {
 
           data.metadata = {
             ...metadata,
             createdAt: metadata.updatedAt,
-            createdByRef: userRef
+            createdByRef: user.id
           };
 
-          const entity = yield call(fbAdd, { collection: 'subscriptionPrefs', data });
+          const entity = yield call(addFeature, { data });
 
-          if (entity?.docId) {
-            yield put({
-              type: 'updateState',
-              payload: {
-                touched: false,
-                isEdit: true
-              }
-            });
+          if (entity.exists) {
+            yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });
 
-            history.push(`/admin/subscriptionPrefs/${entity.docId}`);
+            history.push(`${BASE_URL}/${entity?.data?.id}`);
           }
         }
       } else {

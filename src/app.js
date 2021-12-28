@@ -7,9 +7,10 @@ import { message } from 'antd';
  */
 export const dva = {
   config: {
-    //onAction: createLogger(),
+    // onAction: createLogger(),
     onError(e) {
-      message.error(e.message, 3).then(() => {
+      message.error(e.message, 3).then((error) => {
+        console.warn(error);
       });
     }
   }

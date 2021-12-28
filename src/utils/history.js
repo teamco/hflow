@@ -6,7 +6,7 @@
 export const monitorHistory = (setup, namespace) => {
   const { history, dispatch } = setup;
 
-  history.listen(data => {
+  return history.listen(data => {
     // In case of route replace
     const _location = data.pathname ? { ...data } : { ...data.location };
     Object.keys(_location).forEach(key => {
