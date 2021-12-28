@@ -79,5 +79,8 @@
     "rimraf": "^3.0.2",
     "yorkie": "^2.0.0"
   },
-  "packageManager": "yarn@3.1.0"
+  "packageManager": "yarn@3.1.0",
+  "engines": {
+    "node": "14.x"
+  }
 }
