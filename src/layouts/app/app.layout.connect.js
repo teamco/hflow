@@ -1,6 +1,5 @@
 import { memo } from 'react';
-import { history, withRouter } from 'umi';
-import { connect } from 'dva';
+import { history, withRouter, connect } from 'umi';
 import { withTranslation } from 'react-i18next';
 import { AppLayout } from './app.layout';
 

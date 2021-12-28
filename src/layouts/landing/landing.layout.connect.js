@@ -1,5 +1,4 @@
-import { withRouter } from 'umi';
-import { connect } from 'dva';
+import { withRouter, connect } from 'umi';
 import { LandingLayout } from './landing.layout';
 
 export default withRouter(connect(

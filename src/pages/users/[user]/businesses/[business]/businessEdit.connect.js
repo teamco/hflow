@@ -1,5 +1,4 @@
-import { connect } from 'dva';
-import { history } from 'umi';
+import { history, connect } from 'umi';
 import { withTranslation } from 'react-i18next';
 
 import { businessEdit } from './businessEdit';

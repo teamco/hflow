@@ -1,6 +1,5 @@
-import { connect } from 'dva';
 import { withTranslation } from 'react-i18next';
-import { history } from 'umi';
+import { history, connect } from 'umi';
 
 import { campaignEdit } from './campaignEdit';
 

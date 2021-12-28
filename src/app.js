@@ -15,11 +15,11 @@ export const dva = {
   }
 };
 
-export function onRouteChange(router) {
+// export function onRouteChange(router) {
   // const { matchedRoutes } = router;
   // const dispatch = useDispatch();
   // dispatch({
   //   type: 'appModel/updateReferrer',
   //   payload: { referrer: document.referrer }
   // });
-}
+// }

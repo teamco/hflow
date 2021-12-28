@@ -1,4 +1,4 @@
-import { connect } from 'dva';
+import { connect } from 'umi';
 import { message } from 'antd';
 import i18n from 'utils/i18n';
 

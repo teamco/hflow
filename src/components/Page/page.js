@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from 'dva';
-import { Prompt } from 'umi';
+import { Prompt, connect } from 'umi';
 import { Layout, Row, Spin } from 'antd';
 import classnames from 'classnames';
 import { withTranslation } from 'react-i18next';
