@@ -3,6 +3,7 @@ import React from 'react';
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 import { commonModel } from 'models/common.model';
+import { monitorHistory } from 'utils/history';
 
 /**
  * @export
@@ -21,6 +22,7 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setupHistory(setup) {
+      return monitorHistory({ history, dispatch }, 'landingModel');
     },
     setup({ dispatch }) {
       dispatch({ type: 'query' });

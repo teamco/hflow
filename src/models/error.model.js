@@ -13,9 +13,6 @@ export default dvaModelExtend(commonModel, {
     data: []
   },
   subscriptions: {
-    setupHistory(setup) {
-      monitorHistory(setup, 'errorModel');
-    },
     setup({ dispatch }) {
       dispatch({ type: 'query' });
     }

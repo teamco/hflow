@@ -46,9 +46,10 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      monitorHistory({ history, dispatch }, 'subscriptionModel');
+      return monitorHistory({ history, dispatch }, 'subscriptionModel');
     },
     setup({ dispatch }) {
+      // TODO (teamco): Do something.
     }
   },
   effects: {

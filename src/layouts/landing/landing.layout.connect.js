@@ -1,8 +1,7 @@
 import { connect } from 'umi';
 import { LandingLayout } from './landing.layout';
 
-export default connect(
-    ({ appModel, authModel, loading }) => ({
+export default connect(({ appModel, authModel, loading }) => ({
       appModel,
       authModel,
       loading

@@ -6,6 +6,7 @@ import { fbAdd, fbSignOut, fbUpdate } from 'services/firebase.service';
 import { findUser, gravatarUrl, handleUserSessionTimeout, updateFbUserEmail } from 'services/user.service';
 import { defineAbilityFor } from 'utils/auth/ability';
 import { defineInstance } from 'utils/instance';
+import { monitorHistory } from '../utils/history';
 
 /**
  * @export
@@ -22,11 +23,14 @@ export default dvaModelExtend(commonModel, {
     ability: null
   },
   subscriptions: {
-    setupHistory(setup) {
-    },
-    setup({ dispatch }) {
-    }
-  },
+    subscriptions: {
+      setupHistory({ history, dispatch }) {
+        return monitorHistory({ history, dispatch }, 'authModel');
+      },
+      setup({ dispatch }) {
+        // TODO (teamco): Do something.
+      }
+    }  },
 
   effects: {
 
