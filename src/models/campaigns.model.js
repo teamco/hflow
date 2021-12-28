@@ -28,7 +28,7 @@ export default dvaModelExtend(commonModel, {
     subscriptions: [],
     data: []
   },
-  campaigns: {
+  subscriptions: {
     setupHistory({ history, dispatch }) {
       return monitorHistory({ history, dispatch }, 'campaignModel');
     },

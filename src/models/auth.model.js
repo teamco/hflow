@@ -23,14 +23,13 @@ export default dvaModelExtend(commonModel, {
     ability: null
   },
   subscriptions: {
-    subscriptions: {
-      setupHistory({ history, dispatch }) {
-        return monitorHistory({ history, dispatch }, 'authModel');
-      },
-      setup({ dispatch }) {
-        // TODO (teamco): Do something.
-      }
-    }  },
+    setupHistory({ history, dispatch }) {
+      return monitorHistory({ history, dispatch }, 'authModel');
+    },
+    setup({ dispatch }) {
+      // TODO (teamco): Do something.
+    }
+  },
 
   effects: {
 

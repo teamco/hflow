@@ -13,7 +13,7 @@ export default dvaModelExtend(commonModel, {
     data: []
   },
   subscriptions: {
-    setupHistory(setup) {
+    setupHistory({ history, dispatch }) {
       return monitorHistory({ history, dispatch }, 'pageModel');
     },
     setup({ dispatch }) {
@@ -22,6 +22,7 @@ export default dvaModelExtend(commonModel, {
   },
   effects: {
     * query({ payload }, { put, select }) {
+      // TODO (teamco): Do something.
     }
   },
   reducers: {}

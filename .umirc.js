@@ -15,8 +15,6 @@ export default defineConfig({
   dynamicImportSyntax: {},
   fastRefresh: {},
   dva: {
-    disableModelsReExport: true,
-    lazyLoad: true,
     immer: true,
     hmr: true
   },

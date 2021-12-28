@@ -1,12 +1,9 @@
 import { connect } from 'umi';
 import { LandingLayout } from './landing.layout';
 
-export default connect(({ appModel, authModel, loading }) => ({
-      appModel,
-      authModel,
-      loading
-    }),
+export default connect(({ appModel, authModel, loading }) => ({ appModel, authModel, loading }),
     (dispatch) => ({
+      dispatch,
       onNotification() {
         dispatch({ type: 'appModel/notification' });
       },
@@ -16,5 +13,4 @@ export default connect(({ appModel, authModel, loading }) => ({
       onUpdateDocumentMeta(meta) {
         dispatch({ type: 'appModel/updateDocumentMeta', payload: { meta } });
       }
-    })(LandingLayout)
-);
+    }))(LandingLayout);

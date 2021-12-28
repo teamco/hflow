@@ -21,7 +21,7 @@ export default dvaModelExtend(commonModel, {
     }
   },
   subscriptions: {
-    setupHistory(setup) {
+    setupHistory({ history, dispatch }) {
       return monitorHistory({ history, dispatch }, 'landingModel');
     },
     setup({ dispatch }) {
