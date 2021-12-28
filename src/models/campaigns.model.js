@@ -8,11 +8,9 @@ import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
 import { getAllCampaigns } from 'services/campaigns.service';
 import { history } from 'umi';
 import { monitorHistory } from 'utils/history';
-import i18n from 'utils/i18n';
 import { errorSaveMsg } from 'utils/message';
-import { setAs } from 'utils/object';
-import { getAllSubscriptions } from '../services/subscriptions.service';
-import { getAllPreferences } from '../services/subscriptionsPrefs.service';
+import { getAllSubscriptions } from 'services/subscriptions.service';
+// import { getAllPreferences } from 'services/subscriptionsPrefs.service';
 
 const DEFAULT_STATE = {
   campaigns: []
@@ -47,21 +45,21 @@ export default dvaModelExtend(commonModel, {
       });
     },
 
-    * campaignSubscriptions({ payload }, {put, call}) {
-        const {data: subscriptions = []}  = yield call(getAllSubscriptions);
-        const {data: preferences = [] } = yield call(getAllPreferences);
-
-        const subscriptionPreferences = subscriptions.map((item) => {
-          const prefsNotIncluded = preferences.filter(filterPref => {
-            return !item.preferences.includes(filterPref.id);
-          });
-          return {type: item.subscriptionType, preferences: prefsNotIncluded, id: item.id};
-        })
-
-        yield put({
-          type: 'updateState',
-          payload: { subscriptions: subscriptionPreferences }
+    * campaignSubscriptions({ payload }, { put, call }) {
+      const { data: subscriptions = [] } = yield call(getAllSubscriptions);
+      // const {data: preferences = [] } = yield call(getAllPreferences);
+      const preferences = [];
+      const subscriptionPreferences = subscriptions.map((item) => {
+        const prefsNotIncluded = preferences.filter(filterPref => {
+          return !item.preferences.includes(filterPref.id);
         });
+        return { type: item.subscriptionType, preferences: prefsNotIncluded, id: item.id };
+      });
+
+      yield put({
+        type: 'updateState',
+        payload: { subscriptions: subscriptionPreferences }
+      });
 
     },
 

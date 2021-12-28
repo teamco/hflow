@@ -6,7 +6,7 @@ import { isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
 import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
 import { getAllSubscriptions } from 'services/subscriptions.service';
-import { getAllPreferences } from 'services/subscriptionsPrefs.service';
+// import { getAllPreferences } from 'services/subscriptionsPrefs.service';
 import { history } from 'umi';
 import { COLORS } from 'utils/colors';
 import { monitorHistory } from 'utils/history';
@@ -131,8 +131,8 @@ export default dvaModelExtend(commonModel, {
     },
 
     * subscriptionPrefs(_, { call, put }) {
-      const { data = [] } = yield call(getAllPreferences);
-      yield put({ type: 'updateState', payload: { preferences: data } });
+      // const { data = [] } = yield call(getAllPreferences);
+      yield put({ type: 'updateState', payload: { preferences: [] } });
     },
 
     * subscriptionTypes(_, { call, put }) {
