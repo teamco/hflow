@@ -15,7 +15,19 @@ import { getAllSubscriptions } from '../services/subscriptions.service';
 import { getAllPreferences } from '../services/subscriptionsPrefs.service';
 
 const DEFAULT_STATE = {
-  campaigns: []
+  campaigns: [],
+  discountTypes: {
+    percentage: '%',
+    currency: i18n.t('currency')
+  },
+  durationTypes: {
+    hour: 'hour',
+    day: 'day',
+    week: "week",
+    month: 'month',
+    year: 'year',
+    permanent: 'permanent'
+  }
 };
 
 /**
@@ -28,7 +40,7 @@ export default dvaModelExtend(commonModel, {
     subscriptions: [],
     data: []
   },
-  campaigns: {
+  subscriptions: {
     setupHistory({ history, dispatch }) {
       monitorHistory({ history, dispatch }, 'campaignModel');
     },

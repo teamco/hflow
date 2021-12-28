@@ -56,6 +56,7 @@ export const campaignEdit = (props) => {
     campaignTypes,
     campaignPeriod,
     discountTypes,
+    durationTypes,
     businessUsers,
     tags,
     isEdit,
@@ -88,7 +89,8 @@ export const campaignEdit = (props) => {
     campaignPeriod,
     discountTypes,
     businessUsers,
-    subscriptions
+    subscriptions,
+    durationTypes
   };
 
   const campaignPrefsProps = {

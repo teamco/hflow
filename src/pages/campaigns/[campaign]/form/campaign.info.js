@@ -35,11 +35,17 @@ export const CampaignInfo = (props) => {
   const _isDuration = formRef.getFieldValue('isDuration');
 
   useEffect(() => {
-    setDiscountType(_discountType)
-    setDurationType(_durationType)
-    setIsDiscount(_isDiscount)
-    setIsDuration(_isDuration)
-  }, [_discountType, _durationType, _isDiscount, _isDuration]);
+    setDiscountType(_discountType);
+    setIsDiscount(_isDiscount);
+  }, [_discountType, _isDiscount]);
+
+  useEffect(() => {
+    setDurationType(_durationType);
+    setIsDuration(_isDuration);
+  }, [_durationType, _isDuration]);
+
+  console.log(durationType, isDuration,  'is Duration' );
+  console.log(discountType, isDiscount,  'is Discount' );
 
   /**
    * @constant
@@ -81,14 +87,13 @@ export const CampaignInfo = (props) => {
   const selectDiscountBefore = (
       <Select style={{ width: 90 }}
               value={discountType}
-              disabled={disabled}
+              disabled={disabled && !isDiscount}
               onChange={handleFormUpdate}>
-        <Option key={'percentage'} value={discountTypes?.percentage}>
-          {discountTypes?.percentage}
-        </Option>
-        <Option key={'currency'} value={discountTypes?.currency}>
-          {discountTypes?.currency}
-        </Option>
+        {Object.keys(discountTypes).map((type, idx) => (
+              <Option key={idx} value={discountTypes[type]}>
+                {discountTypes[type]}
+              </Option>
+          ))}
       </Select>
   );
 
@@ -158,7 +163,7 @@ export const CampaignInfo = (props) => {
                        label={t('campaign:duration')}
                        name={'duration'}
                        form={formRef}
-                       disabled={isDuration ? false : true}
+                       disabled={disabled && !isDuration}
                        config={{ rules: [{ required: false }] }}/>
         </div>
         <div>
@@ -177,7 +182,7 @@ export const CampaignInfo = (props) => {
                        label={t('subscription:discount')}
                        name={'discount'}
                        form={formRef}
-                       disabled={isDiscount ? false : true}
+                       disabled={disabled && !isDiscount}
                        config={{ rules: [{ required: false }] }}/>
         </div>
         <div>
