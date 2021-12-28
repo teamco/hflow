@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Input, InputNumber, Select, Slider, Switch } from 'antd';
+import { Input, InputNumber, Select, DatePicker, Switch } from 'antd';
 import FormComponents from 'components/Form';
 
 const { GenericPanel, MandatoryTextarea } = FormComponents;
@@ -17,28 +17,42 @@ export const CampaignInfo = (props) => {
     t,
     formRef,
     disabled,
-    subscriptions
+    subscriptions,
+    discountTypes,
+    durationTypes
   } = props;
 
-  // const {
-  //   subscriptions = []
-  // } = subscriptionModel;
-
-  useEffect(() => {
-
-  });
-
+  const [discountType, setDiscountType] = useState(formRef.getFieldValue('discountType'));
+  const [durationType, setDurationType] = useState(formRef.getFieldValue('durationType'));
   const [subscriptionId, setSubscriptionId] = useState(false);
   const [preferencesList, setPreferencesList] = useState([]);
+  const [isDiscount, setIsDiscount] = useState(false);
+  const [isDuration, setIsDuration] = useState(false);
+
+  const _discountType = formRef.getFieldValue('discountType');
+  const _durationType = formRef.getFieldValue('durationTypes');
+  const _isDiscount = formRef.getFieldValue('isDiscount');
+  const _isDuration = formRef.getFieldValue('isDuration');
+
+  useEffect(() => {
+    setDiscountType(_discountType)
+    setDurationType(_durationType)
+    setIsDiscount(_isDiscount)
+    setIsDuration(_isDuration)
+  }, [_discountType, _durationType, _isDiscount, _isDuration]);
 
   /**
    * @constant
    * @param {string} value
    */
-  // const handleFormUpdate = value => {
-  //   formRef.setFieldsValue({ discountType: value });
-  //   setDiscountType(value);
-  // };
+  const handleFormUpdate = value => {
+    formRef.setFieldsValue({ discountType: value });
+    setDiscountType(value);
+  };
+  const handleDurationFormUpdate = value => {
+    formRef.setFieldsValue({ durationType: value });
+    setDurationType(value);
+  };
 
   const handleSubscriptionType = (id) => {
       setSubscriptionId(id);
@@ -60,6 +74,45 @@ export const CampaignInfo = (props) => {
     return subscription;
   }
 
+  /**
+   * @constant
+   * @type {JSX.Element}
+   */
+  const selectDiscountBefore = (
+      <Select style={{ width: 90 }}
+              value={discountType}
+              disabled={disabled}
+              onChange={handleFormUpdate}>
+        <Option key={'percentage'} value={discountTypes?.percentage}>
+          {discountTypes?.percentage}
+        </Option>
+        <Option key={'currency'} value={discountTypes?.currency}>
+          {discountTypes?.currency}
+        </Option>
+      </Select>
+  );
+
+  /**
+   * @constant
+   * @type {JSX.Element}
+   */
+  const selectDurationBefore = (
+      <Select style={{ width: 90 }}
+              value={durationType}
+              disabled={disabled}
+              onChange={handleDurationFormUpdate}>
+        <Option key={'day'} value={durationTypes?.day}>
+          {durationTypes?.day}
+        </Option>
+        <Option key={'week'} value={durationTypes?.week}>
+          {durationTypes?.week}
+        </Option>
+        <Option key={'month'} value={durationTypes?.month}>
+          {durationTypes?.month}
+        </Option>
+      </Select>
+  );
+
   return (
       <GenericPanel header={t('campaign:info')}
                     name={'info'}
@@ -79,7 +132,7 @@ export const CampaignInfo = (props) => {
             ))}
           </Select>
           <Select
-              name={'subscriptionPref'}
+              name={'preferences'}
               mode="multiple"
               label={t('subscription:preferences')}
               allowClear
@@ -95,26 +148,61 @@ export const CampaignInfo = (props) => {
         </div>
         <div>
           <Switch disabled={disabled}
-                  checkedChildren={t('actions:yes')}
-                  unCheckedChildren={t('actions:no')}/>
-          <Input type={'text'}
-                 label={t('campaign:duration')}
-                 name={'duration'}
-                 form={formRef}
-                 disabled={disabled}
-                 config={{ rules: [{ required: true }] }}/>
+                  name={'isDuration'}
+                  label={t('campaign:activate')}
+                  config={{ valuePropName: 'checked' }}
+                  form={formRef}
+                  checkedChildren={t('campaign:activated')}
+                  unCheckedChildren={t('campaign:hold')} />
+          <InputNumber addonBefore={selectDurationBefore}
+                       label={t('campaign:duration')}
+                       name={'duration'}
+                       form={formRef}
+                       disabled={isDuration ? false : true}
+                       config={{ rules: [{ required: false }] }}/>
         </div>
         <div>
-          <Switch
-                  disabled={disabled}
-                  checkedChildren={t('actions:yes')}
-                  unCheckedChildren={t('actions:no')}/>
+          <></>
+          <DatePicker name={'startAt'} label={t('campaign:startAt')} />
+        </div>
+        <div>
+          <Switch disabled={disabled}
+                  name={'isDiscount'}
+                  label={t('campaign:isDiscount')}
+                  config={{ valuePropName: 'checked' }}
+                  form={formRef}
+                  checkedChildren={t('campaign:activated')}
+                  unCheckedChildren={t('campaign:hold')} />
+          <InputNumber addonBefore={selectDiscountBefore}
+                       label={t('subscription:discount')}
+                       name={'discount'}
+                       form={formRef}
+                       disabled={isDiscount ? false : true}
+                       config={{ rules: [{ required: false }] }}/>
+        </div>
+        <div>
           <Input type={'text'}
-                 label={t('campaign:startAt')}
-                 name={'statDay'}
+                 label={t('campaign:title')}
+                 name={'title'}
                  form={formRef}
                  disabled={disabled}
-                 config={{ rules: [{ required: true }] }}/>
+                 config={{ rules: [{ required: false }] }} />
+          <Input type={'text'}
+                 label={t('campaign:description')}
+                 name={'description'}
+                 form={formRef}
+                 disabled={disabled}
+                 config={{ rules: [{ required: false }] }}/>
+        </div>
+        <div>
+          <Input type={'hidden'}
+                 name={'discountType'}
+                 form={formRef}
+                 disabled={disabled}/>
+          <Input type={'hidden'}
+                 name={'durationType'}
+                 form={formRef}
+                 disabled={disabled}/>
         </div>
       </GenericPanel>
   );

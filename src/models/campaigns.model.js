@@ -143,13 +143,6 @@ export default dvaModelExtend(commonModel, {
 
         let data = { ...payload, metadata };
 
-        // Not mandatory/defined fields preparation before saving.
-        data.analytics = setAs(data.analytics, false);
-        data.logoOnPartnersPage = setAs(data.logoOnPartnersPage, false);
-        data.profile = setAs(data.profile, false);
-        data.requestList = setAs(data.requestList, false);
-        data.tags = setAs(data.tags, []);
-
         if (isEdit) {
           selectedCampaign && params.subscription === selectedCampaign.id ?
               yield call(fbUpdate, { collection: 'campaign', doc: selectedCampaign.id, data }) :
