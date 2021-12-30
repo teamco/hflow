@@ -75,7 +75,7 @@ export const xhrRequest = async (props) => {
       [HEADER_TYPE.authorization]: getBearer(token),
       [HEADER_TYPE.contentType]: CONTENT_TYPE.json
     },
-    ...args
+    params: {...args}
   });
 
   return request.xhr({

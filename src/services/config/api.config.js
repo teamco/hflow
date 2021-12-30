@@ -58,6 +58,14 @@ export const API = {
   features: {
     get: 'features/:featureKey',
     store: 'features'
+  },
+  campaigns: {
+    get: 'campaigns/:campaignsKey',
+    store: 'campaigns'
+  },
+  subscriptions: {
+    get: 'subscriptions/:subscriptionKey',
+    store: 'subscriptions'
   }
 };
 

@@ -1,16 +1,21 @@
 import _ from 'lodash';
-import { fbDelete, fbReadAll, fbReadBy } from 'services/firebase.service';
+import { xhrRequest } from './authentication.service';
+import { API } from './config/api.config';
+import request from '../utils/request';
 
 /**
  * @export
  * @return {Promise<{data: *[]}>}
  */
 export const getAllSubscriptions = async () => {
-  const subscriptions = await fbReadAll({ collection: 'subscriptions' });
+  const subscriptions = await xhrRequest({
+    url: API.subscriptions.store,
+    method: request.METHOD.get
+  });
 
   let data = [];
 
-  subscriptions.forEach(doc => {
+  subscriptions?.data?.forEach(doc => {
     const _data = doc.data();
     data.push(_.merge(_data, { id: doc.id }));
   });
@@ -23,11 +28,11 @@ export const getAllSubscriptions = async () => {
  * @param value
  * @return {{docId, data}}
  */
-export const getAllSubscriptionsBy = async ({ field = 'subscriptionType', value }) => {
-  const subscriptions = await fbReadBy({
-    collection: 'subscriptions',
-    field,
-    value
+export const getSubscription = async ({ id }) => {
+  const subscriptions = await xhrRequest({
+    url: API.subscriptions.get,
+    method: request.METHOD.get,
+    subscriptionsKey: id
   });
 
   let data = [];
@@ -40,11 +45,30 @@ export const getAllSubscriptionsBy = async ({ field = 'subscriptionType', value 
 };
 
 /**
+ * @async
  * @export
- * @param doc
- * @return {Promise<void>}
+ * @param {string} id
+ * @param data
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const deleteSubscription = async ({ doc }) => {
-  await fbDelete({ collection: 'subscriptions', doc });
+export const updateSubscription = async ({ id, data }) => {
+  return await xhrRequest({
+    url: API.subscriptions.get,
+    method: request.METHOD.put,
+    subscriptionKey: id,
+    data
+  });
 };
+
+/**
+ * @async
+ * @export
+ * @param data
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ */
+export const addSubscription = async ({ data }) => {
+  return await xhrRequest({ url: API.subscriptions.store, data });
+};
+
+
 

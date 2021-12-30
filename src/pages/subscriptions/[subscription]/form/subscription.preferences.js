@@ -18,25 +18,25 @@ export const SubscriptionPreferences = (props) => {
     isEdit,
     formRef,
     disabled,
-    preferences = [],
+    features = [],
     selectedSubscription
   } = props;
 
   useEffect(() => {
-    [...preferences].forEach(pref => {
-      const value = (formRef.getFieldValue('preferences') || {})[pref.id];
+    [...features].forEach(pref => {
+      const value = (formRef.getFieldValue('features') || {})[pref.id];
       if (typeof value === 'undefined') {
-        formRef.setFieldsValue({ preferences: { [pref.id]: isEdit ? false : pref.selectedByDefault } });
+        formRef.setFieldsValue({ features: { [pref.id]: isEdit ? false : pref.selectedByDefault } });
       }
     });
-  }, [preferences, selectedSubscription]);
+  }, [features, selectedSubscription]);
 
   return (
       <GenericPanel header={t('subscription:preferences')}
-                    name={'preferences'}
-                    defaultActiveKey={['preferences']}>
+                    name={'features'}
+                    defaultActiveKey={['features']}>
         <div>
-          {sortBy(preferences, 'translateKeys.title', t).map((pref, idx) => {
+          {sortBy(features, 'translateKeys.title', t).map((pref, idx) => {
             const {
               title,
               description,
@@ -55,7 +55,7 @@ export const SubscriptionPreferences = (props) => {
                         config={{ valuePropName: 'checked' }}
                         checkedChildren={t(on)}
                         unCheckedChildren={t(off)}
-                        name={['preferences', pref.id]}/>
+                        name={['features', pref.id]}/>
             );
           })}
         </div>

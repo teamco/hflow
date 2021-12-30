@@ -5,12 +5,14 @@ import { commonModel } from 'models/common.model';
 import { isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
 import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
-import { getAllCampaigns } from 'services/campaigns.service';
+import { addCampaign, getAllCampaigns, getCampaign, updateCampaign } from 'services/campaigns.service';
 import { history } from 'umi';
+import i18n from 'utils/i18n';
 import { monitorHistory } from 'utils/history';
 import { errorSaveMsg } from 'utils/message';
 import { getAllSubscriptions } from 'services/subscriptions.service';
-// import { getAllPreferences } from 'services/subscriptionsPrefs.service';
+import { getFeatures } from '../services/subscriptionsPrefs.service';
+import { setAs } from '../utils/object';
 
 const DEFAULT_STATE = {
   campaigns: [],
@@ -58,9 +60,9 @@ export default dvaModelExtend(commonModel, {
     },
 
     * campaignSubscriptions({ payload }, { put, call }) {
+      const {type = 'Business'} = payload || {};
       const { data: subscriptions = [] } = yield call(getAllSubscriptions);
-      // const {data: preferences = [] } = yield call(getAllPreferences);
-      const preferences = [];
+      const {data: preferences = [] } = yield call(getFeatures, {type});
       const subscriptionPreferences = subscriptions.map((item) => {
         const prefsNotIncluded = preferences.filter(filterPref => {
           return !item.preferences.includes(filterPref.id);
@@ -100,10 +102,7 @@ export default dvaModelExtend(commonModel, {
         // TODO (teamco): Do something.
       } else if (ability.can('read', 'campaigns')) {
 
-        const campaign = yield call(fbFindById, {
-          collection: 'campaigns',
-          doc: campaignId
-        });
+        const campaign = yield call(getCampaign, { id: campaignId });
 
         if (campaign.exists) {
           const selectedCampaign = { ...campaign.data(), ...{ id: campaign.id } };
@@ -148,15 +147,33 @@ export default dvaModelExtend(commonModel, {
 
         const metadata = {
           ...selectedCampaign?.metadata,
-          updatedAt: +(new Date),
-          updatedByRef: userRef
+          updatedAt: +(new Date).toISOString(),
+          updatedByRef: user.id
         };
 
-        let data = { ...payload, metadata };
+        // prepare request
+        let data = {
+          name: setAs(payload.name, 'name'),
+          type: setAs(payload.type, 'business'),
+          featuresByRef: setAs(payload.featuresByRef, []),
+          picUrl: setAs(payload.picUrl, 'picUrl'),
+          subscriptionRef: setAs(payload.type, ''),
+          duration: setAs(payload.duration, null),
+          durationType: setAs(payload.durationType, 'asdas'),
+          discount:  setAs(payload.duration, null),
+          discountType: setAs(payload.discountType, 'asdas'),
+          startedAt: setAs(payload.startedAt, ''),
+          translateKeys: {
+            title: setAs(payload.title, 'asdasd'),
+            description: setAs(payload.description, 'asdasd'),
+          },
+          activated: setAs(payload.isActivated, false),
+          discounted: setAs(payload.isDiscount, false)
+        }
 
         if (isEdit) {
           selectedCampaign && params.subscription === selectedCampaign.id ?
-              yield call(fbUpdate, { collection: 'campaign', doc: selectedCampaign.id, data }) :
+              yield call(updateCampaign, { collection: 'campaign', doc: selectedCampaign.id, data }) :
               errorSaveMsg(true, 'campaign');
 
           yield put({ type: 'updateState', payload: { touched: false } });
@@ -168,11 +185,11 @@ export default dvaModelExtend(commonModel, {
             metadata: {
               ...metadata,
               createdAt: metadata.updatedAt,
-              createdByRef: userRef
+              createdByRef:  user.id
             }
           };
 
-          const entity = yield call(fbAdd, { collection: 'campaigns', data });
+          const entity = yield call(addCampaign, { data });
 
           if (entity?.docId) {
             yield put({

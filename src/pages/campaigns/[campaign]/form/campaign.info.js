@@ -123,7 +123,7 @@ export const CampaignInfo = (props) => {
                     name={'info'}
                     defaultActiveKey={['info']}>
         <div>
-          <Select name={'subscriptionType'}
+          <Select name={'type'}
                   form={formRef}
                   label={t('subscription:type')}
                   disabled={disabled}
@@ -137,7 +137,7 @@ export const CampaignInfo = (props) => {
             ))}
           </Select>
           <Select
-              name={'preferences'}
+              name={'featuresByRef'}
               mode="multiple"
               label={t('subscription:preferences')}
               allowClear
@@ -168,7 +168,7 @@ export const CampaignInfo = (props) => {
         </div>
         <div>
           <></>
-          <DatePicker name={'startAt'} label={t('campaign:startAt')} />
+          <DatePicker name={'startedAt'} label={t('campaign:startAt')} />
         </div>
         <div>
           <Switch disabled={disabled}

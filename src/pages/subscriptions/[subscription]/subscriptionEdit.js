@@ -51,7 +51,7 @@ export const subscriptionEdit = (props) => {
 
   const {
     entityForm,
-    preferences,
+    features,
     selectedSubscription,
     subscriptionTypes,
     subscriptionPeriod,
@@ -94,7 +94,7 @@ export const subscriptionEdit = (props) => {
     isEdit,
     formRef,
     disabled,
-    preferences,
+    features,
     selectedSubscription
   };
 

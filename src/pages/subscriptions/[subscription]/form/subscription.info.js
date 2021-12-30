@@ -68,7 +68,7 @@ export const SubscriptionInfo = (props) => {
                     name={'info'}
                     defaultActiveKey={['info']}>
         <div>
-          <Select name={'subscriptionType'}
+          <Select name={'type'}
                   form={formRef}
                   label={t('subscription:type')}
                   disabled={disabled}

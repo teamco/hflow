@@ -39,8 +39,8 @@ export default connect(
       },
       onDeleteCampaign() {
       },
-      onSubscriptions() {
-        dispatch({ type: 'campaignModel/campaignSubscriptions' });
+      onSubscriptions(payload) {
+        dispatch({ type: 'campaignModel/campaignSubscriptions', payload });
       }
     })
 )(withTranslation()(campaignEdit));

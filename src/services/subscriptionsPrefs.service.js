@@ -7,10 +7,11 @@ import { API } from 'services/config/api.config';
  * @export
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const getFeatures = async () => {
+export const getFeatures = async ({ type }) => {
   return await xhrRequest({
     url: API.features.store,
-    method: request.METHOD.get
+    method: request.METHOD.get,
+    type: type
   });
 };
 
