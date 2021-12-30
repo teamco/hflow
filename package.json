@@ -6,8 +6,6 @@
     "start:linux": "cross-env PORT=8003 umi dev",
     "start:windows": "cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider PORT=8003 umi dev",
     "model:list": "umi dva list model",
-    "yarn:latest": "yarn set version latest",
-    "yarn:update": "yarn set version 3.1.0",
     "umi:clean": "node ./preinstall.js",
     "build": "umi build",
     "postinstall": "umi generate tmp",
@@ -75,7 +73,7 @@
     "rimraf": "^3.0.2",
     "yorkie": "^2.0.0"
   },
-  "packageManager": "yarn@3.1.0",
+  "packageManager": "npm@6.x",
   "engines": {
     "node": "14.x"
   }
