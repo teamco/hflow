@@ -205,7 +205,11 @@ export const featureEdit = (props) => {
                   defaultState: true,
                   price: {
                     originalPrice: 0,
-                    currency
+                    discounted: true,
+                    currency,
+                    discount: {
+                      value: 0
+                    }
                   },
                   featureType: featureTypes[0],
                   translateKeys: {

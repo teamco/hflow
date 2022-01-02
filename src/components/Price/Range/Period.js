@@ -7,15 +7,15 @@ import { Input } from 'antd';
  * @return {JSX.Element}
  * @constructor
  */
-const DiscountType = props => {
-  const { formRef, disabled, prefix = [], namespace } = props;
+const Period = props => {
+  const { formRef, disabled, prefix } = props;
 
   return (
       <Input type={'hidden'}
-             name={[...prefix, namespace, 'type']}
+             name={['price', 'discount', 'type']}
              form={formRef}
              disabled={disabled}/>
   );
 };
 
-export default DiscountType;
+export default Period;

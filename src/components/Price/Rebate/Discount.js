@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DatePicker, InputNumber, Select } from 'antd';
+import { DatePicker, InputNumber, Select, Switch } from 'antd';
 import { withTranslation } from 'react-i18next';
 
 import FormComponents from '@/components/Form';
@@ -15,10 +15,19 @@ const { GenericPanel } = FormComponents;
  * @constructor
  */
 const Discount = props => {
-  const { t, formRef, disabled, discountTypes = [] } = props;
+  const {
+    t,
+    formRef,
+    disabled,
+    prefix = [],
+    namespace = 'discount',
+    discountTypes = [],
+    children = null
+  } = props;
 
-  const { discount } = formRef.getFieldValue('price');
+  const { discount, discounted } = formRef.getFieldValue(prefix[0] || namespace);
   const [discountType, setDiscountType] = useState(discount?.type);
+  const [isDiscounted, setIsDiscounted] = useState(discounted);
 
   useEffect(() => {
     setDiscountType(discount?.type || discountTypes[0]);
@@ -29,8 +38,20 @@ const Discount = props => {
    * @param {string} value
    */
   const handleFormUpdate = value => {
-    formRef.setFieldsValue({ price: { discount: { type: value } } });
+    const field = prefix[0] ?
+        { [prefix[0]]: { discount: { type: value } } } :
+        { discount: { type: value } };
+
+    formRef.setFieldsValue(field);
     setDiscountType(value);
+  };
+
+  /**
+   * @constant
+   * @param {boolean} checked
+   */
+  const handleDisabled = checked => {
+    setIsDiscounted(checked);
   };
 
   /**
@@ -40,7 +61,7 @@ const Discount = props => {
   const selectDiscountBefore = (
       <Select style={{ width: 90 }}
               value={discountType}
-              disabled={disabled}
+              disabled={disabled || !isDiscounted}
               onChange={handleFormUpdate}>
         {discountTypes.map((type, idx) => (
             <Option key={idx} value={type}>{type}</Option>
@@ -50,23 +71,38 @@ const Discount = props => {
 
   return (
       <GenericPanel header={t('discount:info')}
-                    name={'discount'}
-                    defaultActiveKey={['discount']}>
+                    name={namespace}
+                    defaultActiveKey={[namespace]}>
+        <div>
+          <Switch label={t('feature:discounted')}
+                  disabled={disabled}
+                  form={formRef}
+                  onChange={handleDisabled}
+                  config={{ valuePropName: 'checked' }}
+                  checkedChildren={t('actions:yes')}
+                  unCheckedChildren={t('actions:no')}
+                  name={[...prefix, 'discounted']}/>
+        </div>
         <div>
           <InputNumber addonBefore={selectDiscountBefore}
-                       label={t('subscription:discount')}
-                       name={['price', 'discount', 'value']}
+                       label={t('feature:discount')}
+                       name={[...prefix, namespace, 'value']}
                        form={formRef}
-                       disabled={disabled}
-                       config={{ rules: [{ required: true }] }}/>
-          <DatePicker name={['price', 'discount', 'startedAt']}
+                       min={0}
+                       disabled={disabled || !isDiscounted}
+                       config={{ rules: [{ required: isDiscounted }] }}/>
+          <DatePicker name={[...prefix, namespace, 'startedAt']}
                       form={formRef}
-                      label={t('campaign:startedAt')}/>
+                      disabled={disabled || !isDiscounted}
+                      label={t('feature:startedAt')}/>
         </div>
         <div>
           <Rebate.Type formRef={formRef}
-                       disabled={disabled}/>
+                       prefix={prefix}
+                       namespace={namespace}
+                       disabled={disabled || !isDiscounted}/>
         </div>
+        {children}
       </GenericPanel>
   );
 };

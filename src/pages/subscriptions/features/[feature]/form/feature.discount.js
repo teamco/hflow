@@ -28,6 +28,10 @@ export const FeatureDiscount = (props) => {
   return (
       <Rebate.Discount formRef={formRef}
                        disabled={disabled}
-                       discountTypes={types}/>
+                       prefix={['price']}
+                       namespace={'discount'}
+                       discountTypes={types}>
+
+      </Rebate.Discount>
   );
 };
