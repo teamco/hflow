@@ -201,6 +201,15 @@ export const routes = [
           },
           {
             exact: true,
+            path: '/admin/currencies',
+            component: '@/pages/currencies',
+            breadcrumb: 'route:currencies',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
             path: '/admin/featureTypes',
             component: '@/pages/subscriptions/features/types',
             breadcrumb: 'route:featureTypes',

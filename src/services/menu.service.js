@@ -2,7 +2,9 @@ import React from 'react';
 import {
   ApiOutlined,
   ControlOutlined,
+  DollarOutlined,
   FontSizeOutlined,
+  FundOutlined,
   InfoCircleOutlined,
   NotificationOutlined,
   ShoppingCartOutlined,
@@ -87,18 +89,20 @@ export const menus = [
         url: '/admin/featureTypes',
         component: 'featureTypes',
         icon: <FontSizeOutlined/>
-      }
-    ]
-  },
-  {
-    key: 'menu:campaign',
-    icon: <ApiOutlined/>,
-    items: [
+      },
+      { divider: true },
       {
         key: 'menu:campaigns',
         url: '/admin/campaigns',
         component: 'campaigns',
-        icon: <FontSizeOutlined/>
+        icon: <FundOutlined/>
+      },
+      { divider: true },
+      {
+        key: 'menu:currencies',
+        url: '/admin/currencies',
+        component: 'currencies',
+        icon: <DollarOutlined/>
       }
     ]
   },
