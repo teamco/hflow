@@ -7,6 +7,7 @@ export default defineConfig({
   crossorigin: true,
   alias,
   routes,
+  // locale: { antd: true },
   proxy: getProxy(),
   favicon: '/assets/favicon.png',
   dynamicImport: {
@@ -30,3 +31,4 @@ export default defineConfig({
   plugins: [],
   manifest: {}
 });
+
