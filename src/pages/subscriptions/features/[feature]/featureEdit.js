@@ -12,12 +12,13 @@ import { useParams } from 'umi';
 import { fromForm } from 'utils/object';
 import { isLoading } from 'utils/state';
 
-import { PreferenceInfo } from './form/preference.info';
-import { PreferenceTranslate } from './form/preference.translate';
-import { PreferenceMenu } from 'pages/subscriptions/preferences/metadata/preference.menu';
+import { FeatureInfo } from './form/feature.info';
+import { FeatureTags } from './form/feature.tags';
+import { FeatureTranslate } from './form/feature.translate';
+import { FeatureMenu } from 'pages/subscriptions/features/metadata/feature.menu';
 
 import menuStyles from 'components/menu.less';
-import styles from 'pages/subscriptions/preferences/subscriptionPrefs.module.less';
+import styles from 'pages/subscriptions/features/features.module.less';
 import userStyles from 'pages/users/users.module.less';
 
 const { Info } = Main;
@@ -27,20 +28,20 @@ const { Info } = Main;
  * @param props
  * @return {JSX.Element}
  */
-export const preferenceEdit = (props) => {
+export const featureEdit = (props) => {
   const [formRef] = Form.useForm();
 
   const {
     t,
     authModel,
-    subscriptionPrefsModel,
+    featureModel,
     loading,
-    onEditPreference,
+    onEditFeature,
     onFieldsChange,
     onUpdateTags,
     onSave,
     onClose,
-    onDeletePreference
+    onDeleteFeature
   } = props;
 
   /**
@@ -50,13 +51,13 @@ export const preferenceEdit = (props) => {
 
   const {
     entityForm,
-    selectedPreference,
-    preferenceTypes,
+    selectedFeature,
+    featureTypes,
     currencies,
     tags,
     isEdit,
     touched
-  } = subscriptionPrefsModel;
+  } = featureModel;
 
   const { ability } = authModel;
   const component = 'subscriptions';
@@ -66,7 +67,7 @@ export const preferenceEdit = (props) => {
   const [disabledDescription, setDisabledDescription] = useState(false);
 
   useEffect(() => {
-    canUpdate && onEditPreference(params);
+    canUpdate && onEditFeature(params);
   }, [authModel.user, canUpdate]);
 
   /**
@@ -96,7 +97,7 @@ export const preferenceEdit = (props) => {
     t,
     formRef,
     disabled,
-    preferenceTypes,
+    featureTypes,
     currencies,
     setDisabledDescription
   }
@@ -129,15 +130,15 @@ export const preferenceEdit = (props) => {
     loading,
     params,
     component,
-    onDeletePreference
+    onDeleteFeature
   };
 
   const subTitle = (
       <>
         <TrademarkOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
-            t('actions:edit', { type: t('menu:preference') }) :
-            t('actions:addNew', { type: t('menu:preference') })
+            t('actions:edit', { type: t('menu:feature') }) :
+            t('actions:addNew', { type: t('menu:feature') })
         }
       </>
   );
@@ -147,16 +148,16 @@ export const preferenceEdit = (props) => {
             component={component}
             touched={!disabled && touched}
             spinEffects={[
-              'subscriptionPrefsModel/editPreference',
-              'subscriptionPrefsModel/prepareToSave'
+              'featureModel/editFeature',
+              'featureModel/prepareToSave'
             ]}>
-        <div className={styles.preferenceWrapper}>
+        <div className={styles.featureWrapper}>
           <PageHeader ghost={false}
                       subTitle={subTitle}
                       extra={[
                         <Button key={'close'}
                                 size={'small'}
-                                loading={isLoading(loading.effects['subscriptionPrefsModel/prepareToSave'])}
+                                loading={isLoading(loading.effects['featureModel/prepareToSave'])}
                                 onClick={() => onClose()}>
                           {t('actions:close')}
                         </Button>,
@@ -164,8 +165,8 @@ export const preferenceEdit = (props) => {
                                     isEdit={isEdit}
                                     disabled={!touched || disabled}
                                     formRef={formRef}
-                                    loading={loading.effects['subscriptionPrefsModel/prepareToSave']}/>,
-                        <Dropdown overlay={<PreferenceMenu record={selectedPreference} {...menuProps} />}
+                                    loading={loading.effects['featureModel/prepareToSave']}/>,
+                        <Dropdown overlay={<FeatureMenu record={selectedFeature} {...menuProps} />}
                                   disabled={!isEdit || disabled}
                                   trigger={['click']}
                                   overlayClassName={menuStyles.customActionMenu}
@@ -173,7 +174,7 @@ export const preferenceEdit = (props) => {
                           <Button size={'small'}
                                   icon={<SettingOutlined/>}
                                   className={menuStyles.customAction}>
-                            {t('actions:manage', { type: t('menu:preference') })} <DownOutlined/>
+                            {t('actions:manage', { type: t('menu:feature') })} <DownOutlined/>
                           </Button>
                         </Dropdown>
                       ]}/>
@@ -188,15 +189,15 @@ export const preferenceEdit = (props) => {
                   helper: true,
                   defaultState: true,
                   currency: currencies[0],
-                  preferenceType: preferenceTypes[0],
+                  featureType: featureTypes[0],
                   translate: {
                     on: 'actions:yes',
                     off: 'actions:no'
                   }
                 }}>
-            <PreferenceInfo {...prefsProps} />
-            <PreferenceTranslate {...translateProps} />
-            <PreferenceTags {...tagsProps} />
+            <FeatureInfo {...prefsProps} />
+            <FeatureTranslate {...translateProps} />
+            <FeatureTags {...tagsProps} />
             <Info {...infoProps} />
           </Form>
         </div>

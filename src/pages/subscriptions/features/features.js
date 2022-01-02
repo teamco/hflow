@@ -6,9 +6,9 @@ import Page from 'components/Page';
 import Main from 'components/Main';
 import { Can } from 'utils/auth/can';
 
-import { metadata } from 'pages/subscriptions/preferences/preference.metadata';
+import { metadata } from 'pages/subscriptions/features/feature.metadata';
 
-import styles from 'pages/subscriptions/preferences/subscriptionPrefs.module.less';
+import styles from 'pages/subscriptions/features/features.module.less';
 
 const { Table } = Main;
 // import { Table, Tag, Space } from 'antd';
@@ -18,11 +18,11 @@ const { Table } = Main;
  * @param props
  * @return {JSX.Element}
  */
-export const subscriptionPrefs = props => {
+export const features = props => {
   const {
     t,
     authModel,
-    subscriptionPrefsModel,
+    featureModel,
     loading,
     onQuery,
     onNew
@@ -31,7 +31,7 @@ export const subscriptionPrefs = props => {
   const {
     touched,
     data
-  } = subscriptionPrefsModel;
+  } = featureModel;
 
   const tableProps = {
     pagination: false
@@ -44,12 +44,12 @@ export const subscriptionPrefs = props => {
   const subTitle = (
       <>
         <ControlOutlined style={{ marginRight: 10 }}/>
-        {t('panel:preferenceConfig')}
+        {t('panel:featureConfig')}
       </>
   );
 
   const { ability } = authModel;
-  const component = 'subscriptionPrefs';
+  const component = 'features';
   const disabled = ability.cannot('update', component);
 
   const userProps = {
@@ -61,16 +61,16 @@ export const subscriptionPrefs = props => {
       <Page touched={touched}
             component={component}
             spinEffects={[
-              'subscriptionPrefsModel/query',
-              'subscriptionPrefsModel/prepareToSave'
+              'featureModel/query',
+              'featureModel/prepareToSave'
             ]}>
-        <div className={styles.preferenceWrapper}>
+        <div className={styles.featureWrapper}>
           <PageHeader ghost={false}
                       subTitle={subTitle}
                       extra={[
                         <Can I={'create'} a={component} key={'add'}>
                           <Button size={'small'}
-                                  loading={loading.effects['subscriptionPrefsModel/newPreference']}
+                                  loading={loading.effects['featureModel/newFeature']}
                                   disabled={disabled}
                                   icon={<AppstoreAddOutlined/>}
                                   onClick={() => onNew()}

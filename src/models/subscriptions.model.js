@@ -4,25 +4,24 @@ import dvaModelExtend from 'dva-model-extend';
 import { commonModel } from 'models/common.model';
 import { isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
-import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
+import { fbFindById, getRef } from 'services/firebase.service';
 import {
   addSubscription,
   getAllSubscriptions,
   getSubscription,
   updateSubscription
 } from 'services/subscriptions.service';
-// import { getAllPreferences } from 'services/subscriptionsPrefs.service';
 import { history } from 'umi';
 import { COLORS } from 'utils/colors';
 import { monitorHistory } from 'utils/history';
 import i18n from 'utils/i18n';
 import { errorSaveMsg } from 'utils/message';
 import { setAs } from 'utils/object';
-import { getFeatures } from '../services/subscriptionsPrefs.service';
+import { getFeatures } from 'services/features.service';
 
 const DEFAULT_STATE = {
   subscriptions: [],
-  preferences: [],
+  features: [],
   colorsToType: {
     basic: COLORS.tags.orange,
     standard: COLORS.tags.cyan,
@@ -63,7 +62,7 @@ export default dvaModelExtend(commonModel, {
     * query({ payload }, { put, call }) {
       const { data } = yield call(getAllSubscriptions);
 
-      yield put({ type: 'subscriptionPrefs' });
+      yield put({ type: 'features' });
       yield put({ type: 'updateState', payload: { subscriptions: data } });
     },
 
@@ -100,11 +99,11 @@ export default dvaModelExtend(commonModel, {
           yield put({ type: 'updateState', payload: { selectedSubscription } });
 
           const _subscription = { ...selectedSubscription };
-          const _preferences = {};
+          const _features = {};
 
           _subscription.metadata = yield call(detailsInfo, { entity: _subscription, user });
-          _subscription.preferences?.forEach(pref => {
-            _preferences[pref] = true;
+          _subscription.features?.forEach(pref => {
+            _features[pref] = true;
           });
 
           return yield put({
@@ -113,7 +112,7 @@ export default dvaModelExtend(commonModel, {
               model: 'subscriptionModel',
               form: {
                 ..._subscription,
-                preferences: { ..._preferences }
+                features: { ..._features }
               }
             }
           });
@@ -130,11 +129,11 @@ export default dvaModelExtend(commonModel, {
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(subscription) } });
       yield put({ type: 'subscriptionTypes' });
-      yield put({ type: 'subscriptionPrefs', payload: { type } });
+      yield put({ type: 'features', payload: { type } });
       yield put({ type: 'validateSubscription', payload: { subscriptionId: subscription } });
     },
 
-    * subscriptionPrefs({payload}, { call, put }) {
+    * features({payload}, { call, put }) {
       const {type = 'Business'} = payload || {};
       const { data = [] } = yield call(getFeatures, {type});
       yield put({ type: 'updateState', payload: { features: data } });

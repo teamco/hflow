@@ -9,7 +9,7 @@ import Page from 'components/Page';
 
 import { SubscriptionInfo } from 'pages/subscriptions/[subscription]/form/subscription.info';
 import { SubscriptionTags } from 'pages/subscriptions/[subscription]/form/subscription.tags';
-import { SubscriptionPreferences } from 'pages/subscriptions/[subscription]/form/subscription.preferences';
+import { SubscriptionFeatures } from 'pages/subscriptions/[subscription]/form/subscription.features';
 import SubscriptionMenu from 'pages/subscriptions/metadata/subscriptions.menu';
 
 import { useParams } from 'umi';
@@ -89,7 +89,7 @@ export const subscriptionEdit = (props) => {
     businessUsers
   };
 
-  const subscriptionPrefsProps = {
+  const featuresProps = {
     t,
     isEdit,
     formRef,
@@ -198,7 +198,7 @@ export const subscriptionEdit = (props) => {
                   placementOnMap: true
                 }}>
             <SubscriptionInfo {...subscriptionInfoProps} />
-            <SubscriptionPreferences {...subscriptionPrefsProps} />
+            <SubscriptionFeatures {...featuresProps} />
             <SubscriptionTags {...tagsProps} />
             <Info {...infoProps} />
           </Form>

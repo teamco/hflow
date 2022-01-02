@@ -11,7 +11,7 @@ const { GenericPanel } = FormComponents;
  * @return {JSX.Element}
  * @constructor
  */
-export const PreferenceTranslate = (props) => {
+export const FeatureTranslate = (props) => {
   const {
     t,
     formRef,
@@ -53,12 +53,12 @@ export const PreferenceTranslate = (props) => {
   };
 
   return (
-      <GenericPanel header={t('preference:translate')}
+      <GenericPanel header={t('feature:translate')}
                     name={'translate'}
                     defaultActiveKey={['translate']}>
         <div>
           <Input type={'text'}
-                 label={t('preference:title')}
+                 label={t('feature:title')}
                  name={['translateKeys', 'title']}
                  form={formRef}
                  disabled={disabled}
@@ -66,7 +66,7 @@ export const PreferenceTranslate = (props) => {
                  config={{ rules: [{ required: true }] }}/>
 
           <Input type={'text'}
-                 label={t('preference:description')}
+                 label={t('feature:description')}
                  name={['translateKeys', 'description']}
                  form={formRef}
                  disabled={disabled || disabledDescription}
@@ -75,7 +75,7 @@ export const PreferenceTranslate = (props) => {
         </div>
         <div>
           <Input type={'text'}
-                 label={t('preference:translateOn')}
+                 label={t('feature:translateOn')}
                  name={['translateKeys', 'on']}
                  form={formRef}
                  disabled={disabled}
@@ -83,7 +83,7 @@ export const PreferenceTranslate = (props) => {
                  config={{ rules: [{ required: true }] }}/>
 
           <Input type={'text'}
-                 label={t('preference:translateOff')}
+                 label={t('feature:translateOff')}
                  name={['translateKeys', 'off']}
                  form={formRef}
                  disabled={disabled}
@@ -92,7 +92,7 @@ export const PreferenceTranslate = (props) => {
         </div>
         <div>
           <>
-            <Divider orientation={'left'}>{t('preference:example')}</Divider>
+            <Divider orientation={'left'}>{t('feature:example')}</Divider>
             <Form.Item label={t(trTitle)}
                        tooltip={t(trDescription)}>
               <Switch checkedChildren={t(trOn)}

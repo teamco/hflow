@@ -3,9 +3,9 @@ import { Button, Dropdown, Form, Switch } from 'antd';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { NavLink } from 'umi';
 
-import { PreferenceMenu } from './metadata/preference.menu';
+import { FeatureMenu } from './metadata/feature.menu';
 
-import styles from './subscriptionPrefs.module.less';
+import styles from './features.module.less';
 import menuStyles from 'components/menu.less';
 
 /**
@@ -29,13 +29,13 @@ export const metadata = ({
     scroll: { x: 600 },
     columns: [
       {
-        title: t('preference:example'),
+        title: t('feature:example'),
         dataIndex: 'translateKeys',
         key: 'translateKeys',
         render(translateKeys, record) {
           return (
               <div className={styles.example}>
-                <NavLink to={`/admin/subscriptionPrefs/${record.id}`}>
+                <NavLink to={`/admin/features/${record.id}`}>
                   {t(translateKeys.title)}
                 </NavLink>
               </div>
@@ -43,13 +43,13 @@ export const metadata = ({
         }
       },
       {
-        title: t('preference:type'),
+        title: t('feature:type'),
         dataIndex: 'type',
         key: 'type',
         width: 100
       },
       {
-        title: t('preference:status'),
+        title: t('feature:status'),
         dataIndex: 'selectedByDefault',
         key: 'selectedByDefault',
         align: 'center',
@@ -75,14 +75,14 @@ export const metadata = ({
         render(record) {
           return (
               <div className={styles.nowrap}>
-                <Dropdown overlay={<PreferenceMenu record={record} {...menuProps} />}
+                <Dropdown overlay={<FeatureMenu record={record} {...menuProps} />}
                           trigger={['click']}
                           overlayClassName={menuStyles.customActionMenu}
                           key={'custom'}>
                   <Button size={'small'}
                           icon={<SettingOutlined/>}
                           className={menuStyles.customAction}>
-                    {t('actions:manage', { type: t('menu:preference') })} <DownOutlined/>
+                    {t('actions:manage', { type: t('menu:feature') })} <DownOutlined/>
                   </Button>
                 </Dropdown>
               </div>

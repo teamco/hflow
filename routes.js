@@ -201,26 +201,26 @@ export const routes = [
           },
           {
             exact: true,
-            path: '/admin/preferenceTypes',
-            component: '@/pages/subscriptions/preferences/types',
-            breadcrumb: 'route:preferenceTypes',
+            path: '/admin/featureTypes',
+            component: '@/pages/subscriptions/features/types',
+            breadcrumb: 'route:featureTypes',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]
           },
           {
             exact: true,
-            path: '/admin/subscriptionPrefs',
-            component: '@/pages/subscriptions/preferences',
-            breadcrumb: 'route:subscriptionPrefs',
+            path: '/admin/features',
+            component: '@/pages/subscriptions/features',
+            breadcrumb: 'route:features',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]
           },
           {
             exact: true,
-            path: '/admin/subscriptionPrefs/:preference',
-            component: '@/pages/subscriptions/preferences/[preference]',
+            path: '/admin/features/:feature',
+            component: '@/pages/subscriptions/features/[feature]',
             breadcrumb: 'route:subscriptionPref',
             wrappers: [
               '@/wrappers/auth.wrapper'

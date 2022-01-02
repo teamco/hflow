@@ -4,15 +4,15 @@ import dvaModelExtend from 'dva-model-extend';
 import { commonModel } from 'models/common.model';
 import { isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
-import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
+import { getRef } from 'services/firebase.service';
 import { addCampaign, getAllCampaigns, getCampaign, updateCampaign } from 'services/campaigns.service';
 import { history } from 'umi';
 import i18n from 'utils/i18n';
 import { monitorHistory } from 'utils/history';
 import { errorSaveMsg } from 'utils/message';
 import { getAllSubscriptions } from 'services/subscriptions.service';
-import { getFeatures } from '../services/subscriptionsPrefs.service';
-import { setAs } from '../utils/object';
+import { getFeatures } from 'services/features.service';
+import { setAs } from 'utils/object';
 
 const DEFAULT_STATE = {
   campaigns: [],
@@ -62,17 +62,17 @@ export default dvaModelExtend(commonModel, {
     * campaignSubscriptions({ payload }, { put, call }) {
       const {type = 'Business'} = payload || {};
       const { data: subscriptions = [] } = yield call(getAllSubscriptions);
-      const {data: preferences = [] } = yield call(getFeatures, {type});
-      const subscriptionPreferences = subscriptions.map((item) => {
-        const prefsNotIncluded = preferences.filter(filterPref => {
-          return !item.preferences.includes(filterPref.id);
+      const {data: features = [] } = yield call(getFeatures, {type});
+      const subscriptionFeatures = subscriptions.map((item) => {
+        const prefsNotIncluded = features.filter(filterPref => {
+          return !item.features.includes(filterPref.id);
         });
-        return { type: item.subscriptionType, preferences: prefsNotIncluded, id: item.id };
+        return { type: item.subscriptionType, features: prefsNotIncluded, id: item.id };
       });
 
       yield put({
         type: 'updateState',
-        payload: { subscriptions: subscriptionPreferences }
+        payload: { subscriptions: subscriptionFeatures }
       });
 
     },

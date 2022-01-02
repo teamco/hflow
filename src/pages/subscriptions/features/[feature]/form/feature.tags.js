@@ -14,7 +14,7 @@ const { GenericPanel, EditableTags } = FormComponents;
  * @return {JSX.Element}
  * @constructor
  */
-export const PreferenceTags = ({
+export const FeatureTags = ({
   t,
   formRef,
   tags,
@@ -22,7 +22,7 @@ export const PreferenceTags = ({
   onUpdateTags
 }) => {
   return (
-      <GenericPanel header={t('preference:tags')}
+      <GenericPanel header={t('feature:tags')}
                     name={'tags'}>
         <div>
           <EditableTags label={t('form:tags')}

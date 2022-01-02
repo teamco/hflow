@@ -123,7 +123,7 @@
     "subscriptions": "Subscriptions",
     "subscription": "Subscription",
     "subscriptionTypes": "Types",
-    "subscriptionPrefs": "Features",
+    "features": "Features",
     "features": "Features",
     "business": "Business",
     "businesses": "Businesses",
@@ -202,8 +202,8 @@
     "subscriptions": "Subscriptions",
     "subscription": "Subscription",
     "subscriptionTypes": "Subscription Types",
-    "subscriptionPrefs": "Subscription Preferences",
-    "subscriptionPref": "Preference",
+    "features": "Subscription Features",
+    "subscriptionPref": "Feature",
     "campaigns": "Campaigns",
     "campaign": "Campaign",
     "business": "Business",
@@ -223,8 +223,8 @@
     "businessRoles": "Business Roles",
     "businessConfig": "Business Config",
     "subscriptionConfig": "Subscription Config",
-    "subscriptionPrefs": "Subscription Preferences",
-    "preferenceConfig": "Preference Configuration",
+    "features": "Subscription Features",
+    "featureConfig": "Feature Configuration",
     "subscriptionTypes": "Types",
     "businessTypes": "Types"
   },
@@ -336,7 +336,7 @@
   "subscription": {
     "type": "Subscription Type",
     "feature": "Feature",
-    "preferences": "Preferences",
+    "features": "Features",
     "select": "Select",
     "title": "Title",
     "period": "Period",
@@ -349,8 +349,8 @@
     "users": "Maximum of Business users",
     "usersInfo": "Upto to {{users}} users"
   },
-  "preference": {
-    "info": "Preference Info",
+  "feature": {
+    "info": "Feature Info",
     "price": "Price",
     "tags": "Tags",
     "type": "Type",
@@ -358,13 +358,11 @@
     "description": "Description",
     "helper": "Show Helper",
     "status": "Default State",
-    "translate": "Preference Translate",
+    "translate": "Feature Translate",
     "example": "Example",
     "title": "Title",
     "translateOn": "On",
-    "translateOff": "Off"
-  },
-  "feature": {
+    "translateOff": "Off",
     "profile": "Profile",
     "profileHelper": "Includes the business contact information/logo and a small written description of the provided service",
     "basicProfile": "Basic",

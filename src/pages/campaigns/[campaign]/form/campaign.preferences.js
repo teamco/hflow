@@ -11,7 +11,7 @@ const { GenericPanel } = FormComponents;
  * @return {JSX.Element}
  * @constructor
  */
-export const CampaignPreferences = (props) => {
+export const CampaignFeatures = (props) => {
   const {
     t,
     formRef,
@@ -19,9 +19,9 @@ export const CampaignPreferences = (props) => {
   } = props;
 
   return (
-      <GenericPanel header={t('campaign:preferences')}
-                    name={'preferences'}
-                    defaultActiveKey={['preferences']}>
+      <GenericPanel header={t('campaign:features')}
+                    name={'features'}
+                    defaultActiveKey={['features']}>
         <div>
           <Switch label={t('campaign:profile')}
                   disabled={disabled}

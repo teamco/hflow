@@ -1,13 +1,10 @@
 import React from 'react';
-import { Button, Dropdown, Form, Switch } from 'antd';
-import { DownOutlined, SettingOutlined  } from '@ant-design/icons';
+import { Button, Dropdown } from 'antd';
+import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { NavLink } from 'umi';
 
-import CampaignMenu from './metadata/campaigns.menu';
-
 import menuStyles from 'components/menu.less';
-import styles from '../subscriptions/preferences/subscriptionPrefs.module.less';
-import { PreferenceMenu } from '../subscriptions/preferences/metadata/preference.menu';
+import styles from './campaigns.module.less';
 
 /**
  * @export
@@ -35,11 +32,9 @@ export const metadata = ({
         key: 'subscriptionType',
         render(subscriptionType, record) {
           return (
-              <div className={styles.example}>
-                <NavLink to={`/admin/campaigns/${record.id}`}>
-                  {subscriptionType}
-                </NavLink>
-              </div>
+              <NavLink to={`/admin/campaigns/${record.id}`}>
+                {subscriptionType}
+              </NavLink>
           );
         }
       },
@@ -64,14 +59,14 @@ export const metadata = ({
         render(record) {
           return (
               <div className={styles.nowrap}>
-                <Dropdown overlay={<PreferenceMenu record={record} {...menuProps} />}
+                <Dropdown overlay={<CampaignMenu record={record} {...menuProps} />}
                           trigger={['click']}
                           overlayClassName={menuStyles.customActionMenu}
                           key={'custom'}>
                   <Button size={'small'}
                           icon={<SettingOutlined/>}
                           className={menuStyles.customAction}>
-                    {t('actions:manage', { type: t('menu:preference') })} <DownOutlined/>
+                    {t('actions:manage', { type: t('menu:feature') })} <DownOutlined/>
                   </Button>
                 </Dropdown>
               </div>

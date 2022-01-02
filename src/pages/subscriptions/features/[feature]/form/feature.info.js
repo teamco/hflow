@@ -12,13 +12,13 @@ const { Option } = Select;
  * @return {JSX.Element}
  * @constructor
  */
-export const PreferenceInfo = (props) => {
+export const FeatureInfo = (props) => {
   const {
     t,
     formRef,
     disabled,
     currencies,
-    preferenceTypes,
+    featureTypes,
     setDisabledDescription
   } = props;
 
@@ -77,16 +77,16 @@ export const PreferenceInfo = (props) => {
   );
 
   return (
-      <GenericPanel header={t('preference:info')}
+      <GenericPanel header={t('feature:info')}
                     name={'info'}
                     defaultActiveKey={['info']}>
         <div>
           <Select name={'type'}
                   form={formRef}
-                  label={t('preference:type')}
+                  label={t('feature:type')}
                   disabled={disabled}
                   config={{ rules: [{ required: true }] }}>
-            {[...preferenceTypes]?.sort()?.map((type, idx) => (
+            {[...featureTypes]?.sort()?.map((type, idx) => (
                 <Option key={idx}
                         value={type}>
                   {type}
@@ -94,7 +94,7 @@ export const PreferenceInfo = (props) => {
             ))}
           </Select>
           <InputNumber addonBefore={selectCurrencyBefore}
-                       label={t('preference:price')}
+                       label={t('feature:price')}
                        name={'price'}
                        form={formRef}
                        min={0}
@@ -103,7 +103,7 @@ export const PreferenceInfo = (props) => {
         </div>
         <div>
           <>
-            <Form.Item label={t('preference:helper')}
+            <Form.Item label={t('feature:helper')}
                        valuePropName={'checked'}>
               <Switch disabled={disabled}
                       checked={enableHelper}
@@ -112,7 +112,7 @@ export const PreferenceInfo = (props) => {
                       unCheckedChildren={t('actions:no')}/>
             </Form.Item>
           </>
-          <Switch label={t('preference:status')}
+          <Switch label={t('feature:status')}
                   disabled={disabled}
                   form={formRef}
                   config={{ valuePropName: 'checked' }}

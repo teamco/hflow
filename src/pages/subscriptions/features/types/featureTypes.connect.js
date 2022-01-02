@@ -1,7 +1,7 @@
 import { connect } from 'umi';
 import { withTranslation } from 'react-i18next';
 
-import { preferenceTypes } from './preferenceTypes';
+import { featureTypes } from './featureTypes';
 
 export default connect(
     ({ authModel, simpleModel, loading }) => ({
@@ -15,8 +15,8 @@ export default connect(
         dispatch({
           type: `simpleModel/query`,
           payload: {
-            component: 'preferenceTypes',
-            doc: 'preferenceTypes'
+            component: 'featureTypes',
+            doc: 'featureTypes'
           }
         });
       },
@@ -27,10 +27,10 @@ export default connect(
         dispatch({
           type: 'simpleModel/prepareToSave',
           payload: {
-            component: 'preferenceTypes',
-            doc: 'preferenceTypes'
+            component: 'featureTypes',
+            doc: 'featureTypes'
           }
         });
       }
     })
-)(withTranslation()(preferenceTypes));
+)(withTranslation()(featureTypes));

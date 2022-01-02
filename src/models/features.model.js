@@ -10,19 +10,14 @@ import { history } from 'umi';
 import i18n from 'utils/i18n';
 import { monitorHistory } from 'utils/history';
 import { errorSaveMsg } from 'utils/message';
-import {
-  addFeature,
-  getFeature,
-  getFeatures,
-  updateFeature
-} from 'services/subscriptionsPrefs.service';
+import { addFeature, getFeature, getFeatures, updateFeature } from 'services/features.service';
 import { setAs } from 'utils/object';
 
 const DEFAULT_STATE = {};
 
-const MODEL_NAME = 'subscriptionPrefsModel';
-const BASE_URL = '/admin/subscriptionPrefs';
-const ABILITY_FOR = 'subscriptionPrefs';
+const MODEL_NAME = 'featureModel';
+const BASE_URL = '/admin/features';
+const ABILITY_FOR = 'features';
 
 /**
  * @export
@@ -32,7 +27,7 @@ export default dvaModelExtend(commonModel, {
   state: {
     ...DEFAULT_STATE,
     data: [],
-    preferenceTypes: [],
+    featureTypes: [],
     currencies: ['USD']
   },
   subscriptions: {
@@ -46,11 +41,11 @@ export default dvaModelExtend(commonModel, {
   effects: {
 
     * query({ payload }, { put, call }) {
-      const { data = [] } = yield call(getFeatures);
+      const { data = [] } = yield call(getFeatures, { type: 'Business' });
       yield put({ type: 'updateState', payload: { data } });
     },
 
-    * newPreference({ payload }, { put }) {
+    * newFeature({ payload }, { put }) {
       yield put({ type: 'cleanForm' });
 
       history.push(`${BASE_URL}/new`);
@@ -67,67 +62,67 @@ export default dvaModelExtend(commonModel, {
       });
     },
 
-    * validatePreference({ payload }, { call, put, select }) {
+    * validateFeature({ payload }, { call, put, select }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { preferenceId } = payload;
+      const { featureId } = payload;
 
-      if (isNew(preferenceId)) {
+      if (isNew(featureId)) {
         // TODO (teamco): Do something.
       } else if (ability.can('read', ABILITY_FOR)) {
 
-        const preference = yield call(getFeature, { id: preferenceId });
+        const feature = yield call(getFeature, { id: featureId });
 
-        if (preference.exists) {
-          const selectedPreference = { ...preference.data };
+        if (feature.exists) {
+          const selectedFeature = { ...feature.data };
 
-          yield put({ type: 'updateState', payload: { selectedPreference } });
+          yield put({ type: 'updateState', payload: { selectedFeature } });
 
-          const _preference = { ...selectedPreference };
-          _preference.metadata = yield call(detailsInfo, { entity: _preference, user });
+          const _feature = { ...selectedFeature };
+          _feature.metadata = yield call(detailsInfo, { entity: _feature, user });
 
           return yield put({
             type: 'toForm',
             payload: {
               model: MODEL_NAME,
-              form: { ..._preference }
+              form: { ..._feature }
             }
           });
         }
 
-        yield put({ type: 'notFound', payload: { entity: 'Preference', key: 'selectedPreference' } });
+        yield put({ type: 'notFound', payload: { entity: 'Feature', key: 'selectedFeature' } });
       }
     },
 
-    * editPreference({ payload }, { put }) {
+    * editFeature({ payload }, { put }) {
       const { params } = payload;
-      const { preference } = params;
+      const { feature } = params;
 
-      yield put({ type: 'cleanForm', payload: { isEdit: !isNew(preference) } });
-      yield put({ type: 'validatePreference', payload: { preferenceId: preference } });
-      yield put({ type: 'preferenceTypes' });
+      yield put({ type: 'cleanForm', payload: { isEdit: !isNew(feature) } });
+      yield put({ type: 'validateFeature', payload: { featureId: feature } });
+      yield put({ type: 'featureTypes' });
     },
 
-    * preferenceTypes(_, { call, put }) {
+    * featureTypes(_, { call, put }) {
       const fbTypes = yield call(fbFindById, {
         collection: 'simpleEntities',
-        doc: 'preferenceTypes'
+        doc: 'featureTypes'
       });
 
-      let preferenceTypes = { tags: [] };
+      let featureTypes = { tags: [] };
 
       if (fbTypes.exists) {
-        preferenceTypes = fbTypes.data();
+        featureTypes = fbTypes.data();
       }
 
       yield put({
         type: 'updateState',
-        payload: { preferenceTypes: [...preferenceTypes?.tags] }
+        payload: { featureTypes: [...featureTypes?.tags] }
       });
     },
 
     * prepareToSave({ payload, params }, { call, select, put }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { selectedPreference, isEdit } = yield select(state => state[MODEL_NAME]);
+      const { selectedFeature, isEdit } = yield select(state => state[MODEL_NAME]);
       const {
         selectedByDefault,
         price,
@@ -144,13 +139,13 @@ export default dvaModelExtend(commonModel, {
       if (user && ability.can('update', ABILITY_FOR)) {
 
         const metadata = {
-          ...selectedPreference?.metadata,
+          ...selectedFeature?.metadata,
           updatedByRef: user.id
         };
 
         // Not mandatory/defined fields preparation before saving.
         const data = {
-          id: selectedPreference.id,
+          id: selectedFeature.id,
           name: i18n.t(title),
           selectedByDefault,
           price, type, currency,
@@ -162,15 +157,15 @@ export default dvaModelExtend(commonModel, {
         };
 
         if (isEdit) {
-          if (selectedPreference && params.preference === selectedPreference.id) {
-            data.version = selectedPreference.version;
-            const entity = yield call(updateFeature, { id: params.preference, data });
+          if (selectedFeature && params.feature === selectedFeature.id) {
+            data.version = selectedFeature.version;
+            const entity = yield call(updateFeature, { id: params.feature, data });
 
             if (entity.exists) {
               yield put({ type: 'updateState', payload: { touched: false } });
             }
           } else {
-            errorSaveMsg(true, 'Preference');
+            errorSaveMsg(true, 'Feature');
           }
 
         } else {
@@ -191,7 +186,7 @@ export default dvaModelExtend(commonModel, {
         }
       } else {
 
-        yield put({ type: 'noPermissions', payload: { key: 'selectedPreference' } });
+        yield put({ type: 'noPermissions', payload: { key: 'selectedFeature' } });
       }
     }
   },

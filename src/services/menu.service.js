@@ -77,15 +77,15 @@ export const menus = [
       },
       { divider: true },
       {
-        key: 'menu:subscriptionPrefs',
-        url: '/admin/subscriptionPrefs',
-        component: 'subscriptionPrefs',
+        key: 'menu:features',
+        url: '/admin/features',
+        component: 'features',
         icon: <ControlOutlined/>
       },
       {
-        key: 'menu:preferenceTypes',
-        url: '/admin/preferenceTypes',
-        component: 'preferenceTypes',
+        key: 'menu:featureTypes',
+        url: '/admin/featureTypes',
+        component: 'featureTypes',
         icon: <FontSizeOutlined/>
       }
     ]

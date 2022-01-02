@@ -12,14 +12,14 @@ import tableStyles from 'components/Main/Table/table.module.less';
  * @param props
  * @return {JSX.Element}
  */
-export const PreferenceMenu = props => {
+export const FeatureMenu = props => {
   const {
     t,
     ability,
     isEdit,
     component,
     record,
-    onDeletePreference
+    onDeleteFeature
   } = props;
 
   const canEdit = ability.can('edit', component);
@@ -31,8 +31,8 @@ export const PreferenceMenu = props => {
     icon: <ControlOutlined className={tableStyles.action}
                                 twoToneColor={COLORS.success} />,
     children: (
-        <NavLink to={`/admin/subscriptionPrefs/${record.id}`}>
-          {t('actions:edit', { type: t('menu:preference') })}
+        <NavLink to={`/admin/features/${record.id}`}>
+          {t('actions:edit', { type: t('menu:feature') })}
         </NavLink>
     )
   };
@@ -43,9 +43,9 @@ export const PreferenceMenu = props => {
     icon: <DeleteTwoTone className={tableStyles.action}
                          twoToneColor={COLORS.danger} />,
     children: (
-        <Popconfirm title={t('msg:deleteConfirm', { instance: t('menu:preference') })}
+        <Popconfirm title={t('msg:deleteConfirm', { instance: t('menu:feature') })}
                     placement={'topRight'}
-                    onConfirm={() => onDeletePreference(record)}>
+                    onConfirm={() => onDeleteFeature(record)}>
           {t('actions:delete')}
         </Popconfirm>
     )
@@ -64,4 +64,4 @@ export const PreferenceMenu = props => {
   );
 };
 
-export default PreferenceMenu;
+export default FeatureMenu;

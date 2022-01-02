@@ -11,7 +11,7 @@ export const getFeatures = async ({ type }) => {
   return await xhrRequest({
     url: API.features.store,
     method: request.METHOD.get,
-    type: type
+    type
   });
 };
 

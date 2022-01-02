@@ -25,7 +25,7 @@ export const CampaignInfo = (props) => {
   const [discountType, setDiscountType] = useState(formRef.getFieldValue('discountType'));
   const [durationType, setDurationType] = useState(formRef.getFieldValue('durationType'));
   const [subscriptionId, setSubscriptionId] = useState(false);
-  const [preferencesList, setPreferencesList] = useState([]);
+  const [featuresList, setFeaturesList] = useState([]);
   const [isDiscount, setIsDiscount] = useState(false);
   const [isDuration, setIsDuration] = useState(false);
 
@@ -64,14 +64,14 @@ export const CampaignInfo = (props) => {
       setSubscriptionId(id);
   }
 
-  const handlePreferenceList = (list) => {
-    setPreferencesList(list);
+  const handleFeatureList = (list) => {
+    setFeaturesList(list);
   }
 
   const getOptions = () => {
     const subscription = [...subscriptions]
                             .find(el => el.id === subscriptionId)
-                            .preferences.map((item, idx) => (
+                            .features.map((item, idx) => (
         <Option key={idx}
                 value={item.id}>
           {t(item.translateKeys.title)}
@@ -139,11 +139,11 @@ export const CampaignInfo = (props) => {
           <Select
               name={'featuresByRef'}
               mode="multiple"
-              label={t('subscription:preferences')}
+              label={t('subscription:features')}
               allowClear
               style={{ width: '100%' }}
-              placeholder="Please select preferences "
-              onChange={handlePreferenceList}
+              placeholder="Please select features "
+              onChange={handleFeatureList}
           >
             {subscriptionId && getOptions()}
           </Select>

@@ -12,7 +12,7 @@ const { GenericPanel } = FormComponents;
  * @return {JSX.Element}
  * @constructor
  */
-export const SubscriptionPreferences = (props) => {
+export const SubscriptionFeatures = (props) => {
   const {
     t,
     isEdit,
@@ -32,7 +32,7 @@ export const SubscriptionPreferences = (props) => {
   }, [features, selectedSubscription]);
 
   return (
-      <GenericPanel header={t('subscription:preferences')}
+      <GenericPanel header={t('subscription:features')}
                     name={'features'}
                     defaultActiveKey={['features']}>
         <div>
