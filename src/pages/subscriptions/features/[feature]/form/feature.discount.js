@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import Discount from '@/components/Price/Discount/Discount';
+import Reduction from '@/components/Price/Reduction';
 
 const DISCOUNT_TYPES = ['%', 'currency'];
 
@@ -26,8 +26,8 @@ export const FeatureDiscount = (props) => {
   }, [currency]);
 
   return (
-      <Discount formRef={formRef}
-                disabled={disabled}
-                discountTypes={types}/>
+      <Reduction.Discount formRef={formRef}
+                          disabled={disabled}
+                          discountTypes={types}/>
   );
 };

@@ -3,7 +3,7 @@ import { DatePicker, InputNumber, Select } from 'antd';
 import { withTranslation } from 'react-i18next';
 
 import FormComponents from '@/components/Form';
-import DiscountType from '@/components/Price/Discount/DiscountType';
+import Reduction from '@/components/Price/Reduction';
 
 const { Option } = Select;
 const { GenericPanel } = FormComponents;
@@ -64,7 +64,7 @@ const Discount = props => {
                       label={t('campaign:startedAt')}/>
         </div>
         <div>
-          <DiscountType formRef={formRef}
+          <Reduction.Type formRef={formRef}
                         disabled={disabled}/>
         </div>
       </GenericPanel>

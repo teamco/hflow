@@ -65,10 +65,7 @@ export const FeatureInfo = (props) => {
               disabled={disabled}
               onChange={handleFormUpdate}>
         {[...currencies]?.map((type, idx) => (
-            <Option key={idx}
-                    value={type}>
-              {type}
-            </Option>
+            <Option key={idx} value={type}>{type}</Option>
         ))}
       </Select>
   );
