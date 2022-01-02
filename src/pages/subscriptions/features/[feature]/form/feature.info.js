@@ -17,6 +17,7 @@ export const FeatureInfo = (props) => {
     t,
     formRef,
     disabled,
+    currency,
     currencies,
     featureTypes,
     setDisabledDescription
@@ -33,6 +34,10 @@ export const FeatureInfo = (props) => {
     setDisabledDescription(!_desc);
   }, [translate]);
 
+  useEffect(() => {
+    handleFormUpdate(currency);
+  }, [currency]);
+
   /**
    * @constant
    * @param {boolean} value
@@ -42,20 +47,12 @@ export const FeatureInfo = (props) => {
     setEnableHelper(value);
   };
 
-  const _currency = formRef.getFieldValue('currency');
-  const [currency, setCurrency] = useState(_currency);
-
-  useEffect(() => {
-    setCurrency(_currency);
-  }, [_currency]);
-
   /**
    * @constant
    * @param {string} value
    */
   const handleFormUpdate = value => {
-    formRef.setFieldsValue({ currency: value });
-    setCurrency(value);
+    formRef.setFieldsValue({ price: { currency: value } });
   };
 
   /**
@@ -64,10 +61,10 @@ export const FeatureInfo = (props) => {
    */
   const selectCurrencyBefore = (
       <Select style={{ width: 90 }}
-              value={currencies[0]}
+              value={currency}
               disabled={disabled}
               onChange={handleFormUpdate}>
-        {[...currencies]?.sort()?.map((type, idx) => (
+        {[...currencies]?.map((type, idx) => (
             <Option key={idx}
                     value={type}>
               {type}
@@ -95,7 +92,7 @@ export const FeatureInfo = (props) => {
           </Select>
           <InputNumber addonBefore={selectCurrencyBefore}
                        label={t('feature:price')}
-                       name={'price'}
+                       name={['price', 'originalPrice']}
                        form={formRef}
                        min={0}
                        disabled={disabled}
@@ -122,7 +119,7 @@ export const FeatureInfo = (props) => {
         </div>
         <div>
           <Input type={'hidden'}
-                 name={'currency'}
+                 name={['price', 'currency']}
                  form={formRef}
                  disabled={disabled}/>
         </div>

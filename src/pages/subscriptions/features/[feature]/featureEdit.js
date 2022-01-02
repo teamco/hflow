@@ -13,13 +13,14 @@ import { fromForm } from 'utils/object';
 import { isLoading } from 'utils/state';
 
 import { FeatureInfo } from './form/feature.info';
+import { FeatureDiscount } from './form/feature.discount';
 import { FeatureTags } from './form/feature.tags';
 import { FeatureTranslate } from './form/feature.translate';
-import { FeatureMenu } from 'pages/subscriptions/features/metadata/feature.menu';
+import { FeatureMenu } from '@/pages/subscriptions/features/metadata/feature.menu';
 
-import menuStyles from 'components/menu.less';
-import styles from 'pages/subscriptions/features/features.module.less';
-import userStyles from 'pages/users/users.module.less';
+import menuStyles from '@/components/menu.less';
+import styles from '@/pages/subscriptions/features/features.module.less';
+import userStyles from '@/pages/users/users.module.less';
 
 const { Info } = Main;
 
@@ -65,10 +66,17 @@ export const featureEdit = (props) => {
   const canUpdate = ability.can('update', component);
 
   const [disabledDescription, setDisabledDescription] = useState(false);
+  const [currency, setCurrency] = useState(currencies[0]);
 
   useEffect(() => {
     canUpdate && onEditFeature(params);
   }, [authModel.user, canUpdate]);
+
+  const price = formRef.getFieldValue('price');
+
+  useEffect(() => {
+    setCurrency(price?.currency || currencies[0]);
+  }, [price, currencies]);
 
   /**
    * @constant
@@ -99,15 +107,22 @@ export const featureEdit = (props) => {
     disabled,
     featureTypes,
     currencies,
+    currency,
     setDisabledDescription
-  }
+  };
+
+  const discountProps = {
+    formRef,
+    disabled,
+    currency
+  };
 
   const translateProps = {
     t,
     formRef,
     disabled,
     disabledDescription
-  }
+  };
 
   const infoProps = {
     t,
@@ -188,14 +203,18 @@ export const featureEdit = (props) => {
                 initialValues={{
                   helper: true,
                   defaultState: true,
-                  currency: currencies[0],
+                  price: {
+                    originalPrice: 0,
+                    currency
+                  },
                   featureType: featureTypes[0],
-                  translate: {
+                  translateKeys: {
                     on: 'actions:yes',
                     off: 'actions:no'
                   }
                 }}>
             <FeatureInfo {...prefsProps} />
+            <FeatureDiscount {...discountProps} />
             <FeatureTranslate {...translateProps} />
             <FeatureTags {...tagsProps} />
             <Info {...infoProps} />

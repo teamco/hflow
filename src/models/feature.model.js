@@ -28,7 +28,7 @@ export default dvaModelExtend(commonModel, {
     ...DEFAULT_STATE,
     data: [],
     featureTypes: [],
-    currencies: ['USD']
+    currencies: []
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
@@ -99,7 +99,26 @@ export default dvaModelExtend(commonModel, {
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(feature) } });
       yield put({ type: 'validateFeature', payload: { featureId: feature } });
+      yield put({ type: 'currencies' });
       yield put({ type: 'featureTypes' });
+    },
+
+    * currencies(_, { call, put }) {
+      const fbTypes = yield call(fbFindById, {
+        collection: 'simpleEntities',
+        doc: 'currencies'
+      });
+
+      let currencies = { tags: [] };
+
+      if (fbTypes.exists) {
+        currencies = fbTypes.data();
+      }
+
+      yield put({
+        type: 'updateState',
+        payload: { currencies: [...currencies?.tags].sort() }
+      });
     },
 
     * featureTypes(_, { call, put }) {
@@ -123,6 +142,7 @@ export default dvaModelExtend(commonModel, {
     * prepareToSave({ payload, params }, { call, select, put }) {
       const { user, ability } = yield select(state => state.authModel);
       const { selectedFeature, isEdit } = yield select(state => state[MODEL_NAME]);
+      const { feature } = params;
       const {
         selectedByDefault,
         price,
@@ -143,9 +163,8 @@ export default dvaModelExtend(commonModel, {
           updatedByRef: user.id
         };
 
-        // Not mandatory/defined fields preparation before saving.
         const data = {
-          id: selectedFeature.id,
+          id: selectedFeature?.id,
           name: i18n.t(title),
           selectedByDefault,
           price, type, currency,
@@ -157,9 +176,9 @@ export default dvaModelExtend(commonModel, {
         };
 
         if (isEdit) {
-          if (selectedFeature && params.feature === selectedFeature.id) {
+          if (selectedFeature && feature === selectedFeature.id) {
             data.version = selectedFeature.version;
-            const entity = yield call(updateFeature, { id: params.feature, data });
+            const entity = yield call(updateFeature, { id: feature, data });
 
             if (entity.exists) {
               yield put({ type: 'updateState', payload: { touched: false } });
@@ -180,7 +199,6 @@ export default dvaModelExtend(commonModel, {
 
           if (entity.exists) {
             yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });
-
             history.push(`${BASE_URL}/${entity?.data?.id}`);
           }
         }
