@@ -54,6 +54,7 @@ export const featureEdit = (props) => {
     entityForm,
     selectedFeature,
     featureTypes,
+    durationTypes,
     currencies,
     tags,
     isEdit,
@@ -114,7 +115,8 @@ export const featureEdit = (props) => {
   const discountProps = {
     formRef,
     disabled,
-    currency
+    currency,
+    durationTypes
   };
 
   const translateProps = {
@@ -208,7 +210,10 @@ export const featureEdit = (props) => {
                     discounted: true,
                     currency,
                     discount: {
-                      value: 0
+                      value: 0,
+                      duration: {
+                        period: 0
+                      }
                     }
                   },
                   featureType: featureTypes[0],

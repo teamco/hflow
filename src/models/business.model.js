@@ -234,25 +234,7 @@ export default dvaModelExtend(commonModel, {
       });
 
       yield put({ type: 'businessAddress' });
-      yield put({ type: 'businessTypes' });
-    },
-
-    * businessTypes(_, { call, put }) {
-      const fbTypes = yield call(fbFindById, {
-        collection: 'simpleEntities',
-        doc: 'businessTypes'
-      });
-
-      let businessTypes = { tags: [] };
-
-      if (fbTypes.exists) {
-        businessTypes = fbTypes.data();
-      }
-
-      yield put({
-        type: 'updateState',
-        payload: { businessTypes: [...businessTypes?.tags] }
-      });
+      yield put({ type: 'getSimpleEntity', payload: { doc: 'businessTypes' } });
     },
 
     * prepareToSave({ payload, params }, { call, select, put }) {

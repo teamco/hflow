@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import Rebate from '@/components/Price/Rebate';
+import Range from '@/components/Price/Range';
 
 const DISCOUNT_TYPES = ['%', 'currency'];
 
@@ -14,6 +15,7 @@ export const FeatureDiscount = (props) => {
   const {
     formRef,
     disabled,
+    durationTypes = [],
     discountTypes = DISCOUNT_TYPES
   } = props;
 
@@ -30,8 +32,7 @@ export const FeatureDiscount = (props) => {
                        disabled={disabled}
                        prefix={['price']}
                        namespace={'discount'}
-                       discountTypes={types}>
-
-      </Rebate.Discount>
+                       durationTypes={durationTypes}
+                       discountTypes={types}/>
   );
 };

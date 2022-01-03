@@ -4,10 +4,10 @@ import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 
 import FormComponents from '@/components/Form';
-import Rebate from '@/components/Price/Rebate';
+import Duration from '@/components/Price/Range/Duration';
 
 const { Option } = Select;
-const { GenericPanel } = FormComponents;
+const { GenericPanel, HiddenField } = FormComponents;
 
 /**
  * @export
@@ -23,7 +23,7 @@ const Discount = props => {
     prefix = [],
     namespace = 'discount',
     discountTypes = [],
-    children = null
+    durationTypes = []
   } = props;
 
   const { discount, discounted } = formRef.getFieldValue(prefix[0] || namespace);
@@ -75,7 +75,7 @@ const Discount = props => {
                     name={namespace}
                     defaultActiveKey={[namespace]}>
         <div>
-          <Switch label={t('feature:discounted')}
+          <Switch label={t('price:discounted')}
                   disabled={disabled}
                   form={formRef}
                   onChange={handleDisabled}
@@ -86,7 +86,7 @@ const Discount = props => {
         </div>
         <div>
           <InputNumber addonBefore={selectDiscountBefore}
-                       label={t('feature:discount')}
+                       label={t('price:discount')}
                        name={[...prefix, namespace, 'value']}
                        form={formRef}
                        min={0}
@@ -96,14 +96,24 @@ const Discount = props => {
                       form={formRef}
                       disabledDate={current => current && current < moment().endOf('day')}
                       disabled={disabled || !isDiscounted}
-                      label={t('feature:startedAt')}/>
+                      label={t('price:discountStartedAt')}/>
         </div>
         <div>
-          <Rebate.Type form={formRef}
+          <HiddenField form={formRef}
                        name={[...prefix, namespace, 'type']}
                        disabled={disabled}/>
         </div>
-        {children}
+        <div>
+          <Duration form={formRef}
+                    label={t('price:discountDuration')}
+                    disabled={disabled}
+                    prefix={[...prefix, namespace]}
+                    durationTypes={durationTypes}/>
+          <HiddenField name={[...prefix, namespace, 'duration', 'type']}
+                       form={formRef}
+                       min={0}
+                       disabled={disabled}/>
+        </div>
       </GenericPanel>
   );
 };

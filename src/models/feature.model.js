@@ -28,6 +28,7 @@ export default dvaModelExtend(commonModel, {
     ...DEFAULT_STATE,
     data: [],
     featureTypes: [],
+    durationTypes: [],
     currencies: []
   },
   subscriptions: {
@@ -99,44 +100,9 @@ export default dvaModelExtend(commonModel, {
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(feature) } });
       yield put({ type: 'validateFeature', payload: { featureId: feature } });
-      yield put({ type: 'currencies' });
-      yield put({ type: 'featureTypes' });
-    },
-
-    * currencies(_, { call, put }) {
-      const fbTypes = yield call(fbFindById, {
-        collection: 'simpleEntities',
-        doc: 'currencies'
-      });
-
-      let currencies = { tags: [] };
-
-      if (fbTypes.exists) {
-        currencies = fbTypes.data();
-      }
-
-      yield put({
-        type: 'updateState',
-        payload: { currencies: [...currencies?.tags].sort() }
-      });
-    },
-
-    * featureTypes(_, { call, put }) {
-      const fbTypes = yield call(fbFindById, {
-        collection: 'simpleEntities',
-        doc: 'featureTypes'
-      });
-
-      let featureTypes = { tags: [] };
-
-      if (fbTypes.exists) {
-        featureTypes = fbTypes.data();
-      }
-
-      yield put({
-        type: 'updateState',
-        payload: { featureTypes: [...featureTypes?.tags] }
-      });
+      yield put({ type: 'getSimpleEntity', payload: { doc: 'currencies' } });
+      yield put({ type: 'getSimpleEntity', payload: { doc: 'durationTypes' } });
+      yield put({ type: 'getSimpleEntity', payload: { doc: 'featureTypes' } });
     },
 
     * prepareToSave({ payload, params }, { call, select, put }) {

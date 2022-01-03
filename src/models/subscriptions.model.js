@@ -128,8 +128,8 @@ export default dvaModelExtend(commonModel, {
       const { type } = params;
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(subscription) } });
-      yield put({ type: 'subscriptionTypes' });
       yield put({ type: 'features', payload: { type } });
+      yield put({ type: 'getSimpleEntity', payload: { doc: 'subscriptionTypes' } });
       yield put({ type: 'validateSubscription', payload: { subscriptionId: subscription } });
     },
 
@@ -137,24 +137,6 @@ export default dvaModelExtend(commonModel, {
       const {type = 'Business'} = payload || {};
       const { data = [] } = yield call(getFeatures, {type});
       yield put({ type: 'updateState', payload: { features: data } });
-    },
-
-    * subscriptionTypes(_, { call, put }) {
-      const fbTypes = yield call(fbFindById, {
-        collection: 'simpleEntities',
-        doc: 'subscriptionTypes'
-      });
-
-      let subscriptionTypes = { tags: [] };
-
-      if (fbTypes.exists) {
-        subscriptionTypes = fbTypes.data();
-      }
-
-      yield put({
-        type: 'updateState',
-        payload: { subscriptionTypes: [...subscriptionTypes?.tags] }
-      });
     },
 
     * prepareToSave({ payload, params }, { call, select, put }) {

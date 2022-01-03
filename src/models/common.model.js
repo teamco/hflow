@@ -3,6 +3,7 @@ import { message } from 'antd';
 import { history } from 'umi';
 import { merge } from 'lodash';
 import i18n from 'utils/i18n';
+import { fbFindById } from '@/services/firebase.service';
 
 const DEFAULT_FORM = [
   {
@@ -131,6 +132,24 @@ const commonModel = {
       // TODO (teamco): Handle multiple files.
       yield put({ type: 'updateState', payload: { uploadedFiles: { ..._uploadedFiles } } });
       yield put({ type: 'toForm', payload: { form: { license: null }, model } });
+    },
+
+    * getSimpleEntity({ payload }, { call, put }) {
+      const { doc } = payload;
+      const type = payload.type || doc;
+
+      const fbTypes = yield call(fbFindById, { collection: 'simpleEntities', doc });
+
+      let entities = { tags: [] };
+
+      if (fbTypes.exists) {
+        entities = fbTypes.data();
+      }
+
+      yield put({
+        type: 'updateState',
+        payload: { [type]: [...entities?.tags] }
+      });
     },
 
     * raiseCondition({ payload }, { put, take }) {
