@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { InputNumber, Select } from 'antd';
+import { Form, InputNumber, Select } from 'antd';
 import { withTranslation } from 'react-i18next';
+import HiddenField from '@/components/Form/HiddenField';
 
 const { Option } = Select;
 
@@ -15,16 +16,12 @@ const Duration = props => {
     t,
     form,
     min = 0,
+    label,
     disabled,
     durationTypes = [],
-    prefix = [],
-    required = true,
+    required,
+    prefix,
     namespace = 'duration'
-  } = props;
-
-  const {
-    label = t('duration'),
-    name = [...prefix, namespace, 'period']
   } = props;
 
   const { duration } = form.getFieldValue(prefix[0] || namespace);
@@ -62,13 +59,26 @@ const Duration = props => {
   );
 
   return (
-      <InputNumber addonBefore={selectDurationBefore}
-                   label={label}
-                   name={name}
-                   form={form}
-                   min={min}
-                   disabled={disabled}
-                   config={{ rules: [{ required }] }}/>
+      <>
+        <Form.Item noStyle
+                   name={[...prefix, namespace, 'period']}
+                   rules={[
+                     {
+                       required,
+                       message: t('form:required', { field: label })
+                     }
+                   ]}>
+          <InputNumber addonBefore={selectDurationBefore}
+                       min={min}
+                       disabled={disabled}
+                       placeholder={t('form:placeholder', { field: label })}/>
+        </Form.Item>
+        <Form.Item name={[...prefix, namespace, 'type']}
+                   noStyle>
+          <HiddenField name={[...prefix, namespace, 'type']}
+                       disabled={disabled}/>
+        </Form.Item>
+      </>
   );
 };
 

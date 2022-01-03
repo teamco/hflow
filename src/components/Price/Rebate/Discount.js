@@ -96,23 +96,21 @@ const Discount = props => {
                       form={formRef}
                       disabledDate={current => current && current < moment().endOf('day')}
                       disabled={disabled || !isDiscounted}
+                      config={{ rules: [{ required: isDiscounted }] }}
                       label={t('price:discountStartedAt')}/>
         </div>
         <div>
           <HiddenField form={formRef}
                        name={[...prefix, namespace, 'type']}
-                       disabled={disabled}/>
+                       disabled={disabled || !isDiscounted}/>
         </div>
         <div>
           <Duration form={formRef}
                     label={t('price:discountDuration')}
-                    disabled={disabled}
+                    disabled={disabled || !isDiscounted}
                     prefix={[...prefix, namespace]}
+                    required={isDiscounted}
                     durationTypes={durationTypes}/>
-          <HiddenField name={[...prefix, namespace, 'duration', 'type']}
-                       form={formRef}
-                       min={0}
-                       disabled={disabled}/>
         </div>
       </GenericPanel>
   );

@@ -212,7 +212,8 @@ export const featureEdit = (props) => {
                     discount: {
                       value: 0,
                       duration: {
-                        period: 0
+                        period: 0,
+                        type: 'Month'
                       }
                     }
                   },
