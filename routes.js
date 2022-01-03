@@ -210,6 +210,15 @@ export const routes = [
           },
           {
             exact: true,
+            path: '/admin/durationTypes',
+            component: '@/pages/durationTypes',
+            breadcrumb: 'route:durationTypes',
+            wrappers: [
+              '@/wrappers/auth.wrapper'
+            ]
+          },
+          {
+            exact: true,
             path: '/admin/featureTypes',
             component: '@/pages/subscriptions/features/types',
             breadcrumb: 'route:featureTypes',

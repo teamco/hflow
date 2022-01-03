@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DatePicker, InputNumber, Select, Switch } from 'antd';
 import { withTranslation } from 'react-i18next';
+import moment from 'moment';
 
 import FormComponents from '@/components/Form';
 import Rebate from '@/components/Price/Rebate';
@@ -93,14 +94,14 @@ const Discount = props => {
                        config={{ rules: [{ required: isDiscounted }] }}/>
           <DatePicker name={[...prefix, namespace, 'startedAt']}
                       form={formRef}
+                      disabledDate={current => current && current < moment().endOf('day')}
                       disabled={disabled || !isDiscounted}
                       label={t('feature:startedAt')}/>
         </div>
         <div>
-          <Rebate.Type formRef={formRef}
-                       prefix={prefix}
-                       namespace={namespace}
-                       disabled={disabled || !isDiscounted}/>
+          <Rebate.Type form={formRef}
+                       name={[...prefix, namespace, 'type']}
+                       disabled={disabled}/>
         </div>
         {children}
       </GenericPanel>

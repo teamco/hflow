@@ -4,7 +4,9 @@ import { MailOutlined, MessageTwoTone } from '@ant-design/icons';
 
 import { withTranslation } from 'react-i18next';
 
-import styles from 'pages/users/users.module.less';
+import HiddenField from '@/components/Form/HiddenField';
+
+import styles from '@/pages/users/users.module.less';
 
 /**
  * @export
@@ -102,7 +104,7 @@ const SendMessage = (props) => {
               <Form.Item label={t('notifications:re')}
                          name={'replyTo'}
                          noStyle>
-                <Input type={'hidden'}/>
+                <HiddenField />
               </Form.Item>
           )}
           <Form.Item label={t('table:title')}

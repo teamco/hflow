@@ -1,7 +1,7 @@
 import Discount from '@/components/Price/Rebate/Discount';
-import DiscountType from '@/components/Price/Rebate/DiscountType';
+import Form from '@/components/Form';
 
 export default {
   Discount,
-  Type: DiscountType
-}
+  Type: Form.HiddenField
+};

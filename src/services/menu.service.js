@@ -3,6 +3,7 @@ import {
   ApiOutlined,
   ControlOutlined,
   DollarOutlined,
+  FieldTimeOutlined,
   FontSizeOutlined,
   FundOutlined,
   InfoCircleOutlined,
@@ -103,6 +104,13 @@ export const menus = [
         url: '/admin/currencies',
         component: 'currencies',
         icon: <DollarOutlined/>
+      },
+      { divider: true },
+      {
+        key: 'menu:durationTypes',
+        url: '/admin/durationTypes',
+        component: 'durationTypes',
+        icon: <FieldTimeOutlined/>
       }
     ]
   },

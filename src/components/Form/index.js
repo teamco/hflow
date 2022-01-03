@@ -4,6 +4,7 @@ import { findObjectValue } from 'utils/object';
 import GenericPanel from './GenericPanel';
 import GenericTabs from './GenericTabs';
 import EditableTags from './EditableTags';
+import HiddenField from './HiddenField';
 import MandatoryTextarea from './MandatoryTextarea';
 import Phone from './phone';
 
@@ -78,6 +79,7 @@ export default {
   GenericPanel,
   GenericTabs,
   EditableTags,
+  HiddenField,
   Phone,
   MandatoryTextarea
 };

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { Form, Input, InputNumber, Select, Switch } from 'antd';
-import FormComponents from 'components/Form';
+import { Form, InputNumber, Select, Switch } from 'antd';
+import FormComponents from '@/components/Form';
 
-const { GenericPanel } = FormComponents;
+const { GenericPanel, HiddenField } = FormComponents;
 const { Option } = Select;
 
 /**
@@ -115,10 +115,9 @@ export const FeatureInfo = (props) => {
                   name={'selectedByDefault'}/>
         </div>
         <div>
-          <Input type={'hidden'}
-                 name={['price', 'currency']}
-                 form={formRef}
-                 disabled={disabled}/>
+          <HiddenField name={['price', 'currency']}
+                       form={formRef}
+                       disabled={disabled}/>
         </div>
       </GenericPanel>
   );
