@@ -2,7 +2,13 @@
  * @export
  * @type {string}
  */
-export const DEFAULT_DATE_FORMAT = 'MM-DD-YYYY';
+export const DEFAULT_DATE_FORMAT = 'YYYY-MM-DD';
+
+/**
+ * @export
+ * @type {string}
+ */
+export const DEFAULT_DATE_TIME_FORMAT = `${DEFAULT_DATE_FORMAT} HH:mm:ss`;
 
 /**
  * @export
