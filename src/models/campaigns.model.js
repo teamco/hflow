@@ -38,7 +38,10 @@ export default dvaModelExtend(commonModel, {
   state: {
     ...DEFAULT_STATE,
     subscriptions: [],
-    data: []
+    data: [],
+    currencies: [],
+    durationTypes: [],
+    featureTypes: []
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
@@ -131,7 +134,10 @@ export default dvaModelExtend(commonModel, {
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(campaign) } });
       yield put({ type: 'campaignTypes' });
+      yield put({ type: 'getSimpleEntity', payload: { doc: 'currencies' } });
+      yield put({ type: 'getSimpleEntity', payload: { doc: 'durationTypes' } });
       yield put({ type: 'validateCampaign', payload: { campaignId: campaign } });
+      yield put({ type: 'getSimpleEntity', payload: { doc: 'featureTypes' } });
     },
 
     * prepareToSave({ payload, params }, { call, select, put }) {

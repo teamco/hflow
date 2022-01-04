@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
@@ -8,7 +8,7 @@ import Main from 'components/Main';
 import Page from 'components/Page';
 
 import { CampaignInfo } from 'pages/campaigns/[campaign]/form/campaign.info';
-import { CampaignOptions } from 'pages/campaigns/[campaign]/form/campaign.info';
+import { CampaignDiscount } from 'pages/campaigns/[campaign]/form/campaign.discount';
 
 import CampaignMenu from 'pages/campaigns/metadata/campaigns.menu';
 
@@ -59,6 +59,7 @@ export const campaignEdit = (props) => {
     discountTypes,
     durationTypes,
     businessUsers,
+    currencies,
     tags,
     isEdit,
     touched
@@ -69,10 +70,17 @@ export const campaignEdit = (props) => {
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
 
+  const [currency, setCurrency] = useState(currencies[0]);
+
   useEffect(() => {
     canUpdate && onEditCampaign(params);
     onSubscriptions()
   }, [authModel.user, canUpdate]);
+
+  const price = formRef.getFieldValue('price');
+  useEffect(() => {
+    setCurrency(price?.currency || currencies[0]);
+  }, [price, currencies]);
 
   /**
    * @constant
@@ -130,6 +138,13 @@ export const campaignEdit = (props) => {
     onDeleteCampaign
   };
 
+  const discountProps = {
+    formRef,
+    disabled,
+    currency,
+    durationTypes
+  };
+
   const subTitle = (
       <>
         <TrademarkOutlined style={{ marginRight: 10 }}/>
@@ -184,12 +199,22 @@ export const campaignEdit = (props) => {
                 onFinish={onFinish}
                 initialValues={{
                   discountType: t('currency'),
-                  discount: 0,
-                  durationType: "week"
+                  price: {
+                    originalPrice: 1,
+                    discounted: true,
+                    currency,
+                    discount: {
+                      value: 1,
+                      duration: {
+                        period: 1,
+                        type: 'Month'
+                      }
+                    }
+                  },
                 }}
                 onFieldsChange={onFieldsChange}>
             <CampaignInfo {...campaignInfoProps} />
-            <CampaignOptions {...campaignOptionsProps} />
+            <CampaignDiscount {...discountProps} />
             <Info {...infoProps} />
           </Form>
         </div>

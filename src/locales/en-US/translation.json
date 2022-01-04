@@ -331,8 +331,8 @@
     "activate": "Activate Duration",
     "title": "Title",
     "description": "Description",
-    "isDiscount": "Activate Discount"
-
+    "isDiscount": "Activate Discount",
+    "options": "Options"
   },
   "subscription": {
     "type": "Subscription Type",
