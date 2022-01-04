@@ -16,7 +16,7 @@ const Duration = props => {
   const {
     t,
     form,
-    min = 0,
+    min = 1,
     label,
     disabled,
     durationTypes = [],
