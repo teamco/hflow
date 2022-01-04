@@ -25,10 +25,7 @@ export const getAllSubscriptions = async () => {
 /**
  * @export
  * @param {string} [field]
- * @param value
- * @return {{docId, data}}
- */
-export const getSubscription = async ({ id }) => {
+ * @param valuesdw
   const subscriptions = await xhrRequest({
     url: API.subscriptions.get,
     method: request.METHOD.get,

@@ -8,6 +8,7 @@ import Main from 'components/Main';
 import Page from 'components/Page';
 
 import { CampaignInfo } from 'pages/campaigns/[campaign]/form/campaign.info';
+import { CampaignOptions } from 'pages/campaigns/[campaign]/form/campaign.info';
 
 import CampaignMenu from 'pages/campaigns/metadata/campaigns.menu';
 
@@ -87,24 +88,18 @@ export const campaignEdit = (props) => {
     disabled,
     campaignTypes,
     campaignPeriod,
-    discountTypes,
     businessUsers,
     subscriptions,
-    durationTypes
   };
-
-  const campaignPrefsProps = {
+  const campaignOptionsProps = {
     t,
     formRef,
-    disabled
-  };
-
-  const tagsProps = {
-    t,
-    formRef,
-    onUpdateTags,
     disabled,
-    tags
+    campaignTypes,
+    campaignPeriod,
+    discountTypes,
+    businessUsers,
+    durationTypes
   };
 
   const {
@@ -194,6 +189,7 @@ export const campaignEdit = (props) => {
                 }}
                 onFieldsChange={onFieldsChange}>
             <CampaignInfo {...campaignInfoProps} />
+            <CampaignOptions {...campaignOptionsProps} />
             <Info {...infoProps} />
           </Form>
         </div>
