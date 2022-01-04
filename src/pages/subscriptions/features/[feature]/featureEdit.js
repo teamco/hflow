@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
+import { DownOutlined, SettingOutlined, ControlOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
 import SaveButton from 'components/Buttons/save.button';
@@ -152,7 +152,7 @@ export const featureEdit = (props) => {
 
   const subTitle = (
       <>
-        <TrademarkOutlined style={{ marginRight: 10 }}/>
+        <ControlOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
             t('actions:edit', { type: t('menu:feature') }) :
             t('actions:addNew', { type: t('menu:feature') })

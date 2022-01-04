@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import Rebate from '@/components/Price/Rebate';
-import Range from '@/components/Price/Range';
 
 const DISCOUNT_TYPES = ['%', 'currency'];
 

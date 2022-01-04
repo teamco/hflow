@@ -226,7 +226,8 @@
     "features": "Subscription Features",
     "featureConfig": "Feature Configuration",
     "subscriptionTypes": "Types",
-    "businessTypes": "Types"
+    "businessTypes": "Types",
+    "discountInfo": "Discount Info"
   },
   "address": {
     "province": "Province",
@@ -376,6 +377,12 @@
     "notifications": "Notifications",
     "requestList": "Access to Full Request list",
     "logoOnPartnersPage": "Logo on Partners Page"
+  },
+  "price": {
+    "discounted": "Is Discounted?",
+    "discount": "Discount",
+    "discountStartedAt": "Started at",
+    "discountDuration": "Discount Duration"
   },
   "pages": {
   }

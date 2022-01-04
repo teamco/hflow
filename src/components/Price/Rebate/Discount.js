@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import FormComponents from '@/components/Form';
 import Duration from '@/components/Price/Range/Duration';
-import { complexFormKey } from '@/utils/form';
+import { complexFormKey, updateComplexForm } from '@/utils/form';
 
 const { Option } = Select;
 const { GenericPanel, HiddenField } = FormComponents;
@@ -43,11 +43,7 @@ const Discount = props => {
    * @param {string} value
    */
   const handleFormUpdate = value => {
-    const field = prefix[0] ?
-        { [prefix[0]]: { discount: { type: value } } } :
-        { discount: { type: value } };
-
-    formRef.setFieldsValue(field);
+    updateComplexForm(formRef, prefix, namespace, { type: value })
     setDiscountType(value);
   };
 
@@ -75,7 +71,7 @@ const Discount = props => {
   );
 
   return (
-      <GenericPanel header={t('discount:info')}
+      <GenericPanel header={t('panel:discountInfo')}
                     name={namespace}
                     defaultActiveKey={[namespace]}>
         <div>

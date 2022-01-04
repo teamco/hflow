@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, InputNumber, Select } from 'antd';
 import { withTranslation } from 'react-i18next';
 import HiddenField from '@/components/Form/HiddenField';
-import { findObjectByKey } from '@/utils/object';
-import { complexFormKey } from '@/utils/form';
+import { complexFormKey, updateComplexForm } from '@/utils/form';
 
 const { Option } = Select;
 
@@ -39,10 +38,7 @@ const Duration = props => {
    * @param {string} value
    */
   const handleFormUpdate = value => {
-    const _duration = { duration: { type: value } };
-    const field = prefix[0] ? { [prefix[0]]: _duration } : _duration;
-
-    form.setFieldsValue(field);
+    updateComplexForm(form, prefix, namespace, { type: value })
     setDurationType(value);
   };
 

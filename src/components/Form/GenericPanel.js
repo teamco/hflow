@@ -3,11 +3,10 @@ import { Collapse, Form, Spin } from 'antd';
 import { withTranslation } from 'react-i18next';
 import classnames from 'classnames';
 
-import { getSuffix } from 'components/Form';
-import styles from 'components/Form/form.module.less';
+import { getSuffix } from '@/components/Form';
+import Grid from '@/components/Grid';
 
-import Grid from 'components/Grid';
-import MandatoryTextarea from './MandatoryTextarea';
+import styles from '@/components/Form/form.module.less';
 
 const { AntHillRow } = Grid;
 const { Panel } = Collapse;
@@ -87,7 +86,6 @@ class GenericPanel extends Component {
           form,
           label,
           name,
-          span,
           placeholder,
           suffix,
           suffixIcon,
@@ -119,7 +117,7 @@ class GenericPanel extends Component {
         if (_isRequired) {
           const _suffix = getSuffix(t, form, name, label);
 
-          if (_child.type === MandatoryTextarea) {
+          if (_child.type.name === 'MandatoryTextarea') {
             // TODO (teamco): Do something
             configProps.key = `${idx}-${_key}`;
 
@@ -140,15 +138,17 @@ class GenericPanel extends Component {
           }
         }
 
+        const isHidden = _child.type.name === 'HiddenField';
+
         return React.isValidElement(_child) ? (
             <Form.Item label={label}
                        name={name}
-                       span={span}
                        tooltip={tooltip}
                        shouldUpdate
                        dependencies={dependencies}
                        key={`${idx}-${_key}`}
                        rules={rules}
+                       className={isHidden ? styles.hidden : null}
                        {...rest}>
               {React.cloneElement(_child, { ...configProps })}
             </Form.Item>
@@ -178,11 +178,11 @@ class GenericPanel extends Component {
                              display: 'flex',
                              padding: '8px 0',
                              flexFlow: 'wrap'
-                       }}>
-                    {_formItem(_rowChild, idx)}
-                  </div>
-              ) : null;
-            })}
+                           }}>
+                        {_formItem(_rowChild, idx)}
+                      </div>
+                  ) : null;
+                })}
           </Panel>
         </Collapse>
     );
