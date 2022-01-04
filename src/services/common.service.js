@@ -58,3 +58,10 @@ export function getEntityFormIdx({ entityForm, key, namespace = '' }) {
  * @return {boolean}
  */
 export const isNew = id => id === 'new';
+
+/**
+ * @export
+ * @param type
+ * @return {string}
+ */
+export const custDiscountType = type => type === '%' ? 'Percent' : 'Currency';

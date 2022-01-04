@@ -2,7 +2,7 @@
 import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from 'models/common.model';
-import { isNew } from 'services/common.service';
+import { custDiscountType, isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
 import { history } from 'umi';
 
@@ -138,7 +138,8 @@ export default dvaModelExtend(commonModel, {
             ...price,
             discount: {
               ...price.discount,
-              startedAt: moment(price.discount.startedAt).format(DEFAULT_DATE_FORMAT)
+              startedAt: `${moment(price.discount.startedAt).format(DEFAULT_DATE_FORMAT)} 00:00:00`,
+              type: custDiscountType(price.discount.type)
             }
           },
           type, currency,

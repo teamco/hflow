@@ -90,7 +90,7 @@ const Discount = props => {
                        label={t('price:discount')}
                        name={[...prefix, namespace, 'value']}
                        form={formRef}
-                       min={0}
+                       min={1}
                        disabled={disabled || !isDiscounted}
                        config={{ rules: [{ required: isDiscounted }] }}/>
           <DatePicker name={[...prefix, namespace, 'startedAt']}

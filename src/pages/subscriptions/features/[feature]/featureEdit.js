@@ -203,13 +203,13 @@ export const featureEdit = (props) => {
                   helper: true,
                   defaultState: true,
                   price: {
-                    originalPrice: 0,
+                    originalPrice: 1,
                     discounted: true,
                     currency,
                     discount: {
-                      value: 0,
+                      value: 1,
                       duration: {
-                        period: 0,
+                        period: 1,
                         type: 'Month'
                       }
                     }
