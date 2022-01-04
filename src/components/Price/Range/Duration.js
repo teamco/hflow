@@ -30,7 +30,7 @@ const Duration = props => {
   const [durationType, setDurationType] = useState(duration?.type);
 
   useEffect(() => {
-    setDurationType(duration?.type || durationTypes[0]);
+    handleFormUpdate(duration?.type || durationTypes[0]);
   }, [duration?.type]);
 
   /**
@@ -38,7 +38,7 @@ const Duration = props => {
    * @param {string} value
    */
   const handleFormUpdate = value => {
-    updateComplexForm(form, prefix, namespace, { type: value })
+    updateComplexForm(form, prefix, namespace, { type: value });
     setDurationType(value);
   };
 
@@ -72,11 +72,8 @@ const Duration = props => {
                        disabled={disabled}
                        placeholder={t('form:placeholder', { field: label })}/>
         </Form.Item>
-        <Form.Item name={[...prefix, namespace, 'type']}
-                   noStyle>
-          <HiddenField name={[...prefix, namespace, 'type']}
-                       disabled={disabled}/>
-        </Form.Item>
+        <HiddenField name={[...prefix, namespace, 'type']}
+                     disabled={disabled}/>
       </>
   );
 };

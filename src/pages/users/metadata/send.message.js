@@ -101,11 +101,8 @@ const SendMessage = (props) => {
             <Input disabled/>
           </Form.Item>
           {replyTo && (
-              <Form.Item label={t('notifications:re')}
-                         name={'replyTo'}
-                         noStyle>
-                <HiddenField />
-              </Form.Item>
+              <HiddenField label={t('notifications:re')}
+                           name={'replyTo'}/>
           )}
           <Form.Item label={t('table:title')}
                      tooltip={t('form:required', { field: t('table:title') })}

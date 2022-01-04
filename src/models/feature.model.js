@@ -4,7 +4,6 @@ import dvaModelExtend from 'dva-model-extend';
 import { commonModel } from 'models/common.model';
 import { isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
-import { fbFindById } from 'services/firebase.service';
 import { history } from 'umi';
 
 import i18n from 'utils/i18n';
@@ -12,6 +11,8 @@ import { monitorHistory } from 'utils/history';
 import { errorSaveMsg } from 'utils/message';
 import { addFeature, getFeature, getFeatures, updateFeature } from 'services/features.service';
 import { setAs } from 'utils/object';
+import moment from 'moment';
+import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 
 const DEFAULT_STATE = {};
 
@@ -133,7 +134,14 @@ export default dvaModelExtend(commonModel, {
           id: selectedFeature?.id,
           name: i18n.t(title),
           selectedByDefault,
-          price, type, currency,
+          price: {
+            ...price,
+            discount: {
+              ...price.discount,
+              startedAt: moment(price.discount.startedAt).format(DEFAULT_DATE_FORMAT)
+            }
+          },
+          type, currency,
           translateKeys: {
             description: setAs(description, null),
             title, on, off

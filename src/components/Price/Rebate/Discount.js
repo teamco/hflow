@@ -6,6 +6,7 @@ import moment from 'moment';
 import FormComponents from '@/components/Form';
 import Duration from '@/components/Price/Range/Duration';
 import { complexFormKey, updateComplexForm } from '@/utils/form';
+import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 
 const { Option } = Select;
 const { GenericPanel, HiddenField } = FormComponents;
@@ -35,7 +36,7 @@ const Discount = props => {
   const [isDiscounted, setIsDiscounted] = useState(discounted);
 
   useEffect(() => {
-    setDiscountType(discount?.type || discountTypes[0]);
+    handleFormUpdate(discount?.type || discountTypes[0]);
   }, [discount?.type]);
 
   /**
@@ -94,6 +95,7 @@ const Discount = props => {
                        config={{ rules: [{ required: isDiscounted }] }}/>
           <DatePicker name={[...prefix, namespace, 'startedAt']}
                       form={formRef}
+                      format={DEFAULT_DATE_FORMAT}
                       disabledDate={current => current && current < moment().endOf('day')}
                       disabled={disabled || !isDiscounted}
                       config={{ rules: [{ required: isDiscounted }] }}
