@@ -29,7 +29,7 @@ export const getAllCampaigns = async () => {
 * @return {Promise<GlobalConfig.Promise<*>|undefined>}
 */
 export const getCampaign = async ({ id }) => {
-  return await xhrRequest({
+  return xhrRequest({
     url: API.campaigns.get,
     method: request.METHOD.get,
     featureKey: id
@@ -44,7 +44,7 @@ export const getCampaign = async ({ id }) => {
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
 export const updateCampaign = async ({ id, data }) => {
-  return await xhrRequest({
+  return xhrRequest({
     url: API.campaigns.get,
     method: request.METHOD.put,
     featureKey: id,
@@ -59,7 +59,7 @@ export const updateCampaign = async ({ id, data }) => {
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
 export const addCampaign = async ({ data }) => {
-  return await xhrRequest({ url: API.campaigns.store, data });
+  return xhrRequest({ url: API.campaigns.store, data });
 };
 
 
