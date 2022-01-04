@@ -138,7 +138,7 @@ export default dvaModelExtend(commonModel, {
             ...price,
             discount: {
               ...price.discount,
-              startedAt: moment(price.discount.startedAt).format(DEFAULT_DATE_FORMAT),
+              startedAt: `${moment(price.discount.startedAt).format(DEFAULT_DATE_FORMAT)} 00:00:00`,
               type: custDiscountType(price.discount.type)
             }
           },

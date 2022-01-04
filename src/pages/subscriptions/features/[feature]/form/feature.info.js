@@ -70,7 +70,7 @@ export const FeatureInfo = (props) => {
                        label={t('feature:price')}
                        name={['price', 'originalPrice']}
                        form={formRef}
-                       min={0}
+                       min={1}
                        disabled={disabled}
                        config={{ rules: [{ required: true }] }}/>
         </div>
