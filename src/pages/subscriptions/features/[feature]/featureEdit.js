@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
+import { DownOutlined, SettingOutlined, ControlOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
 import SaveButton from 'components/Buttons/save.button';
@@ -66,7 +66,6 @@ export const featureEdit = (props) => {
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
 
-  const [disabledDescription, setDisabledDescription] = useState(false);
   const [currency, setCurrency] = useState(currencies[0]);
 
   useEffect(() => {
@@ -108,8 +107,7 @@ export const featureEdit = (props) => {
     disabled,
     featureTypes,
     currencies,
-    currency,
-    setDisabledDescription
+    currency
   };
 
   const discountProps = {
@@ -122,8 +120,7 @@ export const featureEdit = (props) => {
   const translateProps = {
     t,
     formRef,
-    disabled,
-    disabledDescription
+    disabled
   };
 
   const infoProps = {
@@ -152,7 +149,7 @@ export const featureEdit = (props) => {
 
   const subTitle = (
       <>
-        <TrademarkOutlined style={{ marginRight: 10 }}/>
+        <ControlOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
             t('actions:edit', { type: t('menu:feature') }) :
             t('actions:addNew', { type: t('menu:feature') })
@@ -212,7 +209,8 @@ export const featureEdit = (props) => {
                     discount: {
                       value: 0,
                       duration: {
-                        period: 0
+                        period: 0,
+                        type: 'Month'
                       }
                     }
                   },

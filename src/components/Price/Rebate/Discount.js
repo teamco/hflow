@@ -5,6 +5,8 @@ import moment from 'moment';
 
 import FormComponents from '@/components/Form';
 import Duration from '@/components/Price/Range/Duration';
+import { complexFormKey, updateComplexForm } from '@/utils/form';
+import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 
 const { Option } = Select;
 const { GenericPanel, HiddenField } = FormComponents;
@@ -26,12 +28,15 @@ const Discount = props => {
     durationTypes = []
   } = props;
 
-  const { discount, discounted } = formRef.getFieldValue(prefix[0] || namespace);
+  const wrapper = formRef.getFieldValue(prefix[0]);
+  const discounted = wrapper?.discounted;
+  const discount = complexFormKey(wrapper, namespace, wrapper.type && wrapper.value);
+
   const [discountType, setDiscountType] = useState(discount?.type);
   const [isDiscounted, setIsDiscounted] = useState(discounted);
 
   useEffect(() => {
-    setDiscountType(discount?.type || discountTypes[0]);
+    handleFormUpdate(discount?.type || discountTypes[0]);
   }, [discount?.type]);
 
   /**
@@ -39,11 +44,7 @@ const Discount = props => {
    * @param {string} value
    */
   const handleFormUpdate = value => {
-    const field = prefix[0] ?
-        { [prefix[0]]: { discount: { type: value } } } :
-        { discount: { type: value } };
-
-    formRef.setFieldsValue(field);
+    updateComplexForm(formRef, prefix, namespace, { type: value })
     setDiscountType(value);
   };
 
@@ -71,7 +72,7 @@ const Discount = props => {
   );
 
   return (
-      <GenericPanel header={t('discount:info')}
+      <GenericPanel header={t('panel:discountInfo')}
                     name={namespace}
                     defaultActiveKey={[namespace]}>
         <div>
@@ -94,25 +95,24 @@ const Discount = props => {
                        config={{ rules: [{ required: isDiscounted }] }}/>
           <DatePicker name={[...prefix, namespace, 'startedAt']}
                       form={formRef}
+                      format={DEFAULT_DATE_FORMAT}
                       disabledDate={current => current && current < moment().endOf('day')}
                       disabled={disabled || !isDiscounted}
+                      config={{ rules: [{ required: isDiscounted }] }}
                       label={t('price:discountStartedAt')}/>
         </div>
         <div>
           <HiddenField form={formRef}
                        name={[...prefix, namespace, 'type']}
-                       disabled={disabled}/>
+                       disabled={disabled || !isDiscounted}/>
         </div>
         <div>
           <Duration form={formRef}
                     label={t('price:discountDuration')}
-                    disabled={disabled}
+                    disabled={disabled || !isDiscounted}
                     prefix={[...prefix, namespace]}
+                    required={isDiscounted}
                     durationTypes={durationTypes}/>
-          <HiddenField name={[...prefix, namespace, 'duration', 'type']}
-                       form={formRef}
-                       min={0}
-                       disabled={disabled}/>
         </div>
       </GenericPanel>
   );

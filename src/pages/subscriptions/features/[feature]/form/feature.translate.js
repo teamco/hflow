@@ -15,8 +15,7 @@ export const FeatureTranslate = (props) => {
   const {
     t,
     formRef,
-    disabled,
-    disabledDescription
+    disabled
   } = props;
 
   /**
@@ -33,6 +32,15 @@ export const FeatureTranslate = (props) => {
   const [trDescription, setDescription] = useState(description);
   const [trOn, setOn] = useState(on);
   const [trOff, setOff] = useState(off);
+
+  const [disabledDescription, setDisabledDescription] = useState(false);
+  const [enableHelper, setEnableHelper] = useState(false);
+
+  useEffect(() => {
+    const _desc = description?.length;
+    setEnableHelper(!!_desc);
+    setDisabledDescription(!_desc);
+  }, [translate]);
 
   useEffect(() => {
     setTitle(title);
@@ -52,10 +60,31 @@ export const FeatureTranslate = (props) => {
     handler(value);
   };
 
+  /**
+   * @constant
+   * @param {boolean} value
+   */
+  const toggleHelper = value => {
+    setDisabledDescription(!value);
+    setEnableHelper(value);
+  };
+
   return (
       <GenericPanel header={t('feature:translate')}
                     name={'translate'}
                     defaultActiveKey={['translate']}>
+        <div>
+          <>
+            <Form.Item label={t('feature:helper')}
+                       valuePropName={'checked'}>
+              <Switch disabled={disabled}
+                      checked={enableHelper}
+                      onChange={toggleHelper}
+                      checkedChildren={t('actions:yes')}
+                      unCheckedChildren={t('actions:no')}/>
+            </Form.Item>
+          </>
+        </div>
         <div>
           <Input type={'text'}
                  label={t('feature:title')}

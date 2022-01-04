@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { InputNumber, Select } from 'antd';
+import { Form, InputNumber, Select } from 'antd';
 import { withTranslation } from 'react-i18next';
+import HiddenField from '@/components/Form/HiddenField';
+import { complexFormKey, updateComplexForm } from '@/utils/form';
 
 const { Option } = Select;
 
@@ -15,23 +17,20 @@ const Duration = props => {
     t,
     form,
     min = 0,
+    label,
     disabled,
     durationTypes = [],
+    required,
     prefix = [],
-    required = true,
     namespace = 'duration'
   } = props;
 
-  const {
-    label = t('duration'),
-    name = [...prefix, namespace, 'period']
-  } = props;
-
-  const { duration } = form.getFieldValue(prefix[0] || namespace);
+  const wrapper = form.getFieldValue(prefix[0] || namespace);
+  const duration = complexFormKey(wrapper, namespace, wrapper.type && wrapper.period);
   const [durationType, setDurationType] = useState(duration?.type);
 
   useEffect(() => {
-    setDurationType(duration?.type || durationTypes[0]);
+    handleFormUpdate(duration?.type || durationTypes[0]);
   }, [duration?.type]);
 
   /**
@@ -39,10 +38,7 @@ const Duration = props => {
    * @param {string} value
    */
   const handleFormUpdate = value => {
-    const _duration = { duration: { type: value } };
-    const field = prefix[0] ? { [prefix[0]]: _duration } : _duration;
-
-    form.setFieldsValue(field);
+    updateComplexForm(form, prefix, namespace, { type: value });
     setDurationType(value);
   };
 
@@ -62,13 +58,23 @@ const Duration = props => {
   );
 
   return (
-      <InputNumber addonBefore={selectDurationBefore}
-                   label={label}
-                   name={name}
-                   form={form}
-                   min={min}
-                   disabled={disabled}
-                   config={{ rules: [{ required }] }}/>
+      <>
+        <Form.Item noStyle
+                   name={[...prefix, namespace, 'period']}
+                   rules={[
+                     {
+                       required,
+                       message: t('form:required', { field: label })
+                     }
+                   ]}>
+          <InputNumber addonBefore={selectDurationBefore}
+                       min={min}
+                       disabled={disabled}
+                       placeholder={t('form:placeholder', { field: label })}/>
+        </Form.Item>
+        <HiddenField name={[...prefix, namespace, 'type']}
+                     disabled={disabled}/>
+      </>
   );
 };
 
