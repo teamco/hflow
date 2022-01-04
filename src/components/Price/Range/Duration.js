@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Form, InputNumber, Select } from 'antd';
 import { withTranslation } from 'react-i18next';
 import HiddenField from '@/components/Form/HiddenField';
+import { findObjectByKey } from '@/utils/object';
+import { complexFormKey } from '@/utils/form';
 
 const { Option } = Select;
 
@@ -20,11 +22,12 @@ const Duration = props => {
     disabled,
     durationTypes = [],
     required,
-    prefix,
+    prefix = [],
     namespace = 'duration'
   } = props;
 
-  const { duration } = form.getFieldValue(prefix[0] || namespace);
+  const wrapper = form.getFieldValue(prefix[0] || namespace);
+  const duration = complexFormKey(wrapper, namespace, wrapper.type && wrapper.period);
   const [durationType, setDurationType] = useState(duration?.type);
 
   useEffect(() => {

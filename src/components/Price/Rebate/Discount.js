@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import FormComponents from '@/components/Form';
 import Duration from '@/components/Price/Range/Duration';
+import { complexFormKey } from '@/utils/form';
 
 const { Option } = Select;
 const { GenericPanel, HiddenField } = FormComponents;
@@ -26,7 +27,10 @@ const Discount = props => {
     durationTypes = []
   } = props;
 
-  const { discount, discounted } = formRef.getFieldValue(prefix[0] || namespace);
+  const wrapper = formRef.getFieldValue(prefix[0]);
+  const discounted = wrapper?.discounted;
+  const discount = complexFormKey(wrapper, namespace, wrapper.type && wrapper.value);
+
   const [discountType, setDiscountType] = useState(discount?.type);
   const [isDiscounted, setIsDiscounted] = useState(discounted);
 

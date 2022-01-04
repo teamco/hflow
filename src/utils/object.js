@@ -7,7 +7,7 @@ const { Option } = Select;
 /**
  * @export
  * @function
- * @param {Object} values
+ * @param {Object} object
  * @param {[string]} keys
  * @param {number} nsDeep Start from index.
  * @example
@@ -22,17 +22,53 @@ const { Option } = Select;
  * const value = findObjectValue(values, keys, 0)
  * @return {*}
  */
-export function findObjectValue(values, keys, nsDeep) {
-  if (!values) {
-    return values;
+export function findObjectValue(object, keys, nsDeep) {
+  if (!object) {
+    return object;
   }
-  values = values[keys[nsDeep]];
+  object = object[keys[nsDeep]];
   if (nsDeep < keys.length - 1) {
     nsDeep += 1;
-    return findObjectValue(values, keys, nsDeep);
+    return findObjectValue(object, keys, nsDeep);
   } else {
-    return values;
+    return object;
   }
+}
+
+/**
+ * @export
+ * @param object
+ * @param {string} key
+ * @return {null|*}
+ */
+export function findObjectByKey(object, key) {
+  let result = null;
+  if (Array.isArray(object)) {
+    for (let i = 0; i < object.length; i++) {
+      result = findObjectByKey(object[i], key);
+      if (result) {
+        break;
+      }
+    }
+  } else {
+    for (let prop in object) {
+      if (prop === key) {
+        return object[prop];
+      }
+      if (object[prop] instanceof Object || Array.isArray(object[prop])) {
+        result = findObjectByKey(object[prop], key);
+        if (result) {
+          break;
+        }
+      }
+    }
+  }
+
+  if (!result) {
+    throw new Error(`Undefined ${key}`);
+  }
+
+  return result;
 }
 
 /**
