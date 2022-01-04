@@ -66,7 +66,6 @@ export const featureEdit = (props) => {
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
 
-  const [disabledDescription, setDisabledDescription] = useState(false);
   const [currency, setCurrency] = useState(currencies[0]);
 
   useEffect(() => {
@@ -108,8 +107,7 @@ export const featureEdit = (props) => {
     disabled,
     featureTypes,
     currencies,
-    currency,
-    setDisabledDescription
+    currency
   };
 
   const discountProps = {
@@ -122,8 +120,7 @@ export const featureEdit = (props) => {
   const translateProps = {
     t,
     formRef,
-    disabled,
-    disabledDescription
+    disabled
   };
 
   const infoProps = {

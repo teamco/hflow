@@ -19,33 +19,12 @@ export const FeatureInfo = (props) => {
     disabled,
     currency,
     currencies,
-    featureTypes,
-    setDisabledDescription
+    featureTypes
   } = props;
-
-  const translate = formRef?.getFieldValue('translateKeys');
-  const { description } = translate || {};
-
-  const [enableHelper, setEnableHelper] = useState(false);
-
-  useEffect(() => {
-    const _desc = description?.length;
-    setEnableHelper(!!_desc);
-    setDisabledDescription(!_desc);
-  }, [translate]);
 
   useEffect(() => {
     handleFormUpdate(currency);
   }, [currency]);
-
-  /**
-   * @constant
-   * @param {boolean} value
-   */
-  const toggleHelper = value => {
-    setDisabledDescription(!value);
-    setEnableHelper(value);
-  };
 
   /**
    * @constant
@@ -96,16 +75,6 @@ export const FeatureInfo = (props) => {
                        config={{ rules: [{ required: true }] }}/>
         </div>
         <div>
-          <>
-            <Form.Item label={t('feature:helper')}
-                       valuePropName={'checked'}>
-              <Switch disabled={disabled}
-                      checked={enableHelper}
-                      onChange={toggleHelper}
-                      checkedChildren={t('actions:yes')}
-                      unCheckedChildren={t('actions:no')}/>
-            </Form.Item>
-          </>
           <Switch label={t('feature:status')}
                   disabled={disabled}
                   form={formRef}
