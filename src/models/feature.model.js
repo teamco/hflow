@@ -75,7 +75,18 @@ export default dvaModelExtend(commonModel, {
         const feature = yield call(getFeature, { id: featureId });
 
         if (feature.exists) {
-          const selectedFeature = { ...feature.data };
+          const { price: { discount } } = feature.data;
+
+          const selectedFeature = {
+            ...feature.data,
+            price: {
+              ...feature.data.price,
+              discount: {
+                ...discount,
+                startedAt: moment(discount.startedAt)
+              }
+            }
+          };
 
           yield put({ type: 'updateState', payload: { selectedFeature } });
 

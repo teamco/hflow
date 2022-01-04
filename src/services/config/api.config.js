@@ -60,7 +60,7 @@ export const API = {
     store: 'features'
   },
   campaigns: {
-    get: 'campaigns/:campaignsKey',
+    get: 'campaigns/:campaignKey',
     store: 'campaigns'
   },
   subscriptions: {

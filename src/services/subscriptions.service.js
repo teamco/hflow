@@ -49,7 +49,7 @@ export const getAllSubscriptions = async () => {
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
 export const updateSubscription = async ({ id, data }) => {
-  return await xhrRequest({
+  return xhrRequest({
     url: API.subscriptions.get,
     method: request.METHOD.put,
     subscriptionKey: id,
@@ -64,7 +64,7 @@ export const updateSubscription = async ({ id, data }) => {
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
 export const addSubscription = async ({ data }) => {
-  return await xhrRequest({ url: API.subscriptions.store, data });
+  return xhrRequest({ url: API.subscriptions.store, data });
 };
 
 
