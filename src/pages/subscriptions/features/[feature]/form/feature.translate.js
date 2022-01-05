@@ -38,8 +38,12 @@ export const FeatureTranslate = (props) => {
 
   useEffect(() => {
     const _desc = description?.length;
-    setEnableHelper(!!_desc);
-    setDisabledDescription(!_desc);
+    if (enableHelper) {
+      // TODO (teamco): Do nothing.
+    } else {
+      setEnableHelper(!!_desc);
+      setDisabledDescription(!_desc);
+    }
   }, [translate]);
 
   useEffect(() => {
