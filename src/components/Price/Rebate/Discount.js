@@ -26,8 +26,8 @@ const Discount = props => {
     disabled,
     prefix = [],
     namespace = 'discount',
-    discountTypes = [],
-    durationTypes = DISCOUNT_TYPES
+    discountTypes = DISCOUNT_TYPES,
+    durationTypes = []
   } = props;
 
   const wrapper = formRef.getFieldValue(prefix[0]);
@@ -40,12 +40,11 @@ const Discount = props => {
 
   useEffect(() => {
     handleFormUpdate(discount?.type || _discountTypes[0]);
-  }, [discount?.type, currency]);
+  }, [discount?.type, currency, _discountTypes]);
 
   useEffect(() => {
     setDiscountTypes(discountTypes.map(type => (type === 'currency' ? currency : type)));
   }, [currency]);
-
 
   /**
    * @constant

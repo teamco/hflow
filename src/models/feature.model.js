@@ -176,7 +176,7 @@ export default dvaModelExtend(commonModel, {
                   touched: false,
                   selectedFeature: {
                     ...selectedFeature,
-                    version: entity.version
+                    version: entity.data.version
                   }
                 }
               });
