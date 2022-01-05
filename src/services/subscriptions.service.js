@@ -1,44 +1,29 @@
-import _ from 'lodash';
-import { xhrRequest } from './authentication.service';
-import { API } from './config/api.config';
-import request from '../utils/request';
+import { API } from '@/services/config/api.config';
+import request from '@/utils/request';
+import { xhrRequest } from '@/services/authentication.service';
 
 /**
  * @export
  * @return {Promise<{data: *[]}>}
  */
 export const getAllSubscriptions = async () => {
-  const subscriptions = await xhrRequest({
+  return xhrRequest({
     url: API.subscriptions.store,
     method: request.METHOD.get
   });
-
-  let data = [];
-
-  subscriptions?.data?.forEach(doc => {
-    const _data = doc.data();
-    data.push(_.merge(_data, { id: doc.id }));
-  });
-  return { data };
 };
 
 /**
  * @export
- * @param {string} [field]
- * @param valuesdw
-  const subscriptions = await xhrRequest({
+ * @param id
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ */
+export const getSubscription = async ({id}) => {
+  return xhrRequest({
     url: API.subscriptions.get,
     method: request.METHOD.get,
     subscriptionsKey: id
   });
-
-  let data = [];
-
-  subscriptions.forEach(doc => {
-    const _data = doc.data();
-    data.push(_.merge(_data, { id: doc.id }));
-  });
-  return { data };
 };
 
 /**

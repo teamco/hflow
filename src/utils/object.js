@@ -50,16 +50,17 @@ export function findObjectByKey(object, key) {
         break;
       }
     }
-  } else {
-    for (let prop in object) {
-      if (prop === key) {
-        return object[prop];
-      }
-      if (object[prop] instanceof Object || Array.isArray(object[prop])) {
-        result = findObjectByKey(object[prop], key);
-        if (result) {
-          break;
-        }
+  } else for (let prop in object) {
+    if (prop === key) {
+      return object[prop];
+    }
+    if (!object[prop] || object[prop]['_isAMomentObject']) {
+      continue;
+    }
+    if (object[prop] instanceof Object || Array.isArray(object[prop])) {
+      result = findObjectByKey(object[prop], key);
+      if (result) {
+        break;
       }
     }
   }
