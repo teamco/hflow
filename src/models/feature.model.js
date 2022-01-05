@@ -44,7 +44,7 @@ export default dvaModelExtend(commonModel, {
 
     * query({ payload }, { put, call }) {
       const { data = [] } = yield call(getFeatures, { type: 'Business' });
-      yield put({ type: 'updateState', payload: { data } });
+      yield put({ type: 'updateState', payload: { data, touched: false } });
     },
 
     * newFeature({ payload }, { put }) {
