@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from 'react';
-
+import React from 'react';
 import Rebate from '@/components/Price/Rebate';
-
-const DISCOUNT_TYPES = ['%', 'currency'];
 
 /**
  * @export
@@ -15,16 +12,8 @@ export const FeatureDiscount = (props) => {
     formRef,
     disabled,
     durationTypes = [],
-    discountTypes = DISCOUNT_TYPES
+    discountTypes
   } = props;
-
-  const { currency } = formRef.getFieldValue('price');
-
-  const [types, setTypes] = useState(discountTypes);
-
-  useEffect(() => {
-    setTypes(discountTypes.map(type => (type === 'currency' ? currency : type)));
-  }, [currency]);
 
   return (
       <Rebate.Discount formRef={formRef}
@@ -32,6 +21,6 @@ export const FeatureDiscount = (props) => {
                        prefix={['price']}
                        namespace={'discount'}
                        durationTypes={durationTypes}
-                       discountTypes={types}/>
+                       discountTypes={discountTypes}/>
   );
 };

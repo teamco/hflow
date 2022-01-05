@@ -86,7 +86,7 @@ const mergeHeaders = () => {
  */
 function adaptUrlToParams(url = '', args) {
   const matchers = url.match(/:\w+/g);
-  matchers && matchers.forEach((matcher) => {
+  matchers?.forEach((matcher) => {
     const instance = matcher.replace(':', '');
     url = url.replace(new RegExp(matcher), args[instance]);
   });

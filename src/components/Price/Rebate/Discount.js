@@ -11,6 +11,8 @@ import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 const { Option } = Select;
 const { GenericPanel, HiddenField } = FormComponents;
 
+const DISCOUNT_TYPES = ['%', 'currency'];
+
 /**
  * @export
  * @param props
@@ -25,26 +27,33 @@ const Discount = props => {
     prefix = [],
     namespace = 'discount',
     discountTypes = [],
-    durationTypes = []
+    durationTypes = DISCOUNT_TYPES
   } = props;
 
   const wrapper = formRef.getFieldValue(prefix[0]);
-  const discounted = wrapper?.discounted;
-  const discount = complexFormKey(wrapper, namespace, wrapper.type && wrapper.value);
+  const { discounted, currency } = wrapper;
+  const discount = complexFormKey(wrapper, namespace, discount?.type && discount?.value);
 
+  const [_discountTypes, setDiscountTypes] = useState(discountTypes);
   const [discountType, setDiscountType] = useState(discount?.type);
   const [isDiscounted, setIsDiscounted] = useState(discounted);
 
   useEffect(() => {
-    handleFormUpdate(discount?.type || discountTypes[0]);
-  }, [discount?.type]);
+    handleFormUpdate(discount?.type || _discountTypes[0]);
+  }, [discount?.type, currency]);
+
+  useEffect(() => {
+    setDiscountTypes(discountTypes.map(type => (type === 'currency' ? currency : type)));
+  }, [currency]);
+
 
   /**
    * @constant
    * @param {string} value
    */
   const handleFormUpdate = value => {
-    updateComplexForm(formRef, prefix, namespace, { type: value })
+    value = value === 'Percent' ? '%' : currency;
+    updateComplexForm(formRef, prefix, namespace, { type: value });
     setDiscountType(value);
   };
 
@@ -65,7 +74,7 @@ const Discount = props => {
               value={discountType}
               disabled={disabled || !isDiscounted}
               onChange={handleFormUpdate}>
-        {discountTypes.map((type, idx) => (
+        {_discountTypes.map((type, idx) => (
             <Option key={idx} value={type}>{type}</Option>
         ))}
       </Select>
