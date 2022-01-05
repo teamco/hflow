@@ -88,10 +88,11 @@ export default dvaModelExtend(commonModel, {
             }
           };
 
-          yield put({ type: 'updateState', payload: { selectedFeature } });
-
           const _feature = { ...selectedFeature };
           _feature.metadata = yield call(detailsInfo, { entity: _feature, user });
+
+          yield put({ type: 'updateState', payload: { selectedFeature } });
+          yield put({ type: 'updateTags', payload: { tags: _feature.tags } });
 
           return yield put({
             type: 'toForm',
@@ -131,7 +132,8 @@ export default dvaModelExtend(commonModel, {
           description,
           on,
           off
-        }
+        },
+        tags
       } = payload;
 
       if (user && ability.can('update', ABILITY_FOR)) {
@@ -158,7 +160,8 @@ export default dvaModelExtend(commonModel, {
             description: setAs(description, null),
             title, on, off
           },
-          metadata
+          metadata,
+          tags: setAs(tags, [])
         };
 
         if (isEdit) {
@@ -167,7 +170,16 @@ export default dvaModelExtend(commonModel, {
             const entity = yield call(updateFeature, { id: feature, data });
 
             if (entity.exists) {
-              yield put({ type: 'updateState', payload: { touched: false } });
+              yield put({
+                type: 'updateState',
+                payload: {
+                  touched: false,
+                  selectedFeature: {
+                    ...selectedFeature,
+                    version: entity.data.version
+                  }
+                }
+              });
             }
           } else {
             errorSaveMsg(true, 'Feature');

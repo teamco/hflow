@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { DownOutlined, SettingOutlined, ControlOutlined } from '@ant-design/icons';
+import { ControlOutlined, DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
 import SaveButton from 'components/Buttons/save.button';
 
 import Main from 'components/Main';
 import Page from 'components/Page';
+import Rebate from '@/components/Price/Rebate';
 
 import { useParams } from 'umi';
 
@@ -56,8 +57,8 @@ export const featureEdit = (props) => {
     featureTypes,
     durationTypes,
     currencies,
-    tags,
     isEdit,
+    tags,
     touched
   } = featureModel;
 

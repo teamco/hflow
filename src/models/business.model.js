@@ -202,10 +202,8 @@ export default dvaModelExtend(commonModel, {
 
           _business.metadata = yield call(detailsInfo, { entity: _business, user });
 
-          yield put({
-            type: 'handleStates',
-            payload: { country: _business.country }
-          });
+          yield put({ type: 'handleStates', payload: { country: _business.country } });
+          yield put({ type: 'updateTags', payload: { tags: _business.tags } });
 
           return yield put({
             type: 'toForm',
