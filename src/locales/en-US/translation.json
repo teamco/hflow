@@ -228,6 +228,7 @@
     "features": "Subscription Features",
     "featureConfig": "Feature Configuration",
     "subscriptionTypes": "Types",
+    "featureTypes": "Types",
     "businessTypes": "Types",
     "discountInfo": "Discount Info"
   },
