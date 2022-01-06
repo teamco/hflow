@@ -65,10 +65,10 @@ export const businesses = (props) => {
           <PageHeader ghost={false}
                       subTitle={subTitle}
                       extra={[
-                        // <ExportButton key={'export'}
-                        //               disabled={disabled}
-                        //               component={component}
-                        //               json={data}/>,
+                        <ExportButton key={'export'}
+                                      disabled={disabled}
+                                      component={component}
+                                      json={data}/>,
                         <Can I={'create'} a={component} key={'add'}>
                           <Button size={'small'}
                                   loading={loading.effects['businessModel/newBusiness']}
