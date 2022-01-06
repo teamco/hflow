@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { Input, InputNumber, Select, Slider } from 'antd';
 import FormComponents from 'components/Form';
@@ -17,49 +17,42 @@ export const SubscriptionInfo = (props) => {
     t,
     formRef,
     disabled,
-    discountTypes,
+    currency,
+    currencies=[],
     businessUsers: { dims },
     subscriptionTypes = [],
     subscriptionPeriod = {}
   } = props;
-
-  const [discountType, setDiscountType] = useState(formRef.getFieldValue('discountType'));
 
   let marks = {};
   for (let i = dims.min; i <= dims.max; i++) {
     marks[i] = i;
   }
 
-  const _discountType = formRef.getFieldValue('discountType');
-
   useEffect(() => {
-    setDiscountType(_discountType);
-  }, [_discountType]);
+    handleFormUpdate(currency);
+  }, [currency]);
 
   /**
    * @constant
    * @param {string} value
    */
   const handleFormUpdate = value => {
-    formRef.setFieldsValue({ discountType: value });
-    setDiscountType(value);
+    formRef.setFieldsValue({ price: { currency: value } });
   };
 
   /**
    * @constant
    * @type {JSX.Element}
    */
-  const selectDiscountBefore = (
+  const selectCurrencyBefore = (
       <Select style={{ width: 90 }}
-              value={discountType}
+              value={currency}
               disabled={disabled}
               onChange={handleFormUpdate}>
-        <Option key={'percentage'} value={discountTypes?.percentage}>
-          {discountTypes?.percentage}
-        </Option>
-        <Option key={'currency'} value={discountTypes?.currency}>
-          {discountTypes?.currency}
-        </Option>
+        {[...currencies]?.map((type, idx) => (
+            <Option key={idx} value={type}>{type}</Option>
+        ))}
       </Select>
   );
 
@@ -108,18 +101,14 @@ export const SubscriptionInfo = (props) => {
                  config={{ rules: [{ required: true }] }}/>
         </div>
         <div>
-          <InputNumber addonBefore={t('currency')}
-                       label={t('subscription:price')}
-                       name={'price'}
+          <InputNumber addonBefore={selectCurrencyBefore}
+                       label={t('price:originalPrice')}
+                       name={['price', 'originalPrice']}
                        form={formRef}
+                       min={1}
                        disabled={disabled}
                        config={{ rules: [{ required: true }] }}/>
-          <InputNumber addonBefore={selectDiscountBefore}
-                       label={t('subscription:discount')}
-                       name={'discount'}
-                       form={formRef}
-                       disabled={disabled}
-                       config={{ rules: [{ required: true }] }}/>
+          <></>
         </div>
         <div>
           <Slider marks={marks}

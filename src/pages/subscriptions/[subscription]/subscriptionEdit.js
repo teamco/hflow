@@ -97,7 +97,9 @@ export const subscriptionEdit = (props) => {
     subscriptionTypes,
     subscriptionPeriod,
     discountTypes,
-    businessUsers
+    businessUsers,
+    currencies,
+    currency
   };
 
   const featuresProps = {
