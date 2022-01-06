@@ -4,7 +4,7 @@ import { Input, InputNumber, Select, Slider } from 'antd';
 import FormComponents from 'components/Form';
 import Duration from '@/components/Price/Range/Duration';
 
-const { GenericPanel, MandatoryTextarea } = FormComponents;
+const { GenericPanel } = FormComponents;
 const { Option } = Select;
 
 /**

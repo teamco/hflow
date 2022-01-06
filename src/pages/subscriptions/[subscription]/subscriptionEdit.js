@@ -207,9 +207,7 @@ export const subscriptionEdit = (props) => {
                 onFinish={onFinish}
                 onFieldsChange={onFieldsChange}
                 initialValues={{
-                  discountType: t('currency'),
-                  discount: 0,
-                  users: 1,
+                  numberOfUsers: 1,
                   duration: {
                     type: 'Month',
                     period: 1
