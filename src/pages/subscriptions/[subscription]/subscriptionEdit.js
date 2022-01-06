@@ -55,7 +55,6 @@ export const subscriptionEdit = (props) => {
     features,
     selectedSubscription,
     subscriptionTypes,
-    subscriptionPeriod,
     discountTypes,
     businessUsers,
     currencies,
@@ -95,7 +94,7 @@ export const subscriptionEdit = (props) => {
     formRef,
     disabled,
     subscriptionTypes,
-    subscriptionPeriod,
+    durationTypes,
     discountTypes,
     businessUsers,
     currencies,
@@ -211,6 +210,10 @@ export const subscriptionEdit = (props) => {
                   discountType: t('currency'),
                   discount: 0,
                   users: 1,
+                  duration: {
+                    type: 'Month',
+                    period: 1
+                  },
                   ...DEFAULT_PRICE_VALUES(currency)
                 }}>
             <SubscriptionInfo {...subscriptionInfoProps} />

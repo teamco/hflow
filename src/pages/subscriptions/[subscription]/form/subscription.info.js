@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Input, InputNumber, Select, Slider } from 'antd';
 import FormComponents from 'components/Form';
+import Duration from '@/components/Price/Range/Duration';
 
 const { GenericPanel, MandatoryTextarea } = FormComponents;
 const { Option } = Select;
@@ -21,7 +22,7 @@ export const SubscriptionInfo = (props) => {
     currencies=[],
     businessUsers: { dims },
     subscriptionTypes = [],
-    subscriptionPeriod = {}
+    durationTypes = []
   } = props;
 
   let marks = {};
@@ -73,32 +74,25 @@ export const SubscriptionInfo = (props) => {
                 </Option>
             ))}
           </Select>
-          <Select name={'subscriptionPeriod'}
-                  form={formRef}
-                  label={t('subscription:period')}
-                  disabled={disabled}
-                  config={{ rules: [{ required: true }] }}>
-            {[...Object.keys(subscriptionPeriod)].sort().map((period, idx) => (
-                <Option key={idx}
-                        value={period}>
-                  {subscriptionPeriod[period]}
-                </Option>
-            ))}
-          </Select>
+          <Duration form={formRef}
+                    label={t('subscription:period')}
+                    disabled={disabled}
+                    prefix={[]}
+                    required={true}
+                    durationTypes={durationTypes}/>
         </div>
         <div>
           <Input type={'text'}
                  label={t('subscription:title')}
-                 name={'title'}
+                 name={'name'}
                  form={formRef}
                  disabled={disabled}
                  config={{ rules: [{ required: true }] }}/>
           <Input type={'text'}
-                 label={t('subscription:notice')}
-                 name={'notice'}
+                 label={t('form:description')}
+                 name={['translateKeys', 'description']}
                  form={formRef}
-                 disabled={disabled}
-                 config={{ rules: [{ required: true }] }}/>
+                 disabled={disabled}/>
         </div>
         <div>
           <InputNumber addonBefore={selectCurrencyBefore}
@@ -108,32 +102,14 @@ export const SubscriptionInfo = (props) => {
                        min={1}
                        disabled={disabled}
                        config={{ rules: [{ required: true }] }}/>
-          <></>
-        </div>
-        <div>
           <Slider marks={marks}
                   label={t('subscription:users')}
-                  name={'users'}
+                  name={'numberOfUsers'}
                   form={formRef}
                   min={dims.min}
                   max={dims.max}
                   disabled={disabled}
                   config={{ rules: [{ required: true }] }}/>
-          <MandatoryTextarea type={'text'}
-                             label={t('form:description')}
-                             name={'description'}
-                             rows={4}
-                             showCount
-                             maxLength={300}
-                             disabled={disabled}
-                             form={formRef}
-                             config={{ rules: [{ required: true }] }}/>
-        </div>
-        <div>
-          <Input type={'hidden'}
-                 name={'discountType'}
-                 form={formRef}
-                 disabled={disabled}/>
         </div>
       </GenericPanel>
   );

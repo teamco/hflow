@@ -31,15 +31,6 @@ const DEFAULT_STATE = {
   },
   businessUsers: {
     dims: { min: 1, max: 5 }
-  },
-  subscriptionPeriod: {
-    daily: i18n.t('period:daily'),
-    monthly: i18n.t('period:monthly'),
-    yearly: i18n.t('period:yearly')
-  },
-  discountTypes: {
-    percentage: '%',
-    currency: i18n.t('currency')
   }
 };
 
