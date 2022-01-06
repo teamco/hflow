@@ -81,7 +81,7 @@ export const subscriptions = (props) => {
                         <ExportButton key={'export'}
                                       disabled={disabled}
                                       component={component}
-                                      json={data}/>,
+                                      json={subscriptions}/>,
                         <Can I={'create'} a={component} key={'add'}>
                           <Button size={'small'}
                                   loading={loading.effects['subscriptionModel/newSubscription']}
