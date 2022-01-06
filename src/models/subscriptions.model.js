@@ -5,23 +5,25 @@ import { commonModel } from 'models/common.model';
 import { isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
 import { fbFindById, getRef } from 'services/firebase.service';
+import { history } from 'umi';
 import {
   addSubscription,
   getAllSubscriptions,
   getSubscription,
   updateSubscription
-} from 'services/subscriptions.service';
-import { history } from 'umi';
-import { COLORS } from 'utils/colors';
-import { monitorHistory } from 'utils/history';
-import i18n from 'utils/i18n';
-import { errorSaveMsg } from 'utils/message';
-import { setAs } from 'utils/object';
-import { getFeatures } from 'services/features.service';
+} from '@/services/subscriptions.service';
+import { COLORS } from '@/utils/colors';
+import { monitorHistory } from '@/utils/history';
+import i18n from '@/utils/i18n';
+import { errorSaveMsg } from '@/utils/message';
+import { setAs } from '@/utils/object';
+import { getFeatures } from '@/services/features.service';
 
 const DEFAULT_STATE = {
   subscriptions: [],
   features: [],
+  durationTypes: [],
+  currencies: [],
   colorsToType: {
     basic: COLORS.tags.orange,
     standard: COLORS.tags.cyan,
@@ -97,6 +99,7 @@ export default dvaModelExtend(commonModel, {
           const selectedSubscription = { ...subscription.data(), ...{ id: subscription.id } };
 
           yield put({ type: 'updateState', payload: { selectedSubscription } });
+          yield put({ type: 'updateTags', payload: { tags: selectedSubscription.tags, touched:false } });
 
           const _subscription = { ...selectedSubscription };
           const _features = {};
@@ -129,6 +132,8 @@ export default dvaModelExtend(commonModel, {
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(subscription) } });
       yield put({ type: 'features', payload: { type } });
+      yield put({ type: 'getSimpleEntity', payload: { doc: 'currencies' } });
+      yield put({ type: 'getSimpleEntity', payload: { doc: 'durationTypes' } });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'subscriptionTypes' } });
       yield put({ type: 'validateSubscription', payload: { subscriptionId: subscription } });
     },

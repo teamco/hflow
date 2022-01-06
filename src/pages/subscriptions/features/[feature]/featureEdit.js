@@ -2,16 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { ControlOutlined, DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
-import SaveButton from 'components/Buttons/save.button';
-
-import Main from 'components/Main';
-import Page from 'components/Page';
-import Rebate from '@/components/Price/Rebate';
+import SaveButton from '@/components/Buttons/save.button';
+import Main from '@/components/Main';
+import Page from '@/components/Page';
+import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
 
 import { useParams } from 'umi';
 
-import { fromForm } from 'utils/object';
-import { isLoading } from 'utils/state';
+import { fromForm } from '@/utils/object';
+import { isLoading } from '@/utils/state';
 
 import { FeatureInfo } from './form/feature.info';
 import { FeatureDiscount } from './form/feature.discount';
@@ -203,18 +202,7 @@ export const featureEdit = (props) => {
                 initialValues={{
                   helper: true,
                   defaultState: true,
-                  price: {
-                    originalPrice: 1,
-                    discounted: true,
-                    currency,
-                    discount: {
-                      value: 1,
-                      duration: {
-                        period: 1,
-                        type: 'Month'
-                      }
-                    }
-                  },
+                  ...DEFAULT_PRICE_VALUES(currency),
                   featureType: featureTypes[0],
                   translateKeys: {
                     on: 'actions:yes',

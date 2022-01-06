@@ -1,25 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DownOutlined, SettingOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
-
-import SaveButton from 'components/Buttons/save.button';
-
-import Main from 'components/Main';
-import Page from 'components/Page';
-
-import { SubscriptionInfo } from 'pages/subscriptions/[subscription]/form/subscription.info';
-import { SubscriptionTags } from 'pages/subscriptions/[subscription]/form/subscription.tags';
-import { SubscriptionFeatures } from 'pages/subscriptions/[subscription]/form/subscription.features';
-import SubscriptionMenu from 'pages/subscriptions/metadata/subscriptions.menu';
-
 import { useParams } from 'umi';
 
-import { fromForm } from 'utils/object';
-import { isLoading } from 'utils/state';
+import SaveButton from '@/components/Buttons/save.button';
 
-import menuStyles from 'components/menu.less';
-import styles from 'pages/subscriptions/subscriptions.module.less';
-import userStyles from 'pages/users/users.module.less';
+import Main from '@/components/Main';
+import Page from '@/components/Page';
+import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
+
+import { SubscriptionInfo } from '@/pages/subscriptions/[subscription]/form/subscription.info';
+import { SubscriptionTags } from '@/pages/subscriptions/[subscription]/form/subscription.tags';
+import { SubscriptionFeatures } from '@/pages/subscriptions/[subscription]/form/subscription.features';
+import { SubscriptionDiscount } from '@/pages/subscriptions/[subscription]/form/subscription.discount';
+import SubscriptionMenu from '@/pages/subscriptions/metadata/subscriptions.menu';
+
+import { fromForm } from '@/utils/object';
+import { isLoading } from '@/utils/state';
+
+import menuStyles from '@/components/menu.less';
+import styles from '@/pages/subscriptions/subscriptions.module.less';
+import userStyles from '@/pages/users/users.module.less';
 
 const { Info } = Main;
 
@@ -57,6 +58,8 @@ export const subscriptionEdit = (props) => {
     subscriptionPeriod,
     discountTypes,
     businessUsers,
+    currencies,
+    durationTypes,
     tags,
     isEdit,
     touched
@@ -67,9 +70,17 @@ export const subscriptionEdit = (props) => {
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
 
+  const [currency, setCurrency] = useState(currencies[0]);
+
   useEffect(() => {
     canUpdate && onEditSubscription(params);
   }, [authModel.user, canUpdate]);
+
+  const price = formRef.getFieldValue('price');
+
+  useEffect(() => {
+    setCurrency(price?.currency || currencies[0]);
+  }, [price, currencies]);
 
   /**
    * @constant
@@ -96,6 +107,13 @@ export const subscriptionEdit = (props) => {
     disabled,
     features,
     selectedSubscription
+  };
+
+  const discountProps = {
+    formRef,
+    disabled,
+    currency,
+    durationTypes
   };
 
   const tagsProps = {
@@ -189,15 +207,12 @@ export const subscriptionEdit = (props) => {
                 onFieldsChange={onFieldsChange}
                 initialValues={{
                   discountType: t('currency'),
-                  price: 0,
                   discount: 0,
                   users: 1,
-                  accessToMessages: true,
-                  notifications: true,
-                  dashboard: true,
-                  placementOnMap: true
+                  ...DEFAULT_PRICE_VALUES(currency)
                 }}>
             <SubscriptionInfo {...subscriptionInfoProps} />
+            <SubscriptionDiscount {...discountProps}/>
             <SubscriptionFeatures {...featuresProps} />
             <SubscriptionTags {...tagsProps} />
             <Info {...infoProps} />
