@@ -39,13 +39,8 @@ const commonModel = {
   effects: {
 
     * updateTags({ payload }, { put }) {
-      yield put({
-        type: 'updateState',
-        payload: {
-          tags: payload.tags,
-          touched: true
-        }
-      });
+      const { tags = [], touched = true } = payload;
+      yield put({ type: 'updateState', payload: { tags, touched } });
     },
 
     * cleanForm({ payload }, { put, take }) {

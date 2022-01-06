@@ -92,7 +92,7 @@ export default dvaModelExtend(commonModel, {
           _feature.metadata = yield call(detailsInfo, { entity: _feature, user });
 
           yield put({ type: 'updateState', payload: { selectedFeature } });
-          yield put({ type: 'updateTags', payload: { tags: _feature.tags } });
+          yield put({ type: 'updateTags', payload: { tags: _feature.tags, touched:false } });
 
           return yield put({
             type: 'toForm',

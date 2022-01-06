@@ -1,12 +1,19 @@
 import React from 'react';
-import { Button, Dropdown, Form, Switch } from 'antd';
-import { DownOutlined, SettingOutlined } from '@ant-design/icons';
+import { Button, Col, Dropdown, Row, Switch, Tooltip } from 'antd';
+import {
+  DownOutlined,
+  SettingOutlined,
+  ShoppingCartOutlined,
+  CheckCircleTwoTone,
+  CloseCircleTwoTone
+} from '@ant-design/icons';
 import { NavLink } from 'umi';
 
 import { FeatureMenu } from './metadata/feature.menu';
 
 import styles from './features.module.less';
 import menuStyles from 'components/menu.less';
+import { COLORS } from '@/utils/colors';
 
 /**
  * @export
@@ -26,10 +33,10 @@ export const metadata = ({
   return {
     width: '100%',
     size: 'middle',
-    scroll: { x: 600 },
+    scroll: { x: 670 },
     columns: [
       {
-        title: t('feature:example'),
+        title: t('feature:info'),
         dataIndex: 'translateKeys',
         key: 'translateKeys',
         render(translateKeys, record) {
@@ -40,6 +47,22 @@ export const metadata = ({
                 </NavLink>
               </div>
           );
+        }
+      },
+      {
+        title: (
+            <Tooltip title={t('price:discounted')}>
+              <ShoppingCartOutlined/>
+            </Tooltip>
+        ),
+        dataIndex: 'price',
+        key: 'price',
+        width: 70,
+        align: 'center',
+        render(price) {
+          return price.discounted ?
+              <CheckCircleTwoTone twoToneColor={COLORS.success}/> :
+              <CloseCircleTwoTone twoToneColor={COLORS.disabled}/>;
         }
       },
       {
@@ -90,5 +113,31 @@ export const metadata = ({
         }
       }
     ]
+  };
+};
+
+/**
+ * @export
+ * @param props
+ * @return {JSX.Element|{expandedRowRender(*): *, rowExpandable: (function(*): boolean)}}
+ */
+export const expandableFeature = (props) => {
+  const { t } = props;
+  return {
+    expandedRowRender(record) {
+      const rowProps = { gutter: { xs: 8, sm: 16, md: 24, lg: 32 } };
+      const colProps = { sm: 12, md: 8, style: { marginTop: 10 } };
+
+      return (
+          <div className={styles.featureExpand}>
+            <Row {...rowProps}>
+              <Col {...colProps}>
+
+              </Col>
+            </Row>
+          </div>
+      );
+    },
+    rowExpandable: record => true
   };
 };

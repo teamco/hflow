@@ -6,7 +6,7 @@ import Page from 'components/Page';
 import Main from 'components/Main';
 import { Can } from 'utils/auth/can';
 
-import { metadata } from 'pages/subscriptions/features/feature.metadata';
+import { expandableFeature, metadata } from 'pages/subscriptions/features/feature.metadata';
 
 import styles from 'pages/subscriptions/features/features.module.less';
 
@@ -34,7 +34,8 @@ export const features = props => {
   } = featureModel;
 
   const tableProps = {
-    pagination: false
+    pagination: false,
+    expandable: expandableFeature({t})
   };
 
   useEffect(() => {
