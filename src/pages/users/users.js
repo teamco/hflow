@@ -154,10 +154,10 @@ export const users = (props) => {
                       //         icon={<LayoutOutlined/>}
                       //         onClick={onChangeGridLayout}
                       //         type={'primary'}/>,
-                      <ExportButton key={'export'}
-                                    disabled={disabled}
-                                    component={component}
-                                    json={data}/>,
+                      // <ExportButton key={'export'}
+                      //               disabled={disabled}
+                      //               component={component}
+                      //               json={data}/>,
                       selectedUser && (
                           <Can I={'update'} a={component} key={'save'}>
                             <Button key={'update'}
