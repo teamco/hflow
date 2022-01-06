@@ -8,8 +8,10 @@ import FormComponents from 'components/Form';
 import Main from 'components/Main';
 
 import { fromForm } from 'utils/object';
+import { Can } from 'utils/auth/can';
 
 import styles from 'pages/currencies/currencies.module.less';
+import ExportButton from '@/components/Buttons/export.button';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;
@@ -88,11 +90,17 @@ export const currencies = props => {
           <PageHeader ghost={false}
                       subTitle={subTitle}
                       extra={[
-                        <SaveButton key={'save'}
-                                    isEdit={isEdit}
-                                    disabled={disabled || !touched}
-                                    formRef={formRef}
-                                    loading={loading.effects['simpleModel/prepareToSave']}/>
+                        <ExportButton key={'export'}
+                                      disabled={disabled}
+                                      component={component}
+                                      json={tags}/>,
+                        <Can I={'create'} a={component} key={'add'}>
+                          <SaveButton key={'save'}
+                                      isEdit={isEdit}
+                                      disabled={disabled || !touched}
+                                      formRef={formRef}
+                                      loading={loading.effects['simpleModel/prepareToSave']}/>
+                        </Can>
                       ]}>
           </PageHeader>
           <Form layout={'vertical'}

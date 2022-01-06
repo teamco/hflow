@@ -12,6 +12,7 @@ import { subscriptionCardMetadata } from 'pages/subscriptions/subscriptions.meta
 
 import styles from 'pages/subscriptions/subscriptions.module.less';
 import userStyles from 'pages/users/users.module.less';
+import ExportButton from '@/components/Buttons/export.button';
 
 /**
  * @export
@@ -77,6 +78,10 @@ export const subscriptions = (props) => {
           <PageHeader ghost={false}
                       subTitle={subTitle}
                       extra={[
+                        <ExportButton key={'export'}
+                                      disabled={disabled}
+                                      component={component}
+                                      json={data}/>,
                         <Can I={'create'} a={component} key={'add'}>
                           <Button size={'small'}
                                   loading={loading.effects['subscriptionModel/newSubscription']}

@@ -10,6 +10,7 @@ import { metadata } from 'pages/users/[user]/businesses/businesses.metadata';
 
 import styles from 'pages/users/[user]/businesses/businesses.module.less';
 import { Can } from 'utils/auth/can';
+import ExportButton from '@/components/Buttons/export.button';
 
 const { Table } = Main;
 
@@ -64,6 +65,10 @@ export const businesses = (props) => {
           <PageHeader ghost={false}
                       subTitle={subTitle}
                       extra={[
+                        <ExportButton key={'export'}
+                                      disabled={disabled}
+                                      component={component}
+                                      json={data}/>,
                         <Can I={'create'} a={component} key={'add'}>
                           <Button size={'small'}
                                   loading={loading.effects['businessModel/newBusiness']}

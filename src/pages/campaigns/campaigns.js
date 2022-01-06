@@ -9,6 +9,7 @@ import { Can } from 'utils/auth/can';
 import styles from 'pages/campaigns/campaigns.module.less';
 import userStyles from 'pages/users/users.module.less';
 import { metadata } from 'pages/campaigns/campaigns.metadata';
+import ExportButton from '@/components/Buttons/export.button';
 
 const { Table } = Main;
 
@@ -66,6 +67,10 @@ export const campaigns = (props) => {
           <PageHeader ghost={false}
                       subTitle={subTitle}
                       extra={[
+                        <ExportButton key={'export'}
+                                      disabled={disabled}
+                                      component={component}
+                                      json={data}/>,
                         <Can I={'create'} a={component} key={'add'}>
                           <Button size={'small'}
                                   loading={loading.effects['campaignModel/newCampaign']}

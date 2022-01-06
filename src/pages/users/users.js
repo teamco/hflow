@@ -13,6 +13,7 @@ import SendMessage from 'pages/users/metadata/send.message';
 
 import styles from 'pages/users/users.module.less';
 import { userCardMetadata } from './metadata/user.card';
+import ExportButton from '@/components/Buttons/export.button';
 
 const { Table, Card } = Main;
 
@@ -153,6 +154,10 @@ export const users = (props) => {
                       //         icon={<LayoutOutlined/>}
                       //         onClick={onChangeGridLayout}
                       //         type={'primary'}/>,
+                      <ExportButton key={'export'}
+                                    disabled={disabled}
+                                    component={component}
+                                    json={data}/>,
                       selectedUser && (
                           <Can I={'update'} a={component} key={'save'}>
                             <Button key={'update'}

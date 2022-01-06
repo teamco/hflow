@@ -151,3 +151,20 @@
 .page500 {
   width: 100%;
 }
+
+.exportModal {
+  .ant-modal-body {
+    padding: 24px;
+
+    .ant-modal-confirm-content {
+      overflow: auto;
+      max-height: calc(100vh - 200px);
+      margin: 20px 0 0 0 !important;
+      border-radius: 5px;
+
+      .react-json-view {
+        margin: 0;
+      }
+    }
+  }
+}

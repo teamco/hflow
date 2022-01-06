@@ -10,6 +10,8 @@ import Main from 'components/Main';
 import { fromForm } from 'utils/object';
 
 import styles from 'pages/subscriptions/features/types/featureTypes.module.less';
+import { Can } from '@/utils/auth/can';
+import ExportButton from '@/components/Buttons/export.button';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;
@@ -88,11 +90,17 @@ export const featureTypes = props => {
           <PageHeader ghost={false}
                       subTitle={subTitle}
                       extra={[
-                        <SaveButton key={'save'}
-                                    isEdit={isEdit}
-                                    disabled={disabled || !touched}
-                                    formRef={formRef}
-                                    loading={loading.effects['simpleModel/prepareToSave']}/>
+                        <ExportButton key={'export'}
+                                      disabled={disabled}
+                                      component={component}
+                                      json={tags}/>,
+                        <Can I={'create'} a={component} key={'add'}>
+                          <SaveButton key={'save'}
+                                      isEdit={isEdit}
+                                      disabled={disabled || !touched}
+                                      formRef={formRef}
+                                      loading={loading.effects['simpleModel/prepareToSave']}/>
+                        </Can>
                       ]}>
           </PageHeader>
           <Form layout={'vertical'}

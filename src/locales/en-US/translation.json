@@ -172,6 +172,7 @@
     "change": "Change",
     "sendMessage": "Send",
     "ok": "Ok",
+    "export": "Export",
     "edit": "Edit {{type}}",
     "show": "Show {{type}}",
     "download": "Download file",

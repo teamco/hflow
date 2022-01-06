@@ -2,16 +2,17 @@ import React, { useEffect } from 'react';
 import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ControlOutlined } from '@ant-design/icons';
 
-import Page from 'components/Page';
-import Main from 'components/Main';
-import { Can } from 'utils/auth/can';
+import Page from '@/components/Page';
+import Main from '@/components/Main';
+import ExportButton from '@/components/Buttons/export.button';
+
+import { Can } from '@/utils/auth/can';
 
 import { expandableFeature, metadata } from 'pages/subscriptions/features/feature.metadata';
 
 import styles from 'pages/subscriptions/features/features.module.less';
 
 const { Table } = Main;
-// import { Table, Tag, Space } from 'antd';
 
 /**
  * @export
@@ -35,7 +36,7 @@ export const features = props => {
 
   const tableProps = {
     pagination: false,
-    expandable: expandableFeature({t})
+    expandable: expandableFeature({ t })
   };
 
   useEffect(() => {
@@ -69,12 +70,16 @@ export const features = props => {
           <PageHeader ghost={false}
                       subTitle={subTitle}
                       extra={[
+                        <ExportButton key={'export'}
+                                      disabled={disabled}
+                                      component={component}
+                                      json={data}/>,
                         <Can I={'create'} a={component} key={'add'}>
                           <Button size={'small'}
                                   loading={loading.effects['featureModel/newFeature']}
                                   disabled={disabled}
                                   icon={<AppstoreAddOutlined/>}
-                                  onClick={() => onNew()}
+                                  onClick={onNew}
                                   type={'primary'}>
                             {t('actions:new')}
                           </Button>

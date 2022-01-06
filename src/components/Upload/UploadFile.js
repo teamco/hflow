@@ -6,7 +6,7 @@ import { Link } from 'umi';
 import ImgCrop from 'antd-img-crop';
 import classnames from 'classnames';
 
-import { download, getExtension } from 'utils/file';
+import { downloadFromUrl, getExtension } from 'utils/file';
 import { errorDownloadMsg } from 'utils/message';
 
 import './upload.less';
@@ -172,7 +172,7 @@ class UploadFile extends React.Component {
       url = url || fileProps?.previewUrl;
 
       // Prevent multiple clicks.
-      this.state.ableToDownload && !disabled && download(url, _file).then(() => {
+      this.state.ableToDownload && !disabled && downloadFromUrl(url, _file).then(() => {
         this.setState({ ableToDownload: true });
       }).catch(error => {
         console.warn(error);

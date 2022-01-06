@@ -146,15 +146,22 @@ export const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
 
 /**
  * @export
- * @param url
- * @param fileName
+ * @param {string} url
+ * @param {string} fileName
  * @return {Promise<void>}
  */
-export const download = (url, fileName) => {
-  return getFileFromUrl(url).then(blob => {
-    const link = document.createElement('a');
-    link.href = blob;
-    link.download = fileName;
-    link.click();
-  });
+export const downloadFromUrl = (url, fileName) => {
+  return getFileFromUrl(url).then(href => handleDownload({ href, fileName }));
 };
+
+/**
+ * @export
+ * @param href
+ * @param {string} fileName
+ */
+export const handleDownload = ({ href, fileName }) =>{
+  const link = document.createElement('a');
+  link.href = href;
+  link.download = fileName;
+  link.click();
+}
