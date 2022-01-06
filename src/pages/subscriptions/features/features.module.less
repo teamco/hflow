@@ -44,5 +44,19 @@
 }
 
 .featureExpand {
-    margin-left: 10px;
+  margin-left: 10px;
+
+  :global {
+    form {
+      position: relative;
+      top: 5px;
+    }
+
+    label {
+      &::after {
+        display: none;
+      }
+    }
+  }
+
 }

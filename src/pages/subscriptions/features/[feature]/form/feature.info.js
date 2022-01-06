@@ -67,7 +67,7 @@ export const FeatureInfo = (props) => {
             ))}
           </Select>
           <InputNumber addonBefore={selectCurrencyBefore}
-                       label={t('feature:price')}
+                       label={t('price:originalPrice')}
                        name={['price', 'originalPrice']}
                        form={formRef}
                        min={1}

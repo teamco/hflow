@@ -352,7 +352,6 @@
   },
   "feature": {
     "info": "Feature Info",
-    "price": "Price",
     "tags": "Tags",
     "type": "Type",
     "name": "Unique Name",
@@ -379,6 +378,8 @@
     "logoOnPartnersPage": "Logo on Partners Page"
   },
   "price": {
+    "originalPrice": "Original Price",
+    "discountedPrice": "Discounted Price",
     "discounted": "Is Discounted?",
     "discount": "Discount",
     "discountStartedAt": "Started at",

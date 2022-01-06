@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button, Col, Dropdown, Row, Switch, Tooltip } from 'antd';
+import { Button, Col, Dropdown, Form, Row, Switch, Tooltip } from 'antd';
 import {
+  CheckCircleTwoTone,
+  CloseCircleTwoTone,
   DownOutlined,
   SettingOutlined,
-  ShoppingCartOutlined,
-  CheckCircleTwoTone,
-  CloseCircleTwoTone
+  ShoppingCartOutlined
 } from '@ant-design/icons';
 import { NavLink } from 'umi';
 
@@ -33,7 +33,7 @@ export const metadata = ({
   return {
     width: '100%',
     size: 'middle',
-    scroll: { x: 670 },
+    scroll: { x: 700 },
     columns: [
       {
         title: t('feature:info'),
@@ -128,12 +128,64 @@ export const expandableFeature = (props) => {
       const rowProps = { gutter: { xs: 8, sm: 16, md: 24, lg: 32 } };
       const colProps = { sm: 12, md: 8, style: { marginTop: 10 } };
 
+      const {
+        translateKeys: { description, off, on, title },
+        price: { currency, discounted, discount, originalPrice, discountedPrice }
+      } = record;
+
+      let _offPrice = null;
+      if (discounted) {
+        _offPrice = `(${discount.value}${discount.type === 'Percent' ? '%' : currency} ${t('feature:translateOff')})`;
+      }
+
       return (
           <div className={styles.featureExpand}>
             <Row {...rowProps}>
               <Col {...colProps}>
-
+                <Form layout={'vertical'}>
+                  <Form.Item label={t(title)}
+                             tooltip={t(description)}>
+                    <Switch checkedChildren={t(on)}
+                            unCheckedChildren={t(off)}/>
+                  </Form.Item>
+                </Form>
               </Col>
+              <Col {...colProps}>
+                <>
+                  <div className={'ant-form-horizontal ant-form-item-label'}>
+                    <label>{t('price:originalPrice')}</label>
+                  </div>
+                  <div>{originalPrice}{currency}</div>
+                </>
+              </Col>
+              {discounted && (
+                  <>
+                    <Col {...colProps}>
+                      <div>
+                        <div className={'ant-form-horizontal ant-form-item-label'}>
+                          <label>{t('price:discountedPrice')}</label>
+                        </div>
+                        <div>{discountedPrice} {_offPrice}</div>
+                      </div>
+                    </Col>
+                    <Col {...colProps}>
+                      <div>
+                        <div className={'ant-form-horizontal ant-form-item-label'}>
+                          <label>{t('price:discountDuration')}</label>
+                        </div>
+                        <div>{discount.duration.period} {discount.duration.type}</div>
+                      </div>
+                    </Col>
+                    <Col {...colProps}>
+                      <div>
+                        <div className={'ant-form-horizontal ant-form-item-label'}>
+                          <label>{t('price:discountStartedAt')}</label>
+                        </div>
+                        <div>{discount.startedAt}</div>
+                      </div>
+                    </Col>
+                  </>
+              )}
             </Row>
           </div>
       );
