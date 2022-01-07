@@ -12,6 +12,7 @@ export const FeatureDiscount = (props) => {
     formRef,
     disabled,
     durationTypes = [],
+    currencies = [],
     discountTypes
   } = props;
 
@@ -20,6 +21,7 @@ export const FeatureDiscount = (props) => {
                        disabled={disabled}
                        prefix={['price']}
                        namespace={'discount'}
+                       currencies={currencies}
                        durationTypes={durationTypes}
                        discountTypes={discountTypes}/>
   );

@@ -66,17 +66,9 @@ export const featureEdit = (props) => {
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
 
-  const [currency, setCurrency] = useState(currencies[0]);
-
   useEffect(() => {
     canUpdate && onEditFeature(params);
   }, [authModel.user, canUpdate]);
-
-  const price = formRef.getFieldValue('price');
-
-  useEffect(() => {
-    setCurrency(price?.currency || currencies[0]);
-  }, [price, currencies]);
 
   /**
    * @constant
@@ -105,15 +97,13 @@ export const featureEdit = (props) => {
     t,
     formRef,
     disabled,
-    featureTypes,
-    currencies,
-    currency
+    featureTypes
   };
 
   const discountProps = {
     formRef,
     disabled,
-    currency,
+    currencies,
     durationTypes
   };
 
@@ -202,7 +192,7 @@ export const featureEdit = (props) => {
                 initialValues={{
                   helper: true,
                   defaultState: true,
-                  ...DEFAULT_PRICE_VALUES(currency),
+                  ...DEFAULT_PRICE_VALUES(currencies[0]),
                   featureType: featureTypes[0],
                   translateKeys: {
                     on: 'actions:yes',

@@ -83,7 +83,8 @@ export default dvaModelExtend(commonModel, {
               ...feature.data.price,
               discount: {
                 ...discount,
-                startedAt: moment(discount.startedAt)
+                startedAt: moment(discount?.startedAt),
+                duration: { ...discount?.duration }
               }
             }
           };

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { Form, InputNumber, Select, Switch } from 'antd';
+import { Select, Switch } from 'antd';
 import FormComponents from '@/components/Form';
 
 const { GenericPanel, HiddenField } = FormComponents;
@@ -17,37 +17,8 @@ export const FeatureInfo = (props) => {
     t,
     formRef,
     disabled,
-    currency,
-    currencies,
-    featureTypes
+    featureTypes = []
   } = props;
-
-  useEffect(() => {
-    handleFormUpdate(currency);
-  }, [currency]);
-
-  /**
-   * @constant
-   * @param {string} value
-   */
-  const handleFormUpdate = value => {
-    formRef.setFieldsValue({ price: { currency: value } });
-  };
-
-  /**
-   * @constant
-   * @type {JSX.Element}
-   */
-  const selectCurrencyBefore = (
-      <Select style={{ width: 90 }}
-              value={currency}
-              disabled={disabled}
-              onChange={handleFormUpdate}>
-        {[...currencies]?.map((type, idx) => (
-            <Option key={idx} value={type}>{type}</Option>
-        ))}
-      </Select>
-  );
 
   return (
       <GenericPanel header={t('feature:info')}
@@ -66,15 +37,6 @@ export const FeatureInfo = (props) => {
                 </Option>
             ))}
           </Select>
-          <InputNumber addonBefore={selectCurrencyBefore}
-                       label={t('price:originalPrice')}
-                       name={['price', 'originalPrice']}
-                       form={formRef}
-                       min={1}
-                       disabled={disabled}
-                       config={{ rules: [{ required: true }] }}/>
-        </div>
-        <div>
           <Switch label={t('feature:status')}
                   disabled={disabled}
                   form={formRef}
@@ -82,11 +44,6 @@ export const FeatureInfo = (props) => {
                   checkedChildren={t('actions:yes')}
                   unCheckedChildren={t('actions:no')}
                   name={'selectedByDefault'}/>
-        </div>
-        <div>
-          <HiddenField name={['price', 'currency']}
-                       form={formRef}
-                       disabled={disabled}/>
         </div>
       </GenericPanel>
   );

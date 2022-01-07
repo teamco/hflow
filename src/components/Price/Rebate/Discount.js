@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DatePicker, InputNumber, Select, Switch, Divider } from 'antd';
+import { DatePicker, Divider, InputNumber, Select, Switch } from 'antd';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 
@@ -160,6 +160,9 @@ const Discount = props => {
           <HiddenField form={formRef}
                        name={[...prefix, namespace, 'type']}
                        disabled={disabled || !isDiscounted}/>
+          <HiddenField name={['price', 'currency']}
+                       form={formRef}
+                       disabled={disabled}/>
         </div>
         <div>
           <Duration form={formRef}
