@@ -58,6 +58,10 @@ const Discount = props => {
     setDiscountTypes(discountTypes.map(type => (type === 'currency' ? currency : type)));
   }, [currency]);
 
+  useEffect(() => {
+    setIsDiscounted(discounted);
+  }, [discounted]);
+
   /**
    * @constant
    * @param {string} value
