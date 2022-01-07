@@ -167,11 +167,12 @@ class GenericPanel extends Component {
                     </div>
                 ) :
                 _getChildren(children).map((_rowChild, idx) => {
-                  const { inRow = true, colProps, style, className } = _rowChild?.props;
+                  const { inRow = true, gutter, colProps, style, className } = _rowChild?.props;
                   return inRow ? (
                       <AntHillRow key={idx}
                                   style={style}
                                   className={className}
+                                  gutter={gutter}>
                                   colProps={colProps}>
                         {_formItem(_rowChild, idx)}
                       </AntHillRow>
