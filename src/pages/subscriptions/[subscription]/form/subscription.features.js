@@ -35,7 +35,7 @@ export const SubscriptionFeatures = (props) => {
       <GenericPanel header={t('subscription:features')}
                     name={'features'}
                     defaultActiveKey={['features']}>
-        <div>
+        <div colProps={{ xs: 24, sm: 12, md: 8, lg: 8, xl: 6, xxl: 4 }}>
           {sortBy(features, 'translateKeys.title', t).map((pref, idx) => {
             const {
               title,

@@ -172,7 +172,7 @@ class GenericPanel extends Component {
                       <AntHillRow key={idx}
                                   style={style}
                                   className={className}
-                                  gutter={gutter}>
+                                  gutter={gutter}
                                   colProps={colProps}>
                         {_formItem(_rowChild, idx)}
                       </AntHillRow>

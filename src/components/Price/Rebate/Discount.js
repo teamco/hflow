@@ -126,7 +126,6 @@ const Discount = props => {
                        min={1}
                        disabled={disabled}
                        config={{ rules: [{ required: true }] }}/>
-          <></>
         </div>
         <div colProps={{ xs: 24, sm: 24, md: 24, lg: 24, xl: 24, xxl: 24 }}>
           <Divider orientation={'left'}>{t('subscription:discount')}</Divider>
@@ -141,7 +140,7 @@ const Discount = props => {
                   unCheckedChildren={t('actions:no')}
                   name={[...prefix, 'discounted']}/>
         </div>
-        <div>
+        <div colProps={{ xs: 24, sm: 12, md: 12, lg: 8, xl: 8, xxl: 8 }}>
           <InputNumber addonBefore={selectDiscountBefore}
                        label={t('price:discount')}
                        name={[...prefix, namespace, 'value']}
