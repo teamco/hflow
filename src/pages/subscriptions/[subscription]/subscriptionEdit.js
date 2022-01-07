@@ -69,17 +69,9 @@ export const subscriptionEdit = (props) => {
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
 
-  const [currency, setCurrency] = useState(currencies[0]);
-
   useEffect(() => {
     canUpdate && onEditSubscription(params);
   }, [authModel.user, canUpdate]);
-
-  const price = formRef.getFieldValue('price');
-
-  useEffect(() => {
-    setCurrency(price?.currency || currencies[0]);
-  }, [price, currencies]);
 
   /**
    * @constant
@@ -96,9 +88,7 @@ export const subscriptionEdit = (props) => {
     subscriptionTypes,
     durationTypes,
     discountTypes,
-    businessUsers,
-    currencies,
-    currency
+    businessUsers
   };
 
   const featuresProps = {
@@ -113,7 +103,7 @@ export const subscriptionEdit = (props) => {
   const discountProps = {
     formRef,
     disabled,
-    currency,
+    currencies,
     durationTypes
   };
 
@@ -212,7 +202,7 @@ export const subscriptionEdit = (props) => {
                     type: 'Month',
                     period: 1
                   },
-                  ...DEFAULT_PRICE_VALUES(currency)
+                  ...DEFAULT_PRICE_VALUES(currencies[0])
                 }}>
             <SubscriptionInfo {...subscriptionInfoProps} />
             <SubscriptionDiscount {...discountProps}/>

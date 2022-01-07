@@ -18,8 +18,6 @@ export const SubscriptionInfo = (props) => {
     t,
     formRef,
     disabled,
-    currency,
-    currencies=[],
     businessUsers: { dims },
     subscriptionTypes = [],
     durationTypes = []
@@ -29,33 +27,6 @@ export const SubscriptionInfo = (props) => {
   for (let i = dims.min; i <= dims.max; i++) {
     marks[i] = i;
   }
-
-  useEffect(() => {
-    handleFormUpdate(currency);
-  }, [currency]);
-
-  /**
-   * @constant
-   * @param {string} value
-   */
-  const handleFormUpdate = value => {
-    formRef.setFieldsValue({ price: { currency: value } });
-  };
-
-  /**
-   * @constant
-   * @type {JSX.Element}
-   */
-  const selectCurrencyBefore = (
-      <Select style={{ width: 90 }}
-              value={currency}
-              disabled={disabled}
-              onChange={handleFormUpdate}>
-        {[...currencies]?.map((type, idx) => (
-            <Option key={idx} value={type}>{type}</Option>
-        ))}
-      </Select>
-  );
 
   return (
       <GenericPanel header={t('subscription:info')}
@@ -95,13 +66,6 @@ export const SubscriptionInfo = (props) => {
                  disabled={disabled}/>
         </div>
         <div>
-          <InputNumber addonBefore={selectCurrencyBefore}
-                       label={t('price:originalPrice')}
-                       name={['price', 'originalPrice']}
-                       form={formRef}
-                       min={1}
-                       disabled={disabled}
-                       config={{ rules: [{ required: true }] }}/>
           <Slider marks={marks}
                   label={t('subscription:users')}
                   name={'numberOfUsers'}
@@ -110,6 +74,7 @@ export const SubscriptionInfo = (props) => {
                   max={dims.max}
                   disabled={disabled}
                   config={{ rules: [{ required: true }] }}/>
+          <></>
         </div>
       </GenericPanel>
   );

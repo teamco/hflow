@@ -36,7 +36,6 @@ class GenericPanel extends Component {
       defaultActiveKey,
       header,
       name,
-      inRow = true,
       collapsible = 'header',
       className = ''
     } = this.props;
@@ -168,20 +167,21 @@ class GenericPanel extends Component {
                     </div>
                 ) :
                 _getChildren(children).map((_rowChild, idx) => {
-                  return _rowChild ? inRow ? (
-                      <AntHillRow key={idx}>
+                  const { inRow = true, colProps, style, className } = _rowChild?.props;
+                  return inRow ? (
+                      <AntHillRow key={idx}
+                                  style={style}
+                                  className={className}
+                                  colProps={colProps}>
                         {_formItem(_rowChild, idx)}
                       </AntHillRow>
                   ) : (
                       <div key={idx}
-                           style={{
-                             display: 'flex',
-                             padding: '8px 0',
-                             flexFlow: 'wrap'
-                           }}>
+                           style={style}
+                           className={className}>
                         {_formItem(_rowChild, idx)}
                       </div>
-                  ) : null;
+                  );
                 })}
           </Panel>
         </Collapse>

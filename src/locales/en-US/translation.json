@@ -231,7 +231,7 @@
     "subscriptionTypes": "Types",
     "featureTypes": "Types",
     "businessTypes": "Types",
-    "discountInfo": "Discount Info"
+    "priceInfo": "Price Info"
   },
   "address": {
     "province": "Province",

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DatePicker, InputNumber, Select, Switch } from 'antd';
+import { DatePicker, InputNumber, Select, Switch, Divider } from 'antd';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 
@@ -27,22 +27,34 @@ const Discount = props => {
     prefix = [],
     namespace = 'discount',
     discountTypes = DISCOUNT_TYPES,
-    durationTypes = []
+    durationTypes = [],
+    currencies = []
   } = props;
 
   const wrapper = formRef.getFieldValue(prefix[0]);
-  const { discounted, currency } = wrapper;
-  const discount = complexFormKey(wrapper, namespace, discount?.type && discount?.value);
+  const { discounted } = wrapper;
+
+  const discount = complexFormKey(
+      wrapper,
+      namespace,
+      discount?.type && discount?.value
+  );
 
   const [_discountTypes, setDiscountTypes] = useState(discountTypes);
   const [discountType, setDiscountType] = useState(discount?.type);
   const [isDiscounted, setIsDiscounted] = useState(discounted);
+  const [currency, setCurrency] = useState(currencies[0]);
 
   useEffect(() => {
-    handleFormUpdate(discount?.type || _discountTypes[0]);
+    setCurrency(wrapper?.currency || currencies[0]);
+  }, [wrapper, currencies]);
+
+  useEffect(() => {
+    handleDiscountTypeUpdate(discount?.type || _discountTypes[0]);
   }, [discount?.type, currency, _discountTypes]);
 
   useEffect(() => {
+    handlePriceUpdate(currency);
     setDiscountTypes(discountTypes.map(type => (type === 'currency' ? currency : type)));
   }, [currency]);
 
@@ -50,7 +62,7 @@ const Discount = props => {
    * @constant
    * @param {string} value
    */
-  const handleFormUpdate = value => {
+  const handleDiscountTypeUpdate = value => {
     value = value === 'Percent' ? '%' : currency;
     updateComplexForm(formRef, prefix, namespace, { type: value });
     setDiscountType(value);
@@ -66,23 +78,59 @@ const Discount = props => {
 
   /**
    * @constant
+   * @param {string} value
+   */
+  const handlePriceUpdate = value => {
+    formRef.setFieldsValue({ price: { currency: value } });
+  };
+
+  /**
+   * @constant
    * @type {JSX.Element}
    */
   const selectDiscountBefore = (
       <Select style={{ width: 90 }}
               value={discountType}
               disabled={disabled || !isDiscounted}
-              onChange={handleFormUpdate}>
+              onChange={handleDiscountTypeUpdate}>
         {_discountTypes.map((type, idx) => (
             <Option key={idx} value={type}>{type}</Option>
         ))}
       </Select>
   );
 
+  /**
+   * @constant
+   * @type {JSX.Element}
+   */
+  const selectCurrencyBefore = (
+      <Select style={{ width: 90 }}
+              value={currency}
+              disabled={disabled}
+              onChange={handlePriceUpdate}>
+        {[...currencies]?.map((type, idx) => (
+            <Option key={idx} value={type}>{type}</Option>
+        ))}
+      </Select>
+  );
+
   return (
-      <GenericPanel header={t('panel:discountInfo')}
+      <GenericPanel header={t('panel:priceInfo')}
                     name={namespace}
                     defaultActiveKey={[namespace]}>
+        <div>
+          <InputNumber addonBefore={selectCurrencyBefore}
+                       label={t('price:originalPrice')}
+                       name={[...prefix, 'originalPrice']}
+                       form={formRef}
+                       min={1}
+                       disabled={disabled}
+                       config={{ rules: [{ required: true }] }}/>
+          <></>
+        </div>
+        <div colProps={{ xs: 24, sm: 24, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+          <Divider orientation={'left'}>{t('subscription:discount')}</Divider>
+        </div>
         <div>
           <Switch label={t('price:discounted')}
                   disabled={disabled}
