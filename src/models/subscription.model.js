@@ -18,6 +18,7 @@ import { setAs } from '@/utils/object';
 import { getFeatures } from '@/services/features.service';
 import moment from 'moment';
 import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
+import i18n from '@/utils/i18n';
 
 const DEFAULT_STATE = {
   subscriptions: [],
@@ -161,6 +162,7 @@ export default dvaModelExtend(commonModel, {
         featuresByRef,
         numberOfUsers,
         translateKeys: {
+          title,
           description
         },
         tags
@@ -176,7 +178,7 @@ export default dvaModelExtend(commonModel, {
 
         let data = {
           id: selectedSubscription?.id,
-          name,
+          name: i18n.t(title),
           price: {
             ...price,
             discount: {
@@ -188,6 +190,7 @@ export default dvaModelExtend(commonModel, {
           type,
           numberOfUsers,
           translateKeys: {
+            title,
             description: setAs(description, null)
           },
           metadata,

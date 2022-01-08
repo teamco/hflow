@@ -55,7 +55,7 @@ export const SubscriptionInfo = (props) => {
         <div>
           <Input type={'text'}
                  label={t('subscription:title')}
-                 name={'name'}
+                 name={['translateKeys', 'title']}
                  form={formRef}
                  disabled={disabled}
                  config={{ rules: [{ required: true }] }}/>
