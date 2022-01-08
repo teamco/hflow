@@ -186,6 +186,7 @@ export default dvaModelExtend(commonModel, {
             }
           },
           type,
+          numberOfUsers,
           translateKeys: {
             description: setAs(description, null)
           },
@@ -193,7 +194,6 @@ export default dvaModelExtend(commonModel, {
           featuresByRef: Object.keys(featuresByRef).filter(key => payload.features[key]),
           tags: setAs(tags, [])
         };
-        debugger
 
         if (isEdit) {
           if (selectedSubscription && params.subscription === selectedSubscription.id) {
