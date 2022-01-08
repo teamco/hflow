@@ -4,15 +4,15 @@ import { withTranslation } from 'react-i18next';
 import { registerUser } from './register.user';
 
 export default connect(
-    ({ authModel, userRolesModel, loading }) => ({
+    ({ authModel, userRoleModel, loading }) => ({
       authModel,
-      userRolesModel,
+      userRoleModel,
       loading
     }),
     (dispatch) => ({
       dispatch,
       onQuery() {
-        dispatch({ type: `userRolesModel/query` });
+        dispatch({ type: `userRoleModel/query` });
       },
       onRegisterBusinessUser(data) {
         dispatch({ type: 'businessModel/sendRegisterLinkBusinessUser', payload: { data } });

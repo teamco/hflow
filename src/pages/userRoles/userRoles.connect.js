@@ -4,33 +4,33 @@ import { withTranslation } from 'react-i18next';
 import { userRoles } from './userRoles';
 
 export default connect(
-    ({ authModel, userRolesModel, loading }) => {
+    ({ authModel, userRoleModel, loading }) => {
       return {
         loading,
         authModel,
-        userRolesModel
+        userRoleModel
       };
     },
     (dispatch) => ({
       dispatch,
       onQuery() {
-        dispatch({ type: `userRolesModel/query` });
+        dispatch({ type: `userRoleModel/query` });
       },
       onSave(payload) {
         dispatch({
-          type: 'userRolesModel/prepareToSave',
+          type: 'userRoleModel/prepareToSave',
           payload
         });
       },
       onUpdateUserRoles(roles) {
         dispatch({
-          type: 'userRolesModel/updateUserRoles',
+          type: 'userRoleModel/updateUserRoles',
           payload: { roles }
         });
       },
       onUpdateBusinessRoles(roles) {
         dispatch({
-          type: 'userRolesModel/updateBusinessRoles',
+          type: 'userRoleModel/updateBusinessRoles',
           payload: { roles }
         });
       }

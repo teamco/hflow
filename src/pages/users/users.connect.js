@@ -7,16 +7,16 @@ import { users } from './users';
 import { STATUS } from 'utils/message';
 
 export default connect(
-    ({ authModel, userModel, userRolesModel, loading }) => ({
+    ({ authModel, userModel, userRoleModel, loading }) => ({
       authModel,
       userModel,
-      userRolesModel,
+      userRoleModel,
       loading
     }),
     (dispatch) => ({
       dispatch,
       onRolesQuery() {
-        dispatch({ type: `userRolesModel/query` });
+        dispatch({ type: `userRoleModel/query` });
       },
       onUpdateRoles(selectedUser, roles) {
         dispatch({ type: `userModel/updateRoles`, payload: { selectedUser, roles } });

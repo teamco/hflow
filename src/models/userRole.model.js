@@ -10,14 +10,14 @@ import { monitorHistory } from 'utils/history';
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'userRolesModel',
+  namespace: 'userRoleModel',
   state: {
     userRoles: {},
     businessRoles: {}
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, 'userRolesModel');
+      return monitorHistory({ history, dispatch }, 'userRoleModel');
     },
     setup({ dispatch }) {
       // TODO (teamco): Do something.
@@ -59,7 +59,7 @@ export default dvaModelExtend(commonModel, {
         yield put({
           type: 'toForm',
           payload: {
-            model: 'userRolesModel',
+            model: 'userRoleModel',
             form: { ...data }
           }
         });
@@ -81,7 +81,7 @@ export default dvaModelExtend(commonModel, {
     },
 
     * updateUserRoles({ payload }, { put, select }) {
-      const { userRoles } = yield select(state => state.userRolesModel);
+      const { userRoles } = yield select(state => state.userRoleModel);
       yield put({
         type: 'updateState',
         payload: {
@@ -92,7 +92,7 @@ export default dvaModelExtend(commonModel, {
     },
 
     * updateBusinessRoles({ payload }, { put, select }) {
-      const { businessRoles } = yield select(state => state.userRolesModel);
+      const { businessRoles } = yield select(state => state.userRoleModel);
       yield put({
         type: 'updateState',
         payload: {
@@ -104,7 +104,7 @@ export default dvaModelExtend(commonModel, {
 
     * save({ payload }, { put, call, select }) {
       const { user, ability } = yield select(state => state.authModel);
-      const state = yield select(state => state.userRolesModel);
+      const state = yield select(state => state.userRoleModel);
 
       const { doc } = payload;
 

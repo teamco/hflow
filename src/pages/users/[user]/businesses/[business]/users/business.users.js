@@ -26,7 +26,7 @@ export const businessUsers = (props) => {
   const {
     t,
     businessModel,
-    userRolesModel,
+    userRoleModel,
     userModel,
     onSendVerification,
     onResendRegisterLink,
@@ -48,7 +48,7 @@ export const businessUsers = (props) => {
 
   let {
     entityForm
-  } = userRolesModel;
+  } = userRoleModel;
 
   /**
    * @type {{user, business}}
@@ -94,7 +94,7 @@ export const businessUsers = (props) => {
             component={component}
             spinEffects={[
               'businessModel/usersQuery',
-              'userRolesModel/query'
+              'userRoleModel/query'
             ]}>
         <PageHeader ghost={false}
                     subTitle={subTitle}

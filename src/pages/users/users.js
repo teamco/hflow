@@ -27,7 +27,7 @@ export const users = (props) => {
     t,
     authModel,
     userModel,
-    userRolesModel,
+    userRoleModel,
     loading,
     selectedUser,
     onUpdateRoles,
@@ -48,7 +48,7 @@ export const users = (props) => {
     verificationSent
   } = userModel;
 
-  const { userRoles, businessRoles } = userRolesModel;
+  const { userRoles, businessRoles } = userRoleModel;
 
   data = selectedUser ? [selectedUser] : data;
 

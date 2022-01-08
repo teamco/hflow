@@ -25,12 +25,12 @@ export const registerUser = props => {
     setIsRegisterVisible,
     loading,
     authModel,
-    userRolesModel,
+    userRoleModel,
     onRegisterBusinessUser,
     onQuery
   } = props;
 
-  const { businessRoles = [] } = userRolesModel;
+  const { businessRoles = [] } = userRoleModel;
 
   /**
    * @type {{user, business}}
@@ -118,7 +118,7 @@ export const registerUser = props => {
                           htmlType={'submit'}
                           block
                           disabled={disabled}
-                          loading={isLoading(loading.effects['userRolesModel/query'])}
+                          loading={isLoading(loading.effects['userRoleModel/query'])}
                           icon={<FormOutlined/>}
                           className={styles.loginBtns}>
                     {t('auth:register')}

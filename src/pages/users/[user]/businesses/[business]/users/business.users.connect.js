@@ -5,9 +5,9 @@ import { message } from 'antd';
 import i18n from 'utils/i18n';
 
 export default connect(
-    ({ businessModel, userRolesModel, userModel, loading }) => ({
+    ({ businessModel, userRoleModel, userModel, loading }) => ({
       businessModel,
-      userRolesModel,
+      userRoleModel,
       userModel,
       loading
     }),
@@ -15,7 +15,7 @@ export default connect(
       dispatch,
       onQuery(params) {
         dispatch({ type: `businessModel/usersQuery`, payload: { ...params } });
-        dispatch({ type: `userRolesModel/query` });
+        dispatch({ type: `userRoleModel/query` });
       },
       onUpdateRole(params, user, role) {
         dispatch({ type: `businessModel/updateUserRole`, payload: { params, user, role } });

@@ -24,7 +24,7 @@ export const userRoles = props => {
 
   const {
     t,
-    userRolesModel,
+    userRoleModel,
     authModel,
     loading,
     onQuery,
@@ -39,7 +39,7 @@ export const userRoles = props => {
     isEdit,
     entityForm,
     touched
-  } = userRolesModel;
+  } = userRoleModel;
 
   useEffect(() => {
     onQuery();
@@ -84,7 +84,7 @@ export const userRoles = props => {
   const disabled = ability.cannot('update', component);
 
   return (
-      <Page spinEffects={['userRolesModel/query']}
+      <Page spinEffects={['userRoleModel/query']}
             component={component}>
         <div className={styles.preparationWrapper}>
           <PageHeader ghost={false}
@@ -94,7 +94,7 @@ export const userRoles = props => {
                                     isEdit={isEdit}
                                     disabled={disabled || !touched}
                                     formRef={formRef}
-                                    loading={loading.effects['userRolesModel/prepareToSave']}/>
+                                    loading={loading.effects['userRoleModel/prepareToSave']}/>
                       ]}>
           </PageHeader>
           <Form layout={'vertical'}

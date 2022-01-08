@@ -37,7 +37,7 @@ export const profile = (props) => {
             component={component}
             spinEffects={[
               'userModel/getUser',
-              'userRolesModel/query',
+              'userRoleModel/query',
               'businessModel/query'
             ]}>
         <Users selectedUser={selectedUser}/>
