@@ -171,18 +171,15 @@ export default dvaModelExtend(commonModel, {
             data.version = selectedFeature.version;
             const entity = yield call(updateFeature, { id: feature, data });
 
-            if (entity.exists) {
-              yield put({
-                type: 'updateState',
-                payload: {
-                  touched: false,
-                  selectedFeature: {
-                    ...selectedFeature,
-                    version: entity.data.version
-                  }
-                }
-              });
-            }
+            yield put({
+              type: 'updateVersion',
+              payload: {
+                entity,
+                selectedEntity: selectedFeature,
+                entityName: 'selectedFeature'
+              }
+            });
+
           } else {
             errorSaveMsg(true, 'Feature');
           }

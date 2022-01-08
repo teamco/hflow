@@ -91,6 +91,23 @@ const commonModel = {
       });
     },
 
+    * updateVersion({ payload }, { put }) {
+      const { entity, selectedEntity, entityName } = payload;
+
+      if (entity.exists) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            touched: false,
+            [entityName]: {
+              ...selectedEntity,
+              version: entity.data.version
+            }
+          }
+        });
+      }
+    },
+
     * handleAddFile({ payload }, { put, select }) {
       const { file, field, model } = payload;
       const { uploadedFiles } = yield select(state => state[model]);

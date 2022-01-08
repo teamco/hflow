@@ -157,7 +157,6 @@ export default dvaModelExtend(commonModel, {
       const {
         price,
         type,
-        currency,
         name = null,
         featuresByRef,
         numberOfUsers,
@@ -187,24 +186,31 @@ export default dvaModelExtend(commonModel, {
             }
           },
           type,
-          currency,
           translateKeys: {
             description: setAs(description, null)
           },
           metadata,
+          featuresByRef: Object.keys(featuresByRef).filter(key => payload.features[key]),
           tags: setAs(tags, [])
         };
-debugger
-        // Not mandatory/defined fields preparation before saving.
-        // data.tags = setAs(data.tags, []);
-        data.featuresByRef = Object.keys(payload.features).filter(key => payload.features[key]);
+        debugger
 
         if (isEdit) {
-          selectedSubscription && params.subscription === selectedSubscription.id ?
-              yield call(updateSubscription, { id: selectedSubscription.id, data }) :
-              errorSaveMsg(true, 'Subscription');
+          if (selectedSubscription && params.subscription === selectedSubscription.id) {
+            const entity = yield call(updateSubscription, { id: selectedSubscription.id, data });
 
-          yield put({ type: 'updateState', payload: { touched: false } });
+            yield put({
+              type: 'updateVersion',
+              payload: {
+                entity,
+                selectedEntity: selectedSubscription,
+                entityName: 'selectedSubscription'
+              }
+            });
+
+          } else {
+            errorSaveMsg(true, 'Subscription');
+          }
 
         } else {
 
@@ -219,16 +225,9 @@ debugger
 
           const entity = yield call(addSubscription, { data });
 
-          if (entity?.docId) {
-            yield put({
-              type: 'updateState',
-              payload: {
-                touched: false,
-                isEdit: true
-              }
-            });
-
-            history.push(`${BASE_URL}/${entity.docId}`);
+          if (entity.exists) {
+            yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });
+            history.push(`${BASE_URL}/${entity?.data?.id}`);
           }
         }
       } else {
