@@ -2,9 +2,8 @@
 import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from 'models/common.model';
-import { isNew } from 'services/common.service';
+import { custDiscountType, isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
-import { fbFindById, getRef } from 'services/firebase.service';
 import { history } from 'umi';
 import {
   addSubscription,
@@ -14,10 +13,11 @@ import {
 } from '@/services/subscriptions.service';
 import { COLORS } from '@/utils/colors';
 import { monitorHistory } from '@/utils/history';
-import i18n from '@/utils/i18n';
 import { errorSaveMsg } from '@/utils/message';
 import { setAs } from '@/utils/object';
 import { getFeatures } from '@/services/features.service';
+import moment from 'moment';
+import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 
 const DEFAULT_STATE = {
   subscriptions: [],
@@ -34,17 +34,21 @@ const DEFAULT_STATE = {
   }
 };
 
+const MODEL_NAME = 'subscriptionModel';
+const BASE_URL = '/admin/subscriptions';
+const ABILITY_FOR = 'subscriptions';
+
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'subscriptionModel',
+  namespace: MODEL_NAME,
   state: {
     ...DEFAULT_STATE
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, 'subscriptionModel');
+      return monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
       // TODO (teamco): Do something.
@@ -62,7 +66,7 @@ export default dvaModelExtend(commonModel, {
     * newSubscription({ payload }, { put }) {
       yield put({ type: 'cleanForm' });
 
-      history.push(`/admin/subscriptions/new`);
+      history.push(`${BASE_URL}/new`);
 
       yield put({
         type: 'updateState',
@@ -82,15 +86,27 @@ export default dvaModelExtend(commonModel, {
 
       if (isNew(subscriptionId)) {
         // TODO (teamco): Do something.
-      } else if (ability.can('read', 'subscriptions')) {
+      } else if (ability.can('read', ABILITY_FOR)) {
 
         const subscription = yield call(getSubscription, { id: subscriptionId });
 
         if (subscription.exists) {
-          const selectedSubscription = { ...subscription.data(), ...{ id: subscription.id } };
+          const { price: { discount } } = subscription.data;
+
+          const selectedSubscription = {
+            ...subscription.data,
+            price: {
+              ...subscription.data.price,
+              discount: {
+                ...discount,
+                startedAt: moment(discount?.startedAt),
+                duration: { ...discount?.duration }
+              }
+            }
+          };
 
           yield put({ type: 'updateState', payload: { selectedSubscription } });
-          yield put({ type: 'updateTags', payload: { tags: selectedSubscription.tags, touched:false } });
+          yield put({ type: 'updateTags', payload: { tags: selectedSubscription.tags, touched: false } });
 
           const _subscription = { ...selectedSubscription };
           const _features = {};
@@ -103,7 +119,7 @@ export default dvaModelExtend(commonModel, {
           return yield put({
             type: 'toForm',
             payload: {
-              model: 'subscriptionModel',
+              model: MODEL_NAME,
               form: {
                 ..._subscription,
                 features: { ..._features }
@@ -129,22 +145,29 @@ export default dvaModelExtend(commonModel, {
       yield put({ type: 'validateSubscription', payload: { subscriptionId: subscription } });
     },
 
-    * features({payload}, { call, put }) {
-      const {type = 'Business'} = payload || {};
-      const { data = [] } = yield call(getFeatures, {type});
+    * features({ payload }, { call, put }) {
+      const { type = 'Business' } = payload || {};
+      const { data = [] } = yield call(getFeatures, { type });
       yield put({ type: 'updateState', payload: { features: data } });
     },
 
     * prepareToSave({ payload, params }, { call, select, put }) {
       const { user, ability } = yield select(state => state.authModel);
       const { selectedSubscription, isEdit } = yield select(state => state.subscriptionModel);
+      const {
+        price,
+        type,
+        currency,
+        name = null,
+        featuresByRef,
+        numberOfUsers,
+        translateKeys: {
+          description
+        },
+        tags
+      } = payload;
 
-      if (user && ability.can('update', 'subscriptions')) {
-
-        const userRef = getRef({
-          collection: 'users',
-          doc: user.id
-        });
+      if (user && ability.can('update', ABILITY_FOR)) {
 
         const metadata = {
           ...selectedSubscription?.metadata,
@@ -153,29 +176,25 @@ export default dvaModelExtend(commonModel, {
         };
 
         let data = {
-          featuresByRef: setAs(payload.features, []),
-          name: setAs(payload.title, ''),
-          type: setAs(payload.type, ''),
-          picUrl: setAs(payload.picUrl, ''),
-          originalPrice: setAs(payload.price, ''),
-          discountedPrice: setAs(payload.discount, ''),
-          discountType: setAs(payload.discountType, ''),
-          discountValue: setAs(payload.discount, ''),
-          discountStartAt: setAs(payload.discountStartAt, +(new Date).toISOString()),
-          discountDuration: setAs(payload.discountDuration, ''),
-          duration: setAs(payload.duration, 3),
-          effectiveDate: setAs(payload.effectiveDate,  +(new Date).toISOString()),
-          expirationDate: setAs(payload.expirationDate,  +(new Date).toISOString()),
-          numberOfUsers: setAs(payload.numberOfUsers, 1),
-          currency: setAs(payload.currency, 'USA'),
+          id: selectedSubscription?.id,
+          name,
+          price: {
+            ...price,
+            discount: {
+              ...price.discount,
+              startedAt: `${moment(price.discount.startedAt).format(DEFAULT_DATE_FORMAT)} 00:00:00`,
+              type: custDiscountType(price.discount.type)
+            }
+          },
+          type,
+          currency,
           translateKeys: {
-            title: setAs(payload.title, 'temp data'),
-            description: setAs(payload.description, 'temp data'),
-          }
+            description: setAs(description, null)
+          },
+          metadata,
+          tags: setAs(tags, [])
         };
-
-
-
+debugger
         // Not mandatory/defined fields preparation before saving.
         // data.tags = setAs(data.tags, []);
         data.featuresByRef = Object.keys(payload.features).filter(key => payload.features[key]);
@@ -209,7 +228,7 @@ export default dvaModelExtend(commonModel, {
               }
             });
 
-            history.push(`/admin/subscriptions/${entity.docId}`);
+            history.push(`${BASE_URL}/${entity.docId}`);
           }
         }
       } else {

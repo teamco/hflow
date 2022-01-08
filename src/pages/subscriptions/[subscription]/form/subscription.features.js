@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Switch } from 'antd';
 
-import FormComponents from 'components/Form';
-import { sortBy } from 'utils/array';
+import FormComponents from '@/components/Form';
+import { sortBy } from '@/utils/array';
 
 const { GenericPanel } = FormComponents;
 
@@ -24,9 +24,9 @@ export const SubscriptionFeatures = (props) => {
 
   useEffect(() => {
     [...features].forEach(pref => {
-      const value = (formRef.getFieldValue('features') || {})[pref.id];
+      const value = (formRef.getFieldValue('featuresByRef') || {})[pref.id];
       if (typeof value === 'undefined') {
-        formRef.setFieldsValue({ features: { [pref.id]: isEdit ? false : pref.selectedByDefault } });
+        formRef.setFieldsValue({ featuresByRef: { [pref.id]: isEdit ? false : pref.selectedByDefault } });
       }
     });
   }, [features, selectedSubscription]);
@@ -37,12 +37,7 @@ export const SubscriptionFeatures = (props) => {
                     defaultActiveKey={['features']}>
         <div colProps={{ xs: 24, sm: 12, md: 8, lg: 8, xl: 6, xxl: 4 }}>
           {sortBy(features, 'translateKeys.title', t).map((pref, idx) => {
-            const {
-              title,
-              description,
-              on,
-              off
-            } = pref.translateKeys;
+            const { title, description, on, off } = pref.translateKeys;
 
             const _helper = description ? t(description) : null;
 
@@ -55,7 +50,7 @@ export const SubscriptionFeatures = (props) => {
                         config={{ valuePropName: 'checked' }}
                         checkedChildren={t(on)}
                         unCheckedChildren={t(off)}
-                        name={['features', pref.id]}/>
+                        name={['featuresByRef', pref.id]}/>
             );
           })}
         </div>
