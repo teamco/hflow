@@ -1,6 +1,8 @@
 import request from 'umi-request';
 import { API_CONFIG } from 'services/config/api.config';
 import { stub } from './function';
+import { successSaveMsg } from '@/utils/message';
+import capitalize from 'capitalize-first-letter';
 
 /**
  * @constant
@@ -154,22 +156,27 @@ function toBase64(file) {
 
 /**
  * @function
+ * @param {boolean} notice
  * @param opts
  * @param [errorHandler]
  * @param [fallbackUrl]
  * @return {Q.Promise<any> | undefined}
  */
-function xhr(opts, errorHandler = stub, fallbackUrl) {
+function xhr(opts, notice, errorHandler = stub, fallbackUrl) {
   const { pathname } = window.location;
   const { url, method } = opts;
   delete opts.url;
   delete opts.method;
 
   return request[method](url, opts).then((res) => {
+    const isEdit = method === METHOD.put;
+    notice && [METHOD.post, METHOD.put].includes(method) && successSaveMsg(isEdit);
+
     return {
       data: res,
       exists: !!res?.id
     };
+
   }).catch((error) => {
     const _st = setTimeout(() => {
       if (fallbackUrl && !pathname.match(new RegExp(fallbackUrl))) {

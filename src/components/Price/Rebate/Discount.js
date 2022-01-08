@@ -55,7 +55,7 @@ const Discount = props => {
 
   useEffect(() => {
     handlePriceUpdate(currency);
-    setDiscountTypes(discountTypes.map(type => (type === 'currency' ? currency : type)));
+    setDiscountTypes(discountTypes.map(type => _handleDiscountType(type)));
   }, [currency]);
 
   useEffect(() => {
@@ -65,9 +65,17 @@ const Discount = props => {
   /**
    * @constant
    * @param {string} value
+   * @return {string}
+   * @private
    */
-  const handleDiscountTypeUpdate = value => {
-    value = value === 'Percent' ? '%' : currency;
+  const _handleDiscountType = value => ['Percent', '%'].includes(value) ? '%' : currency;
+
+  /**
+   * @constant
+   * @param {string} value
+   */
+  const handleDiscountTypeUpdate = (value) => {
+    value = _handleDiscountType(value);
     updateComplexForm(formRef, prefix, namespace, { type: value });
     setDiscountType(value);
   };

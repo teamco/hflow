@@ -93,6 +93,7 @@
     "fullName": "Full Name",
     "firstName": "First Name",
     "lastName": "Last Name",
+    "entity": "Entity",
     "entityKey": "Entity Key",
     "contentKey": "Content Key",
     "upload": "Upload",

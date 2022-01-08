@@ -45,7 +45,9 @@ export const getXHRToken = (props) => {
   return request.xhr({
         ...opts,
         ...{ data }
-      }, async (error) => await handleError(error, notice)
+      },
+      false,
+      async (error) => await handleError(error, notice)
   );
 };
 
@@ -78,9 +80,11 @@ export const xhrRequest = async (props) => {
     ...args
   });
 
-  return request.xhr({
+  return request.xhr( {
         ...opts,
         ...{ data }
-      }, async (error) => await handleError(error, notice)
+      },
+      notice,
+      async (error) => await handleError(error, notice)
   );
 };

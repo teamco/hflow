@@ -22,7 +22,7 @@ export const STATUS = {
  * @param isEdit
  * @param instance
  */
-export const successSaveMsg = (isEdit, instance) => {
+export const successSaveMsg = (isEdit, instance = i18n.t('form:entity')) => {
   message.success(i18n.t(isEdit ? 'msg:successUpdate' : 'msg:successSave', { instance })).then();
 };
 
