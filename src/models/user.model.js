@@ -1,18 +1,26 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 import { message } from 'antd';
-import { commonModel } from 'models/common.model';
-import { fbFindById, fbUpdate } from 'services/firebase.service';
-import { findUser, forceSignOutUser, getUsers, sendVerificationEmail } from 'services/user.service';
-import { defineAbilityFor } from 'utils/auth/ability';
-import { monitorHistory } from 'utils/history';
-import i18n from 'utils/i18n';
+
+import { commonModel } from '@/models/common.model';
+import { fbFindById, fbUpdate } from '@/services/firebase.service';
+import {
+  findUser,
+  forceSignOutUser,
+  getUsers,
+  sendVerificationEmail
+} from '@/services/user.service';
+import { defineAbilityFor } from '@/utils/auth/ability';
+import { monitorHistory } from '@/utils/history';
+import i18n from '@/utils/i18n';
+
+const MODEL_NAME = 'userModel';
 
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'userModel',
+  namespace: MODEL_NAME,
   state: {
     profiles: [1],
     selectedProfile: null,
@@ -23,7 +31,7 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, 'userModel');
+      return monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
       // TODO (teamco): Do something.
@@ -117,7 +125,7 @@ export default dvaModelExtend(commonModel, {
     },
 
     * changeGridLayout({ payload }, { put, select }) {
-      const { gridLayout } = yield select(state => state.userModel);
+      const { gridLayout } = yield select(state => state[MODEL_NAME]);
       yield put({ type: 'updateState', payload: { gridLayout: !gridLayout } });
     },
 

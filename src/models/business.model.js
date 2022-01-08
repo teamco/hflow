@@ -13,7 +13,7 @@ import ct from 'countries-and-timezones';
 /** @type {array} */
 import provinces from 'provinces';
 
-import { sendAuthLink, sendVerificationEmail } from 'services/user.service';
+import { sendAuthLink, sendVerificationEmail } from '@/services/user.service';
 
 import {
   findBusinessTempUser,
@@ -22,17 +22,17 @@ import {
   getBusinesses,
   getBusinessUsers,
   getTempBusinessUsers
-} from 'services/business.service';
+} from '@/services/business.service';
 
-import { toFile } from 'utils/file';
-import { monitorHistory } from 'utils/history';
-import { errorSaveMsg, STATUS } from 'utils/message';
-import { setAs } from 'utils/object';
+import { toFile } from '@/utils/file';
+import { monitorHistory } from '@/utils/history';
+import { errorSaveMsg, STATUS } from '@/utils/message';
+import { setAs } from '@/utils/object';
 
-import { detailsInfo } from 'services/cross.model.service';
-import { fbAdd, fbDelete, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
-import { isAdmin } from 'services/userRoles.service';
-import { isNew } from 'services/common.service';
+import { detailsInfo } from '@/services/cross.model.service';
+import { fbAdd, fbDelete, fbFindById, fbUpdate, getRef } from '@/services/firebase.service';
+import { isAdmin } from '@/services/userRoles.service';
+import { isNew } from '@/services/common.service';
 
 const DEFAULT_STATE = {
   availableCountries: ['US', 'CA', 'IL'], //'ALL'
@@ -45,15 +45,18 @@ const DEFAULT_STATE = {
   businessUserRef: null
 };
 
+const MODEL_NAME = 'businessModel';
+const ABILITY_FOR = 'businesses';
+
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'businessModel',
+  namespace: MODEL_NAME,
   state: { ...DEFAULT_STATE, data: [] },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, 'businessModel');
+      return monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
       // TODO (teamco): Do something.
@@ -66,7 +69,7 @@ export default dvaModelExtend(commonModel, {
       let { user, ability } = yield select(state => state.authModel);
       const { userId = user?.id } = payload;
 
-      if (ability.can('read', 'profile') && ability.can('read', 'businesses')) {
+      if (ability.can('read', 'profile') && ability.can('read', ABILITY_FOR)) {
         if (userId === user?.id) {
           // TODO (teamco): Do nothing.
         } else {
@@ -106,7 +109,7 @@ export default dvaModelExtend(commonModel, {
     },
 
     * businessAddress(_, { select, put }) {
-      const { availableCountries } = yield select(state => state.businessModel);
+      const { availableCountries } = yield select(state => state[MODEL_NAME]);
       let countries = [];
 
       if (availableCountries === 'ALL') {
@@ -121,7 +124,7 @@ export default dvaModelExtend(commonModel, {
         type: 'toForm',
         payload: {
           form: {},
-          model: 'businessModel'
+          model: MODEL_NAME
         }
       });
     },
@@ -156,7 +159,7 @@ export default dvaModelExtend(commonModel, {
 
       if (isNew(businessId)) {
         // TODO (teamco): Do something.
-      } else if (ability.can('read', 'businesses')) {
+      } else if (ability.can('read', ABILITY_FOR)) {
 
         const business = yield call(fbFindById, {
           collection: 'businesses',
@@ -208,7 +211,7 @@ export default dvaModelExtend(commonModel, {
           return yield put({
             type: 'toForm',
             payload: {
-              model: 'businessModel',
+              model: MODEL_NAME,
               form: { ..._business }
             }
           });
@@ -237,7 +240,7 @@ export default dvaModelExtend(commonModel, {
 
     * prepareToSave({ payload, params }, { call, select, put }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { uploadedFiles, selectedBusiness, isEdit } = yield select(state => state.businessModel);
+      const { uploadedFiles, selectedBusiness, isEdit } = yield select(state => state[MODEL_NAME]);
       const { selectedUser } = yield select(state => state.userModel);
 
       let entity;
@@ -260,7 +263,7 @@ export default dvaModelExtend(commonModel, {
         });
       }
 
-      if (user && ability.can('update', 'businesses')) {
+      if (user && ability.can('update', ABILITY_FOR)) {
 
         const userRef = getRef({
           collection: 'users',
@@ -448,7 +451,7 @@ export default dvaModelExtend(commonModel, {
           yield put({
             type: 'toForm',
             payload: {
-              model: 'businessModel',
+              model: MODEL_NAME,
               form: { ...data }
             }
           });
@@ -462,7 +465,7 @@ export default dvaModelExtend(commonModel, {
     },
 
     * finishRegistration({ payload }, { call, put, select }) {
-      const { businessUserRef } = yield select(state => state.businessModel);
+      const { businessUserRef } = yield select(state => state[MODEL_NAME]);
       const { _userExist } = payload;
 
       if (_userExist.docId && businessUserRef) {

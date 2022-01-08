@@ -1,20 +1,24 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
-
-import { commonModel } from 'models/common.model';
-import { getNotifications } from 'services/notification.service';
 import { message } from 'antd';
-import i18n from 'utils/i18n';
 import { history } from 'umi';
-import { fbAdd, fbFindById, fbUpdate, getRef } from 'services/firebase.service';
-import { STATUS } from 'utils/message';
-import { monitorHistory } from 'utils/history';
+
+import { commonModel } from '@/models/common.model';
+import { getNotifications } from '@/services/notification.service';
+import { fbAdd, fbFindById, fbUpdate, getRef } from '@/services/firebase.service';
+
+import i18n from '@/utils/i18n';
+import { STATUS } from '@/utils/message';
+import { monitorHistory } from '@/utils/history';
+
+const MODEL_NAME = 'notificationModel';
+const ABILITY_FOR = 'notifications';
 
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'notificationModel',
+  namespace: MODEL_NAME,
   state: {
     badge: {
       count: 0,
@@ -27,7 +31,7 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, 'notificationModel');
+      return monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
       // TODO (teamco): Do something.
@@ -39,7 +43,7 @@ export default dvaModelExtend(commonModel, {
       let { user, ability } = yield select(state => state.authModel);
       const { userId } = payload;
 
-      if (user && ability.can('read', 'notifications')) {
+      if (user && ability.can('read', ABILITY_FOR)) {
         if (userId && ability.can('read', 'profile')) {
           const _user = yield call(fbFindById, {
             collection: 'users',
@@ -67,10 +71,10 @@ export default dvaModelExtend(commonModel, {
 
     * getCount({ payload = {} }, { put, call, select }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { badge } = yield select(state => state.notificationModel);
+      const { badge } = yield select(state => state[MODEL_NAME]);
       let { inbox = [] } = payload;
 
-      if (user && ability.can('read', 'notifications')) {
+      if (user && ability.can('read', ABILITY_FOR)) {
 
         if (!inbox.length) {
           const notifications = yield call(getNotifications, { userId: user.id, email: user.email });
@@ -93,7 +97,7 @@ export default dvaModelExtend(commonModel, {
       const { user, ability } = yield select(state => state.authModel);
       const { type, status, replyTo, sentTo, title, description, isPrivate, read = false } = payload;
 
-      if (user && ability.can('create', 'notifications')) {
+      if (user && ability.can('create', ABILITY_FOR)) {
 
         let replyRef = null;
         if (replyTo) {
@@ -128,10 +132,10 @@ export default dvaModelExtend(commonModel, {
 
     * setAsRead({ payload }, { put, call, select }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { notifications } = yield select(state => state.notificationModel);
+      const { notifications } = yield select(state => state[MODEL_NAME]);
       const { doc, status = STATUS.read } = payload;
 
-      if (user && ability.can('update', 'notifications')) {
+      if (user && ability.can('update', ABILITY_FOR)) {
 
         // Update notifications
         yield call(fbUpdate, {

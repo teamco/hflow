@@ -1,20 +1,22 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 
-import { commonModel } from 'models/common.model';
-import { detailsInfo } from 'services/cross.model.service';
-import { fbFindById, fbUpdate, fbWrite, getRef } from 'services/firebase.service';
-import { monitorHistory } from 'utils/history';
+import { commonModel } from '@/models/common.model';
+import { detailsInfo } from '@/services/cross.model.service';
+import { fbFindById, fbUpdate, fbWrite, getRef } from '@/services/firebase.service';
+import { monitorHistory } from '@/utils/history';
+
+const MODEL_NAME = 'simpleModel';
 
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'simpleModel',
+  namespace: MODEL_NAME,
   state: {},
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, 'simpleModel');
+      return monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
       // TODO (teamco): Do something.
@@ -44,7 +46,7 @@ export default dvaModelExtend(commonModel, {
         yield put({
           type: 'toForm',
           payload: {
-            model: 'simpleModel',
+            model: MODEL_NAME,
             form: { ...data }
           }
         });
@@ -64,7 +66,7 @@ export default dvaModelExtend(commonModel, {
 
     * prepareToSave({ payload }, { call, put, select }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { tags } = yield select(state => state.simpleModel);
+      const { tags } = yield select(state => state[MODEL_NAME]);
       const { doc, component, ...rest } = payload;
 
       const _db = { collection: 'simpleEntities', doc };

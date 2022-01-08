@@ -153,7 +153,7 @@ export default dvaModelExtend(commonModel, {
 
     * prepareToSave({ payload, params }, { call, select, put }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { selectedSubscription, isEdit } = yield select(state => state.subscriptionModel);
+      const { selectedSubscription, isEdit } = yield select(state => state[MODEL_NAME]);
       const {
         price,
         type,
@@ -191,7 +191,7 @@ export default dvaModelExtend(commonModel, {
             description: setAs(description, null)
           },
           metadata,
-          featuresByRef: Object.keys(featuresByRef).filter(key => payload.features[key]),
+          featuresByRef: Object.keys(featuresByRef).filter(key => featuresByRef[key]),
           tags: setAs(tags, [])
         };
 

@@ -2,14 +2,16 @@ import React from 'react';
 
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
-import { commonModel } from 'models/common.model';
-import { monitorHistory } from 'utils/history';
+import { commonModel } from '@/models/common.model';
+import { monitorHistory } from '@/utils/history';
+
+const MODEL_NAME = 'landingModel';
 
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'landingModel',
+  namespace: MODEL_NAME,
   state: {
     data: {
       realEstate: {}
@@ -22,7 +24,7 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, 'landingModel');
+      return monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
       dispatch({ type: 'query' });
@@ -35,7 +37,7 @@ export default dvaModelExtend(commonModel, {
     
     * getContent({ payload }, { put, select }) {
       // TODO (teamco): Write code here.
-      const { data } = yield select(state => state.landingModel);
+      const { data } = yield select(state => state[MODEL_NAME]);
       const { user } = yield select(state => state.authModel);
       
       // const realEstate = yield call(... in services);

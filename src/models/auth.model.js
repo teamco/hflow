@@ -1,19 +1,26 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 
-import { commonModel } from 'models/common.model';
-import { fbAdd, fbSignOut, fbUpdate } from 'services/firebase.service';
-import { findUser, gravatarUrl, handleUserSessionTimeout, updateFbUserEmail } from 'services/user.service';
-import { defineAbilityFor } from 'utils/auth/ability';
-import { defineInstance } from 'utils/instance';
-import { monitorHistory } from '../utils/history';
+import { commonModel } from '@/models/common.model';
+import { fbAdd, fbSignOut, fbUpdate } from '@/services/firebase.service';
+import {
+  findUser,
+  gravatarUrl,
+  handleUserSessionTimeout,
+  updateFbUserEmail
+} from '@/services/user.service';
+import { defineAbilityFor } from '@/utils/auth/ability';
+import { defineInstance } from '@/utils/instance';
+import { monitorHistory } from '@/utils/history';
+
+const MODEL_NAME = 'authModel';
 
 /**
  * @export
  * @default
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'authModel',
+  namespace: MODEL_NAME,
   state: {
     MIN_PASSWORD_LENGTH: 8,
     registerData: {},
@@ -24,7 +31,7 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, 'authModel');
+      return monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
       // TODO (teamco): Do something.
@@ -38,7 +45,7 @@ export default dvaModelExtend(commonModel, {
         registerData = {},
         isSignedOut,
         refreshSignIn
-      } = yield select(state => state.authModel);
+      } = yield select(state => state[MODEL_NAME]);
 
       let { user = {}, _userExist } = payload || {};
 
@@ -223,7 +230,7 @@ export default dvaModelExtend(commonModel, {
     },
 
     * defineAbilities({ payload = {} }, { call, put, select }) {
-      const { user } = yield select(state => state.authModel);
+      const { user } = yield select(state => state[MODEL_NAME]);
       const { userId = user?.id } = payload;
 
       const ability = yield call(defineAbilityFor, { user, userId });
@@ -232,7 +239,7 @@ export default dvaModelExtend(commonModel, {
     },
 
     * signOut({ payload }, { call, put, select }) {
-      const state = yield select(state => state.authModel);
+      const state = yield select(state => state[MODEL_NAME]);
       const { user } = payload;
 
       // Clear garbage.

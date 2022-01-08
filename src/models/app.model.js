@@ -13,11 +13,13 @@ const appMeta = {
   charSet: 'utf-8'
 };
 
+const MODEL_NAME = 'appModel';
+
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'appModel',
+  namespace: MODEL_NAME,
   state: {
     is404: false,
     interval: {
@@ -86,7 +88,7 @@ export default dvaModelExtend(commonModel, {
     },
 
     * updateDocumentMeta({ payload }, { put, select }) {
-      const { meta } = yield select(state => state.appModel);
+      const { meta } = yield select(state => state[MODEL_NAME]);
       yield put({
         type: 'updateState',
         payload: {
