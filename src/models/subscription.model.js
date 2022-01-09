@@ -158,7 +158,7 @@ export default dvaModelExtend(commonModel, {
       const {
         price,
         type,
-        name = null,
+        duration,
         featuresByRef,
         numberOfUsers,
         translateKeys: {
@@ -188,6 +188,7 @@ export default dvaModelExtend(commonModel, {
             }
           },
           type,
+          duration,
           numberOfUsers,
           translateKeys: {
             title,
