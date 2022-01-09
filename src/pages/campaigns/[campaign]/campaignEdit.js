@@ -6,6 +6,7 @@ import SaveButton from 'components/Buttons/save.button';
 
 import Main from 'components/Main';
 import Page from 'components/Page';
+import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
 
 import { CampaignInfo } from 'pages/campaigns/[campaign]/form/campaign.info';
 import { CampaignDiscount } from 'pages/campaigns/[campaign]/form/campaign.discount';
@@ -38,11 +39,10 @@ export const campaignEdit = (props) => {
     loading,
     onEditCampaign,
     onFieldsChange,
-    onUpdateTags,
     onSave,
     onClose,
     onDeleteCampaign,
-    onSubscriptions
+    onSubscriptions,
   } = props;
 
   /**
@@ -56,11 +56,10 @@ export const campaignEdit = (props) => {
     subscriptions,
     campaignTypes,
     campaignPeriod,
-    discountTypes,
     durationTypes,
     businessUsers,
     currencies,
-    tags,
+    featureTypes,
     isEdit,
     touched
   } = campaignModel;
@@ -70,17 +69,10 @@ export const campaignEdit = (props) => {
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
 
-  const [currency, setCurrency] = useState(currencies[0]);
-
   useEffect(() => {
     canUpdate && onEditCampaign(params);
     onSubscriptions()
   }, [authModel.user, canUpdate]);
-
-  const price = formRef.getFieldValue('price');
-  useEffect(() => {
-    setCurrency(price?.currency || currencies[0]);
-  }, [price, currencies]);
 
   /**
    * @constant
@@ -99,16 +91,14 @@ export const campaignEdit = (props) => {
     businessUsers,
     subscriptions,
   };
-  const campaignOptionsProps = {
-    t,
+
+  const discountProps = {
     formRef,
     disabled,
-    campaignTypes,
-    campaignPeriod,
-    discountTypes,
-    businessUsers,
+    currencies,
     durationTypes
   };
+
 
   const {
     createdBy,
@@ -136,13 +126,6 @@ export const campaignEdit = (props) => {
     params,
     component,
     onDeleteCampaign
-  };
-
-  const discountProps = {
-    formRef,
-    disabled,
-    currency,
-    durationTypes
   };
 
   const subTitle = (
@@ -198,18 +181,13 @@ export const campaignEdit = (props) => {
                 scrollToFirstError={true}
                 onFinish={onFinish}
                 initialValues={{
-                  discountType: t('currency'),
-                  price: {
-                    originalPrice: 1,
-                    discounted: true,
-                    currency,
-                    discount: {
-                      value: 1,
-                      duration: {
-                        period: 1,
-                        type: 'Month'
-                      }
-                    }
+                  helper: true,
+                  defaultState: true,
+                  ...DEFAULT_PRICE_VALUES(currencies[0]),
+                  featureType: featureTypes[0],
+                  translateKeys: {
+                    on: 'actions:yes',
+                    off: 'actions:no'
                   },
                 }}
                 onFieldsChange={onFieldsChange}>

@@ -2,7 +2,7 @@
 import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from 'models/common.model';
-import { isNew } from 'services/common.service';
+import { custDiscountType, isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
 import { getRef } from 'services/firebase.service';
 import { addCampaign, getAllCampaigns, getCampaign, updateCampaign } from 'services/campaigns.service';
@@ -13,21 +13,11 @@ import { errorSaveMsg } from 'utils/message';
 import { getAllSubscriptions } from 'services/subscriptions.service';
 import { getFeatures } from 'services/features.service';
 import { setAs } from 'utils/object';
+import moment from 'moment';
+import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 
 const DEFAULT_STATE = {
-  campaigns: [],
-  discountTypes: {
-    percentage: '%',
-    currency: i18n.t('currency')
-  },
-  durationTypes: {
-    hour: 'hour',
-    day: 'day',
-    week: "week",
-    month: 'month',
-    year: 'year',
-    permanent: 'permanent'
-  }
+  campaigns: []
 };
 
 /**
@@ -68,9 +58,9 @@ export default dvaModelExtend(commonModel, {
       const {data: features = [] } = yield call(getFeatures, {type});
       const subscriptionFeatures = subscriptions.map((item) => {
         const prefsNotIncluded = features.filter(filterPref => {
-          return !item.features.includes(filterPref.id);
+          return !item.featuresByRef.includes(filterPref.id);
         });
-        return { type: item.subscriptionType, features: prefsNotIncluded, id: item.id };
+        return { type: item.type, features: prefsNotIncluded, id: item.id };
       });
 
       yield put({
@@ -108,7 +98,8 @@ export default dvaModelExtend(commonModel, {
         const campaign = yield call(getCampaign, { id: campaignId });
 
         if (campaign.exists) {
-          const selectedCampaign = { ...campaign.data(), ...{ id: campaign.id } };
+          const selectedCampaign = {
+            ...campaign.data(), ...{ id: campaign.id } };
 
           yield put({ type: 'updateState', payload: { selectedCampaign } });
 
@@ -133,11 +124,12 @@ export default dvaModelExtend(commonModel, {
       const { campaign } = params;
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(campaign) } });
-      yield put({ type: 'campaignTypes' });
+
+      // yield put({ type: 'campaignTypes' });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'currencies' } });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'durationTypes' } });
-      yield put({ type: 'validateCampaign', payload: { campaignId: campaign } });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'featureTypes' } });
+      yield put({ type: 'validateCampaign', payload: { campaignId: campaign } });
     },
 
     * prepareToSave({ payload, params }, { call, select, put }) {
@@ -164,17 +156,18 @@ export default dvaModelExtend(commonModel, {
           featuresByRef: setAs(payload.featuresByRef, []),
           picUrl: setAs(payload.picUrl, 'picUrl'),
           subscriptionRef: setAs(payload.type, ''),
-          duration: setAs(payload.duration, null),
-          durationType: setAs(payload.durationType, 'asdas'),
-          discount:  setAs(payload.duration, null),
-          discountType: setAs(payload.discountType, 'asdas'),
-          startedAt: setAs(payload.startedAt, ''),
           translateKeys: {
             title: setAs(payload.title, 'asdasd'),
             description: setAs(payload.description, 'asdasd'),
           },
-          activated: setAs(payload.isActivated, false),
-          discounted: setAs(payload.isDiscount, false)
+          price: {
+            ...payload.price,
+            discount: {
+              ...payload.price.discount,
+              startedAt: `${moment(payload.price.discount.startedAt).format(DEFAULT_DATE_FORMAT)} 00:00:00`,
+              type: custDiscountType(payload.price.discount.type)
+            }
+          },
         }
 
         if (isEdit) {
