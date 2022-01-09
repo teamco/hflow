@@ -103,7 +103,7 @@ export const subscriptions = (props) => {
                 colorsToType,
                 features: {
                   all: features,
-                  selected: data.features
+                  selected: data.featuresByRef
                 },
                 ...subscriptionCardMetadata(t, {
                   data,

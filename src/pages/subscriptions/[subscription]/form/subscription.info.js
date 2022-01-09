@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { Input, InputNumber, Select, Slider } from 'antd';
+import { DatePicker, Divider, Select, Slider } from 'antd';
 import FormComponents from 'components/Form';
 import Duration from '@/components/Price/Range/Duration';
+import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
+import moment from 'moment';
 
 const { GenericPanel } = FormComponents;
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 /**
  * @export
@@ -46,26 +49,14 @@ export const SubscriptionInfo = (props) => {
             ))}
           </Select>
           <Duration form={formRef}
-                    label={t('subscription:period')}
+                    label={t('subscription:duration')}
                     disabled={disabled}
                     prefix={[]}
+                    namespace={'paymentDuration'}
                     required={true}
                     durationTypes={durationTypes}/>
         </div>
-        <div>
-          <Input type={'text'}
-                 label={t('subscription:title')}
-                 name={['translateKeys', 'title']}
-                 form={formRef}
-                 disabled={disabled}
-                 config={{ rules: [{ required: true }] }}/>
-          <Input type={'text'}
-                 label={t('form:description')}
-                 name={['translateKeys', 'description']}
-                 form={formRef}
-                 disabled={disabled}/>
-        </div>
-        <div>
+        <div colProps={{ xs: 24, sm: 12, md: 12, lg: 8, xl: 8, xxl: 8 }}>
           <Slider marks={marks}
                   label={t('subscription:users')}
                   name={'numberOfUsers'}
@@ -74,7 +65,16 @@ export const SubscriptionInfo = (props) => {
                   max={dims.max}
                   disabled={disabled}
                   config={{ rules: [{ required: true }] }}/>
-          <></>
+        </div>
+        <div>
+          <RangePicker name={'saleInfo'}
+                       form={formRef}
+                       format={DEFAULT_DATE_FORMAT}
+                       disabledDate={current => current && current < moment().endOf('day')}
+                       disabled={disabled}
+                       placeholder={[t('subscription:saleStart'), t('subscription:saleEnd')]}
+                       config={{ rules: [{ type: 'array', required: true }] }}
+                       label={t('subscription:saleAt')}/>
         </div>
       </GenericPanel>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DatePicker, Divider, InputNumber, Select, Switch } from 'antd';
+import { DatePicker, Divider, Input, InputNumber, Select, Switch } from 'antd';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 
@@ -130,7 +130,7 @@ const Discount = props => {
       <GenericPanel header={t('panel:priceInfo')}
                     name={namespace}
                     defaultActiveKey={[namespace]}>
-        <div>
+        <div colProps={{ xs: 24, sm: 12, md: 12, lg: 8, xl: 6, xxl: 4 }}>
           <InputNumber addonBefore={selectCurrencyBefore}
                        label={t('price:originalPrice')}
                        name={[...prefix, 'originalPrice']}
@@ -138,6 +138,12 @@ const Discount = props => {
                        min={1}
                        disabled={disabled}
                        config={{ rules: [{ required: true }] }}/>
+          <Input label={t('price:discountedPrice')}
+                 name={[...prefix, 'discountedPrice']}
+                 form={formRef}
+                 min={1}
+                 readOnly={true}
+                 disabled={disabled}/>
         </div>
         <div colProps={{ xs: 24, sm: 24, md: 24, lg: 24, xl: 24, xxl: 24 }}>
           <Divider orientation={'left'}>{t('subscription:discount')}</Divider>
