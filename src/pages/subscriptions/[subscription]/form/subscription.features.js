@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Switch } from 'antd';
+import { Select, Switch } from 'antd';
 
 import FormComponents from '@/components/Form';
 import EmptyData from '@/components/EmptyData';
@@ -7,6 +7,7 @@ import EmptyData from '@/components/EmptyData';
 import { sortBy } from '@/utils/array';
 
 const { GenericPanel } = FormComponents;
+const { Option } = Select;
 
 /**
  * @export
@@ -21,7 +22,9 @@ export const SubscriptionFeatures = (props) => {
     formRef,
     disabled,
     features = [],
-    selectedSubscription
+    featureTypes = [],
+    selectedSubscription,
+    onChangeFeatureType
   } = props;
 
   useEffect(() => {
@@ -33,12 +36,29 @@ export const SubscriptionFeatures = (props) => {
     });
   }, [features, selectedSubscription]);
 
+  const colProps = { xs: 24, sm: 12, md: 8, lg: 8, xl: 6, xxl: 4 };
+
   return (
       <GenericPanel header={t('subscription:features')}
                     name={'features'}
                     defaultActiveKey={['features']}>
+        <div colProps={colProps}>
+          <Select name={'featureType'}
+                  form={formRef}
+                  label={t('feature:type')}
+                  disabled={disabled}
+                  onChange={onChangeFeatureType}
+                  config={{ rules: [{ required: true }] }}>
+            {[...featureTypes].sort().map((type, idx) => (
+                <Option key={idx}
+                        value={type}>
+                  {type}
+                </Option>
+            ))}
+          </Select>
+        </div>
         {features.length ? (
-            <div colProps={{ xs: 24, sm: 12, md: 8, lg: 8, xl: 6, xxl: 4 }}>
+            <div colProps={colProps}>
               {sortBy(features, 'translateKeys.title', t).map((pref, idx) => {
                 const { title, description, on, off } = pref.translateKeys;
 

@@ -87,6 +87,8 @@ export default dvaModelExtend(commonModel, {
 
       if (isNew(subscriptionId)) {
         // TODO (teamco): Do something.
+        yield put({ type: 'features'});
+
       } else if (ability.can('read', ABILITY_FOR)) {
 
         const subscription = yield call(getSubscription, { id: subscriptionId });
@@ -117,6 +119,8 @@ export default dvaModelExtend(commonModel, {
             _features[pref] = true;
           });
 
+          yield put({ type: 'features', payload: { type: _subscription.featureType } });
+
           return yield put({
             type: 'toForm',
             payload: {
@@ -136,18 +140,22 @@ export default dvaModelExtend(commonModel, {
     * editSubscription({ payload }, { put }) {
       const { params } = payload;
       const { subscription } = params;
-      const { type } = params;
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(subscription) } });
-      yield put({ type: 'features', payload: { type } });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'currencies' } });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'durationTypes' } });
+      yield put({ type: 'getSimpleEntity', payload: { doc: 'featureTypes' } });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'subscriptionTypes' } });
       yield put({ type: 'validateSubscription', payload: { subscriptionId: subscription } });
     },
 
-    * features({ payload }, { call, put }) {
-      const { type = 'Business' } = payload || {};
+    * changeFeatureType({ payload = {} }, { put }) {
+      const { type = 'Business' } = payload;
+      yield put({ type: 'features', payload: { type } });
+    },
+
+    * features({ payload = {} }, { call, put }) {
+      const { type = 'Business' } = payload;
       const { data = [] } = yield call(getFeatures, { type });
       yield put({ type: 'updateState', payload: { features: data } });
     },
@@ -158,14 +166,15 @@ export default dvaModelExtend(commonModel, {
       const {
         price,
         type,
+        featureType,
         duration,
         featuresByRef,
         numberOfUsers,
         translateKeys: {
           title,
-          description
+          description = setAs(description, null)
         },
-        tags
+        tags = setAs(tags, [])
       } = payload;
 
       if (user && ability.can('update', ABILITY_FOR)) {
@@ -187,16 +196,10 @@ export default dvaModelExtend(commonModel, {
               type: custDiscountType(price.discount.type)
             }
           },
-          type,
-          duration,
-          numberOfUsers,
-          translateKeys: {
-            title,
-            description: setAs(description, null)
-          },
-          metadata,
+          translateKeys: { title, description },
           featuresByRef: Object.keys(featuresByRef).filter(key => featuresByRef[key]),
-          tags: setAs(tags, [])
+          type, featureType, tags, duration,
+          numberOfUsers, metadata
         };
 
         if (isEdit) {

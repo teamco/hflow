@@ -42,7 +42,8 @@ export const subscriptionEdit = (props) => {
     onUpdateTags,
     onSave,
     onClose,
-    onDeleteSubscription
+    onDeleteSubscription,
+    onChangeFeatureType
   } = props;
 
   /**
@@ -59,6 +60,7 @@ export const subscriptionEdit = (props) => {
     businessUsers,
     currencies,
     durationTypes,
+    featureTypes,
     tags,
     isEdit,
     touched
@@ -97,7 +99,9 @@ export const subscriptionEdit = (props) => {
     formRef,
     disabled,
     features,
-    selectedSubscription
+    selectedSubscription,
+    featureTypes,
+    onChangeFeatureType
   };
 
   const discountProps = {
@@ -160,6 +164,9 @@ export const subscriptionEdit = (props) => {
             spinEffects={[
               'subscriptionModel/editSubscription',
               'subscriptionModel/subscriptionTypes',
+              'subscriptionModel/changeFeatureType',
+              'subscriptionModel/features',
+              'subscriptionModel/getSimpleEntity',
               'subscriptionModel/prepareToSave'
             ]}>
         <div className={styles.subscriptionWrapper}>
@@ -198,6 +205,7 @@ export const subscriptionEdit = (props) => {
                 onFieldsChange={onFieldsChange}
                 initialValues={{
                   numberOfUsers: 1,
+                  featureType: 'Business',
                   duration: {
                     type: 'Month',
                     period: 1

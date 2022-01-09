@@ -37,6 +37,9 @@ export default connect(
       onEditSubscription(params) {
         dispatch({ type: `subscriptionModel/editSubscription`, payload: { params } });
       },
+      onChangeFeatureType(type) {
+        dispatch({ type: `subscriptionModel/changeFeatureType`, payload: { type } });
+      },
       onDeleteSubscription() {
       }
     })
