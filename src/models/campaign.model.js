@@ -3,6 +3,7 @@ import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from 'models/common.model';
 import { custDiscountType, isNew } from 'services/common.service';
+import { dateFormat } from '@/utils/timestamp';
 import { detailsInfo } from 'services/cross.model.service';
 import { getRef } from 'services/firebase.service';
 import { addCampaign, getAllCampaigns, getCampaign, updateCampaign } from 'services/campaigns.service';
@@ -60,7 +61,7 @@ export default dvaModelExtend(commonModel, {
         const prefsNotIncluded = features.filter(filterPref => {
           return !item.featuresByRef.includes(filterPref.id);
         });
-        return { type: item.type, features: prefsNotIncluded, id: item.id };
+        return { type: item.type, features: prefsNotIncluded, id: item.id, featureType: item.featureType };
       });
 
       yield put({
@@ -148,26 +149,29 @@ export default dvaModelExtend(commonModel, {
           updatedAt: +(new Date).toISOString(),
           updatedByRef: user.id
         };
-
+        const {price: {discount, discounted}} = payload
         // prepare request
         let data = {
           name: setAs(payload.name, 'name'),
-          type: setAs(payload.type, 'business'),
+          type: setAs(payload.subscriptionType, 'Business'),
           featuresByRef: setAs(payload.featuresByRef, []),
           picUrl: setAs(payload.picUrl, 'picUrl'),
           subscriptionRef: setAs(payload.type, ''),
           translateKeys: {
-            title: setAs(payload.title, 'asdasd'),
-            description: setAs(payload.description, 'asdasd'),
+            title: setAs(payload.title, ''),
+            description: setAs(payload.description, ''),
           },
-          price: {
-            ...payload.price,
-            discount: {
-              ...payload.price.discount,
-              startedAt: `${moment(payload.price.discount.startedAt).format(DEFAULT_DATE_FORMAT)} 00:00:00`,
-              type: custDiscountType(payload.price.discount.type)
-            }
+          duration: discount.duration,
+          discount: {
+            type: custDiscountType(discount.type),
+            value: discount.value,
+            startedAt: dateFormat(discount.startedAt),
+            duration: discount.duration
           },
+          tags: [],
+          startedAt: dateFormat(discount.startedAt),
+          activated: discounted,
+          discounted
         }
 
         if (isEdit) {

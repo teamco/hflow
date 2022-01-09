@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { Input, InputNumber, Select, DatePicker, Switch } from 'antd';
+import { Input,  Select } from 'antd';
 import FormComponents from 'components/Form';
 
-const { GenericPanel, MandatoryTextarea } = FormComponents;
+const { GenericPanel, MandatoryTextarea, HiddenField } = FormComponents;
 const { Option } = Select;
 
 /**
@@ -25,6 +25,8 @@ export const CampaignInfo = (props) => {
 
   const handleSubscriptionType = (id) => {
       setSubscriptionId(id);
+      const subscription = [...subscriptions].find(el => el.id === id);
+      formRef.setFieldsValue({ subscriptionType: subscription.featureType});
   }
 
   const handleFeatureList = (list) => {
@@ -87,6 +89,11 @@ export const CampaignInfo = (props) => {
             {subscriptionId && getOptions()}
           </Select>
         </div>
+        <>
+          <HiddenField name={['subscriptionType']}
+                       form={formRef}
+                       disabled={disabled}/>
+        </>
       </GenericPanel>
   );
 };

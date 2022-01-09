@@ -142,7 +142,7 @@ const Discount = props => {
                  name={[...prefix, 'discountedPrice']}
                  form={formRef}
                  min={1}
-                 readOnly={true}
+                 readOnly={false}
                  disabled={disabled}/>
         </div>
         <div colProps={{ xs: 24, sm: 24, md: 24, lg: 24, xl: 24, xxl: 24 }}>
