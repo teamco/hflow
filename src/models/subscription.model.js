@@ -17,7 +17,7 @@ import { errorSaveMsg } from '@/utils/message';
 import { setAs } from '@/utils/object';
 import { getFeatures } from '@/services/features.service';
 import moment from 'moment';
-import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
+import { dateFormat } from '@/utils/timestamp';
 import i18n from '@/utils/i18n';
 
 const DEFAULT_STATE = {
@@ -94,7 +94,7 @@ export default dvaModelExtend(commonModel, {
         const subscription = yield call(getSubscription, { id: subscriptionId });
 
         if (subscription.exists) {
-          const { price: { discount } } = subscription.data;
+          const { price: { discount }, saleInfo } = subscription.data;
 
           const selectedSubscription = {
             ...subscription.data,
@@ -105,7 +105,8 @@ export default dvaModelExtend(commonModel, {
                 startedAt: moment(discount?.startedAt),
                 duration: { ...discount?.duration }
               }
-            }
+            },
+            saleInfo: [moment(saleInfo.startedAt), moment(saleInfo.expiredAt)]
           };
 
           yield put({ type: 'updateState', payload: { selectedSubscription } });
@@ -167,14 +168,15 @@ export default dvaModelExtend(commonModel, {
         price,
         type,
         featureType,
-        duration,
+        paymentDuration,
         featuresByRef,
         numberOfUsers,
         translateKeys: {
           title,
           description = setAs(description, null)
         },
-        tags = setAs(tags, [])
+        tags = setAs(tags, []),
+        saleInfo
       } = payload;
 
       if (user && ability.can('update', ABILITY_FOR)) {
@@ -192,13 +194,17 @@ export default dvaModelExtend(commonModel, {
             ...price,
             discount: {
               ...price.discount,
-              startedAt: `${moment(price.discount.startedAt).format(DEFAULT_DATE_FORMAT)} 00:00:00`,
+              startedAt: dateFormat(price.discount.startedAt),
               type: custDiscountType(price.discount.type)
             }
           },
+          saleInfo: {
+            startedAt: dateFormat(saleInfo[0]),
+            expiredAt: dateFormat(saleInfo[1]),
+          },
           translateKeys: { title, description },
           featuresByRef: Object.keys(featuresByRef).filter(key => featuresByRef[key]),
-          type, featureType, tags, duration,
+          type, featureType, tags, paymentDuration,
           numberOfUsers, metadata
         };
 

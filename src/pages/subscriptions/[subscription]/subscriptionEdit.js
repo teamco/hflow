@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { DownOutlined, SettingOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 import { useParams } from 'umi';
@@ -21,6 +21,7 @@ import { isLoading } from '@/utils/state';
 import menuStyles from '@/components/menu.less';
 import styles from '@/pages/subscriptions/subscriptions.module.less';
 import userStyles from '@/pages/users/users.module.less';
+import { SubscriptionTranslate } from '@/pages/subscriptions/[subscription]/form/subscription.translate';
 
 const { Info } = Main;
 
@@ -109,6 +110,12 @@ export const subscriptionEdit = (props) => {
     disabled,
     currencies,
     durationTypes
+  };
+
+  const translateProps = {
+    t,
+    formRef,
+    disabled
   };
 
   const tagsProps = {
@@ -206,13 +213,14 @@ export const subscriptionEdit = (props) => {
                 initialValues={{
                   numberOfUsers: 1,
                   featureType: 'Business',
-                  duration: {
+                  paymentDuration: {
                     type: 'Month',
                     period: 1
                   },
                   ...DEFAULT_PRICE_VALUES(currencies[0])
                 }}>
             <SubscriptionInfo {...subscriptionInfoProps} />
+            <SubscriptionTranslate {...translateProps}/>
             <SubscriptionDiscount {...discountProps}/>
             <SubscriptionFeatures {...featuresProps} />
             <SubscriptionTags {...tagsProps} />

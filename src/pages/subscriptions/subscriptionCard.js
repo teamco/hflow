@@ -24,7 +24,6 @@ const SubscriptionCard = (props) => {
     className,
     colorsToType,
     features,
-    subscriptionPeriod,
     onSelectSubscription = stub
   } = props;
 
@@ -106,7 +105,7 @@ const SubscriptionCard = (props) => {
           })}
         </ul>
         <h1>{currencyFormat({ price: _price })}</h1>
-        <h4>{subscriptionPeriod[data?.subscriptionPeriod]}</h4>
+        <h4>{data?.paymentDuration?.type}</h4>
         <h2>{discountInfo(discount)}</h2>
         <Button onClick={onSelectSubscription}>{t('subscription:select')}</Button>
       </div>

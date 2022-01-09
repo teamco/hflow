@@ -345,15 +345,20 @@
     "features": "Features",
     "select": "Select",
     "title": "Title",
-    "period": "Period",
+    "duration": "Payment Duration",
     "tags": "Subscription Tags",
+    "sale": "Sale Information",
+    "saleAt": "Sale Started / Expired (at)",
+    "saleStart": "Started at",
+    "saleEnd": "Expired at",
     "discount": "Discount",
     "discountInfo": "Discount {{discount}}",
     "info": "Subscription Info",
     "price": "Price",
     "notice": "Notice",
     "users": "Maximum of Business users",
-    "usersInfo": "Upto to {{users}} users"
+    "usersInfo": "Upto to {{users}} users",
+    "translate": "Subscription Translate"
   },
   "feature": {
     "info": "Feature Info",

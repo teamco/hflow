@@ -3,6 +3,8 @@ import { withTranslation } from 'react-i18next';
 
 import { features } from './features';
 
+const MODEL_NAME = 'featureModel';
+
 export default connect(
     ({ authModel, featureModel, loading }) => ({
       loading,
@@ -12,19 +14,17 @@ export default connect(
     (dispatch) => ({
       dispatch,
       onQuery() {
-        dispatch({
-          type: `featureModel/query`
-        });
+        dispatch({ type: `${MODEL_NAME}/query` });
       },
       onNew() {
-        dispatch({ type: `featureModel/newFeature` });
+        dispatch({ type: `${MODEL_NAME}/newFeature` });
       },
       onUpdateTags(tags) {
-        dispatch({ type: 'featureModel/updateTags', payload: { tags } });
+        dispatch({ type: `${MODEL_NAME}/updateTags`, payload: { tags } });
       },
       onSave() {
         dispatch({
-          type: 'featureModel/prepareToSave',
+          type: `${MODEL_NAME}/prepareToSave`,
           payload: {
             component: 'features',
             doc: 'features'

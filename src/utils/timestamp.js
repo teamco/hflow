@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 /**
  * @export
  * @type {string}
@@ -51,3 +53,12 @@ export const delayedFn = props => {
     clearTimeout(_ts);
   }, ts);
 };
+
+/**
+ * @export
+ * @param {Date} date
+ * @return {`${string} 00:00:00`}
+ */
+export const dateFormat = date => {
+  return `${moment(date).format(DEFAULT_DATE_FORMAT)} 00:00:00`
+}
