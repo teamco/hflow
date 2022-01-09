@@ -17,7 +17,7 @@ import { errorSaveMsg } from '@/utils/message';
 import { setAs } from '@/utils/object';
 import { getFeatures } from '@/services/features.service';
 import moment from 'moment';
-import { dateFormat, DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
+import { dateFormat } from '@/utils/timestamp';
 import i18n from '@/utils/i18n';
 
 const DEFAULT_STATE = {

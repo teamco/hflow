@@ -33,7 +33,6 @@ export const subscriptions = (props) => {
 
   const {
     subscriptions = [],
-    subscriptionPeriod,
     colorsToType,
     features
   } = subscriptionModel;
@@ -99,7 +98,6 @@ export const subscriptions = (props) => {
               const props = {
                 t,
                 isEdit: true,
-                subscriptionPeriod,
                 colorsToType,
                 features: {
                   all: features,
