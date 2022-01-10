@@ -26,11 +26,15 @@ export const metadata = ({
   onActivateBusiness
 }) => {
 
-  const params = useParams();
+  /**
+   * @type {{business}}
+   */
+  const { business } = useParams();
+
   const menuProps = {
     isEdit: true,
     loading,
-    params,
+    params: {user, business},
     onActivateBusiness,
     onHoldBusiness,
     onDeleteBusiness

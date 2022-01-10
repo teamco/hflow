@@ -36,7 +36,7 @@ export const businesses = (props) => {
   /**
    * @type {{user}}
    */
-  const { user } = useParams();
+  const { user = authModel.user?.id } = useParams();
 
   useEffect(() => {
     onGetBusinesses(selectedUser, user);

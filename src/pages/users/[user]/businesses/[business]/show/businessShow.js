@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
-import Page from 'components/Page';
-import userStyles from 'pages/users/users.module.less';
 import { useParams } from 'umi';
-import { Button, Form, PageHeader } from 'antd';
-import { TrademarkOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Form, PageHeader } from 'antd';
+import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
 
-import Main from 'components/Main';
+import Main from '@/components/Main';
+import Page from '@/components/Page';
+import BusinessMenu from '@/pages/users/[user]/businesses/metadata/business.menu';
 
-import { fromForm } from 'utils/object';
-import { isNew } from 'services/common.service';
+import { fromForm } from '@/utils/object';
+import { isNew } from '@/services/common.service';
 
-import styles from 'pages/users/[user]/businesses/businesses.module.less';
+import styles from '@/pages/users/[user]/businesses/businesses.module.less';
+import menuStyles from '@/components/menu.less';
+import userStyles from '@/pages/users/users.module.less';
 
 const { Info } = Main;
 
@@ -23,6 +25,9 @@ export const businessShow = (props) => {
     businessModel,
     loading,
     onEditBusiness,
+    onActivateBusiness,
+    onHoldBusiness,
+    onDeleteBusiness,
     onClose
   } = props;
 
@@ -46,18 +51,16 @@ export const businessShow = (props) => {
   const { ability } = authModel;
   const component = 'businesses';
   const disabled = ability.cannot('update', component);
-  const update = ability.can('update', component);
+  const read = ability.can('read', component);
 
   useEffect(() => {
-    if (update) {
-      onEditBusiness(params);
-    } else if (isNew(params.business)) {
-      onEditBusiness(params);
+    if (read) {
+      onEditBusiness(params, false);
     }
   }, [
     authModel.user,
-    update,
-    params.user
+    params.user,
+    read
   ]);
 
   const businessInfoProps = {
@@ -132,16 +135,21 @@ export const businessShow = (props) => {
   const menuProps = {
     isEdit,
     loading,
-    params
+    ability,
+    params: {
+      user: params?.user || authModel.user?.id,
+      business: params?.business
+    },
+    onActivateBusiness,
+    onHoldBusiness,
+    onDeleteBusiness,
+    onEditBusiness
   };
 
   const subTitle = (
       <>
         <TrademarkOutlined style={{ marginRight: 10 }}/>
-        {isEdit ?
-            t('actions:edit', { type: t('business') }) :
-            t('actions:addNew', { type: t('business') })
-        }
+        {t('actions:show', { type: t('business') })}
       </>
   );
 
@@ -160,7 +168,17 @@ export const businessShow = (props) => {
                                 size={'small'}
                                 onClick={() => onClose(params.user)}>
                           {t('actions:close')}
-                        </Button>
+                        </Button>,
+                        <Dropdown overlay={<BusinessMenu record={{ id: params?.business }} {...menuProps} />}
+                                  trigger={['click']}
+                                  overlayClassName={menuStyles.customActionMenu}
+                                  key={'custom'}>
+                          <Button size={'small'}
+                                  icon={<SettingOutlined/>}
+                                  className={menuStyles.customAction}>
+                            {t('actions:manage', { type: t('business') })} <DownOutlined/>
+                          </Button>
+                        </Dropdown>
                       ]}/>
         </div>
       </Page>
