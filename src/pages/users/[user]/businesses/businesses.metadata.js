@@ -91,8 +91,8 @@ export const metadata = ({
         fixed: 'right',
         width: 200,
         render(record) {
-          const businessUrl = params?.user ?
-              `/admin/users/${params.user}/businesses/${record.id}` :
+          const businessUrl = user ?
+              `/admin/users/${user}/businesses/${record.id}` :
               `/admin/businesses/${record.id}`;
           return data.length ? (
               <div className={styles.nowrap}>
