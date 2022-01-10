@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import { Input,  Select } from 'antd';
+import { DatePicker, Input, Select } from 'antd';
 import FormComponents from 'components/Form';
+import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
+import moment from 'moment';
 
 const { GenericPanel, MandatoryTextarea, HiddenField } = FormComponents;
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 /**
  * @export
@@ -88,6 +91,16 @@ export const CampaignInfo = (props) => {
           >
             {subscriptionId && getOptions()}
           </Select>
+        </div>
+        <div>
+          <RangePicker name={'saleInfo'}
+                       form={formRef}
+                       format={DEFAULT_DATE_FORMAT}
+                       disabledDate={current => current && current < moment().endOf('day')}
+                       disabled={disabled}
+                       placeholder={[t('subscription:saleStart'), t('subscription:saleEnd')]}
+                       config={{ rules: [{ type: 'array', required: true }] }}
+                       label={t('subscription:saleAt')}/>
         </div>
         <>
           <HiddenField name={['subscriptionType']}

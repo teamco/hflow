@@ -14,6 +14,7 @@ import { getAllSubscriptions } from 'services/subscriptions.service';
 import { getFeatures } from 'services/features.service';
 import { setAs } from 'utils/object';
 import moment from 'moment';
+import { dateFormat } from '@/utils/timestamp';
 
 const DEFAULT_STATE = {
   campaigns: []
@@ -175,7 +176,7 @@ export default dvaModelExtend(commonModel, {
           },
           subscriptionRef: setAs(type, ''),
           translateKeys: { title, description },
-          tags, activated: discounted, private: true
+          tags, activated: discounted, private: false
         }
 
         if (isEdit) {
