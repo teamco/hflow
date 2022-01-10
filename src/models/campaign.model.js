@@ -2,8 +2,7 @@
 import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from 'models/common.model';
-import { custDiscountType, isNew } from 'services/common.service';
-import { dateFormat } from '@/utils/timestamp';
+import { isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
 import { getRef } from 'services/firebase.service';
 import { addCampaign, getAllCampaigns, getCampaign, updateCampaign } from 'services/campaigns.service';
@@ -15,7 +14,6 @@ import { getAllSubscriptions } from 'services/subscriptions.service';
 import { getFeatures } from 'services/features.service';
 import { setAs } from 'utils/object';
 import moment from 'moment';
-import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 
 const DEFAULT_STATE = {
   campaigns: []
@@ -99,12 +97,17 @@ export default dvaModelExtend(commonModel, {
         const campaign = yield call(getCampaign, { id: campaignId });
 
         if (campaign.exists) {
+          const { price: { discount }, saleInfo } = campaign.data;
+
           const selectedCampaign = {
-            ...campaign.data(), ...{ id: campaign.id } };
+            ...campaign.data,
+            saleInfo: [moment(saleInfo.startedAt), moment(saleInfo.expiredAt)]
+          };
 
           yield put({ type: 'updateState', payload: { selectedCampaign } });
 
           const campaign = { ...selectedCampaign };
+
           campaign.metadata = yield call(detailsInfo, { entity: campaign, user });
 
           return yield put({
@@ -136,7 +139,18 @@ export default dvaModelExtend(commonModel, {
     * prepareToSave({ payload, params }, { call, select, put }) {
       const { user, ability } = yield select(state => state.authModel);
       const { selectedCampaign, isEdit } = yield select(state => state.campaignModel);
-
+      const {
+        name,
+        price,
+        subscriptionType,
+        featuresByRef,
+        picUrl,
+        type,
+        title,
+        description,
+        tags = setAs(tags, []),
+        saleInfo
+      } = payload
       if (user && ability.can('update', 'campaign')) {
 
         const userRef = getRef({
@@ -149,29 +163,19 @@ export default dvaModelExtend(commonModel, {
           updatedAt: +(new Date).toISOString(),
           updatedByRef: user.id
         };
-        const {price: {discount, discounted}} = payload
-        // prepare request
+        const {discounted} = price
         let data = {
-          name: setAs(payload.name, 'name'),
-          type: setAs(payload.subscriptionType, 'Business'),
-          featuresByRef: setAs(payload.featuresByRef, []),
-          picUrl: setAs(payload.picUrl, 'picUrl'),
-          subscriptionRef: setAs(payload.type, ''),
-          translateKeys: {
-            title: setAs(payload.title, ''),
-            description: setAs(payload.description, ''),
+          id: selectedCampaign?.id,
+          name: i18n.t(title),
+          featuresByRef: setAs(featuresByRef, []),
+          picUrl: setAs(picUrl, 'picUrl'),
+          saleInfo: {
+            startedAt: dateFormat(saleInfo[0]),
+            expiredAt: dateFormat(saleInfo[1]),
           },
-          duration: discount.duration,
-          discount: {
-            type: custDiscountType(discount.type),
-            value: discount.value,
-            startedAt: dateFormat(discount.startedAt),
-            duration: discount.duration
-          },
-          tags: [],
-          startedAt: dateFormat(discount.startedAt),
-          activated: discounted,
-          discounted
+          subscriptionRef: setAs(type, ''),
+          translateKeys: { title, description },
+          tags, activated: discounted, private: true
         }
 
         if (isEdit) {

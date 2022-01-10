@@ -10,6 +10,7 @@ import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
 
 import { CampaignInfo } from 'pages/campaigns/[campaign]/form/campaign.info';
 import { CampaignDiscount } from 'pages/campaigns/[campaign]/form/campaign.discount';
+import  CommonTags  from 'components/Tags';
 
 import CampaignMenu from 'pages/campaigns/metadata/campaigns.menu';
 
@@ -43,6 +44,7 @@ export const campaignEdit = (props) => {
     onClose,
     onDeleteCampaign,
     onSubscriptions,
+    onUpdateTags
   } = props;
 
   /**
@@ -61,7 +63,8 @@ export const campaignEdit = (props) => {
     currencies,
     featureTypes,
     isEdit,
-    touched
+    touched,
+    tags
   } = campaignModel;
 
   const { ability } = authModel;
@@ -138,6 +141,14 @@ export const campaignEdit = (props) => {
       </>
   );
 
+  const tagsProps = {
+    t,
+    formRef,
+    onUpdateTags,
+    disabled,
+    tags
+  };
+
   return (
       <Page className={userStyles.users}
             component={component}
@@ -193,6 +204,7 @@ export const campaignEdit = (props) => {
                 onFieldsChange={onFieldsChange}>
             <CampaignInfo {...campaignInfoProps} />
             <CampaignDiscount {...discountProps} />
+            <CommonTags {...tagsProps} />
             <Info {...infoProps} />
           </Form>
         </div>

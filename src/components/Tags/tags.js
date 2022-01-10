@@ -14,7 +14,7 @@ const { GenericPanel, EditableTags } = FormComponents;
  * @return {JSX.Element}
  * @constructor
  */
-export const CampaignTags = ({
+const CommonTags = ({
   t,
   formRef,
   tags,
@@ -36,3 +36,5 @@ export const CampaignTags = ({
       </GenericPanel>
   );
 };
+
+export default CommonTags;
