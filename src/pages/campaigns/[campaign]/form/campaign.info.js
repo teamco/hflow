@@ -48,24 +48,16 @@ export const CampaignInfo = (props) => {
     return subscription;
   }
 
+  /**
+   * @constant
+   * @param {Event} e
+   * @param {function} handler
+   */
+
   return (
       <GenericPanel header={t('campaign:info')}
                     name={'info'}
                     defaultActiveKey={['info']}>
-        <div>
-          <Input type={'text'}
-                 label={t('campaign:title')}
-                 name={'title'}
-                 form={formRef}
-                 disabled={disabled}
-                 config={{ rules: [{ required: false }] }} />
-          <Input type={'text'}
-                 label={t('campaign:description')}
-                 name={'description'}
-                 form={formRef}
-                 disabled={disabled}
-                 config={{ rules: [{ required: false }] }}/>
-        </div>
         <div>
           <Select name={'type'}
                   form={formRef}

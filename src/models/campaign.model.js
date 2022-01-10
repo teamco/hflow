@@ -17,8 +17,15 @@ import moment from 'moment';
 import { dateFormat } from '@/utils/timestamp';
 
 const DEFAULT_STATE = {
-  campaigns: []
+  campaigns: [],
+  subscriptions: [],
+  data: [],
+  currencies: [],
+  durationTypes: [],
+  featureTypes: []
 };
+
+const BASE_URL = '/admin/campaigns';
 
 /**
  * @export
@@ -27,11 +34,6 @@ export default dvaModelExtend(commonModel, {
   namespace: 'campaignModel',
   state: {
     ...DEFAULT_STATE,
-    subscriptions: [],
-    data: [],
-    currencies: [],
-    durationTypes: [],
-    featureTypes: []
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
@@ -43,12 +45,10 @@ export default dvaModelExtend(commonModel, {
   },
   effects: {
 
-    * query({ payload }, { put, call, select }) {
+    * query({ payload }, { put, call }) {
       const { data = [] } = yield call(getAllCampaigns);
 
-      yield put({
-        type: 'updateState',
-        payload: { data }
+      yield put({ type: 'updateState', payload: { data }
       });
     },
 
@@ -96,9 +96,10 @@ export default dvaModelExtend(commonModel, {
       } else if (ability.can('read', 'campaigns')) {
 
         const campaign = yield call(getCampaign, { id: campaignId });
+        console.log(campaign);
 
         if (campaign.exists) {
-          const { price: { discount }, saleInfo } = campaign.data;
+          const { data: {saleInfo} } = campaign;
 
           const selectedCampaign = {
             ...campaign.data,
@@ -106,16 +107,21 @@ export default dvaModelExtend(commonModel, {
           };
 
           yield put({ type: 'updateState', payload: { selectedCampaign } });
+          yield put({ type: 'updateTags', payload: { tags: selectedCampaign.tags, touched: false } });
 
-          const campaign = { ...selectedCampaign };
+          const _campaign = { ...selectedCampaign };
+          const _features = {};
 
-          campaign.metadata = yield call(detailsInfo, { entity: campaign, user });
+          _campaign.metadata = yield call(detailsInfo, { entity: _campaign, user });
+          _campaign.features?.forEach(pref => {
+            _features[pref] = true;
+          });
 
           return yield put({
             type: 'toForm',
             payload: {
               model: 'campaignModel',
-              form: { ...campaign }
+              form: { ..._campaign, features: { ..._features } }
             }
           });
         }
@@ -141,14 +147,15 @@ export default dvaModelExtend(commonModel, {
       const { user, ability } = yield select(state => state.authModel);
       const { selectedCampaign, isEdit } = yield select(state => state.campaignModel);
       const {
-        name,
         price,
         subscriptionType,
         featuresByRef,
         picUrl,
         type,
-        title,
-        description,
+        translateKeys: {
+          title,
+          description = setAs(description, null)
+        },
         tags = setAs(tags, []),
         saleInfo
       } = payload
@@ -180,14 +187,21 @@ export default dvaModelExtend(commonModel, {
         }
 
         if (isEdit) {
-          selectedCampaign && params.subscription === selectedCampaign.id ?
-              yield call(updateCampaign, { collection: 'campaign', doc: selectedCampaign.id, data }) :
-              errorSaveMsg(true, 'campaign');
+          if (selectedCampaign && params.subscription === selectedCampaign.id) {
+            const entity = yield call(updateCampaign, { id: selectedCampaign.id, data });
+            yield put({
+              type: 'updateVersion',
+              payload: {
+                touched: false,
+                entity,
+                selectedEntity: selectedCampaign,
+                entityName: 'selectedCampaign'
+              } });
 
-          yield put({ type: 'updateState', payload: { touched: false } });
-
+          } else {
+            errorSaveMsg(true, 'Subscription');
+          }
         } else {
-
           data = {
             ...data,
             metadata: {
@@ -199,16 +213,9 @@ export default dvaModelExtend(commonModel, {
 
           const entity = yield call(addCampaign, { data });
 
-          if (entity?.docId) {
-            yield put({
-              type: 'updateState',
-              payload: {
-                touched: false,
-                isEdit: true
-              }
-            });
-
-            history.push(`/admin/campaigns/${entity.docId}`);
+          if (entity.exists) {
+            yield put({ type: 'updateState', payload: { touched: false, isEdit: true }});
+            history.push(`${BASE_URL}/${entity?.data?.id}`);
           }
         }
       } else {

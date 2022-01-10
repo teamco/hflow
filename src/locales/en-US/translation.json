@@ -330,6 +330,7 @@
     "type": "Campaign Type",
     "feature": "Feature",
     "startAt": "Start At",
+    "expiredAt": "Expire At",
     "duration": "Duration",
     "activated": "Activated",
     "hold": "Hold",
@@ -337,7 +338,9 @@
     "title": "Title",
     "description": "Description",
     "isDiscount": "Activate Discount",
-    "options": "Options"
+    "options": "Options",
+    "onNewCampTitle": "New Campaign",
+    "onDescriptionOfNewCamp": "New Camp Description"
   },
   "subscription": {
     "type": "Subscription Type",

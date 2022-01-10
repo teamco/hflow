@@ -8,18 +8,10 @@ import request from '../utils/request';
  * @return {Promise<{data: *[]}>}
  */
 export const getAllCampaigns = async () => {
-  const campaigns = await xhrRequest({
+  return await xhrRequest({
     url: API.campaigns.store,
     method: request.METHOD.get
   });
-
-  let data = [];
-
-  campaigns?.data?.forEach(doc => {
-    const _data = doc.data();
-    data.push(_.merge(_data, {id: doc.id}));
-  });
-  return {data};
 };
 
 /**
@@ -32,7 +24,7 @@ export const getCampaign = async ({ id }) => {
   return xhrRequest({
     url: API.campaigns.get,
     method: request.METHOD.get,
-    featureKey: id
+    campaignKey: id
   });
 };
 

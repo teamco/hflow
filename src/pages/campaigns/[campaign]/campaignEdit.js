@@ -22,6 +22,7 @@ import { isLoading } from 'utils/state';
 import menuStyles from 'components/menu.less';
 import styles from 'pages/campaigns/campaigns.module.less';
 import userStyles from 'pages/users/users.module.less';
+import { CampaignTranslate } from './form/campaing.translate';
 
 const { Info } = Main;
 
@@ -102,7 +103,6 @@ export const campaignEdit = (props) => {
     durationTypes
   };
 
-
   const {
     createdBy,
     updatedBy,
@@ -131,6 +131,20 @@ export const campaignEdit = (props) => {
     onDeleteCampaign
   };
 
+  const tagsProps = {
+    t,
+    formRef,
+    onUpdateTags,
+    disabled,
+    tags
+  };
+
+  const translateProps = {
+    t,
+    formRef,
+    disabled
+  };
+
   const subTitle = (
       <>
         <TrademarkOutlined style={{ marginRight: 10 }}/>
@@ -140,14 +154,6 @@ export const campaignEdit = (props) => {
         }
       </>
   );
-
-  const tagsProps = {
-    t,
-    formRef,
-    onUpdateTags,
-    disabled,
-    tags
-  };
 
   return (
       <Page className={userStyles.users}
@@ -204,6 +210,7 @@ export const campaignEdit = (props) => {
                 onFieldsChange={onFieldsChange}>
             <CampaignInfo {...campaignInfoProps} />
             <CampaignDiscount {...discountProps} />
+            <CampaignTranslate {...translateProps} />
             <CommonTags {...tagsProps} />
             <Info {...infoProps} />
           </Form>

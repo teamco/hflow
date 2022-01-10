@@ -60,6 +60,7 @@ export const campaigns = (props) => {
       <Page className={userStyles.users}
             component={component}
             spinEffects={[
+              'campaignModel/query',
               'campaignModel/prepareToSave'
             ]}>
         <div className={styles.campaignWrapper}

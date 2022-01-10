@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Dropdown } from 'antd';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { NavLink } from 'umi';
-
+import { CampaignMenu } from './metadata/campaigns.menu';
 import menuStyles from 'components/menu.less';
 import styles from './campaigns.module.less';
 
@@ -27,29 +27,40 @@ export const metadata = ({
     scroll: { x: 600 },
     columns: [
       {
-        title: t('subscription:type'),
-        dataIndex: 'subscriptionType',
-        key: 'subscriptionType',
-        render(subscriptionType, record) {
+        title: t('campaign:type'),
+        dataIndex: 'translateKeys',
+        key: 'translateKeys',
+        render(translateKeys, record) {
           return (
               <NavLink to={`/admin/campaigns/${record.id}`}>
-                {subscriptionType}
+                {t(translateKeys.title)}
               </NavLink>
           );
         }
       },
       {
-        title: t('campaign:feature'),
-        dataIndex: 'features',
-        key: 'features',
-        width: 100
+        title: t('campaign:startAt'),
+        dataIndex: 'saleInfo',
+        key: 'saleInfo',
+        render(saleInfo, record) {
+          return (
+             <>
+               {saleInfo.startedAt}
+             </>
+          );
+        }
       },
       {
-        title: t('campaign:startAt'),
-        dataIndex: 'startAt',
-        key: 'startAt',
-        align: 'center',
-        width: 150
+        title: t('campaign:expiredAt'),
+        dataIndex: 'saleInfo',
+        key: 'saleInfo',
+        render(saleInfo, record) {
+          return (
+              <>
+                {saleInfo.expiredAt}
+              </>
+          );
+        }
       },
       {
         title: t('table:action'),
