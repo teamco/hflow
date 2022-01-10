@@ -18,6 +18,7 @@ export const metadata = ({
   t,
   data,
   user,
+  isEdit = true,
   ability,
   loading,
   multiple,
@@ -27,14 +28,18 @@ export const metadata = ({
 }) => {
 
   /**
-   * @type {{business}}
+   * @type {{user, business}}
    */
-  const { business } = useParams();
+  const params = useParams();
 
   const menuProps = {
-    isEdit: true,
+    isEdit,
     loading,
-    params: {user, business},
+    ability,
+    params: {
+      user: params?.user || user,
+      business: params?.business
+    },
     onActivateBusiness,
     onHoldBusiness,
     onDeleteBusiness
@@ -43,6 +48,7 @@ export const metadata = ({
   return {
     width: '100%',
     size: 'middle',
+    scroll: { x: 900 },
     columns: [
       {
         title: t('table:name'),
@@ -70,12 +76,14 @@ export const metadata = ({
         title: t('auth:email'),
         dataIndex: 'email',
         key: 'email',
+        width: 200,
         filterable: multiple,
         sortable: multiple
       },
       {
         title: t('business:type'),
         dataIndex: 'businessType',
+        width: 200,
         key: 'businessType',
         filterable: multiple,
         sortable: multiple
@@ -83,16 +91,17 @@ export const metadata = ({
       {
         title: t('form:updatedAt'),
         dataIndex: 'metadata',
+        width: 150,
         key: 'metadata.updatedAt',
         render: metadata => tsToLocaleDateTime(metadata.updatedAt)
       },
       {
         title: t('table:action'),
         fixed: 'right',
-        width: 200,
+        width: 210,
         render(record) {
-          const businessUrl = user ?
-              `/admin/users/${user}/businesses/${record.id}` :
+          const businessUrl = params?.user ?
+              `/admin/users/${params?.user}/businesses/${record.id}` :
               `/admin/businesses/${record.id}`;
           return data.length ? (
               <div className={styles.nowrap}>

@@ -86,6 +86,7 @@ export const businesses = (props) => {
                    t,
                    data,
                    user,
+                   isEdit: false,
                    multiple: true,
                    ability,
                    loading,

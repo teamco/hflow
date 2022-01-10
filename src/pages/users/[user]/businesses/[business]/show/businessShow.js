@@ -142,8 +142,7 @@ export const businessShow = (props) => {
     },
     onActivateBusiness,
     onHoldBusiness,
-    onDeleteBusiness,
-    onEditBusiness
+    onDeleteBusiness
   };
 
   const subTitle = (
