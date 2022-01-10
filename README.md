@@ -2,11 +2,11 @@
 
 * Install
 ```bash
-$ yarn install
+$ npm install
 ```
 * Start
 ```bash
-$ yarn start
+$ npm run start:linux / windows
 ```
 ### Useful links
 * https://github.com/dvajs/dva
