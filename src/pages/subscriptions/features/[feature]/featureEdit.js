@@ -195,7 +195,7 @@ export const featureEdit = (props) => {
                   defaultState: true,
                   ...DEFAULT_PRICE_VALUES(currencies[0]),
                   trialPeriod: {
-                    ...DEFAULT_PRICE_VALUES(currencies[0]),
+                    ...DEFAULT_PRICE_VALUES(currencies[0], false),
                     duration: {
                       type: 'Week',
                       period: 1
@@ -207,12 +207,12 @@ export const featureEdit = (props) => {
                     off: 'actions:no'
                   }
                 }}>
-            {/*<FeatureInfo {...prefsProps} />*/}
-            {/*<FeatureDiscount {...discountProps} />*/}
+            <FeatureInfo {...prefsProps} />
+            <FeatureDiscount {...discountProps} />
             <FeatureTrial {...discountProps} />
-            {/*<FeatureTranslate {...translateProps} />*/}
-            {/*<FeatureTags {...tagsProps} />*/}
-            {/*<Info {...infoProps} />*/}
+            <FeatureTranslate {...translateProps} />
+            <FeatureTags {...tagsProps} />
+            <Info {...infoProps} />
           </Form>
         </div>
       </Page>

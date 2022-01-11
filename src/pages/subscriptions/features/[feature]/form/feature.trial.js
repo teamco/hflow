@@ -31,15 +31,13 @@ const FeatureTrial = (props) => {
                        currencies={currencies}
                        durationTypes={durationTypes}
                        discountTypes={discountTypes}>
-
-        <div><Divider/></div>
-        <div>
-          <Duration form={formRef}
-                    label={t('price:trialDuration')}
-                    disabled={disabled}
-                    prefix={['trialPeriod', 'duration']}
-                    durationTypes={durationTypes}/>
-        </div>
+        <Divider orientation={'left'}>{t('price:trial')}</Divider>
+        <Duration form={formRef}
+                  label={t('price:trialDuration')}
+                  disabled={disabled}
+                  prefix={['trialPeriod', 'duration']}
+                  required={false}
+                  durationTypes={durationTypes}/>
       </Rebate.Discount>
   );
 };

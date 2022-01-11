@@ -1,7 +1,7 @@
 /**
  * @export
  * @param {string} currency
- * @param {boolean} discounted
+ * @param {boolean} [discounted]
  * @return {{price: {discounted: boolean, originalPrice: number, discount: {duration: {period: number, type: string},
  *     value: number}, currency}}}
  * @constructor

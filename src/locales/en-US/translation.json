@@ -395,6 +395,7 @@
     "discount": "Discount",
     "discountStartedAt": "Started at",
     "discountDuration": "Discount Duration",
+    "trial": "Trial",
     "trialDuration": "Trial Period Duration"
   },
   "pages": {
