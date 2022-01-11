@@ -63,6 +63,7 @@ export const CampaignInfo = (props) => {
                   form={formRef}
                   label={t('subscription:type')}
                   disabled={disabled}
+                  defaultValue = 'Basic'
                   onChange={(id) => handleSubscriptionType(id)}
                   config={{ rules: [{ required: true }] }}>
             {[...subscriptions].map((item, idx) => (

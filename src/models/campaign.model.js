@@ -96,7 +96,6 @@ export default dvaModelExtend(commonModel, {
       } else if (ability.can('read', 'campaigns')) {
 
         const campaign = yield call(getCampaign, { id: campaignId });
-        console.log(campaign);
 
         if (campaign.exists) {
           const { data: {saleInfo} } = campaign;
@@ -116,12 +115,34 @@ export default dvaModelExtend(commonModel, {
           _campaign.features?.forEach(pref => {
             _features[pref] = true;
           });
+          yield put({ type: 'campaignSubscriptions', payload: { type: 'Business'}});
+
+          const formData = {
+              featuresByRef: _campaign.featuresByRef,
+              metadata: _campaign.metadata,
+              subscriptionRef: _campaign.subscriptionRef,
+              price: {
+                currency: 'USD',
+                discount: {
+                  type: '%',
+                  value: 1,
+                  startedAt: moment(saleInfo.startedAt),
+                  discounted: true,
+                  originalPrice: 1,
+                  duration: {
+                    period: 1, type: 'Month'
+                  },
+                }
+              },
+              saleInfo: _campaign.saleInfo,
+              translateKeys: _campaign.translateKeys
+          }
 
           return yield put({
             type: 'toForm',
             payload: {
               model: 'campaignModel',
-              form: { ..._campaign, features: { ..._features } }
+              form: { ...formData, features: { ..._features } }
             }
           });
         }
