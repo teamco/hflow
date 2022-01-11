@@ -206,7 +206,7 @@ export default dvaModelExtend(commonModel, {
           _business.metadata = yield call(detailsInfo, { entity: _business, user });
 
           yield put({ type: 'handleStates', payload: { country: _business.country } });
-          yield put({ type: 'updateTags', payload: { tags: _business.tags, touched:false } });
+          yield put({ type: 'updateTags', payload: { tags: _business.tags, touched: false } });
 
           return yield put({
             type: 'toForm',
@@ -222,10 +222,10 @@ export default dvaModelExtend(commonModel, {
     },
 
     * editBusiness({ payload }, { put }) {
-      const { params } = payload;
+      const { params, isEdit } = payload;
       const { business } = params;
 
-      yield put({ type: 'cleanForm', payload: { isEdit: !isNew(business) } });
+      yield put({ type: 'cleanForm', payload: { isEdit: typeof isEdit === 'undefined' ? !isNew(business) : isEdit } });
       yield put({
         type: 'validateBusiness',
         payload: {

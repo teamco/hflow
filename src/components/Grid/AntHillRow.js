@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 import React from 'react';
 
-import { layout } from 'utils/layout';
+import { layout } from '@/utils/layout';
 
 const AntHillRow = (props) => {
   const {

@@ -77,7 +77,7 @@ export default dvaModelExtend(commonModel, {
         if (feature.exists) {
           const { price: { discount } } = feature.data;
 
-          const selectedFeature = {
+          let selectedFeature = {
             ...feature.data,
             price: {
               ...feature.data.price,
@@ -88,6 +88,10 @@ export default dvaModelExtend(commonModel, {
               }
             }
           };
+
+          if (selectedFeature.trialPeriod === null) {
+            delete selectedFeature.trialPeriod;
+          }
 
           const _feature = { ...selectedFeature };
           _feature.metadata = yield call(detailsInfo, { entity: _feature, user });

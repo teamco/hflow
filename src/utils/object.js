@@ -1,6 +1,7 @@
 import React from 'react';
 import { Select } from 'antd';
 import { sortBy } from 'utils/array';
+import _ from 'lodash';
 
 const { Option } = Select;
 
@@ -42,34 +43,23 @@ export function findObjectValue(object, keys, nsDeep) {
  * @return {null|*}
  */
 export function findObjectByKey(object, key) {
-  let result = null;
-  if (Array.isArray(object)) {
-    for (let i = 0; i < object.length; i++) {
-      result = findObjectByKey(object[i], key);
-      if (result) {
-        break;
-      }
-    }
-  } else for (let prop in object) {
-    if (prop === key) {
-      return object[prop];
-    }
-    if (object[prop] && object[prop]['_isAMomentObject']) {
-      continue;
-    }
-    if (object[prop] instanceof Object || Array.isArray(object[prop])) {
-      result = findObjectByKey(object[prop], key);
-      if (result) {
-        break;
-      }
-    }
-  }
 
-  if (!result) {
+  /**
+   * @constant
+   * @param object
+   * @param {string} key
+   * @param {array} res
+   * @return {any|*[]}
+   */
+  const result = (object, key, res = []) => _.cloneDeepWith(obj, (v, k) => {
+    k === key && res.push(v);
+  }) && res;
+
+  if (!result.length) {
     throw new Error(`Undefined ${key}`);
   }
 
-  return result;
+  return result[0];
 }
 
 /**

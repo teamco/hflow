@@ -3,16 +3,17 @@ import {
   DeleteTwoTone,
   FileDoneOutlined,
   PauseCircleOutlined,
-  UsergroupAddOutlined
+  UsergroupAddOutlined,
+  EditOutlined
 } from '@ant-design/icons';
 import { Menu, Popconfirm } from 'antd';
 import { withTranslation } from 'react-i18next';
 import { NavLink } from 'umi';
 
-import { abilityMenuItem } from 'utils/abilityComponent/abilityMenuItem';
-import { COLORS } from 'utils/colors';
+import { abilityMenuItem } from '@/utils/abilityComponent/abilityMenuItem';
+import { COLORS } from '@/utils/colors';
 
-import tableStyles from 'components/Main/Table/table.module.less';
+import tableStyles from '@/components/Main/Table/table.module.less';
 
 /**
  * @export
@@ -41,6 +42,17 @@ const BusinessMenu = props => {
           <NavLink to={`/admin/users/${params.user}/businesses/${record.id}/users`}>
             {t('actions:manage', { type: t('auth:users') })}
           </NavLink>
+    )
+  };
+
+  const editProps = {
+    key: 'edit',
+    canI: ability?.can('update', 'business'),
+    icon: <EditOutlined />,
+    children: (
+        <NavLink to={`/admin/users/${params.user}/businesses/${record.id}/edit`}>
+          {t('actions:edit', { type: t('business') })}
+        </NavLink>
     )
   };
 
@@ -78,6 +90,7 @@ const BusinessMenu = props => {
 
   return (
       <Menu>
+        {!isEdit && abilityMenuItem(editProps)}
         {abilityMenuItem(businessUsersProps)}
         {abilityMenuItem(activateProps)}
         {abilityMenuItem(holdProps)}

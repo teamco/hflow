@@ -7,6 +7,7 @@ import FormComponents from '@/components/Form';
 import Duration from '@/components/Price/Range/Duration';
 import { complexFormKey, updateComplexForm } from '@/utils/form';
 import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
+import { layout } from '@/utils/layout';
 
 const { Option } = Select;
 const { GenericPanel, HiddenField } = FormComponents;
@@ -24,15 +25,24 @@ const Discount = props => {
     t,
     formRef,
     disabled,
+    collapsed = false,
     prefix = [],
     namespace = 'discount',
     discountTypes = DISCOUNT_TYPES,
     durationTypes = [],
-    currencies = []
+    currencies = [],
+    children
   } = props;
 
+  const { header = t('panel:priceInfo') } = props;
+
   const wrapper = formRef.getFieldValue(prefix[0]);
-  const { discounted } = wrapper;
+
+  const discounted = complexFormKey(
+      wrapper,
+      'discounted',
+      false
+  );
 
   const discount = complexFormKey(
       wrapper,
@@ -127,9 +137,9 @@ const Discount = props => {
   );
 
   return (
-      <GenericPanel header={t('panel:priceInfo')}
+      <GenericPanel header={header}
                     name={namespace}
-                    defaultActiveKey={[namespace]}>
+                    defaultActiveKey={collapsed ? null : [namespace]}>
         <div colProps={{ xs: 24, sm: 12, md: 12, lg: 8, xl: 6, xxl: 4 }}>
           <InputNumber addonBefore={selectCurrencyBefore}
                        label={t('price:originalPrice')}
@@ -145,7 +155,7 @@ const Discount = props => {
                  readOnly={false}
                  disabled={disabled}/>
         </div>
-        <div colProps={{ xs: 24, sm: 24, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+        <div colProps={layout.fullColumn}>
           <Divider orientation={'left'}>{t('subscription:discount')}</Divider>
         </div>
         <div>
@@ -190,6 +200,7 @@ const Discount = props => {
                     required={isDiscounted}
                     durationTypes={durationTypes}/>
         </div>
+        {children && (<div colProps={layout.fullColumn}>{children}</div>)}
       </GenericPanel>
   );
 };

@@ -15,9 +15,9 @@ export default connect(
     }),
     (dispatch) => ({
       dispatch,
-      onEditBusiness(params) {
+      onEditBusiness(params, isEdit) {
         dispatch({ type: `userModel/validateUser`, payload: { userId: params.user } });
-        dispatch({ type: `businessModel/editBusiness`, payload: { params } });
+        dispatch({ type: `businessModel/editBusiness`, payload: { params, isEdit } });
       },
       onHoldBusiness() {
       },
