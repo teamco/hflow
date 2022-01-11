@@ -20,15 +20,24 @@ export const CampaignInfo = (props) => {
     t,
     formRef,
     disabled,
-    subscriptions,
+    subscriptions
   } = props;
+
+  const getValue = key => formRef?.getFieldValue(key);
 
   const [subscriptionId, setSubscriptionId] = useState(false);
   const [featuresList, setFeaturesList] = useState([]);
+  const subscriptionRefId =  getValue('type');
+
+  useEffect(() => {
+      if (subscriptionRefId && subscriptions.length > 0) {
+        handleSubscriptionType(subscriptionRefId);
+      }
+  },[subscriptionRefId, subscriptions]);
 
   const handleSubscriptionType = (id) => {
       setSubscriptionId(id);
-      const subscription = [...subscriptions].find(el => el.id === id);
+      const subscription = [...subscriptions]?.find(el => el.id === id);
       formRef.setFieldsValue({ subscriptionType: subscription.featureType});
   }
 
@@ -39,7 +48,7 @@ export const CampaignInfo = (props) => {
   const getOptions = () => {
     const subscription = [...subscriptions]
                             .find(el => el.id === subscriptionId)
-                            .features.map((item, idx) => (
+                            ?.features?.map((item, idx) => (
         <Option key={idx}
                 value={item.id}>
           {t(item.translateKeys.title)}
@@ -63,7 +72,6 @@ export const CampaignInfo = (props) => {
                   form={formRef}
                   label={t('subscription:type')}
                   disabled={disabled}
-                  defaultValue = 'Basic'
                   onChange={(id) => handleSubscriptionType(id)}
                   config={{ rules: [{ required: true }] }}>
             {[...subscriptions].map((item, idx) => (
@@ -80,7 +88,6 @@ export const CampaignInfo = (props) => {
               allowClear
               style={{ width: '100%' }}
               placeholder="Please select features "
-              onChange={handleFeatureList}
           >
             {subscriptionId && getOptions()}
           </Select>

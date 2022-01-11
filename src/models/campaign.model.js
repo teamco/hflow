@@ -96,6 +96,7 @@ export default dvaModelExtend(commonModel, {
       } else if (ability.can('read', 'campaigns')) {
 
         const campaign = yield call(getCampaign, { id: campaignId });
+        yield put({ type: 'campaignSubscriptions', payload: { type: 'Business'}});
 
         if (campaign.exists) {
           const { data: {saleInfo} } = campaign;
@@ -115,12 +116,12 @@ export default dvaModelExtend(commonModel, {
           _campaign.features?.forEach(pref => {
             _features[pref] = true;
           });
-          yield put({ type: 'campaignSubscriptions', payload: { type: 'Business'}});
 
           const formData = {
               featuresByRef: _campaign.featuresByRef,
               metadata: _campaign.metadata,
               subscriptionRef: _campaign.subscriptionRef,
+              type: _campaign.subscriptionRef,
               price: {
                 currency: 'USD',
                 discount: {
@@ -156,8 +157,6 @@ export default dvaModelExtend(commonModel, {
       const { campaign } = params;
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(campaign) } });
-
-      // yield put({ type: 'campaignTypes' });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'currencies' } });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'durationTypes' } });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'featureTypes' } });
@@ -197,19 +196,24 @@ export default dvaModelExtend(commonModel, {
           id: selectedCampaign?.id,
           name: i18n.t(title),
           featuresByRef: setAs(featuresByRef, []),
-          picUrl: setAs(picUrl, 'picUrl'),
           saleInfo: {
             startedAt: dateFormat(saleInfo[0]),
             expiredAt: dateFormat(saleInfo[1]),
           },
           subscriptionRef: setAs(type, ''),
           translateKeys: { title, description },
-          tags, activated: discounted, private: false
+          activated: discounted, private: false,
+          metadata: {
+            ...metadata,
+            createdAt: metadata.updatedAt,
+            createdByRef:  user.id
+          }
         }
 
         if (isEdit) {
-          if (selectedCampaign && params.subscription === selectedCampaign.id) {
-            const entity = yield call(updateCampaign, { id: selectedCampaign.id, data });
+          if (selectedCampaign && params.campaign === selectedCampaign.id) {
+            const _data = {...data, version: selectedCampaign.version};
+            const entity = yield call(updateCampaign, { id: selectedCampaign.id, data: _data });
             yield put({
               type: 'updateVersion',
               payload: {
@@ -225,11 +229,6 @@ export default dvaModelExtend(commonModel, {
         } else {
           data = {
             ...data,
-            metadata: {
-              ...metadata,
-              createdAt: metadata.updatedAt,
-              createdByRef:  user.id
-            }
           };
 
           const entity = yield call(addCampaign, { data });

@@ -39,7 +39,7 @@ export const updateCampaign = async ({ id, data }) => {
   return xhrRequest({
     url: API.campaigns.get,
     method: request.METHOD.put,
-    featureKey: id,
+    campaignKey: id,
     data
   });
 };
