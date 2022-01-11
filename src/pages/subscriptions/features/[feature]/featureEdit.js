@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { ControlOutlined, DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
@@ -17,6 +17,7 @@ import { FeatureDiscount } from './form/feature.discount';
 import { FeatureTags } from './form/feature.tags';
 import { FeatureTranslate } from './form/feature.translate';
 import { FeatureMenu } from '@/pages/subscriptions/features/metadata/feature.menu';
+import FeatureTrial from '@/pages/subscriptions/features/[feature]/form/feature.trial';
 
 import menuStyles from '@/components/menu.less';
 import styles from '@/pages/subscriptions/features/features.module.less';
@@ -193,17 +194,25 @@ export const featureEdit = (props) => {
                   helper: true,
                   defaultState: true,
                   ...DEFAULT_PRICE_VALUES(currencies[0]),
+                  trialPeriod: {
+                    ...DEFAULT_PRICE_VALUES(currencies[0]),
+                    duration: {
+                      type: 'Week',
+                      period: 1
+                    }
+                  },
                   featureType: featureTypes[0],
                   translateKeys: {
                     on: 'actions:yes',
                     off: 'actions:no'
                   }
                 }}>
-            <FeatureInfo {...prefsProps} />
-            <FeatureDiscount {...discountProps} />
-            <FeatureTranslate {...translateProps} />
-            <FeatureTags {...tagsProps} />
-            <Info {...infoProps} />
+            {/*<FeatureInfo {...prefsProps} />*/}
+            {/*<FeatureDiscount {...discountProps} />*/}
+            <FeatureTrial {...discountProps} />
+            {/*<FeatureTranslate {...translateProps} />*/}
+            {/*<FeatureTags {...tagsProps} />*/}
+            {/*<Info {...infoProps} />*/}
           </Form>
         </div>
       </Page>

@@ -65,7 +65,7 @@ export function findObjectByKey(object, key) {
     }
   }
 
-  if (!result) {
+  if (result === null) {
     throw new Error(`Undefined ${key}`);
   }
 

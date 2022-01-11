@@ -232,6 +232,7 @@
     "subscriptionTypes": "Types",
     "featureTypes": "Types",
     "businessTypes": "Types",
+    "trialPriceInfo": "Trial Period",
     "priceInfo": "Price Info"
   },
   "address": {
@@ -393,7 +394,8 @@
     "discounted": "Is Discounted?",
     "discount": "Discount",
     "discountStartedAt": "Started at",
-    "discountDuration": "Discount Duration"
+    "discountDuration": "Discount Duration",
+    "trialDuration": "Trial Period Duration"
   },
   "pages": {
   }
