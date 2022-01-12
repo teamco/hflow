@@ -28,6 +28,7 @@ const FeatureTrial = (props) => {
                        prefix={['trialPeriod', 'price']}
                        namespace={'discount'}
                        collapsed={true}
+                       priceMin={0}
                        currencies={currencies}
                        durationTypes={durationTypes}
                        discountTypes={discountTypes}>

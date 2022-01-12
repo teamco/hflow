@@ -3,7 +3,7 @@ import React from 'react';
 import { Select, Switch } from 'antd';
 import FormComponents from '@/components/Form';
 
-const { GenericPanel, HiddenField } = FormComponents;
+const { GenericPanel } = FormComponents;
 const { Option } = Select;
 
 /**
@@ -17,8 +17,17 @@ export const FeatureInfo = (props) => {
     t,
     formRef,
     disabled,
-    featureTypes = []
+    featureTypes = [],
+    setIsTrialed
   } = props;
+
+  /**
+   * @constant
+   * @param {boolean} checked
+   */
+  const handleTrialToggling = checked => {
+    setIsTrialed(checked);
+  };
 
   return (
       <GenericPanel header={t('feature:info')}
@@ -44,6 +53,14 @@ export const FeatureInfo = (props) => {
                   checkedChildren={t('actions:yes')}
                   unCheckedChildren={t('actions:no')}
                   name={'selectedByDefault'}/>
+          <Switch label={t('price:trialed')}
+                  disabled={disabled}
+                  form={formRef}
+                  onChange={handleTrialToggling}
+                  config={{ valuePropName: 'checked' }}
+                  checkedChildren={t('actions:yes')}
+                  unCheckedChildren={t('actions:no')}
+                  name={['trialPeriod', 'trialed']}/>
         </div>
       </GenericPanel>
   );

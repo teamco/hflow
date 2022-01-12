@@ -26,6 +26,7 @@ const Discount = props => {
     formRef,
     disabled,
     collapsed = false,
+    priceMin = 1,
     prefix = [],
     namespace = 'discount',
     discountTypes = DISCOUNT_TYPES,
@@ -145,7 +146,7 @@ const Discount = props => {
                        label={t('price:originalPrice')}
                        name={[...prefix, 'originalPrice']}
                        form={formRef}
-                       min={1}
+                       min={priceMin}
                        disabled={disabled}
                        config={{ rules: [{ required: true }] }}/>
           <Input label={t('price:discountedPrice')}
