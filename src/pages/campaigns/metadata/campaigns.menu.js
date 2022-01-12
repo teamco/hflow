@@ -4,10 +4,10 @@ import { NavLink } from 'umi';
 import { Menu, Popconfirm } from 'antd';
 import { DeleteTwoTone, ShoppingCartOutlined } from '@ant-design/icons';
 
-import { abilityMenuItem } from 'utils/abilityComponent/abilityMenuItem';
-import { COLORS } from 'utils/colors';
+import { abilityMenuItem } from '@/utils/abilityComponent/abilityMenuItem';
+import { COLORS } from '@/utils/colors';
 
-import tableStyles from 'components/Main/Table/table.module.less';
+import tableStyles from '@/components/Main/Table/table.module.less';
 
 /**
  * @export

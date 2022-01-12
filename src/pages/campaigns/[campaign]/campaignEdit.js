@@ -2,27 +2,27 @@ import React, { useEffect } from 'react';
 import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
-import SaveButton from 'components/Buttons/save.button';
-
-import Main from 'components/Main';
-import Page from 'components/Page';
+import SaveButton from '@/components/Buttons/save.button';
+import Main from '@/components/Main';
+import Page from '@/components/Page';
 import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
+import  CommonTags  from '@/components/Tags';
 
-import { CampaignInfo } from 'pages/campaigns/[campaign]/form/campaign.info';
-import { CampaignDiscount } from 'pages/campaigns/[campaign]/form/campaign.discount';
-import  CommonTags  from 'components/Tags';
+import { CampaignInfo } from '@/pages/campaigns/[campaign]/form/campaign.info';
+import { CampaignDiscount } from '@/pages/campaigns/[campaign]/form/campaign.discount';
 
-import CampaignMenu from 'pages/campaigns/metadata/campaigns.menu';
+import CampaignMenu from '@/pages/campaigns/metadata/campaigns.menu';
 
 import { useParams } from 'umi';
 
-import { fromForm } from 'utils/object';
-import { isLoading } from 'utils/state';
+import { fromForm } from '@/utils/object';
+import { isLoading } from '@/utils/state';
 
-import menuStyles from 'components/menu.less';
-import styles from 'pages/campaigns/campaigns.module.less';
-import userStyles from 'pages/users/users.module.less';
 import { CampaignTranslate } from './form/campaing.translate';
+
+import menuStyles from '@/components/menu.less';
+import styles from '@/pages/campaigns/campaigns.module.less';
+import userStyles from '@/pages/users/users.module.less';
 
 const { Info } = Main;
 

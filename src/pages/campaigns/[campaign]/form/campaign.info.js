@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import { DatePicker, Input, Select } from 'antd';
+import { DatePicker, Select } from 'antd';
 import FormComponents from 'components/Form';
 import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 import moment from 'moment';
 
-const { GenericPanel, MandatoryTextarea, HiddenField } = FormComponents;
+const { GenericPanel, HiddenField } = FormComponents;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
@@ -27,35 +27,33 @@ export const CampaignInfo = (props) => {
 
   const [subscriptionId, setSubscriptionId] = useState(false);
   const [featuresList, setFeaturesList] = useState([]);
-  const subscriptionRefId =  getValue('type');
+  const subscriptionRefId = getValue('type');
 
   useEffect(() => {
-      if (subscriptionRefId && subscriptions.length > 0) {
-        handleSubscriptionType(subscriptionRefId);
-      }
-  },[subscriptionRefId, subscriptions]);
+    if (subscriptionRefId && subscriptions.length > 0) {
+      handleSubscriptionType(subscriptionRefId);
+    }
+  }, [subscriptionRefId, subscriptions]);
 
   const handleSubscriptionType = (id) => {
-      setSubscriptionId(id);
-      const subscription = [...subscriptions]?.find(el => el.id === id);
-      formRef.setFieldsValue({ subscriptionType: subscription.featureType});
-  }
+    setSubscriptionId(id);
+    const subscription = [...subscriptions]?.find(el => el.id === id);
+    formRef.setFieldsValue({ subscriptionType: subscription.featureType });
+  };
 
   const handleFeatureList = (list) => {
     setFeaturesList(list);
-  }
+  };
 
   const getOptions = () => {
-    const subscription = [...subscriptions]
-                            .find(el => el.id === subscriptionId)
-                            ?.features?.map((item, idx) => (
-        <Option key={idx}
-                value={item.id}>
-          {t(item.translateKeys.title)}
-        </Option>
-    ));
-    return subscription;
-  }
+    return [...subscriptions].find(el => el.id === subscriptionId)?.
+        features?.map((item, idx) => (
+            <Option key={idx}
+                    value={item.id}>
+              {t(item.translateKeys.title)}
+            </Option>
+        ));
+  };
 
   /**
    * @constant
@@ -81,14 +79,11 @@ export const CampaignInfo = (props) => {
                 </Option>
             ))}
           </Select>
-          <Select
-              name={'featuresByRef'}
-              mode="multiple"
-              label={t('subscription:features')}
-              allowClear
-              style={{ width: '100%' }}
-              placeholder="Please select features "
-          >
+          <Select name={'featuresByRef'}
+                  mode={'multiple'}
+                  label={t('subscription:features')}
+                  allowClear
+                  style={{ width: '100%' }}>
             {subscriptionId && getOptions()}
           </Select>
         </div>

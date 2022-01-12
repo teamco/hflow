@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
-import Page from 'components/Page';
-import Main from '../../components/Main';
-import { Can } from 'utils/auth/can';
+import Page from '@/components/Page';
+import Main from '@/components/Main';
+import { Can } from '@/utils/auth/can';
 
-import styles from 'pages/campaigns/campaigns.module.less';
-import userStyles from 'pages/users/users.module.less';
-import { metadata } from 'pages/campaigns/campaigns.metadata';
+import styles from '@/pages/campaigns/campaigns.module.less';
+import userStyles from '@/pages/users/users.module.less';
+import { metadata } from '@/pages/campaigns/campaigns.metadata';
 import ExportButton from '@/components/Buttons/export.button';
 
 const { Table } = Main;

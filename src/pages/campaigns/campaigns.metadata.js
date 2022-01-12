@@ -13,11 +13,7 @@ import styles from './campaigns.module.less';
  * @param loading
  * @return {*}
  */
-export const metadata = ({
-  t,
-  ability,
-  loading
-}) => {
+export const metadata = ({ t, ability, loading }) => {
 
   const menuProps = { t, loading, ability };
 
@@ -55,11 +51,7 @@ export const metadata = ({
         dataIndex: 'saleInfo',
         key: 'saleInfo',
         render(saleInfo, record) {
-          return (
-              <>
-                {saleInfo.expiredAt}
-              </>
-          );
+          return saleInfo.expiredAt;
         }
       },
       {

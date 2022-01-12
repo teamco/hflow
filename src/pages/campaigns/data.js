@@ -1,4 +1,3 @@
-
 export const cardProps = [
   {
     campaignType: 'Basic Plus',
@@ -12,7 +11,7 @@ export const cardProps = [
     },
     campaignPeriod: '100422',
     features: {
-      [`accessToMessages`]: {isActive: false },
+      [`accessToMessages`]: { isActive: false },
       [`dashboard`]: { isActive: true },
       [`profile`]: { isActive: true, type: 'basicProfile' },
       [`analytics`]: { isActive: true, type: 'basicAnalytics' },
@@ -22,28 +21,14 @@ export const cardProps = [
       [`requestList`]: { isActive: true }
     },
     dataset: [
-      {
-        accessToMessages: { isActive: true }
-      },
-      {
-        dashboard: { isActive: true }
-      },
-      {
-        profile: { isActive: true, type: 'basicProfile' }
-      },
-      {
-        analytics: { isActive: true, type: 'basicAnalytics' }
-      },
-      {
-        logoOnPartnersPage: { isActive: true }
-      },
-      {
-        notifications: { isActive: true }
-      },{
-        placementOnMap: { isActive: true }
-      },{
-        requestList: { isActive: true }
-      }
+      { accessToMessages: { isActive: true } },
+      { dashboard: { isActive: true } },
+      { profile: { isActive: true, type: 'basicProfile' } },
+      { analytics: { isActive: true, type: 'basicAnalytics' } },
+      { logoOnPartnersPage: { isActive: true } },
+      { notifications: { isActive: true } },
+      { placementOnMap: { isActive: true } },
+      { requestList: { isActive: true } }
     ]
   }
-]
+];
