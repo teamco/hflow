@@ -392,6 +392,7 @@
     "originalPrice": "Original Price",
     "discountedPrice": "Discounted Price",
     "discounted": "Is Discounted?",
+    "trialed": "Is Trialed?",
     "discount": "Discount",
     "discountStartedAt": "Started at",
     "discountDuration": "Discount Duration",

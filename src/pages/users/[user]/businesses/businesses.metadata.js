@@ -115,7 +115,7 @@ export const metadata = ({
                 </Can>
                 <Can I={'update'} a={'businesses'}>
                   <Tooltip title={t('actions:edit', { type: t('menu:business') })}>
-                    <NavLink to={`${businessUrl}/edit`}>
+                    <NavLink to={`${businessUrl}`}>
                       <ProfileTwoTone className={tableStyles.action}
                                       twoToneColor={COLORS.success}/>
                     </NavLink>

@@ -93,7 +93,7 @@ export const routes = [
           },
           {
             exact: true,
-            path: '/admin/businesses/:business/edit',
+            path: '/admin/businesses/:business',
             component: '@/pages/users/[user]/businesses/[business]',
             breadcrumb: 'route:businessEdit',
             wrappers: [
