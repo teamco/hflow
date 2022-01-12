@@ -13,22 +13,19 @@ import { errorSaveMsg } from 'utils/message';
 import { getAllSubscriptions } from 'services/subscriptions.service';
 import { getFeatures } from 'services/features.service';
 import { setAs } from 'utils/object';
+import moment from 'moment';
+import { dateFormat } from '@/utils/timestamp';
 
 const DEFAULT_STATE = {
   campaigns: [],
-  discountTypes: {
-    percentage: '%',
-    currency: i18n.t('currency')
-  },
-  durationTypes: {
-    hour: 'hour',
-    day: 'day',
-    week: "week",
-    month: 'month',
-    year: 'year',
-    permanent: 'permanent'
-  }
+  subscriptions: [],
+  data: [],
+  currencies: [],
+  durationTypes: [],
+  featureTypes: []
 };
+
+const BASE_URL = '/admin/campaigns';
 
 /**
  * @export
@@ -37,11 +34,6 @@ export default dvaModelExtend(commonModel, {
   namespace: 'campaignModel',
   state: {
     ...DEFAULT_STATE,
-    subscriptions: [],
-    data: [],
-    currencies: [],
-    durationTypes: [],
-    featureTypes: []
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
@@ -53,12 +45,10 @@ export default dvaModelExtend(commonModel, {
   },
   effects: {
 
-    * query({ payload }, { put, call, select }) {
+    * query({ payload }, { put, call }) {
       const { data = [] } = yield call(getAllCampaigns);
 
-      yield put({
-        type: 'updateState',
-        payload: { data }
+      yield put({ type: 'updateState', payload: { data }
       });
     },
 
@@ -68,9 +58,9 @@ export default dvaModelExtend(commonModel, {
       const {data: features = [] } = yield call(getFeatures, {type});
       const subscriptionFeatures = subscriptions.map((item) => {
         const prefsNotIncluded = features.filter(filterPref => {
-          return !item.features.includes(filterPref.id);
+          return !item.featuresByRef.includes(filterPref.id);
         });
-        return { type: item.subscriptionType, features: prefsNotIncluded, id: item.id };
+        return { type: item.type, features: prefsNotIncluded, id: item.id, featureType: item.featureType };
       });
 
       yield put({
@@ -106,20 +96,54 @@ export default dvaModelExtend(commonModel, {
       } else if (ability.can('read', 'campaigns')) {
 
         const campaign = yield call(getCampaign, { id: campaignId });
+        yield put({ type: 'campaignSubscriptions', payload: { type: 'Business'}});
 
         if (campaign.exists) {
-          const selectedCampaign = { ...campaign.data(), ...{ id: campaign.id } };
+          const { data: {saleInfo} } = campaign;
+
+          const selectedCampaign = {
+            ...campaign.data,
+            saleInfo: [moment(saleInfo.startedAt), moment(saleInfo.expiredAt)]
+          };
 
           yield put({ type: 'updateState', payload: { selectedCampaign } });
+          yield put({ type: 'updateTags', payload: { tags: selectedCampaign.tags, touched: false } });
 
-          const campaign = { ...selectedCampaign };
-          campaign.metadata = yield call(detailsInfo, { entity: campaign, user });
+          const _campaign = { ...selectedCampaign };
+          const _features = {};
+
+          _campaign.metadata = yield call(detailsInfo, { entity: _campaign, user });
+          _campaign.features?.forEach(pref => {
+            _features[pref] = true;
+          });
+
+          const formData = {
+              featuresByRef: _campaign.featuresByRef,
+              metadata: _campaign.metadata,
+              subscriptionRef: _campaign.subscriptionRef,
+              type: _campaign.subscriptionRef,
+              price: {
+                currency: 'USD',
+                discount: {
+                  type: '%',
+                  value: 1,
+                  startedAt: moment(saleInfo.startedAt),
+                  discounted: true,
+                  originalPrice: 1,
+                  duration: {
+                    period: 1, type: 'Month'
+                  },
+                }
+              },
+              saleInfo: _campaign.saleInfo,
+              translateKeys: _campaign.translateKeys
+          }
 
           return yield put({
             type: 'toForm',
             payload: {
               model: 'campaignModel',
-              form: { ...campaign }
+              form: { ...formData, features: { ..._features } }
             }
           });
         }
@@ -133,17 +157,28 @@ export default dvaModelExtend(commonModel, {
       const { campaign } = params;
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(campaign) } });
-      yield put({ type: 'campaignTypes' });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'currencies' } });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'durationTypes' } });
-      yield put({ type: 'validateCampaign', payload: { campaignId: campaign } });
       yield put({ type: 'getSimpleEntity', payload: { doc: 'featureTypes' } });
+      yield put({ type: 'validateCampaign', payload: { campaignId: campaign } });
     },
 
     * prepareToSave({ payload, params }, { call, select, put }) {
       const { user, ability } = yield select(state => state.authModel);
       const { selectedCampaign, isEdit } = yield select(state => state.campaignModel);
-
+      const {
+        price,
+        subscriptionType,
+        featuresByRef,
+        picUrl,
+        type,
+        translateKeys: {
+          title,
+          description = setAs(description, null)
+        },
+        tags = setAs(tags, []),
+        saleInfo
+      } = payload
       if (user && ability.can('update', 'campaign')) {
 
         const userRef = getRef({
@@ -156,57 +191,51 @@ export default dvaModelExtend(commonModel, {
           updatedAt: +(new Date).toISOString(),
           updatedByRef: user.id
         };
-
-        // prepare request
+        const {discounted} = price
         let data = {
-          name: setAs(payload.name, 'name'),
-          type: setAs(payload.type, 'business'),
-          featuresByRef: setAs(payload.featuresByRef, []),
-          picUrl: setAs(payload.picUrl, 'picUrl'),
-          subscriptionRef: setAs(payload.type, ''),
-          duration: setAs(payload.duration, null),
-          durationType: setAs(payload.durationType, 'asdas'),
-          discount:  setAs(payload.duration, null),
-          discountType: setAs(payload.discountType, 'asdas'),
-          startedAt: setAs(payload.startedAt, ''),
-          translateKeys: {
-            title: setAs(payload.title, 'asdasd'),
-            description: setAs(payload.description, 'asdasd'),
+          id: selectedCampaign?.id,
+          name: i18n.t(title),
+          featuresByRef: setAs(featuresByRef, []),
+          saleInfo: {
+            startedAt: dateFormat(saleInfo[0]),
+            expiredAt: dateFormat(saleInfo[1]),
           },
-          activated: setAs(payload.isActivated, false),
-          discounted: setAs(payload.isDiscount, false)
+          subscriptionRef: setAs(type, ''),
+          translateKeys: { title, description },
+          activated: discounted, private: false,
+          metadata: {
+            ...metadata,
+            createdAt: metadata.updatedAt,
+            createdByRef:  user.id
+          }
         }
 
         if (isEdit) {
-          selectedCampaign && params.subscription === selectedCampaign.id ?
-              yield call(updateCampaign, { collection: 'campaign', doc: selectedCampaign.id, data }) :
-              errorSaveMsg(true, 'campaign');
+          if (selectedCampaign && params.campaign === selectedCampaign.id) {
+            const _data = {...data, version: selectedCampaign.version};
+            const entity = yield call(updateCampaign, { id: selectedCampaign.id, data: _data });
+            yield put({
+              type: 'updateVersion',
+              payload: {
+                touched: false,
+                entity,
+                selectedEntity: selectedCampaign,
+                entityName: 'selectedCampaign'
+              } });
 
-          yield put({ type: 'updateState', payload: { touched: false } });
-
+          } else {
+            errorSaveMsg(true, 'Subscription');
+          }
         } else {
-
           data = {
             ...data,
-            metadata: {
-              ...metadata,
-              createdAt: metadata.updatedAt,
-              createdByRef:  user.id
-            }
           };
 
           const entity = yield call(addCampaign, { data });
 
-          if (entity?.docId) {
-            yield put({
-              type: 'updateState',
-              payload: {
-                touched: false,
-                isEdit: true
-              }
-            });
-
-            history.push(`/admin/campaigns/${entity.docId}`);
+          if (entity.exists) {
+            yield put({ type: 'updateState', payload: { touched: false, isEdit: true }});
+            history.push(`${BASE_URL}/${entity?.data?.id}`);
           }
         }
       } else {

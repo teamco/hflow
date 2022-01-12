@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
@@ -6,9 +6,11 @@ import SaveButton from 'components/Buttons/save.button';
 
 import Main from 'components/Main';
 import Page from 'components/Page';
+import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
 
 import { CampaignInfo } from 'pages/campaigns/[campaign]/form/campaign.info';
 import { CampaignDiscount } from 'pages/campaigns/[campaign]/form/campaign.discount';
+import  CommonTags  from 'components/Tags';
 
 import CampaignMenu from 'pages/campaigns/metadata/campaigns.menu';
 
@@ -20,6 +22,7 @@ import { isLoading } from 'utils/state';
 import menuStyles from 'components/menu.less';
 import styles from 'pages/campaigns/campaigns.module.less';
 import userStyles from 'pages/users/users.module.less';
+import { CampaignTranslate } from './form/campaing.translate';
 
 const { Info } = Main;
 
@@ -38,11 +41,11 @@ export const campaignEdit = (props) => {
     loading,
     onEditCampaign,
     onFieldsChange,
-    onUpdateTags,
     onSave,
     onClose,
     onDeleteCampaign,
-    onSubscriptions
+    onSubscriptions,
+    onUpdateTags
   } = props;
 
   /**
@@ -56,13 +59,13 @@ export const campaignEdit = (props) => {
     subscriptions,
     campaignTypes,
     campaignPeriod,
-    discountTypes,
     durationTypes,
     businessUsers,
     currencies,
-    tags,
+    featureTypes,
     isEdit,
-    touched
+    touched,
+    tags
   } = campaignModel;
 
   const { ability } = authModel;
@@ -70,17 +73,10 @@ export const campaignEdit = (props) => {
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
 
-  const [currency, setCurrency] = useState(currencies[0]);
-
   useEffect(() => {
     canUpdate && onEditCampaign(params);
     onSubscriptions()
   }, [authModel.user, canUpdate]);
-
-  const price = formRef.getFieldValue('price');
-  useEffect(() => {
-    setCurrency(price?.currency || currencies[0]);
-  }, [price, currencies]);
 
   /**
    * @constant
@@ -99,14 +95,11 @@ export const campaignEdit = (props) => {
     businessUsers,
     subscriptions,
   };
-  const campaignOptionsProps = {
-    t,
+
+  const discountProps = {
     formRef,
     disabled,
-    campaignTypes,
-    campaignPeriod,
-    discountTypes,
-    businessUsers,
+    currencies,
     durationTypes
   };
 
@@ -138,11 +131,18 @@ export const campaignEdit = (props) => {
     onDeleteCampaign
   };
 
-  const discountProps = {
+  const tagsProps = {
+    t,
     formRef,
+    onUpdateTags,
     disabled,
-    currency,
-    durationTypes
+    tags
+  };
+
+  const translateProps = {
+    t,
+    formRef,
+    disabled
   };
 
   const subTitle = (
@@ -198,23 +198,20 @@ export const campaignEdit = (props) => {
                 scrollToFirstError={true}
                 onFinish={onFinish}
                 initialValues={{
-                  discountType: t('currency'),
-                  price: {
-                    originalPrice: 1,
-                    discounted: true,
-                    currency,
-                    discount: {
-                      value: 1,
-                      duration: {
-                        period: 1,
-                        type: 'Month'
-                      }
-                    }
+                  helper: true,
+                  defaultState: true,
+                  ...DEFAULT_PRICE_VALUES(currencies[0]),
+                  featureType: featureTypes[0],
+                  translateKeys: {
+                    on: 'actions:yes',
+                    off: 'actions:no'
                   },
                 }}
                 onFieldsChange={onFieldsChange}>
             <CampaignInfo {...campaignInfoProps} />
             <CampaignDiscount {...discountProps} />
+            <CampaignTranslate {...translateProps} />
+            <CommonTags {...tagsProps} />
             <Info {...infoProps} />
           </Form>
         </div>
