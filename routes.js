@@ -109,24 +109,33 @@ export const routes = [
               '@/wrappers/auth.wrapper'
             ]
           },
-          {
-            exact: true,
-            path: '/admin/users/:user/businesses/:business/edit',
-            component: '@/pages/users/[user]/businesses/[business]',
-            breadcrumb: 'route:businessEdit',
-            wrappers: [
-              '@/wrappers/auth.wrapper'
-            ]
-          },
+          // {
+          //   exact: true,
+          //   path: '/admin/users/:user/businesses/:business/edit',
+          //   component: '@/pages/users/[user]/businesses/[business]',
+          //   breadcrumb: 'route:businessEdit',
+          //   wrappers: [
+          //     '@/wrappers/auth.wrapper'
+          //   ]
+          // },
           {
             exact: true,
             path: '/admin/users/:user/businesses/:business',
-            component: '@/pages/users/[user]/businesses/[business]/show',
+            component: '@/pages/users/[user]/businesses/[business]',
             breadcrumb: 'route:businessShow',
             wrappers: [
               '@/wrappers/auth.wrapper'
             ]
           },
+          // {
+          //   exact: true,
+          //   path: '/admin/users/:user/businesses/:business/',
+          //   component: '@/pages/users/[user]/businesses/[business]/show',
+          //   breadcrumb: 'route:businessShow',
+          //   wrappers: [
+          //     '@/wrappers/auth.wrapper'
+          //   ]
+          // },
           {
             exact: true,
             path: '/admin/users/:user/businesses/:business/users',
