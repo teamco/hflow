@@ -67,14 +67,6 @@ export const CampaignTranslate = (props) => {
                  onChange={e => handleValue(e, setDescription)}
                  config={{ rules: [{ required: false }] }}/>
         </div>
-        <div>
-          <>
-            <Divider orientation={'left'}>{t('feature:example')}</Divider>
-            <Form.Item label={t(trTitle)}
-                       tooltip={t(trDescription)}>
-            </Form.Item>
-          </>
-        </div>
       </GenericPanel>
   );
 };

@@ -330,8 +330,6 @@
   "campaign": {
     "type": "Campaign Type",
     "feature": "Feature",
-    "startAt": "Start At",
-    "expiredAt": "Expire At",
     "duration": "Duration",
     "activated": "Activated",
     "hold": "Hold",
