@@ -50,7 +50,7 @@ const BusinessMenu = props => {
     canI: ability?.can('update', 'business'),
     icon: <EditOutlined />,
     children: (
-        <NavLink to={`/admin/users/${params.user}/businesses/${record.id}/edit`}>
+        <NavLink to={`/admin/users/${params.user}/businesses/${record.id}`}>
           {t('actions:edit', { type: t('business') })}
         </NavLink>
     )

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ControlOutlined, DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
@@ -63,9 +63,11 @@ export const featureEdit = (props) => {
   } = featureModel;
 
   const { ability } = authModel;
-  const component = 'subscriptions';
+  const component = 'features';
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
+
+  const [isTrialed, setIsTrialed] = useState(false);
 
   useEffect(() => {
     canUpdate && onEditFeature(params);
@@ -98,7 +100,8 @@ export const featureEdit = (props) => {
     t,
     formRef,
     disabled,
-    featureTypes
+    featureTypes,
+    setIsTrialed
   };
 
   const discountProps = {
@@ -209,7 +212,7 @@ export const featureEdit = (props) => {
                 }}>
             <FeatureInfo {...prefsProps} />
             <FeatureDiscount {...discountProps} />
-            <FeatureTrial {...discountProps} />
+            {isTrialed && (<FeatureTrial {...discountProps} />)}
             <FeatureTranslate {...translateProps} />
             <FeatureTags {...tagsProps} />
             <Info {...infoProps} />
