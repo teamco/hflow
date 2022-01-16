@@ -85,8 +85,7 @@ export const featureEdit = (props) => {
     formRef,
     onUpdateTags,
     disabled,
-    tags,
-    header: t('feature:tags')
+    tags
   };
 
   const {

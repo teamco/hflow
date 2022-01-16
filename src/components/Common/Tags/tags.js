@@ -21,10 +21,13 @@ const CommonTags = ({
   t,
   formRef,
   tags = [],
-  header,
   disabled,
-  onUpdateTags = stub()
+  onUpdateTags = stub(),
+  ...rest
 }) => {
+
+  const { header = t('form:tags') } = rest;
+
   return (
       <GenericPanel header={header}
                     name={'tags'}>
