@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Input } from 'antd';
 import FormComponents from 'components/Form';
+import { withTranslation } from 'react-i18next';
 
 const { GenericPanel } = FormComponents;
 
@@ -11,30 +12,39 @@ const { GenericPanel } = FormComponents;
  * @return {JSX.Element}
  * @constructor
  */
-export const SubscriptionTranslate = (props) => {
+const CommonTranslate = (props) => {
   const {
     t,
     formRef,
-    disabled
+    disabled,
+    prefix = ['translateKeys']
+  } = props;
+
+  const {
+    header = t('form:translate'),
+    title = t('form:title'),
+    description = t('form:description')
   } = props;
 
   return (
-      <GenericPanel header={t('subscription:translate')}
+      <GenericPanel header={header}
                     name={'translate'}
                     defaultActiveKey={['translate']}>
         <div>
           <Input type={'text'}
-                 label={t('subscription:title')}
-                 name={['translateKeys', 'title']}
+                 label={title}
+                 name={[...prefix, 'title']}
                  form={formRef}
                  disabled={disabled}
                  config={{ rules: [{ required: true }] }}/>
           <Input type={'text'}
-                 label={t('form:description')}
-                 name={['translateKeys', 'description']}
+                 label={description}
+                 name={[...prefix, 'description']}
                  form={formRef}
                  disabled={disabled}/>
         </div>
       </GenericPanel>
   );
 };
+
+export default withTranslation()(CommonTranslate);

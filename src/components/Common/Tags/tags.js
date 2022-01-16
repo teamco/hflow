@@ -1,6 +1,8 @@
 import React from 'react';
 
 import FormComponents from '@/components/Form';
+import { stub } from '@/utils/function';
+import { withTranslation } from 'react-i18next';
 
 const { GenericPanel, EditableTags } = FormComponents;
 
@@ -8,21 +10,23 @@ const { GenericPanel, EditableTags } = FormComponents;
  * @export
  * @param t
  * @param formRef
- * @param tags
+ * @param [tags]
+ * @param {string} header
  * @param {boolean} disabled
- * @param onUpdateTags
+ * @param {function} [onUpdateTags]
  * @return {JSX.Element}
  * @constructor
  */
 const CommonTags = ({
   t,
   formRef,
-  tags,
+  tags = [],
+  header,
   disabled,
-  onUpdateTags
+  onUpdateTags = stub()
 }) => {
   return (
-      <GenericPanel header={t('campaign:tags')}
+      <GenericPanel header={header}
                     name={'tags'}>
         <div>
           <EditableTags label={t('form:tags')}
@@ -37,4 +41,4 @@ const CommonTags = ({
   );
 };
 
-export default CommonTags;
+export default withTranslation()(CommonTags);

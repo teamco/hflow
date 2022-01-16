@@ -74,12 +74,12 @@ export const FeatureTranslate = (props) => {
   };
 
   return (
-      <GenericPanel header={t('feature:translate')}
+      <GenericPanel header={t('form:translate')}
                     name={'translate'}
                     defaultActiveKey={['translate']}>
         <div>
           <>
-            <Form.Item label={t('feature:helper')}
+            <Form.Item label={t('form:helper')}
                        valuePropName={'checked'}>
               <Switch disabled={disabled}
                       checked={enableHelper}
@@ -91,7 +91,7 @@ export const FeatureTranslate = (props) => {
         </div>
         <div>
           <Input type={'text'}
-                 label={t('feature:title')}
+                 label={t('form:title')}
                  name={['translateKeys', 'title']}
                  form={formRef}
                  disabled={disabled}
@@ -99,7 +99,7 @@ export const FeatureTranslate = (props) => {
                  config={{ rules: [{ required: true }] }}/>
 
           <Input type={'text'}
-                 label={t('feature:description')}
+                 label={t('form:description')}
                  name={['translateKeys', 'description']}
                  form={formRef}
                  disabled={disabled || disabledDescription}

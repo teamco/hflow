@@ -7,10 +7,10 @@ import SaveButton from '@/components/Buttons/save.button';
 
 import Main from '@/components/Main';
 import Page from '@/components/Page';
+import Common from '@/components/Common';
 import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
 
 import { SubscriptionInfo } from '@/pages/subscriptions/[subscription]/form/subscription.info';
-import { SubscriptionTags } from '@/pages/subscriptions/[subscription]/form/subscription.tags';
 import { SubscriptionFeatures } from '@/pages/subscriptions/[subscription]/form/subscription.features';
 import { SubscriptionDiscount } from '@/pages/subscriptions/[subscription]/form/subscription.discount';
 import SubscriptionMenu from '@/pages/subscriptions/metadata/subscriptions.menu';
@@ -21,7 +21,6 @@ import { isLoading } from '@/utils/state';
 import menuStyles from '@/components/menu.less';
 import styles from '@/pages/subscriptions/subscriptions.module.less';
 import userStyles from '@/pages/users/users.module.less';
-import { SubscriptionTranslate } from '@/pages/subscriptions/[subscription]/form/subscription.translate';
 
 const { Info } = Main;
 
@@ -113,17 +112,16 @@ export const subscriptionEdit = (props) => {
   };
 
   const translateProps = {
-    t,
     formRef,
     disabled
   };
 
   const tagsProps = {
-    t,
     formRef,
     onUpdateTags,
     disabled,
-    tags
+    tags,
+    header: t('subscription:tags')
   };
 
   const {
@@ -220,10 +218,10 @@ export const subscriptionEdit = (props) => {
                   ...DEFAULT_PRICE_VALUES(currencies[0])
                 }}>
             <SubscriptionInfo {...subscriptionInfoProps} />
-            <SubscriptionTranslate {...translateProps}/>
+            <Common.Translate {...translateProps}/>
             <SubscriptionDiscount {...discountProps}/>
             <SubscriptionFeatures {...featuresProps} />
-            <SubscriptionTags {...tagsProps} />
+            <Common.Tags {...tagsProps} />
             <Info {...infoProps} />
           </Form>
         </div>

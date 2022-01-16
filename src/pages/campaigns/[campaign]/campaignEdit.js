@@ -6,7 +6,7 @@ import SaveButton from '@/components/Buttons/save.button';
 import Main from '@/components/Main';
 import Page from '@/components/Page';
 import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
-import  CommonTags  from '@/components/Tags';
+import  Common  from '@/components/Common';
 
 import { CampaignInfo } from '@/pages/campaigns/[campaign]/form/campaign.info';
 import { CampaignDiscount } from '@/pages/campaigns/[campaign]/form/campaign.discount';
@@ -17,8 +17,6 @@ import { useParams } from 'umi';
 
 import { fromForm } from '@/utils/object';
 import { isLoading } from '@/utils/state';
-
-import { CampaignTranslate } from './form/campaing.translate';
 
 import menuStyles from '@/components/menu.less';
 import styles from '@/pages/campaigns/campaigns.module.less';
@@ -136,11 +134,11 @@ export const campaignEdit = (props) => {
     formRef,
     onUpdateTags,
     disabled,
-    tags
+    tags,
+    header: t('campaign:tags')
   };
 
   const translateProps = {
-    t,
     formRef,
     disabled
   };
@@ -210,8 +208,8 @@ export const campaignEdit = (props) => {
                 onFieldsChange={onFieldsChange}>
             <CampaignInfo {...campaignInfoProps} />
             <CampaignDiscount {...discountProps} />
-            <CampaignTranslate {...translateProps} />
-            <CommonTags {...tagsProps} />
+            <Common.Translate {...translateProps} />
+            <Common.Tags {...tagsProps} />
             <Info {...infoProps} />
           </Form>
         </div>
