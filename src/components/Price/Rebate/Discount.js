@@ -154,6 +154,7 @@ const Discount = props => {
                  form={formRef}
                  min={priceMin}
                  readOnly={true}
+                 bordered={false}
                  placeholder={t('price:discountedCalc')}
                  disabled={disabled}/>
         </div>
