@@ -5,6 +5,7 @@ import { Button, Dropdown, Form, PageHeader } from 'antd';
 import SaveButton from '@/components/Buttons/save.button';
 import Main from '@/components/Main';
 import Page from '@/components/Page';
+import Common from '@/components/Common';
 import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
 
 import { useParams } from 'umi';
@@ -14,7 +15,6 @@ import { isLoading } from '@/utils/state';
 
 import { FeatureInfo } from './form/feature.info';
 import { FeatureDiscount } from './form/feature.discount';
-import { FeatureTags } from './form/feature.tags';
 import { FeatureTranslate } from './form/feature.translate';
 import { FeatureMenu } from '@/pages/subscriptions/features/metadata/feature.menu';
 import FeatureTrial from '@/pages/subscriptions/features/[feature]/form/feature.trial';
@@ -82,11 +82,11 @@ export const featureEdit = (props) => {
   };
 
   const tagsProps = {
-    t,
     formRef,
     onUpdateTags,
     disabled,
-    tags
+    tags,
+    header: t('feature:tags')
   };
 
   const {
@@ -214,7 +214,7 @@ export const featureEdit = (props) => {
             <FeatureDiscount {...discountProps} />
             {isTrialed && (<FeatureTrial {...discountProps} />)}
             <FeatureTranslate {...translateProps} />
-            <FeatureTags {...tagsProps} />
+            <Common.Tags {...tagsProps} />
             <Info {...infoProps} />
           </Form>
         </div>
