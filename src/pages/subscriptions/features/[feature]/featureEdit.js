@@ -197,7 +197,9 @@ export const featureEdit = (props) => {
                   defaultState: true,
                   ...DEFAULT_PRICE_VALUES(currencies[0]),
                   trialPeriod: {
-                    ...DEFAULT_PRICE_VALUES(currencies[0], false),
+                    ...DEFAULT_PRICE_VALUES(currencies[0], false, {
+                      originalPrice: 0
+                    }),
                     duration: {
                       type: 'Week',
                       period: 1

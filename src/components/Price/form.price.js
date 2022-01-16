@@ -2,11 +2,11 @@
  * @export
  * @param {string} currency
  * @param {boolean} [discounted]
- * @return {{price: {discounted: boolean, originalPrice: number, discount: {duration: {period: number, type: string},
- *     value: number}, currency}}}
+ * @param [overwrite]
+ * @return {{price: {discounted: boolean, originalPrice: number, discount: {}, currency: string}}}
  * @constructor
  */
-export const DEFAULT_PRICE_VALUES = (currency, discounted = true) => ({
+export const DEFAULT_PRICE_VALUES = (currency, discounted = true, overwrite = {}) => ({
   price: {
     originalPrice: 1,
     discounted,
@@ -17,6 +17,7 @@ export const DEFAULT_PRICE_VALUES = (currency, discounted = true) => ({
         period: 1,
         type: 'Month'
       }
-    }
+    },
+    ...overwrite
   }
 });

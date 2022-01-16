@@ -153,7 +153,7 @@ const Discount = props => {
                  name={[...prefix, 'discountedPrice']}
                  form={formRef}
                  min={1}
-                 readOnly={false}
+                 readOnly={true}
                  disabled={disabled}/>
         </div>
         <div colProps={layout.fullColumn}>

@@ -27,7 +27,6 @@ const FeatureTrial = (props) => {
                        header={t('panel:trialPriceInfo')}
                        prefix={['trialPeriod', 'price']}
                        namespace={'discount'}
-                       collapsed={true}
                        priceMin={0}
                        currencies={currencies}
                        durationTypes={durationTypes}
