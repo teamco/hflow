@@ -21,6 +21,41 @@ const BASE_URL = '/admin/features';
 const ABILITY_FOR = 'features';
 
 /**
+ * @constant
+ * @param {{discount, discounted: boolean}} price
+ * @return {{price: (*&{discount: (*&{startedAt: string, type: string})})}}
+ * @private
+ */
+const _definePrice = (price = {}) => {
+  const { discount = {}, discounted } = price;
+
+  return {
+    ...price,
+    discount: discounted ? {
+      ...discount,
+      startedAt: discount?.startedAt ? `${moment(discount?.startedAt).format(DEFAULT_DATE_FORMAT)} 00:00:00` : null,
+      type: custDiscountType(discount?.type),
+      duration: { ...discount?.duration }
+    } : null
+  };
+};
+
+/**
+ * @constant
+ * @param {{trialed:boolean, price}} trialPeriod
+ * @return {{price: {price: *}}|{trialed: boolean}}
+ * @private
+ */
+const _defineTrialed = (trialPeriod = {}) => {
+  return trialPeriod?.trialed ? {
+    ...trialPeriod,
+    price: { ..._definePrice(trialPeriod?.price) }
+  } : {
+    trialed: false
+  };
+};
+
+/**
  * @export
  */
 export default dvaModelExtend(commonModel, {
@@ -75,23 +110,13 @@ export default dvaModelExtend(commonModel, {
         const feature = yield call(getFeature, { id: featureId });
 
         if (feature.exists) {
-          const { price: { discount } } = feature.data;
+          const { price, trialPeriod } = feature.data;
 
           let selectedFeature = {
             ...feature.data,
-            price: {
-              ...feature.data.price,
-              discount: {
-                ...discount,
-                startedAt: moment(discount?.startedAt),
-                duration: { ...discount?.duration }
-              }
-            }
+            trialPeriod: { ..._defineTrialed(trialPeriod) },
+            price: { ..._definePrice(price) }
           };
-
-          if (selectedFeature.trialPeriod === null) {
-            delete selectedFeature.trialPeriod;
-          }
 
           const _feature = { ...selectedFeature };
           _feature.metadata = yield call(detailsInfo, { entity: _feature, user });
@@ -132,6 +157,7 @@ export default dvaModelExtend(commonModel, {
         price,
         type,
         currency,
+        trialPeriod,
         translateKeys: {
           title,
           description,
@@ -153,14 +179,8 @@ export default dvaModelExtend(commonModel, {
           id: selectedFeature?.id,
           name: i18n.t(title),
           selectedByDefault,
-          price: {
-            ...price,
-            discount: {
-              ...price.discount,
-              startedAt: `${moment(price.discount.startedAt).format(DEFAULT_DATE_FORMAT)} 00:00:00`,
-              type: custDiscountType(price.discount.type)
-            }
-          },
+          trialPeriod: { ..._defineTrialed(trialPeriod) },
+          price: { ..._definePrice(price) },
           type, currency,
           translateKeys: {
             description: setAs(description, null),
@@ -169,6 +189,11 @@ export default dvaModelExtend(commonModel, {
           metadata,
           tags: setAs(tags, [])
         };
+
+        // TODO (teamco): Workaround for un-updated trial period (as a new component issue).
+        if (!trialPeriod?.price?.currency) {
+          data.trialPeriod.price.currency = price.currency;
+        }
 
         if (isEdit) {
           if (selectedFeature && feature === selectedFeature.id) {

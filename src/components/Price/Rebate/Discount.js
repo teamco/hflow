@@ -191,7 +191,7 @@ const Discount = props => {
           <HiddenField form={formRef}
                        name={[...prefix, namespace, 'type']}
                        disabled={disabled || !isDiscounted}/>
-          <HiddenField name={['price', 'currency']}
+          <HiddenField name={[...prefix, 'currency']}
                        form={formRef}
                        disabled={disabled}/>
         </div>

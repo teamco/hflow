@@ -18,7 +18,7 @@ const FeatureTrial = (props) => {
     disabled,
     durationTypes = [],
     currencies = [],
-    discountTypes = []
+    discountTypes
   } = props;
 
   return (
