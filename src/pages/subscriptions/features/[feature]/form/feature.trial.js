@@ -35,8 +35,8 @@ const FeatureTrial = (props) => {
         <Duration form={formRef}
                   label={t('price:trialDuration')}
                   disabled={disabled}
-                  prefix={['trialPeriod', 'duration']}
-                  required={false}
+                  prefix={['trialPeriod']}
+                  required={true}
                   durationTypes={durationTypes}/>
       </Rebate.Discount>
   );
