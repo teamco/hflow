@@ -152,7 +152,7 @@ const Discount = props => {
           <Input label={t('price:discountedPrice')}
                  name={[...prefix, 'discountedPrice']}
                  form={formRef}
-                 min={1}
+                 min={priceMin}
                  readOnly={true}
                  disabled={disabled}/>
         </div>
