@@ -388,6 +388,7 @@
   "price": {
     "originalPrice": "Original Price",
     "discountedPrice": "Discounted Price",
+    "discountedCalc": "Will be Calculated",
     "discounted": "Is Discounted?",
     "trialed": "Is Trialed?",
     "discount": "Discount",
