@@ -5,12 +5,15 @@
   "scripts": {
     "start:linux": "cross-env PORT=8003 umi dev",
     "start:windows": "cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider PORT=8003 umi dev",
+    "start:windows:node16": "cross-env NODE_ENV=development PORT=8003 umi dev",
     "model:list": "umi dva list model",
     "umi:clean": "node ./preinstall.js",
     "build": "umi build",
     "postinstall": "umi generate tmp",
     "test": "umi-test",
-    "test:coverage": "umi-test --coverage"
+    "test:coverage": "umi-test --coverage",
+    "cypress:int": "cypress open --config integrationFolder=./cypress/integration",
+    "cypress:int:ci": "cypress run --config integrationFolder=./cypress/integration"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -62,6 +65,7 @@
     "@umijs/test": "^3.5.20",
     "colors": "^1.4.0",
     "cross-env": "^7.0.3",
+    "cypress": "9.2.1",
     "dayjs": "^1.10.7",
     "enzyme": "^3.11.0",
     "lint-staged": "^12.1.4",
