@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Form, InputNumber, Select } from 'antd';
+import { useStateIfMounted } from 'use-state-if-mounted';
 import { withTranslation } from 'react-i18next';
 import HiddenField from '@/components/Form/HiddenField';
 import { complexFormKey, updateComplexForm } from '@/utils/form';
+import { effectHook } from '@/utils/state';
 
 const { Option } = Select;
 
@@ -27,9 +29,9 @@ const Duration = props => {
 
   const wrapper = form.getFieldValue(prefix[0] || namespace);
   const duration = complexFormKey(wrapper, namespace, wrapper.type && wrapper.period);
-  const [durationType, setDurationType] = useState(duration?.type);
+  const [durationType, setDurationType] = useStateIfMounted(!!duration?.type);
 
-  useEffect(() => {
+  effectHook(() => {
     handleFormUpdate(duration?.type || durationTypes[0]);
   }, [duration?.type]);
 

@@ -46,18 +46,22 @@ export function findObjectByKey(object, key) {
 
   /**
    * @constant
-   * @param object
+   * @param obj
    * @param {string} key
    * @param {array} res
    * @return {any|*[]}
    */
-  const result = (object, key, res = []) => _.cloneDeepWith(obj, (v, k) => {
-    k === key && res.push(v);
-  }) && res;
+  const findValuesDeepByKey = (obj, key, res = []) => (
+      _.cloneDeepWith(obj, (v, k) => {
+        k === key && res.push(v);
+      }) && res
+  );
 
-  if (!result.length) {
-    throw new Error(`Undefined ${key}`);
-  }
+  const result = findValuesDeepByKey(object, key);
+
+  // if (!result.length) {
+  //   throw new Error(`Undefined ${key}`);
+  // }
 
   return result[0];
 }

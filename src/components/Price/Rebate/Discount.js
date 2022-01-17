@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { DatePicker, Divider, Input, InputNumber, Select, Switch } from 'antd';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
@@ -8,6 +8,7 @@ import Duration from '@/components/Price/Range/Duration';
 import { complexFormKey, updateComplexForm } from '@/utils/form';
 import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 import { layout } from '@/utils/layout';
+import { effectHook } from '@/utils/state';
 
 const { Option } = Select;
 const { GenericPanel, HiddenField } = FormComponents;
@@ -56,20 +57,20 @@ const Discount = props => {
   const [isDiscounted, setIsDiscounted] = useState(discounted);
   const [currency, setCurrency] = useState(currencies[0]);
 
-  useEffect(() => {
+  effectHook(() => {
     setCurrency(wrapper?.currency || currencies[0]);
-  }, [wrapper, currencies]);
+  }, [wrapper, currencies])
 
-  useEffect(() => {
+  effectHook(() => {
     handleDiscountTypeUpdate(discount?.type || _discountTypes[0]);
   }, [discount?.type, currency, _discountTypes]);
 
-  useEffect(() => {
+  effectHook(() => {
     handlePriceUpdate(currency);
     setDiscountTypes(discountTypes.map(type => _handleDiscountType(type)));
   }, [currency]);
 
-  useEffect(() => {
+  effectHook(() => {
     setIsDiscounted(discounted);
   }, [discounted]);
 

@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { Select, Switch } from 'antd';
 
 import FormComponents from '@/components/Form';
 import EmptyData from '@/components/EmptyData';
 
 import { sortBy } from '@/utils/array';
+import { effectHook } from '@/utils/state';
 
 const { GenericPanel } = FormComponents;
 const { Option } = Select;
@@ -27,7 +28,7 @@ export const SubscriptionFeatures = (props) => {
     onChangeFeatureType
   } = props;
 
-  useEffect(() => {
+  effectHook(() => {
     [...features].forEach(pref => {
       const value = (formRef.getFieldValue('featuresByRef') || {})[pref.id];
       if (typeof value === 'undefined') {

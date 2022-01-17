@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { effectHook } from '@/utils/state';
 
 /**
  * @constant
@@ -47,7 +48,7 @@ export const useGeolocation = (watch = false, settings = defaultSettings) => {
     setError(error.message);
   };
 
-  useEffect(() => {
+  effectHook(() => {
     if (!geolocation) {
       return setError('Geolocation is not supported');
     }

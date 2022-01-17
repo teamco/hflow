@@ -1,5 +1,5 @@
 import ErrorModal from 'components/Authentication/modals/error.modal';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'umi';
 import { Button, Form, Input, PageHeader } from 'antd';
 import { LockTwoTone, ProfileTwoTone, SaveOutlined, UserAddOutlined } from '@ant-design/icons';
@@ -13,6 +13,7 @@ import Page from 'components/Page';
 
 import styles from 'pages/finishSignUp/finishSignUp.module.less';
 import stylesAuth from 'components/Authentication/authentication.module.less';
+import { effectHook } from '@/utils/state';
 
 const { GenericPanel } = FormComponents;
 
@@ -43,7 +44,7 @@ export const finishSignUp = (props) => {
   const [formRef] = Form.useForm();
   const params = useParams();
 
-  useEffect(() => {
+  effectHook(() => {
     onPrepareRegistration(params);
   }, []);
 

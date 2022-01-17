@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import { Helmet } from 'umi';
 import { Form, Layout } from 'antd';
 import ReactInterval from 'react-interval';
@@ -10,6 +10,7 @@ import { AbilityContext } from 'utils/auth/can';
 import 'utils/i18n';
 
 import styles from './landing.layout.module.less';
+import { effectHook } from '@/utils/state';
 
 const { Content } = Layout;
 
@@ -39,7 +40,7 @@ export const LandingLayout = (props) => {
 
   const { user, ability } = authModel;
 
-  useEffect(() => {
+  effectHook(() => {
     props.onDefineAbilities();
   }, [user]);
 

@@ -1,3 +1,6 @@
+import React, { useEffect } from 'react';
+import { stub } from '@/utils/function';
+
 /**
  * @export
  * @param timestamp
@@ -49,3 +52,34 @@ export const spinningLocal = (loading) => {
 export const isLoading = loading => {
   return loading ? 1 : 0;
 };
+
+/**
+ * @export
+ * @param {number} [ts]
+ * @return {Promise<unknown>}
+ */
+export const simulateRequest = (ts = 300) =>
+    new Promise(resolve => setTimeout(resolve, ts));
+
+/**
+ * @export
+ * @param {function} [effect]
+ * @param {array} [deps]
+ * @param {function} [apiCall]
+ * @param {number} [ts]
+ */
+export function effectHook(effect = stub, deps = [], apiCall = simulateRequest, ts = 300) {
+  useEffect(() => {
+    let isMounted = true;
+
+    apiCall(ts).then(() => {
+      if (isMounted) {
+        effect();
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [...deps]);
+}

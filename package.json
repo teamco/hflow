@@ -50,6 +50,7 @@
     "short-uuid": "^4.2.0",
     "umi": "^3.5.20",
     "umi-request": "^1.4.0",
+    "use-state-if-mounted": "^1.0.4",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {

@@ -1,8 +1,9 @@
-import { getSuffix } from './index';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Form, Input } from 'antd';
-
 import countryCodes from 'country-codes-list';
+
+import { getSuffix } from './index';
+import { effectHook } from '@/utils/state';
 
 /**
  * @export
@@ -27,7 +28,7 @@ const phone = ({
   countryData
 }) => {
 
-  useEffect(() => {
+  effectHook(() => {
     countryData.countryCallingCode && formRef.setFieldsValue({
       phone: { code: `+${countryData.countryCallingCode || ''}` }
     });

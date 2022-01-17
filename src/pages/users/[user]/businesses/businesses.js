@@ -1,16 +1,18 @@
-import Page from 'components/Page';
-import userStyles from 'pages/users/users.module.less';
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { useParams } from 'umi';
+
+import Page from 'components/Page';
 import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, TrademarkOutlined } from '@ant-design/icons';
-
 import Main from 'components/Main';
-import { metadata } from 'pages/users/[user]/businesses/businesses.metadata';
 
-import styles from 'pages/users/[user]/businesses/businesses.module.less';
 import { Can } from 'utils/auth/can';
 import ExportButton from '@/components/Buttons/export.button';
+
+import { metadata } from 'pages/users/[user]/businesses/businesses.metadata';
+import userStyles from 'pages/users/users.module.less';
+import styles from 'pages/users/[user]/businesses/businesses.module.less';
+import { effectHook } from '@/utils/state';
 
 const { Table } = Main;
 
@@ -38,7 +40,7 @@ export const businesses = (props) => {
    */
   const { user = authModel.user?.id } = useParams();
 
-  useEffect(() => {
+  effectHook(() => {
     onGetBusinesses(selectedUser, user);
   }, [authModel.user, user]);
 

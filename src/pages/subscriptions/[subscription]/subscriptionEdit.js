@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { DownOutlined, SettingOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 import { useParams } from 'umi';
@@ -16,7 +16,7 @@ import { SubscriptionDiscount } from '@/pages/subscriptions/[subscription]/form/
 import SubscriptionMenu from '@/pages/subscriptions/metadata/subscriptions.menu';
 
 import { fromForm } from '@/utils/object';
-import { isLoading } from '@/utils/state';
+import { effectHook, isLoading } from '@/utils/state';
 
 import menuStyles from '@/components/menu.less';
 import styles from '@/pages/subscriptions/subscriptions.module.less';
@@ -71,7 +71,7 @@ export const subscriptionEdit = (props) => {
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
 
-  useEffect(() => {
+  effectHook(() => {
     canUpdate && onEditSubscription(params);
   }, [authModel.user, canUpdate]);
 

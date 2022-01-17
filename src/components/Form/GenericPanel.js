@@ -137,7 +137,7 @@ class GenericPanel extends Component {
           }
         }
 
-        const isHidden = _child.type.name === 'HiddenField';
+        const isHidden = _child?.type?.name === 'HiddenField';
 
         return React.isValidElement(_child) ? (
             <Form.Item label={label}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import ReactJson from 'react-json-view';
 
 import Page from 'components/Page';
@@ -9,6 +9,7 @@ import { PageHeader } from 'antd';
 import { UserSwitchOutlined } from '@ant-design/icons';
 
 import styles from 'pages/userLogs/userLogs.module.less';
+import { effectHook } from '@/utils/state';
 
 const { Table } = Main;
 
@@ -25,7 +26,7 @@ export const userLogs = (props) => {
     data = []
   } = userLogModel;
 
-  useEffect(() => {
+  effectHook(() => {
     onQuery();
   }, []);
 

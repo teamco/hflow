@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { DatePicker, Select } from 'antd';
 import FormComponents from 'components/Form';
 import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 import moment from 'moment';
+import { effectHook } from '@/utils/state';
 
 const { GenericPanel, HiddenField } = FormComponents;
 const { Option } = Select;
@@ -29,7 +30,7 @@ export const CampaignInfo = (props) => {
   const [featuresList, setFeaturesList] = useState([]);
   const subscriptionRefId = getValue('type');
 
-  useEffect(() => {
+  effectHook(() => {
     if (subscriptionRefId && subscriptions.length > 0) {
       handleSubscriptionType(subscriptionRefId);
     }

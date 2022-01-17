@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 
 import { Button, Tooltip } from 'antd';
@@ -10,7 +10,7 @@ import SignInModal from 'components/Authentication/modals/signin.modal';
 import UpdateEmailModal from 'components/Authentication/modals/updateEmail.modal';
 
 import styles from 'components/Authentication/authentication.module.less';
-import { isLoading } from 'utils/state';
+import { effectHook, isLoading } from 'utils/state';
 
 /**
  * @constant
@@ -53,7 +53,7 @@ export const signIn = props => {
   const [isErrorVisible, setIsErrorVisible] = useState(false);
   const [isNAEmailVisible, setIsNAEmailVisible] = useState(false);
 
-  useEffect(() => {
+  effectHook(() => {
     if (user) {
       if (authModel.user) {
         const { metadata, email } = authModel.user;

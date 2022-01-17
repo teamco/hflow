@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { FacebookOutlined, GoogleOutlined, TwitterOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
@@ -9,7 +9,7 @@ import SignUp from 'components/Authentication/signUp.connect';
 import Page from 'components/Page';
 import Logo from 'components/Logo';
 
-import { isLoading } from 'utils/state';
+import { effectHook, isLoading } from 'utils/state';
 
 /**
  * @constant
@@ -40,7 +40,7 @@ export const Login = (props) => {
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
   const [isErrorVisible, setIsErrorVisible] = useState(false);
 
-  useEffect(() => {
+  effectHook(() => {
     if (user && !authModel.user && !Object.keys(authModel.registerData).length) {
       props.onSignIn(user);
     }

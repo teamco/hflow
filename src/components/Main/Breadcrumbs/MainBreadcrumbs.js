@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Breadcrumb } from 'antd';
 import { withTranslation } from 'react-i18next';
 import { NavLink } from 'umi';
 import { withBreadcrumbs } from 'utils/breadcrumbs';
 
 import { routes } from '/routes';
+import { effectHook } from '@/utils/state';
 
 /**
  * This component is wrapped in withBreadcrumbs which automatically
@@ -25,11 +26,11 @@ const Breadcrumbs = ({ breadcrumbs, meta, onUpdateDocumentMeta, onUpdate404, ...
   const { t, is404 } = props;
   const title = breadcrumbs?.map(({ breadcrumb }) => t(breadcrumb))?.join(' / ');
 
-  useEffect(() => {
+  effectHook(() => {
     onUpdateDocumentMeta({ title });
   }, [title && (title !== meta.title)]);
 
-  useEffect(() => {
+  effectHook(() => {
     onUpdate404(is404);
   }, [is404]);
 

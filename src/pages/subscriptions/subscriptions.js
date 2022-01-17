@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
@@ -13,6 +13,7 @@ import { subscriptionCardMetadata } from 'pages/subscriptions/subscriptions.meta
 import styles from 'pages/subscriptions/subscriptions.module.less';
 import userStyles from 'pages/users/users.module.less';
 import ExportButton from '@/components/Buttons/export.button';
+import { effectHook } from '@/utils/state';
 
 /**
  * @export
@@ -37,7 +38,7 @@ export const subscriptions = (props) => {
     features
   } = subscriptionModel;
 
-  useEffect(() => {
+  effectHook(() => {
     onQuery();
   }, [authModel.user]);
 

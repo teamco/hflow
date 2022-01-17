@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ControlOutlined } from '@ant-design/icons';
 
@@ -7,8 +7,9 @@ import Main from '@/components/Main';
 import ExportButton from '@/components/Buttons/export.button';
 
 import { Can } from '@/utils/auth/can';
+import { effectHook } from '@/utils/state';
 
-import { expandableFeature, metadata } from 'pages/subscriptions/features/feature.metadata';
+import { expandableFeature, metadata } from '@/pages/subscriptions/features/feature.metadata';
 
 import styles from 'pages/subscriptions/features/features.module.less';
 
@@ -39,7 +40,7 @@ export const features = props => {
     expandable: expandableFeature({ t })
   };
 
-  useEffect(() => {
+  effectHook(() => {
     onQuery();
   }, [authModel.user]);
 

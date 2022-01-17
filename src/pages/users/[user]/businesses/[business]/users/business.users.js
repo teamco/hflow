@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'umi';
 import { Button, PageHeader } from 'antd';
 import { UserAddOutlined, UserOutlined } from '@ant-design/icons';
@@ -14,6 +14,7 @@ import { Can } from 'utils/auth/can';
 import { fromForm } from 'utils/object';
 
 import styles from 'pages/users/users.module.less';
+import { effectHook } from '@/utils/state';
 
 const { Table } = Main;
 
@@ -57,7 +58,7 @@ export const businessUsers = (props) => {
 
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
 
-  useEffect(() => {
+  effectHook(() => {
     onQuery(params);
   }, []);
 

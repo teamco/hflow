@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { Form, PageHeader } from 'antd';
 import { PieChartOutlined } from '@ant-design/icons';
 
@@ -10,6 +10,7 @@ import Main from 'components/Main';
 import { fromForm } from 'utils/object';
 
 import styles from 'pages/userRoles/userRoles.module.less';
+import { effectHook } from '@/utils/state';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;
@@ -41,7 +42,7 @@ export const userRoles = props => {
     touched
   } = userRoleModel;
 
-  useEffect(() => {
+  effectHook(() => {
     onQuery();
   }, [authModel.user]);
 

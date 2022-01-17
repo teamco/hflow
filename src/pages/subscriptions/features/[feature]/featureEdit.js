@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ControlOutlined, DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
@@ -11,7 +11,7 @@ import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
 import { useParams } from 'umi';
 
 import { fromForm } from '@/utils/object';
-import { isLoading } from '@/utils/state';
+import { effectHook, isLoading } from '@/utils/state';
 
 import { FeatureInfo } from './form/feature.info';
 import { FeatureDiscount } from './form/feature.discount';
@@ -69,7 +69,7 @@ export const featureEdit = (props) => {
 
   const [isTrialed, setIsTrialed] = useState(false);
 
-  useEffect(() => {
+  effectHook(() => {
     canUpdate && onEditFeature(params);
   }, [authModel.user, canUpdate]);
 
@@ -194,13 +194,13 @@ export const featureEdit = (props) => {
                 onFieldsChange={onFieldsChange}
                 initialValues={{
                   helper: true,
+                  trialed: false,
                   defaultState: true,
                   ...DEFAULT_PRICE_VALUES(currencies[0]),
                   trialPeriod: {
                     ...DEFAULT_PRICE_VALUES(currencies[0], false, {
                       originalPrice: 0
                     }),
-                    trialed: false,
                     duration: {
                       type: 'Week',
                       period: 1

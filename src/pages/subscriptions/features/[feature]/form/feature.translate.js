@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-
+import React, { useState } from 'react';
 import { Divider, Form, Input, Switch } from 'antd';
-import FormComponents from 'components/Form';
+
+import FormComponents from '@/components/Form';
+import { effectHook } from '@/utils/state';
 
 const { GenericPanel } = FormComponents;
 
@@ -36,7 +37,7 @@ export const FeatureTranslate = (props) => {
   const [disabledDescription, setDisabledDescription] = useState(false);
   const [enableHelper, setEnableHelper] = useState(false);
 
-  useEffect(() => {
+  effectHook(() => {
     const _desc = description?.length;
     if (enableHelper) {
       // TODO (teamco): Do nothing.
@@ -46,7 +47,7 @@ export const FeatureTranslate = (props) => {
     }
   }, [translate]);
 
-  useEffect(() => {
+  effectHook(() => {
     setTitle(title);
     setDescription(description);
     setOn(on);

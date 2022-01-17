@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NavLink } from 'umi';
 import {
   ContactsTwoTone,
@@ -21,6 +21,7 @@ import UserMenu from 'pages/users/metadata/users.menu';
 import styles from 'pages/users/users.module.less';
 import tableStyles from 'components/Main/Table/table.module.less';
 import menuStyles from 'components/menu.less';
+import { effectHook } from '@/utils/state';
 
 /**
  * @export
@@ -54,7 +55,7 @@ export const metadata = ({
   onLockUser
 }) => {
 
-  useEffect(() => {
+  effectHook(() => {
   }, []);
 
   const menuProps = {

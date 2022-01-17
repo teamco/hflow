@@ -22,11 +22,7 @@ import { COLORS } from '@/utils/colors';
  * @param loading
  * @return {*}
  */
-export const metadata = ({
-  t,
-  ability,
-  loading
-}) => {
+export const metadata = ({ t, ability, loading }) => {
 
   const menuProps = { t, loading, ability };
 

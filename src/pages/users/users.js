@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, PageHeader } from 'antd';
 import { SaveOutlined, UserSwitchOutlined } from '@ant-design/icons';
 import { Can } from 'utils/auth/can';
@@ -6,7 +6,7 @@ import { Can } from 'utils/auth/can';
 import Page from 'components/Page';
 import Main from 'components/Main';
 
-import { isLoading } from 'utils/state';
+import { effectHook, isLoading } from 'utils/state';
 import { metadata } from 'pages/users/users.metadata';
 import { expendableProfile } from 'pages/users/[user]/profile/profile.metadata';
 import SendMessage from 'pages/users/metadata/send.message';
@@ -52,12 +52,12 @@ export const users = (props) => {
 
   data = selectedUser ? [selectedUser] : data;
 
-  useEffect(() => {
+  effectHook(() => {
     !selectedUser && onQuery();
     onRolesQuery();
   }, [authModel.user]);
 
-  useEffect(() => {
+  effectHook(() => {
     if (selectedUser?.roles) {
       const _current = [...currentRoles].sort();
       const _selected = [...selectedUser?.roles || []].sort();

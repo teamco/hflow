@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 
@@ -16,7 +16,7 @@ import CampaignMenu from '@/pages/campaigns/metadata/campaigns.menu';
 import { useParams } from 'umi';
 
 import { fromForm } from '@/utils/object';
-import { isLoading } from '@/utils/state';
+import { effectHook, isLoading } from '@/utils/state';
 
 import menuStyles from '@/components/menu.less';
 import styles from '@/pages/campaigns/campaigns.module.less';
@@ -71,9 +71,10 @@ export const campaignEdit = (props) => {
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
 
-  useEffect(() => {
+
+  effectHook(() => {
     canUpdate && onEditCampaign(params);
-    onSubscriptions()
+    onSubscriptions();
   }, [authModel.user, canUpdate]);
 
   /**

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { Form, PageHeader } from 'antd';
 import { FontSizeOutlined } from '@ant-design/icons';
 
@@ -12,6 +12,7 @@ import { fromForm } from 'utils/object';
 
 import styles from 'pages/subscriptions/types/subscriptionTypes.module.less';
 import ExportButton from '@/components/Buttons/export.button';
+import { effectHook } from '@/utils/state';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;
@@ -41,7 +42,7 @@ export const subscriptionTypes = props => {
     touched
   } = simpleModel;
 
-  useEffect(() => {
+  effectHook(() => {
     onQuery();
   }, [authModel.user]);
 

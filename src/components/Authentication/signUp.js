@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Col, Form, Input, message, Modal, Row, Tooltip } from 'antd';
 import { FormOutlined, LockTwoTone, LoginOutlined, ProfileTwoTone } from '@ant-design/icons';
 import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
@@ -10,7 +10,7 @@ import { emailPartial } from 'components/partials/email.partial';
 import styles from 'components/Authentication/authentication.module.less';
 
 import Strength from 'components/Authentication/strength';
-import { isLoading } from 'utils/state';
+import { effectHook, isLoading } from 'utils/state';
 
 export const signUp = props => {
 
@@ -39,7 +39,7 @@ export const signUp = props => {
   const [meterValue, setMeterValue] = useState(null);
   const [meterText, setMeterText] = useState('');
 
-  useEffect(() => {
+  effectHook(() => {
     if (user && Object.keys(registerData).length) {
       onSignIn(user);
       handleCancel();

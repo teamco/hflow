@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'umi';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
@@ -13,6 +13,7 @@ import { isNew } from '@/services/common.service';
 import styles from '@/pages/users/[user]/businesses/businesses.module.less';
 import menuStyles from '@/components/menu.less';
 import userStyles from '@/pages/users/users.module.less';
+import { effectHook } from '@/utils/state';
 
 const { Info } = Main;
 
@@ -53,7 +54,7 @@ export const businessShow = (props) => {
   const disabled = ability.cannot('update', component);
   const read = ability.can('read', component);
 
-  useEffect(() => {
+  effectHook(() => {
     if (read) {
       onEditBusiness(params, false);
     }

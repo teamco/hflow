@@ -1,7 +1,8 @@
-import React from 'react';
+import React  from 'react';
 
 import { Select, Switch } from 'antd';
 import FormComponents from '@/components/Form';
+import { effectHook } from '@/utils/state';
 
 const { GenericPanel } = FormComponents;
 const { Option } = Select;
@@ -20,6 +21,12 @@ export const FeatureInfo = (props) => {
     featureTypes = [],
     setIsTrialed
   } = props;
+
+  const isChecked = formRef.getFieldValue('trialed');
+
+  effectHook(() => {
+    setIsTrialed(isChecked);
+  }, [isChecked]);
 
   /**
    * @constant
@@ -60,7 +67,7 @@ export const FeatureInfo = (props) => {
                   config={{ valuePropName: 'checked' }}
                   checkedChildren={t('actions:yes')}
                   unCheckedChildren={t('actions:no')}
-                  name={['trialPeriod', 'trialed']}/>
+                  name={'trialed'}/>
         </div>
       </GenericPanel>
   );

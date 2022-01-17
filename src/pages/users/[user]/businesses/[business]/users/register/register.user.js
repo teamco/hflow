@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { useParams } from 'umi';
 import { Button, Form, Modal, Select, Tooltip } from 'antd';
 import { FormOutlined } from '@ant-design/icons';
@@ -6,7 +6,7 @@ import { FormOutlined } from '@ant-design/icons';
 import { emailPartial } from 'components/partials/email.partial';
 import { isOwner } from 'services/userRoles.service';
 import { useFocus } from 'utils/hooks';
-import { isLoading } from 'utils/state';
+import { effectHook, isLoading } from 'utils/state';
 
 import styles from 'components/Authentication/authentication.module.less';
 
@@ -40,7 +40,7 @@ export const registerUser = props => {
   const [formRef] = Form.useForm();
   const [emailRef, setEmailFocus] = useFocus();
 
-  useEffect(() => {
+  effectHook(() => {
     onQuery();
     isRegisterVisible && setEmailFocus();
   }, [isRegisterVisible]);

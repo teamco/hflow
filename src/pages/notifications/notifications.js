@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { PageHeader, Tabs } from 'antd';
 import { NotificationOutlined } from '@ant-design/icons';
 import { useParams } from 'umi';
@@ -11,6 +11,7 @@ import { expendableNotification } from 'pages/notifications/metadata/notificatio
 
 import styles from 'pages/notifications/notifications.module.less';
 import SendMessage from 'pages/users/metadata/send.message';
+import { effectHook } from '@/utils/state';
 
 const { Table } = Main;
 const { TabPane } = Tabs;
@@ -43,7 +44,7 @@ export const notifications = (props) => {
   const [visibleMessage, setVisibleMessage] = useState({ visible: false, props: {} });
   const [activeTab, setActiveTab] = useState('inbox');
 
-  useEffect(() => {
+  effectHook(() => {
     onQuery(params?.user);
   }, []);
 

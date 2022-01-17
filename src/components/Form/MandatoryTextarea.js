@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Input } from 'antd';
 import classnames from 'classnames';
 
 import styles from './form.module.less';
+import { effectHook } from '@/utils/state';
 
 const { TextArea } = Input;
 
@@ -30,7 +31,7 @@ const MandatoryTextarea = props => {
 
   const [mandatory, setMandatory] = useState('');
 
-  useEffect(() => {
+  effectHook(() => {
     handleMandatoryTextarea(name);
   }, [form?.getFieldValue(name)]);
 

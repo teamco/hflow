@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'umi';
 
 import Page from 'components/Page';
@@ -8,6 +8,7 @@ import Businesses from 'pages/users/[user]/businesses';
 import styles from 'pages/users/[user]/profile/profile.module.less';
 import userStyles from 'pages/users/users.module.less';
 import classnames from 'classnames';
+import { effectHook } from '@/utils/state';
 
 export const profile = (props) => {
   const {
@@ -24,7 +25,7 @@ export const profile = (props) => {
     selectedUser
   } = userModel;
 
-  useEffect(() => {
+  effectHook(() => {
     onGetUser(selectedUser, params.user);
   }, [authModel.user, params.user]);
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
@@ -10,6 +10,7 @@ import styles from '@/pages/campaigns/campaigns.module.less';
 import userStyles from '@/pages/users/users.module.less';
 import { metadata } from '@/pages/campaigns/campaigns.metadata';
 import ExportButton from '@/components/Buttons/export.button';
+import { effectHook } from '@/utils/state';
 
 const { Table } = Main;
 
@@ -33,7 +34,7 @@ export const campaigns = (props) => {
     data,
   } = campaignModel;
 
-  useEffect(() => {
+  effectHook(() => {
     onQuery();
   }, [authModel.user]);
 

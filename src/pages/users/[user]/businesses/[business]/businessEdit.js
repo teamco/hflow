@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import Page from 'components/Page';
 import userStyles from 'pages/users/users.module.less';
 import { useParams } from 'umi';
@@ -16,7 +16,7 @@ import BusinessMenu from 'pages/users/[user]/businesses/metadata/business.menu';
 import SaveButton from 'components/Buttons/save.button';
 
 import { fromForm } from 'utils/object';
-import { isLoading } from 'utils/state';
+import { effectHook, isLoading } from 'utils/state';
 
 import styles from 'pages/users/[user]/businesses/businesses.module.less';
 import menuStyles from 'components/menu.less';
@@ -70,7 +70,7 @@ export const businessEdit = (props) => {
   const disabled = ability.cannot('update', component);
   const canUpdate = ability.can('update', component);
 
-  useEffect(() => {
+  effectHook(() => {
     canUpdate && onEditBusiness(params);
   }, [authModel.user, params.user, canUpdate]);
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { BackTop, Layout, Spin } from 'antd';
 
 import Footer from 'components/Footer';
@@ -6,6 +6,7 @@ import HeaderSection from 'pages/landing/sections/header.section';
 
 import styles from 'pages/landing/landing.module.less';
 import stylesPage from 'layouts/landing/page/landing.page.layout.module.less';
+import { effectHook } from '@/utils/state';
 
 const { Content } = Layout;
 
@@ -27,7 +28,7 @@ export const LandingPage = (props) => {
     pageStyles = stylesPage.pageContent
   } = props;
 
-  useEffect(() => {
+  effectHook(() => {
   }, []);
 
   const {

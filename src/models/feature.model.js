@@ -23,17 +23,21 @@ const ABILITY_FOR = 'features';
 /**
  * @constant
  * @param {{discount, discounted: boolean}} price
+ * @param {boolean} [format]
  * @return {{price: (*&{discount: (*&{startedAt: string, type: string})})}}
  * @private
  */
-const _definePrice = (price = {}) => {
+const _definePrice = (price = {}, format = true) => {
   const { discount = {}, discounted } = price;
+  const startedAt = discount?.startedAt ?
+      format ? `${moment(discount?.startedAt).format(DEFAULT_DATE_FORMAT)} 00:00:00` :
+          moment(discount?.startedAt) : null;
 
   return {
     ...price,
     discount: discounted ? {
       ...discount,
-      startedAt: discount?.startedAt ? `${moment(discount?.startedAt).format(DEFAULT_DATE_FORMAT)} 00:00:00` : null,
+      startedAt,
       type: custDiscountType(discount?.type),
       duration: { ...discount?.duration }
     } : null
@@ -42,17 +46,17 @@ const _definePrice = (price = {}) => {
 
 /**
  * @constant
- * @param {{trialed:boolean, price}} trialPeriod
- * @return {{price: {price: *}}|{trialed: boolean}}
+ * @param {boolean} trialed
+ * @param {{price}} trialPeriod
+ * @param {boolean} [format]
+ * @return {{price: {price: *}}}
  * @private
  */
-const _defineTrialed = (trialPeriod = {}) => {
-  return trialPeriod?.trialed ? {
+const _defineTrialed = (trialed, trialPeriod = {}, format = true) => {
+  return trialed ? {
     ...trialPeriod,
-    price: { ..._definePrice(trialPeriod?.price) }
-  } : {
-    trialed: false
-  };
+    price: { ..._definePrice(trialPeriod?.price, format) }
+  } : null;
 };
 
 /**
@@ -110,12 +114,12 @@ export default dvaModelExtend(commonModel, {
         const feature = yield call(getFeature, { id: featureId });
 
         if (feature.exists) {
-          const { price, trialPeriod } = feature.data;
+          const { price, trialPeriod, trialed } = feature.data;
 
           let selectedFeature = {
             ...feature.data,
-            trialPeriod: { ..._defineTrialed(trialPeriod) },
-            price: { ..._definePrice(price) }
+            trialPeriod: { ..._defineTrialed(trialed, trialPeriod, false) },
+            price: { ..._definePrice(price, false) }
           };
 
           const _feature = { ...selectedFeature };
@@ -158,6 +162,7 @@ export default dvaModelExtend(commonModel, {
         type,
         currency,
         trialPeriod,
+        trialed,
         translateKeys: {
           title,
           description,
@@ -179,9 +184,9 @@ export default dvaModelExtend(commonModel, {
           id: selectedFeature?.id,
           name: i18n.t(title),
           selectedByDefault,
-          trialPeriod: { ..._defineTrialed(trialPeriod) },
+          trialPeriod: { ..._defineTrialed(trialed, trialPeriod) },
           price: { ..._definePrice(price) },
-          type, currency,
+          type, currency, trialed,
           translateKeys: {
             description: setAs(description, null),
             title, on, off
