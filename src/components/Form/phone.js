@@ -3,7 +3,7 @@ import { Form, Input } from 'antd';
 import countryCodes from 'country-codes-list';
 
 import { getSuffix } from './index';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 /**
  * @export

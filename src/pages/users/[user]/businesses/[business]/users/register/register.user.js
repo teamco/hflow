@@ -6,7 +6,8 @@ import { FormOutlined } from '@ant-design/icons';
 import { emailPartial } from 'components/partials/email.partial';
 import { isOwner } from 'services/userRoles.service';
 import { useFocus } from 'utils/hooks';
-import { effectHook, isLoading } from 'utils/state';
+import { isLoading } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 import styles from 'components/Authentication/authentication.module.less';
 

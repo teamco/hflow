@@ -5,10 +5,11 @@ import moment from 'moment';
 
 import FormComponents from '@/components/Form';
 import Duration from '@/components/Price/Range/Duration';
+
 import { complexFormKey, updateComplexForm } from '@/utils/form';
 import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 import { layout } from '@/utils/layout';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { Option } = Select;
 const { GenericPanel, HiddenField } = FormComponents;
@@ -40,39 +41,9 @@ const Discount = props => {
 
   const wrapper = formRef.getFieldValue(prefix[0]);
 
-  const discounted = complexFormKey(
-      wrapper,
-      'discounted',
-      false
-  );
-
-  const discount = complexFormKey(
-      wrapper,
-      namespace,
-      discount?.type && discount?.value
-  );
-
-  const [_discountTypes, setDiscountTypes] = useState(discountTypes);
-  const [discountType, setDiscountType] = useState(discount?.type);
-  const [isDiscounted, setIsDiscounted] = useState(discounted);
-  const [currency, setCurrency] = useState(currencies[0]);
-
-  effectHook(() => {
-    setCurrency(wrapper?.currency || currencies[0]);
-  }, [wrapper, currencies])
-
-  effectHook(() => {
-    handleDiscountTypeUpdate(discount?.type || _discountTypes[0]);
-  }, [discount?.type, currency, _discountTypes]);
-
-  effectHook(() => {
-    handlePriceUpdate(currency);
-    setDiscountTypes(discountTypes.map(type => _handleDiscountType(type)));
-  }, [currency]);
-
-  effectHook(() => {
-    setIsDiscounted(discounted);
-  }, [discounted]);
+  const discounted = !!complexFormKey(wrapper, 'discounted', false);
+  const discount = complexFormKey(wrapper, namespace, false);
+  const currency = complexFormKey(wrapper, 'currency', false) || currencies[0];
 
   /**
    * @constant
@@ -84,13 +55,25 @@ const Discount = props => {
 
   /**
    * @constant
+   * @type {string}
+   * @private
+   */
+  const discountType = _handleDiscountType(discount?.type);
+
+  const [isDiscounted, setIsDiscounted] = useState(discounted);
+
+  /**
+   * @constant
    * @param {string} value
    */
   const handleDiscountTypeUpdate = (value) => {
     value = _handleDiscountType(value);
     updateComplexForm(formRef, prefix, namespace, { type: value });
-    setDiscountType(value);
   };
+
+  effectHook(() => {
+    handleDisabled(discounted);
+  }, [discounted]);
 
   /**
    * @constant
@@ -105,7 +88,7 @@ const Discount = props => {
    * @param {string} value
    */
   const handlePriceUpdate = value => {
-    formRef.setFieldsValue({ price: { currency: value } });
+    updateComplexForm(formRef, prefix, 'currency', value);
   };
 
   /**
@@ -117,8 +100,8 @@ const Discount = props => {
               value={discountType}
               disabled={disabled || !isDiscounted}
               onChange={handleDiscountTypeUpdate}>
-        {_discountTypes.map((type, idx) => (
-            <Option key={idx} value={type}>{type}</Option>
+        {discountTypes.map((type, idx) => (
+            <Option key={idx} value={type}>{_handleDiscountType(type)}</Option>
         ))}
       </Select>
   );
@@ -191,9 +174,11 @@ const Discount = props => {
         <div>
           <HiddenField form={formRef}
                        name={[...prefix, namespace, 'type']}
+                       value={discountType}
                        disabled={disabled || !isDiscounted}/>
           <HiddenField name={[...prefix, 'currency']}
                        form={formRef}
+                       value={currency}
                        disabled={disabled}/>
         </div>
         <div>

@@ -5,7 +5,7 @@ import FormComponents from '@/components/Form';
 import EmptyData from '@/components/EmptyData';
 
 import { sortBy } from '@/utils/array';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { GenericPanel } = FormComponents;
 const { Option } = Select;

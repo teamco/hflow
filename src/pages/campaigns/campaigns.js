@@ -10,7 +10,7 @@ import styles from '@/pages/campaigns/campaigns.module.less';
 import userStyles from '@/pages/users/users.module.less';
 import { metadata } from '@/pages/campaigns/campaigns.metadata';
 import ExportButton from '@/components/Buttons/export.button';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { Table } = Main;
 

@@ -10,7 +10,7 @@ import { AbilityContext } from 'utils/auth/can';
 import 'utils/i18n';
 
 import styles from './landing.layout.module.less';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { Content } = Layout;
 

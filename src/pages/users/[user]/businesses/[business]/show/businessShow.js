@@ -13,7 +13,7 @@ import { isNew } from '@/services/common.service';
 import styles from '@/pages/users/[user]/businesses/businesses.module.less';
 import menuStyles from '@/components/menu.less';
 import userStyles from '@/pages/users/users.module.less';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { Info } = Main;
 

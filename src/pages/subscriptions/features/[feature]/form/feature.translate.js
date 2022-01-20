@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Divider, Form, Input, Switch } from 'antd';
 
 import FormComponents from '@/components/Form';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { GenericPanel } = FormComponents;
 

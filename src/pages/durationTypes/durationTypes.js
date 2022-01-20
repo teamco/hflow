@@ -12,7 +12,7 @@ import { Can } from 'utils/auth/can';
 
 import styles from '@/pages/durationTypes/durationTypes.module.less';
 import ExportButton from '@/components/Buttons/export.button';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;

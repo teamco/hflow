@@ -11,7 +11,7 @@ import { expendableNotification } from 'pages/notifications/metadata/notificatio
 
 import styles from 'pages/notifications/notifications.module.less';
 import SendMessage from 'pages/users/metadata/send.message';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { Table } = Main;
 const { TabPane } = Tabs;

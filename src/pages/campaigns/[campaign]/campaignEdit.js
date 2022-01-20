@@ -16,7 +16,8 @@ import CampaignMenu from '@/pages/campaigns/metadata/campaigns.menu';
 import { useParams } from 'umi';
 
 import { fromForm } from '@/utils/object';
-import { effectHook, isLoading } from '@/utils/state';
+import { isLoading } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 import menuStyles from '@/components/menu.less';
 import styles from '@/pages/campaigns/campaigns.module.less';

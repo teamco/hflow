@@ -11,7 +11,8 @@ import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
 import { useParams } from 'umi';
 
 import { fromForm } from '@/utils/object';
-import { effectHook, isLoading } from '@/utils/state';
+import { isLoading } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 import { FeatureInfo } from './form/feature.info';
 import { FeatureDiscount } from './form/feature.discount';
@@ -195,7 +196,7 @@ export const featureEdit = (props) => {
                 initialValues={{
                   helper: true,
                   trialed: false,
-                  defaultState: true,
+                  selectedByDefault: true,
                   ...DEFAULT_PRICE_VALUES(currencies[0]),
                   trialPeriod: {
                     ...DEFAULT_PRICE_VALUES(currencies[0], false, {

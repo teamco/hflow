@@ -12,7 +12,7 @@ import { fromForm } from 'utils/object';
 import styles from 'pages/subscriptions/features/types/featureTypes.module.less';
 import { Can } from '@/utils/auth/can';
 import ExportButton from '@/components/Buttons/export.button';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;

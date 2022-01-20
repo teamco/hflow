@@ -4,13 +4,15 @@ import classnames from 'classnames';
 import { Button, Tooltip } from 'antd';
 import { FacebookOutlined, GoogleOutlined, LoginOutlined, LogoutOutlined, TwitterOutlined } from '@ant-design/icons';
 
+import { isLoading } from 'utils/state';
+import { effectHook } from 'utils/hooks';
+
 import SignUp from 'components/Authentication/signUp.connect';
 import ErrorModal from 'components/Authentication/modals/error.modal';
 import SignInModal from 'components/Authentication/modals/signin.modal';
 import UpdateEmailModal from 'components/Authentication/modals/updateEmail.modal';
 
 import styles from 'components/Authentication/authentication.module.less';
-import { effectHook, isLoading } from 'utils/state';
 
 /**
  * @constant

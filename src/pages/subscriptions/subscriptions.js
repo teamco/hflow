@@ -13,7 +13,7 @@ import { subscriptionCardMetadata } from 'pages/subscriptions/subscriptions.meta
 import styles from 'pages/subscriptions/subscriptions.module.less';
 import userStyles from 'pages/users/users.module.less';
 import ExportButton from '@/components/Buttons/export.button';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 /**
  * @export

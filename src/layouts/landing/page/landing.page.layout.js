@@ -6,7 +6,7 @@ import HeaderSection from 'pages/landing/sections/header.section';
 
 import styles from 'pages/landing/landing.module.less';
 import stylesPage from 'layouts/landing/page/landing.page.layout.module.less';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { Content } = Layout;
 

@@ -1,8 +1,8 @@
-import React  from 'react';
+import React from 'react';
 
 import { Select, Switch } from 'antd';
 import FormComponents from '@/components/Form';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { GenericPanel } = FormComponents;
 const { Option } = Select;
@@ -25,7 +25,7 @@ export const FeatureInfo = (props) => {
   const isChecked = formRef.getFieldValue('trialed');
 
   effectHook(() => {
-    setIsTrialed(isChecked);
+    handleTrialToggling(isChecked);
   }, [isChecked]);
 
   /**

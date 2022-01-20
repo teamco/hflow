@@ -160,7 +160,6 @@ export default dvaModelExtend(commonModel, {
         selectedByDefault,
         price,
         type,
-        currency,
         trialPeriod,
         trialed,
         translateKeys: {
@@ -186,7 +185,7 @@ export default dvaModelExtend(commonModel, {
           selectedByDefault,
           trialPeriod: { ..._defineTrialed(trialed, trialPeriod) },
           price: { ..._definePrice(price) },
-          type, currency, trialed,
+          type, trialed,
           translateKeys: {
             description: setAs(description, null),
             title, on, off

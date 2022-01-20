@@ -7,7 +7,7 @@ import Main from '@/components/Main';
 import ExportButton from '@/components/Buttons/export.button';
 
 import { Can } from '@/utils/auth/can';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 import { expandableFeature, metadata } from '@/pages/subscriptions/features/feature.metadata';
 

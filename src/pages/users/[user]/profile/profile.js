@@ -1,5 +1,8 @@
 import React from 'react';
 import { useParams } from 'umi';
+import classnames from 'classnames';
+
+import { effectHook } from '@/utils/hooks';
 
 import Page from 'components/Page';
 import Users from 'pages/users';
@@ -7,8 +10,6 @@ import Businesses from 'pages/users/[user]/businesses';
 
 import styles from 'pages/users/[user]/profile/profile.module.less';
 import userStyles from 'pages/users/users.module.less';
-import classnames from 'classnames';
-import { effectHook } from '@/utils/state';
 
 export const profile = (props) => {
   const {

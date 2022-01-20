@@ -13,7 +13,7 @@ import Page from 'components/Page';
 
 import styles from 'pages/finishSignUp/finishSignUp.module.less';
 import stylesAuth from 'components/Authentication/authentication.module.less';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { GenericPanel } = FormComponents;
 

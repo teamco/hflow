@@ -10,7 +10,7 @@ import Main from 'components/Main';
 import { fromForm } from 'utils/object';
 
 import styles from 'pages/userRoles/userRoles.module.less';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;

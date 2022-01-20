@@ -4,7 +4,7 @@ import { DatePicker, Select } from 'antd';
 import FormComponents from 'components/Form';
 import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 import moment from 'moment';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { GenericPanel, HiddenField } = FormComponents;
 const { Option } = Select;

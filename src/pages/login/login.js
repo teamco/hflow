@@ -9,7 +9,8 @@ import SignUp from 'components/Authentication/signUp.connect';
 import Page from 'components/Page';
 import Logo from 'components/Logo';
 
-import { effectHook, isLoading } from 'utils/state';
+import { isLoading } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 /**
  * @constant

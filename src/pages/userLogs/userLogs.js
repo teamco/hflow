@@ -9,7 +9,7 @@ import { PageHeader } from 'antd';
 import { UserSwitchOutlined } from '@ant-design/icons';
 
 import styles from 'pages/userLogs/userLogs.module.less';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { Table } = Main;
 

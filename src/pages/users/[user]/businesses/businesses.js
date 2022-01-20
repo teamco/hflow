@@ -12,7 +12,7 @@ import ExportButton from '@/components/Buttons/export.button';
 import { metadata } from 'pages/users/[user]/businesses/businesses.metadata';
 import userStyles from 'pages/users/users.module.less';
 import styles from 'pages/users/[user]/businesses/businesses.module.less';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { Table } = Main;
 

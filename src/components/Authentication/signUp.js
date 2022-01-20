@@ -10,7 +10,9 @@ import { emailPartial } from 'components/partials/email.partial';
 import styles from 'components/Authentication/authentication.module.less';
 
 import Strength from 'components/Authentication/strength';
-import { effectHook, isLoading } from 'utils/state';
+import { isLoading } from 'utils/state';
+import { effectHook } from 'utils/hooks';
+
 
 export const signUp = props => {
 

@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Form, Input } from 'antd';
 import classnames from 'classnames';
 
+import { effectHook } from '@/utils/hooks';
+
 import styles from './form.module.less';
-import { effectHook } from '@/utils/state';
 
 const { TextArea } = Input;
 

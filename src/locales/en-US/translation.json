@@ -375,6 +375,7 @@
     "profileHelper": "Includes the business contact information/logo and a small written description of the provided service",
     "basicProfile": "Basic",
     "fullProfile": "Full",
+    "createBusiness": "Create Business",
     "analytics": "Analytics",
     "basicAnalytics": "Basic",
     "fullAnalytics": "Full",

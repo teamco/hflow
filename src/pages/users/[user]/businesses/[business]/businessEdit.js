@@ -16,7 +16,8 @@ import BusinessMenu from 'pages/users/[user]/businesses/metadata/business.menu';
 import SaveButton from 'components/Buttons/save.button';
 
 import { fromForm } from 'utils/object';
-import { effectHook, isLoading } from 'utils/state';
+import { isLoading } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 import styles from 'pages/users/[user]/businesses/businesses.module.less';
 import menuStyles from 'components/menu.less';

@@ -14,7 +14,7 @@ import { Can } from 'utils/auth/can';
 import { fromForm } from 'utils/object';
 
 import styles from 'pages/users/users.module.less';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 const { Table } = Main;
 

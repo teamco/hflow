@@ -4,7 +4,7 @@ import LandingPage from 'layouts/landing/page';
 import LandingContent from 'pages/landing/sections/landing.content';
 
 import styles from 'pages/landing/landing.module.less';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 export const landing = (props) => {
   const {

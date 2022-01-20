@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Button, PageHeader } from 'antd';
 import { SaveOutlined, UserSwitchOutlined } from '@ant-design/icons';
-import { Can } from 'utils/auth/can';
 
-import Page from 'components/Page';
-import Main from 'components/Main';
+import { Can } from '@/utils/auth/can';
+import { isLoading } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
-import { effectHook, isLoading } from 'utils/state';
-import { metadata } from 'pages/users/users.metadata';
-import { expendableProfile } from 'pages/users/[user]/profile/profile.metadata';
-import SendMessage from 'pages/users/metadata/send.message';
+import Page from '@/components/Page';
+import Main from '@/components/Main';
 
-import styles from 'pages/users/users.module.less';
+import { metadata } from '@/pages/users/users.metadata';
+import { expendableProfile } from '@/pages/users/[user]/profile/profile.metadata';
+import SendMessage from '@/pages/users/metadata/send.message';
+
+import styles from '@/pages/users/users.module.less';
 import { userCardMetadata } from './metadata/user.card';
 import ExportButton from '@/components/Buttons/export.button';
 

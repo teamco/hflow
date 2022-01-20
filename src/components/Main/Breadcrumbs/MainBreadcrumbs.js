@@ -5,7 +5,7 @@ import { NavLink } from 'umi';
 import { withBreadcrumbs } from 'utils/breadcrumbs';
 
 import { routes } from '/routes';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 /**
  * This component is wrapped in withBreadcrumbs which automatically

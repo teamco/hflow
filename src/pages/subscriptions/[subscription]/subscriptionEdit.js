@@ -16,7 +16,8 @@ import { SubscriptionDiscount } from '@/pages/subscriptions/[subscription]/form/
 import SubscriptionMenu from '@/pages/subscriptions/metadata/subscriptions.menu';
 
 import { fromForm } from '@/utils/object';
-import { effectHook, isLoading } from '@/utils/state';
+import { isLoading } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 import menuStyles from '@/components/menu.less';
 import styles from '@/pages/subscriptions/subscriptions.module.less';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { effectHook } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 /**
  * @constant
