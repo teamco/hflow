@@ -36,5 +36,5 @@ jobs:
         headless: true
         record: false
         wait-on: 'http://localhost:8003'
-        start: cross-env PORT=8003 umi dev
+        start: npm run start:linux
         wait-on-timeout: 120
