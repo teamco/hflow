@@ -6,6 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+.snap
+
 node_modules
 .idea
 .vscode
