@@ -23,5 +23,6 @@ jobs:
       uses: cypress-io/github-action@v2
       with:
         record: false
-        start: start:linux
         wait-on: 'http://localhost:8003'
+        start: cross-env PORT=8003 umi dev
+        wait-on-timeout: 120
