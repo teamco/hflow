@@ -1,0 +1,14 @@
+{
+    "baseUrl": "http://localhost:8003",
+    "env": {
+        "serverUrl": "",
+        "loginToken": ""
+    },
+    "videoUploadOnPasses": false,
+    "retries": {
+        "runMode": 2,
+        "openMode": 0
+    },
+    "video": false,
+    "screenshotsOnRunFailure": false
+}
