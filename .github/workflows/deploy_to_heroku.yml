@@ -33,10 +33,10 @@ jobs:
           npm -v
           yarn -v
                          
-    - name: Build project
-      run: |
-        npm install
-        npm run build
+    # - name: Build project
+    #   run: |
+    #     npm install
+    #     npm run build
         
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    # - name: Build the Docker image
+    #   run: docker build . --file Dockerfile --tag hflow_img:$(date +%s)
