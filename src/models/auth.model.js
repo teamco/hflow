@@ -11,6 +11,17 @@ import { createServerProfile, getXHRToken } from '@/services/authentication.serv
 
 const MODEL_NAME = 'authModel';
 
+const DEFAULT_STATE = {
+  user: null,
+  serverUserId: null,
+  token: {
+    guest: null,
+    access: null,
+    refresh: null,
+    expiredAt: null
+  }
+};
+
 /**
  * @export
  * @default
@@ -18,19 +29,12 @@ const MODEL_NAME = 'authModel';
 export default dvaModelExtend(commonModel, {
   namespace: MODEL_NAME,
   state: {
+    ...DEFAULT_STATE,
     MIN_PASSWORD_LENGTH: 8,
     registerData: {},
-    user: null,
     refreshSignIn: true,
     isSignedOut: false,
-    ability: null,
-    serverUserId: null,
-    token: {
-      guest: null,
-      access: null,
-      refresh: null,
-      expiredAt: null
-    }
+    ability: null
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
@@ -315,7 +319,7 @@ export default dvaModelExtend(commonModel, {
         return yield put({
           type: 'updateState',
           payload: {
-            user: null,
+            ...DEFAULT_STATE,
             isSignedOut: false,
             refreshSignIn: true,
             ability: yield call(defineAbilityFor, { user: null })
@@ -340,7 +344,7 @@ export default dvaModelExtend(commonModel, {
           yield put({
             type: 'updateState',
             payload: {
-              user: null,
+              ...DEFAULT_STATE,
               isSignedOut: true,
               refreshSignIn: true,
               ability: yield call(defineAbilityFor, { user: null })
