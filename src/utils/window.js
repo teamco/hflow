@@ -21,26 +21,6 @@ export const scrollToRef = ({ id }) => {
 
 /**
  * @export
- * @param useState
- * @param useLayoutEffect
- * @return {*}
- */
-export function useWindowSize(useState, useLayoutEffect) {
-  const event = 'orientationchange' in window ? 'orientationchange' : 'resize';
-  const [size, setSize] = useState([0, 0]);
-  useLayoutEffect(() => {
-    const { innerWidth, innerHeight, addEventListener, removeEventListener } = window;
-    const updateSize = () => (setSize([innerWidth, innerHeight]));
-    addEventListener(event, updateSize);
-    updateSize();
-    return () => removeEventListener(event, updateSize);
-  }, []);
-
-  return size;
-}
-
-/**
- * @export
  * @return {boolean}
  */
 export function isLocalHost() {

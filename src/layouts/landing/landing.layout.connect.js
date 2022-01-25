@@ -25,6 +25,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onUpdateDocumentMeta(meta) {
     dispatch({ type: 'appModel/updateDocumentMeta', payload: { meta } });
+  },
+  onOnline(isOnline = window.navigator.onLine) {
+    dispatch({ type: 'appModel/handleOnline', payload: { isOnline } });
   }
 });
 

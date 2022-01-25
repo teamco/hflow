@@ -3,13 +3,16 @@
  * @type {{initializeApp, auth}}
  */
 import firebase from 'firebase/app';
-import { firebaseConfig } from 'services/config/firebase.config';
 import { message } from 'antd';
 import capitalize from 'capitalize-first-letter';
 
 import 'firebase/auth';
 import 'firebase/firestore';
-import { errorDeleteMsg, errorSaveMsg, successDeleteMsg, successSaveMsg } from 'utils/message';
+
+import { firebaseConfig } from '@/services/config/firebase.config';
+
+import { errorDeleteMsg, errorSaveMsg, successDeleteMsg, successSaveMsg } from '@/utils/message';
+import i18n from '@/utils/i18n';
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
@@ -53,22 +56,32 @@ export const fbSignOut = async () => {
  * @param {boolean} [notice]
  */
 export const fbAdd = async ({ collection, data = {}, notice = true }) => {
-  return await db.collection(collection).add(data).then(async (docRef) => {
-    const data = (await docRef.get()).data();
-    notice && successSaveMsg(false, capitalize(collection));
+  if (window.navigator.onLine) {
+    return await db.collection(collection).add(data).then(async (docRef) => {
+      const data = (await docRef.get()).data();
+      notice && successSaveMsg(false, capitalize(collection));
 
-    return {
-      docId: docRef.id,
-      data
-    };
-  }).catch(async error => {
+      return {
+        docId: docRef.id,
+        data
+      };
+    }).catch(async error => {
+      if (notice) {
+        await message.error(error.message);
+        errorSaveMsg(false, capitalize(collection));
+      }
+      console.error(`Create: ${collection}\n`, error);
+      throw new Error(error);
+    });
+  } else {
+    const error = i18n.t('error:noConnection');
     if (notice) {
-      await message.error(error.message);
+      await message.error(error);
       errorSaveMsg(false, capitalize(collection));
     }
     console.error(`Create: ${collection}\n`, error);
     throw new Error(error);
-  });
+  }
 };
 
 /**

@@ -26,7 +26,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.16",
-    "antd": "^4.18.4",
+    "antd": "^4.18.5",
     "antd-img-crop": "^4.1.0",
     "capitalize-first-letter": "^1.0.0",
     "classnames": "^2.3.1",
@@ -36,7 +36,7 @@
     "firebase": "^8.10.0",
     "generate-password": "^1.7.0",
     "gravatar": "^1.8.2",
-    "i18next": "^21.6.5",
+    "i18next": "^21.6.7",
     "i18next-browser-languagedetector": "^6.1.2",
     "i18next-xhr-backend": "^3.2.2",
     "lodash": "^4.17.21",
@@ -57,29 +57,29 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@testing-library/dom": "^8.11.1",
+    "@testing-library/dom": "^8.11.2",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@types/react": "^17.0.38",
     "@umijs/babel-preset-umi": "^3.5.20",
-    "@umijs/preset-react": "^2.1.0",
+    "@umijs/preset-react": "^2.1.1",
     "@umijs/test": "^3.5.20",
     "colors": "^1.4.0",
     "cross-env": "^7.0.3",
-    "cypress": "9.2.1",
+    "cypress": "^9.3.1",
     "dayjs": "^1.10.7",
     "enzyme": "^3.11.0",
-    "lint-staged": "^12.1.4",
+    "lint-staged": "^12.3.1",
     "moment": "^2.29.1",
     "prettier": "^2.5.1",
-    "prop-types": "^15.8.0",
+    "prop-types": "^15.8.1",
     "react-test-renderer": "^17.0.2",
     "redux-logger": "^3.0.6",
     "rimraf": "^3.0.2",
     "yorkie": "^2.0.0"
   },
-  "packageManager": "npm@6.x",
+  "packageManager": "npm@8.x",
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   }
 }

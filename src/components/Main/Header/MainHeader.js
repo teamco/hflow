@@ -1,15 +1,17 @@
 import React from 'react';
-import { Badge, Layout } from 'antd';
-import SignIn from 'components/Authentication/signIn.connect';
-import { BellOutlined, BellTwoTone } from '@ant-design/icons';
 import { NavLink } from 'umi';
+import { Badge, Layout, Tooltip } from 'antd';
+import { BellOutlined, BellTwoTone, CloudTwoTone } from '@ant-design/icons';
+
+import SignIn from '@/components/Authentication/signIn.connect';
+import { COLORS } from '@/utils/colors';
 
 const { Header } = Layout;
 
 export default class MainHeader extends React.Component {
 
   render() {
-    const { t, user, badge: { count = 0, overflow = 10 } } = this.props;
+    const { t, user, isOnline, badge: { count = 0, overflow = 10 } } = this.props;
 
     return (
         <Header className={'site-layout-background'}
@@ -41,6 +43,11 @@ export default class MainHeader extends React.Component {
                   ) : (<BellOutlined/>)}
                 </NavLink>
             )}
+            <div className={'site-connection'}>
+              <Tooltip title={isOnline ? t('msg:connected') : t('error:noConnection')}>
+                <CloudTwoTone twoToneColor={isOnline ? COLORS.success : COLORS.danger}/>
+              </Tooltip>
+            </div>
           </div>
         </Header>
     );

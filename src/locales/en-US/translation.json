@@ -18,6 +18,7 @@
     "userExist": "The user already exist",
     "userAssigned": "The user already assigned to business",
     "noEmail": "Email address is required",
+    "noConnection": "No internet connection",
     "na": "None"
   },
   "user": {
@@ -156,6 +157,7 @@
     "errorSentPasswordResetEmail": "Failed to send Password Reset",
     "linkSent": "The link was successfully sent",
     "errorLinkSend": "Failed to send link",
+    "connected": "Successfully connected to the network",
     "noData": "No Data",
     "unsaved": "You have unsaved changes that will be lost"
   },

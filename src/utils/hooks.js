@@ -196,22 +196,42 @@ export function useAbortableEffect(effect, dependencies = []) {
  * @param {array} [deps]
  * @param {function} [apiCall]
  * @param {number} [ts]
+ * @param {boolean} [debug]
  */
-export function effectHook(effect = stub, deps = [], apiCall = promisedStub, ts = 10) {
+export function effectHook(effect = stub, deps = [], apiCall = promisedStub, ts = 10, debug = false) {
   useEffect(() => {
     let isMounted = true;
 
     apiCall(ts).then(() => {
       if (isMounted) {
-        console.log('mounted', effect, deps)
+        debug && console.info('Mounted', effect, deps);
         effect();
       }
     });
 
     return () => {
-      console.log('unmounted', effect, deps)
+      debug && console.info('UnMounted', effect, deps);
       isMounted = false;
     };
   }, [...deps]);
 }
 
+/**
+ * @export
+ * @param useState
+ * @param useLayoutEffect
+ * @return {*}
+ */
+export function useWindowSize(useState, useLayoutEffect) {
+  const event = 'orientationchange' in window ? 'orientationchange' : 'resize';
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    const { innerWidth, innerHeight, addEventListener, removeEventListener } = window;
+    const updateSize = () => (setSize([innerWidth, innerHeight]));
+    addEventListener(event, updateSize);
+    updateSize();
+    return () => removeEventListener(event, updateSize);
+  }, []);
+
+  return size;
+}

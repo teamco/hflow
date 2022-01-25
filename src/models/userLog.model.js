@@ -3,7 +3,7 @@ import dvaModelExtend from 'dva-model-extend';
 import _ from 'lodash';
 
 import { commonModel } from 'models/common.model';
-import { fbAdd, fbReadAll, getRef } from 'services/firebase.service';
+import { fbReadAll, getRef } from 'services/firebase.service';
 import { isLocalHost } from 'utils/window';
 
 /**
@@ -47,29 +47,29 @@ export default dvaModelExtend(commonModel, {
     * monitor({ payload }, { call, select }) {
       const { referrer } = yield select(state => state.appModel);
       const { user } = yield select(state => state.authModel);
-      const { createdAt, metadata, namespace, eventType, duration } = payload;
-
-      const data = {
-        createdAt,
-        referrer,
-        metadata,
-        namespace,
-        eventType,
-        createdByRef: null,
-        duration: 0
-      };
+      const { namespace, eventType, duration } = payload;
 
       const userRef = getRef({
         collection: 'users',
         doc: user?.uid
       });
 
-      typeof duration !== 'undefined' && (data.duration = duration);
-      typeof user?.email !== 'undefined' && (data.createdBy = user?.email);
+      const data = {
+        referrer,
+        location,
+        namespace,
+        eventType,
+        duration,
+        metadata: {
+          createdAt: +(new Date()),
+          createdByRef: userRef
+        }
+      };
 
-      const logExist = isLocalHost() ?
-          null :
-          yield call(fbAdd, { collection: 'userLogs', data, notice: false });
+      const logExist = isLocalHost() ? null : null;
+
+      // TODO (teamco): Provide user log abilities.
+      // yield call(fbAdd, { collection: 'userLogs', data, notice: false });
 
       if (logExist?.docId) {
         // TODO (teamco): Do something

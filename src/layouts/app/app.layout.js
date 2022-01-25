@@ -3,15 +3,16 @@ import { Helmet } from 'umi';
 import { Form, Layout } from 'antd';
 import * as queryString from 'querystring';
 
-import Login from 'pages/login';
-import Page404 from 'pages/404';
+import Login from '@/pages/login';
+import Page404 from '@/pages/404';
 
-import Loader from 'components/Loader';
-import Main from 'components/Main';
+import Loader from '@/components/Loader';
+import Main from '@/components/Main';
 
-import { delayedFn } from 'utils/timestamp';
+import { delayedFn } from '@/utils/timestamp';
 
-import 'utils/i18n';
+import '@/utils/i18n';
+
 import './app.layout.less';
 
 const { Content } = Layout;
@@ -38,11 +39,13 @@ export const AppLayout = (props) => {
     onToggleMenu,
     onUpdate404,
     onUpdateDocumentMeta,
-    onRoute
+    onRoute,
+    onOnline
   } = props;
 
   const {
     is404,
+    isOnline,
     language,
     menus,
     collapsedMenu,
@@ -64,7 +67,7 @@ export const AppLayout = (props) => {
   const { user, ability } = authModel;
   const { badge } = notificationModel;
 
-  const headerProps = { t, user, badge };
+  const headerProps = { t, user, badge, isOnline };
 
   // TODO (teamco): Find better solution.
   const isAuth = user || mode === 'signIn';

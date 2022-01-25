@@ -3,12 +3,7 @@ import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from '@/models/common.model';
 import { fbAdd, fbSignOut, fbUpdate } from '@/services/firebase.service';
-import {
-  findUser,
-  gravatarUrl,
-  handleUserSessionTimeout,
-  updateFbUserEmail
-} from '@/services/user.service';
+import { findUser, gravatarUrl, handleUserSessionTimeout, updateFbUserEmail } from '@/services/user.service';
 import { defineAbilityFor } from '@/utils/auth/ability';
 import { defineInstance } from '@/utils/instance';
 import { monitorHistory } from '@/utils/history';

@@ -22,6 +22,7 @@ export default dvaModelExtend(commonModel, {
   namespace: MODEL_NAME,
   state: {
     is404: false,
+    isOnline: false,
     interval: {
       timeout: 60000,
       enabled: true
@@ -89,12 +90,7 @@ export default dvaModelExtend(commonModel, {
 
     * updateDocumentMeta({ payload }, { put, select }) {
       const { meta } = yield select(state => state[MODEL_NAME]);
-      yield put({
-        type: 'updateState',
-        payload: {
-          meta: { ...meta, ...payload.meta }
-        }
-      });
+      yield put({ type: 'updateState', payload: { meta: { ...meta, ...payload.meta } } });
     },
 
     * update404({ payload }, { put }) {
@@ -102,45 +98,29 @@ export default dvaModelExtend(commonModel, {
     },
 
     * updateReferrer({ payload }, { put }) {
-      yield put({
-        type: 'updateState',
-        payload: {
-          referrer: payload.referrer
-        }
-      });
+      yield put({ type: 'updateState', payload: { referrer: payload.referrer } });
     },
 
     * toggleMenu({ payload }, { put }) {
-      yield put({
-        type: 'updateState',
-        payload: {
-          collapsedMenu: payload.collapse
-        }
-      });
+      yield put({ type: 'updateState', payload: { collapsedMenu: payload.collapse } });
     },
 
     * activeModel({ payload }, { put }) {
-      yield put({
-        type: 'updateState',
-        payload: {
-          activeModel: { ...payload }
-        }
-      });
+      yield put({ type: 'updateState', payload: { activeModel: { ...payload } } });
     },
 
     * checkActiveTab({ payload }, { put }) {
-      yield put({
-        type: 'updateState',
-        payload: {
-          activeTab: payload
-        }
-      });
+      yield put({ type: 'updateState', payload: { activeTab: payload } });
     },
 
     * notification(_, { call, put, select }) {
       console.log('Notification');
 
       yield put({ type: 'notificationModel/getCount' });
+    },
+
+    * handleOnline({ payload }, { put }) {
+      yield put({ type: 'updateState', payload });
     }
   },
 

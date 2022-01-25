@@ -3,14 +3,14 @@ import { Helmet } from 'umi';
 import { Form, Layout } from 'antd';
 import ReactInterval from 'react-interval';
 
-import Loader from 'components/Loader';
+import Loader from '@/components/Loader';
 
-import { AbilityContext } from 'utils/auth/can';
+import { AbilityContext } from '@/utils/auth/can';
 
-import 'utils/i18n';
+import { effectHook } from '@/utils/hooks';
+import '@/utils/i18n';
 
 import styles from './landing.layout.module.less';
-import { effectHook } from '@/utils/hooks';
 
 const { Content } = Layout;
 
@@ -28,7 +28,8 @@ export const LandingLayout = (props) => {
     appModel,
     authModel,
     loading,
-    onNotification
+    onNotification,
+    onOnline
   } = props;
 
   const {
@@ -59,6 +60,9 @@ export const LandingLayout = (props) => {
           <ReactInterval timeout={timeout}
                          enabled={enabled}
                          callback={onNotification}/>
+          <ReactInterval timeout={10000}
+                         enabled={enabled}
+                         callback={onOnline}/>
           <Suspense fallback={<Loader fullScreen spinning={loading.effects['appModel/query']}/>}>
             <Layout style={{ minHeight: '100vh' }} key={language}>
               <Layout className={styles.siteLayout}>

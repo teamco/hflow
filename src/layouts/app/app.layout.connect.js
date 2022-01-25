@@ -1,4 +1,4 @@
-import { history, connect } from 'umi';
+import { connect, history } from 'umi';
 import { withTranslation } from 'react-i18next';
 import { AppLayout } from './app.layout';
 
