@@ -7,6 +7,7 @@ import { findUser, gravatarUrl, handleUserSessionTimeout, updateFbUserEmail } fr
 import { defineAbilityFor } from '@/utils/auth/ability';
 import { defineInstance } from '@/utils/instance';
 import { monitorHistory } from '@/utils/history';
+import { createServerProfile, getXHRToken } from '@/services/authentication.service';
 
 const MODEL_NAME = 'authModel';
 
@@ -22,7 +23,14 @@ export default dvaModelExtend(commonModel, {
     user: null,
     refreshSignIn: true,
     isSignedOut: false,
-    ability: null
+    ability: null,
+    serverUserId: null,
+    token: {
+      guest: null,
+      access: null,
+      refresh: null,
+      expiredAt: null
+    }
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
@@ -104,72 +112,135 @@ export default dvaModelExtend(commonModel, {
       }
 
       if (_userExist?.docId) {
-        const _user = { ..._userExist.data, id: _userExist.docId };
 
-        // Update user
-        yield call(fbUpdate, {
-          collection: 'users',
-          doc: _userExist.docId,
-          data: {
-            ..._user,
-            roles: [...(_user?.roles || [])]
-          }
-        });
-
-        // Finish business user registration
-        if (registerData.isBusinessUser) {
-          yield put({
-            type: 'businessModel/finishRegistration',
-            payload: { _userExist }
-          });
-        }
-
-        // Define user abilities
-        const ability = yield call(defineAbilityFor, {
-          user: _user,
-          userId: _userExist?.docId
-        });
-
-        yield put({
-          type: 'updateState',
-          payload: {
-            user: { ..._user },
-            registerData: {},
-            isSignedOut: false,
-            ability
-          }
-        });
-
-        yield put({ type: 'appModel/notification' });
-
-        yield call(handleUserSessionTimeout);
-
-        // history.push(`/admin/users/${_userExist?.docId}`);
+        yield put({ type: 'updateProfile', payload: { _userExist, registerData } });
 
       } else if (refreshSignIn) {
 
-        // Create user
-        _userExist = yield call(fbAdd, { collection: 'users', data: userProps });
-
-        yield put({
-          type: 'updateState',
-          payload: {
-            isSignedOut: false,
-            refreshSignIn: false
-          }
-        });
-
-        return yield put({
-          type: 'signIn',
-          payload: {
-            user: _userExist.data,
-            _userExist
-          }
-        });
+        yield put({ type: 'createProfile', payload: { userProps } });
 
       } else {
         // TODO (teamco): Show error.
       }
+    },
+
+    * createProfile({ payload }, { call, put }) {
+      const { userProps } = payload;
+
+      // Create user
+      const _userExist = yield call(fbAdd, { collection: 'users', data: userProps });
+
+      yield put({
+        type: 'updateState',
+        payload: {
+          isSignedOut: false,
+          refreshSignIn: false
+        }
+      });
+
+      yield put({ type: 'signIn', payload: { user: _userExist.data, _userExist } });
+    },
+
+    * createServerProfile({ payload }, { call, put, select }) {
+      const { token } = yield select(state => state[MODEL_NAME]);
+      const { _userExist } = payload;
+      const { serverUserId, emailVerified } = _userExist.data;
+
+      if (!serverUserId) {
+        const guestToken = yield call(getXHRToken);
+
+        yield put({ type: 'updateState', payload: { token: { ...token, guest: guestToken?.access_token } } });
+
+        if (emailVerified) {
+          const { data } = yield call(createServerProfile, {
+            uid: _userExist.docId,
+            token: guestToken?.access_token
+          });
+
+          yield put({ type: 'updateState', payload: { serverUserId: data?.serverUserId } });
+
+          // Update user
+          yield call(fbUpdate, {
+            collection: 'users',
+            doc: _userExist.docId,
+            data: { serverUserId: data?.serverUserId }
+          });
+        }
+      }
+    },
+
+    * updateToken({ payload }, { call, put, select }) {
+      const { token } = yield select(state => state[MODEL_NAME]);
+
+      const { user } = payload;
+
+      const { data: { access_token, refresh_token, token_validity } } = yield call(getXHRToken, {
+        username: user.id,
+        password: user.email
+      });
+
+      yield put({
+        type: 'updateState',
+        payload: {
+          token: {
+            ...token,
+            access: access_token,
+            refresh: refresh_token,
+            expiredAt: parseInt(token_validity, 10)
+          }
+        }
+      });
+    },
+
+    /**
+     * @function
+     * @param {{
+     *  registerData: {isBusinessUser: boolean},
+     *  _userExist: {data, docId: string, serverUserId: string, emailVerified: boolean}
+     * }} payload
+     * @param call
+     * @param put
+     * @return {Generator<*, void, *>}
+     */
+    * updateProfile({ payload }, { call, put }) {
+      const { _userExist, registerData } = payload;
+      const _user = { ..._userExist.data, id: _userExist.docId };
+
+      yield put({ type: 'createServerProfile', payload: { _userExist } });
+      yield put({ type: 'updateToken', payload: { user: _user } });
+
+      const data = { ..._user, roles: [...(_user?.roles || [])] };
+
+      // Update user
+      yield call(fbUpdate, {
+        collection: 'users',
+        doc: _user.id,
+        data
+      });
+
+      // Finish business user registration
+      if (registerData.isBusinessUser) {
+        yield put({ type: 'businessModel/finishRegistration', payload: { _userExist } });
+      }
+
+      // Define user abilities
+      const ability = yield call(defineAbilityFor, { user: _user, userId: _user.id });
+
+      yield put({
+        type: 'updateState',
+        payload: {
+          user: { ..._user },
+          registerData: {},
+          isSignedOut: false,
+          ability
+        }
+      });
+
+      yield put({ type: 'appModel/notification' });
+
+      yield call(handleUserSessionTimeout);
+
+      // history.push(`/admin/users/${_userExist?.docId}`);
     },
 
     * registerData({ payload }, { call, put }) {

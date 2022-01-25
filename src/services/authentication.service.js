@@ -1,7 +1,7 @@
 import { message } from 'antd';
 
-import request from 'utils/request';
-import { API } from 'services/config/api.config';
+import request from '@/utils/request';
+import { API } from '@/services/config/api.config';
 
 const { METHOD, HEADER_TYPE, CONTENT_TYPE } = request;
 
@@ -25,13 +25,13 @@ const handleError = async (error, notice) => {
 
 /**
  * @export
- * @param props
+ * @param [props]
  * @return {GlobalConfig.Promise<*>|undefined}
  */
-export const getXHRToken = (props) => {
+export const getXHRToken = (props = {}) => {
   const {
-    username = 'andrewp',
-    password = 'password',
+    username = 'guest',
+    password = 'guest',
     notice
   } = props;
 
@@ -56,19 +56,29 @@ export const getXHRToken = (props) => {
  * @export
  * @param props
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ * @example
+ * updateFeature = async ({ id, data }) => {
+ *   return xhrRequest({
+ *     url: API.features.get,
+ *     method: request.METHOD.put,
+ *     featureKey: id,
+ *     data
+ *   });
+ * };
  */
 export const xhrRequest = async (props) => {
-  const {
+  let {
     url,
     data = {},
     user,
     password,
     method = METHOD.post,
     notice = true,
+    token,
     ...args
   } = props;
 
-  const token = await getXHRToken({ user, password, notice });
+  token = token || (await getXHRToken({ user, password, notice }));
 
   const opts = request.config({
     url,
@@ -80,11 +90,26 @@ export const xhrRequest = async (props) => {
     ...args
   });
 
-  return request.xhr( {
+  return request.xhr({
         ...opts,
         ...{ data }
       },
       notice,
       async (error) => await handleError(error, notice)
   );
+};
+
+/**
+ * @export
+ * @async
+ * @param {string} uid
+ * @param {string} token
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ */
+export const createServerProfile = async ({ uid, token }) => {
+  return xhrRequest({
+    url: API.users.get,
+    userKey: uid,
+    token
+  });
 };

@@ -49,11 +49,11 @@ export const API_CONFIG = () => {
 
 export const API = {
   auth: {
-    getToken: 'authenticate',
-    currentUser: 'current_user'
+    getToken: 'authenticate'
   },
   users: {
-    getUser: 'users/:userKey'
+    get: 'users/:userKey',
+    store: 'users'
   },
   features: {
     get: 'features/:featureKey',
