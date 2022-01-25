@@ -4,6 +4,11 @@
  */
 import short from 'short-uuid';
 
+import i18n from '@/utils/i18n';
+import { message } from 'antd';
+import { errorSaveMsg } from '@/utils/message';
+import capitalize from 'capitalize-first-letter';
+
 /**
  * @constant
  * @export
@@ -65,3 +70,24 @@ export const isNew = id => id === 'new';
  * @return {string}
  */
 export const custDiscountType = type => type === '%' ? 'Percent' : 'Currency';
+
+/**
+ * @export
+ * @param {string} collection
+ * @param {boolean} notice
+ * @return {boolean}
+ * @example
+ * networkConnection('users', true)
+ */
+export const networkConnection = (collection, notice) => {
+  if (window.navigator.onLine) {
+    return true;
+  } else {
+    const error = i18n.t('error:noConnection');
+    if (notice) {
+      message.error(error).then(() => errorSaveMsg(false, capitalize(collection)));
+    }
+    console.error(`Create: ${collection}\n`, error);
+    return false;
+  }
+};
