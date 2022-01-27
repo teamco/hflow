@@ -38,12 +38,12 @@ export const getNotifications = async ({ userId, email }) => {
     optional: { order: 'metadata.createdAt' }
   });
 
-  createdBy.forEach(doc => {
+  createdBy?.forEach(doc => {
     const _data = doc.data();
     sent.push(_.merge(_data, { id: doc.id }));
   });
 
-  sentTo.forEach(doc => {
+  sentTo?.forEach(doc => {
     const _data = doc.data();
     inbox.push(_.merge(_data, { id: doc.id }));
   });
