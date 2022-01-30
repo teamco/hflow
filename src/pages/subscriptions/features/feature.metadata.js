@@ -12,7 +12,7 @@ import { NavLink } from 'umi';
 import { FeatureMenu } from './metadata/feature.menu';
 
 import styles from './features.module.less';
-import menuStyles from 'components/menu.less';
+import menuStyles from '@/components/menu.less';
 import { COLORS } from '@/utils/colors';
 
 /**

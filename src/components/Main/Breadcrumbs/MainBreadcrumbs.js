@@ -2,7 +2,7 @@ import React from 'react';
 import { Breadcrumb } from 'antd';
 import { withTranslation } from 'react-i18next';
 import { NavLink } from 'umi';
-import { withBreadcrumbs } from 'utils/breadcrumbs';
+import { withBreadcrumbs } from '@/utils/breadcrumbs';
 
 import { routes } from '/routes';
 import { effectHook } from '@/utils/hooks';

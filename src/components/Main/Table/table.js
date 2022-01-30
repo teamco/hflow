@@ -2,7 +2,7 @@ import { Table } from 'antd';
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 
-import styles from 'components/Main/Table/table.module.less';
+import styles from '@/components/Main/Table/table.module.less';
 
 /**
  * @function

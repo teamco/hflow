@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'antd';
 import classnames from 'classnames';
 
-import styles from 'components/Subscription/subscription.module.less';
+import styles from '@/components/Subscription/subscription.module.less';
 
 const { Meta } = Card;
 

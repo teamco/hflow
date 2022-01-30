@@ -2,7 +2,7 @@ import { Layout, Menu } from 'antd';
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { NavLink } from 'umi';
-import { abilityMenuItem } from 'utils/abilityComponent/abilityMenuItem';
+import { abilityMenuItem } from '@/utils/abilityComponent/abilityMenuItem';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;

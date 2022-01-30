@@ -1,11 +1,11 @@
 import React from 'react';
 import { NavLink } from 'umi';
-import { COLORS } from 'utils/colors';
+import { COLORS } from '@/utils/colors';
 import { DeleteTwoTone, ControlOutlined } from '@ant-design/icons';
 import { Menu, Popconfirm } from 'antd';
-import { abilityMenuItem } from 'utils/abilityComponent/abilityMenuItem';
+import { abilityMenuItem } from '@/utils/abilityComponent/abilityMenuItem';
 
-import tableStyles from 'components/Main/Table/table.module.less';
+import tableStyles from '@/components/Main/Table/table.module.less';
 
 /**
  * @export

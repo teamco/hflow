@@ -1,8 +1,8 @@
 import React  from 'react';
 import ReactJson from 'react-json-view';
 
-import Page from 'components/Page';
-import Main from 'components/Main';
+import Page from '@/components/Page';
+import Main from '@/components/Main';
 
 import { userLogsMetadata } from 'pages/userLogs/userLogs.metadata';
 import { PageHeader } from 'antd';

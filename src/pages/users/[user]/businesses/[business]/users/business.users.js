@@ -3,15 +3,15 @@ import { useParams } from 'umi';
 import { Button, PageHeader } from 'antd';
 import { UserAddOutlined, UserOutlined } from '@ant-design/icons';
 
-import Page from 'components/Page';
-import Main from 'components/Main';
+import Page from '@/components/Page';
+import Main from '@/components/Main';
 
 import RegisterUser from 'pages/users/[user]/businesses/[business]/users/register';
 import { metadata } from 'pages/users/[user]/businesses/[business]/users/business.users.metadata';
 import { expandable } from 'pages/users/[user]/businesses/[business]/users/metadata/business.user.expandable';
 
-import { Can } from 'utils/auth/can';
-import { fromForm } from 'utils/object';
+import { Can } from '@/utils/auth/can';
+import { fromForm } from '@/utils/object';
 
 import styles from 'pages/users/users.module.less';
 import { effectHook } from '@/utils/hooks';

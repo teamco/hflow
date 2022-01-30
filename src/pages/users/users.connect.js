@@ -1,10 +1,10 @@
 import { connect } from 'umi';
 import { message } from 'antd';
-import i18n from 'utils/i18n';
+import i18n from '@/utils/i18n';
 
 import { withTranslation } from 'react-i18next';
 import { users } from './users';
-import { STATUS } from 'utils/message';
+import { STATUS } from '@/utils/message';
 
 export default connect(
     ({ authModel, userModel, userRoleModel, loading }) => ({

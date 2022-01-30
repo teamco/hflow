@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { FacebookOutlined, GoogleOutlined, TwitterOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
 
-import ErrorModal from 'components/Authentication/modals/error.modal';
-import SignInModal from 'components/Authentication/modals/signin.modal';
-import SignUp from 'components/Authentication/signUp.connect';
-import Page from 'components/Page';
-import Logo from 'components/Logo';
+import ErrorModal from '@/components/Authentication/modals/error.modal';
+import SignInModal from '@/components/Authentication/modals/signin.modal';
+import SignUp from '@/components/Authentication/signUp.connect';
+import Page from '@/components/Page';
+import Logo from '@/components/Logo';
 
 import { isLoading } from '@/utils/state';
 import { effectHook } from '@/utils/hooks';

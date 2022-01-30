@@ -1,6 +1,6 @@
 import { Menu } from 'antd';
 import React from 'react';
-import { stub } from 'utils/function';
+import { stub } from '@/utils/function';
 
 /**
  * @export

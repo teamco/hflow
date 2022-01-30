@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { withTranslation } from 'react-i18next';
 
-import LandingHeader from 'components/Landing/landing.header';
+import LandingHeader from '@/components/Landing/landing.header';
 
 import styles from 'pages/landing/landing.module.less';
 

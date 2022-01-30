@@ -1,7 +1,7 @@
 import { getUsers } from 'services/user.service';
 import { getRef } from 'services/firebase.service';
 
-import { tsToLocaleDateTime } from 'utils/timestamp';
+import { tsToLocaleDateTime } from '@/utils/timestamp';
 
 /**
  * @constant

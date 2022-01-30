@@ -6,11 +6,11 @@ import { custDiscountType, isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
 import { history } from 'umi';
 
-import i18n from 'utils/i18n';
-import { monitorHistory } from 'utils/history';
-import { errorSaveMsg } from 'utils/message';
+import i18n from '@/utils/i18n';
+import { monitorHistory } from '@/utils/history';
+import { errorSaveMsg } from '@/utils/message';
 import { addFeature, getFeature, getFeatures, updateFeature } from 'services/features.service';
-import { setAs } from 'utils/object';
+import { setAs } from '@/utils/object';
 import moment from 'moment';
 import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 

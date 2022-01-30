@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'antd';
 import { CalendarTwoTone, MailTwoTone } from '@ant-design/icons';
-import { tsToLocaleDateTime } from 'utils/timestamp';
-import EmailVerified from 'components/Profile/email.verified';
+import { tsToLocaleDateTime } from '@/utils/timestamp';
+import EmailVerified from '@/components/Profile/email.verified';
 
 import styles from 'pages/users/users.module.less';
 

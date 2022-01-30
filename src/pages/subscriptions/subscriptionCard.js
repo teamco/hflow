@@ -2,10 +2,10 @@ import React from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 
-import { COLORS } from 'utils/colors';
-import { currencyFormat } from 'utils/currency';
-import { stub } from 'utils/function';
-import { sortBy } from 'utils/array';
+import { COLORS } from '@/utils/colors';
+import { currencyFormat } from '@/utils/currency';
+import { stub } from '@/utils/function';
+import { sortBy } from '@/utils/array';
 
 import styles from 'pages/subscriptions/subscriptions.module.less';
 

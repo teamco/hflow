@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Popconfirm } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { isLoading } from 'utils/state';
+import { isLoading } from '@/utils/state';
 
 import i18n from './i18n';
 import { COLORS } from './colors';

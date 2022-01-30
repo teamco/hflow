@@ -1,10 +1,10 @@
 import React from 'react';
 import { cleanup } from '@testing-library/react';
 
-import { expectations } from '../../../../__tests__/helper';
+import { expectations } from '__tests__/helper';
 import Border from '../border';
 
-describe('components/Border', () => {
+describe('@/components/Border', () => {
 
   // Note: running cleanup afterEach is done automatically for you in @testing-library/react@9.0.0 or higher
   // unmount and cleanup DOM after the test is finished.

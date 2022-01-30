@@ -2,11 +2,11 @@ import React from 'react';
 import { Button, Col, Divider, Form, Input, Modal, Row, Tooltip } from 'antd';
 import { FormOutlined, LockTwoTone, LoginOutlined } from '@ant-design/icons';
 
-import { emailPartial } from 'components/partials/email.partial';
+import { emailPartial } from '@/components/partials/email.partial';
 
-import styles from 'components/Authentication/authentication.module.less';
+import styles from '@/components/Authentication/authentication.module.less';
 
-import { isLoading } from 'utils/state';
+import { isLoading } from '@/utils/state';
 
 /**
  * @constant

@@ -2,9 +2,9 @@ import React from 'react';
 import { Input, Select } from 'antd';
 import countryCodes from 'country-codes-list';
 
-import { sortBy } from 'utils/array';
+import { sortBy } from '@/utils/array';
 
-import FormComponents from 'components/Form';
+import FormComponents from '@/components/Form';
 
 /**
  * @constant

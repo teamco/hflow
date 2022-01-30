@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import { effectHook } from '@/utils/hooks';
 
-import Page from 'components/Page';
+import Page from '@/components/Page';
 import Users from 'pages/users';
 import Businesses from 'pages/users/[user]/businesses';
 

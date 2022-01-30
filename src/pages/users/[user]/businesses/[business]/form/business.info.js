@@ -1,10 +1,10 @@
 import React from 'react';
 import { Input, Select } from 'antd';
 
-import { emailProps } from 'components/partials/email.partial';
-import FormComponents from 'components/Form';
-import UploadFile from 'components/Upload';
-import { sortBy } from 'utils/array';
+import { emailProps } from '@/components/partials/email.partial';
+import FormComponents from '@/components/Form';
+import UploadFile from '@/components/Upload';
+import { sortBy } from '@/utils/array';
 
 const { GenericPanel } = FormComponents;
 const { TextArea } = Input;

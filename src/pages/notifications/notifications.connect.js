@@ -2,8 +2,8 @@ import { connect } from 'umi';
 import { withTranslation } from 'react-i18next';
 
 import { notifications } from './notifications';
-import i18n from 'utils/i18n';
-import { STATUS } from 'utils/message';
+import i18n from '@/utils/i18n';
+import { STATUS } from '@/utils/message';
 
 export default connect(
     ({ authModel, notificationModel, loading }) => ({

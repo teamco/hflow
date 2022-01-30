@@ -2,7 +2,7 @@ import { connect } from 'umi';
 import { withTranslation } from 'react-i18next';
 import { businessUsers } from './business.users';
 import { message } from 'antd';
-import i18n from 'utils/i18n';
+import i18n from '@/utils/i18n';
 
 export default connect(
     ({ businessModel, userRoleModel, userModel, loading }) => ({

@@ -7,12 +7,12 @@ import { detailsInfo } from 'services/cross.model.service';
 import { getRef } from 'services/firebase.service';
 import { addCampaign, getAllCampaigns, getCampaign, updateCampaign } from 'services/campaigns.service';
 import { history } from 'umi';
-import i18n from 'utils/i18n';
-import { monitorHistory } from 'utils/history';
-import { errorSaveMsg } from 'utils/message';
+import i18n from '@/utils/i18n';
+import { monitorHistory } from '@/utils/history';
+import { errorSaveMsg } from '@/utils/message';
 import { getAllSubscriptions } from 'services/subscriptions.service';
 import { getFeatures } from 'services/features.service';
-import { setAs } from 'utils/object';
+import { setAs } from '@/utils/object';
 import moment from 'moment';
 import { dateFormat } from '@/utils/timestamp';
 

@@ -10,8 +10,8 @@ import {
   ToolOutlined,
   UserOutlined
 } from '@ant-design/icons';
-import { tsToLocaleDateTime } from 'utils/timestamp';
-import EmailVerified from 'components/Profile/email.verified';
+import { tsToLocaleDateTime } from '@/utils/timestamp';
+import EmailVerified from '@/components/Profile/email.verified';
 
 import { isAdmin, isBusiness, isDeveloper, isTest } from 'services/userRoles.service';
 

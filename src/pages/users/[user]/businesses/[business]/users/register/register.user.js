@@ -3,13 +3,13 @@ import { useParams } from 'umi';
 import { Button, Form, Modal, Select, Tooltip } from 'antd';
 import { FormOutlined } from '@ant-design/icons';
 
-import { emailPartial } from 'components/partials/email.partial';
+import { emailPartial } from '@/components/partials/email.partial';
 import { isOwner } from 'services/userRoles.service';
-import { useFocus } from 'utils/hooks';
+import { useFocus } from '@/utils/hooks';
 import { isLoading } from '@/utils/state';
 import { effectHook } from '@/utils/hooks';
 
-import styles from 'components/Authentication/authentication.module.less';
+import styles from '@/components/Authentication/authentication.module.less';
 
 const { Option } = Select;
 

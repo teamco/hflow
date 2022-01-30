@@ -1,4 +1,4 @@
-import { useDelayedRender } from 'utils/hooks';
+import { useDelayedRender } from '@/utils/hooks';
 
 /**
  * @export

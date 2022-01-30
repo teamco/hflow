@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`@/components/Footer Footer 1`] = `
+<DocumentFragment>
+  <footer
+    class="ant-layout-footer footer"
+    data-testid="footer"
+  />
+</DocumentFragment>
+`;
+
+exports[`components/Footer Footer 1`] = `
+<DocumentFragment>
+  <footer
+    class="ant-layout-footer footer"
+    data-testid="footer"
+  />
+</DocumentFragment>
+`;

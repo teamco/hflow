@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'umi';
 import { Result } from 'antd';
-import Page from 'components/Page';
+import Page from '@/components/Page';
 import { withTranslation } from 'react-i18next';
 
 import styles from 'layouts/app/app.layout.less';
-import { Can } from 'utils/auth/can';
+import { Can } from '@/utils/auth/can';
 
 /**
  * @function

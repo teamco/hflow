@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select } from 'antd';
-import { sortBy } from 'utils/array';
+import { sortBy } from '@/utils/array';
 import _ from 'lodash';
 
 const { Option } = Select;

@@ -1,11 +1,11 @@
 import React  from 'react';
-import Page from 'components/Page';
+import Page from '@/components/Page';
 import userStyles from 'pages/users/users.module.less';
 import { useParams } from 'umi';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
 
-import Main from 'components/Main';
+import Main from '@/components/Main';
 
 import { BusinessAddress } from 'pages/users/[user]/businesses/[business]/form/business.address';
 import { BusinessInfo } from 'pages/users/[user]/businesses/[business]/form/business.info';
@@ -13,14 +13,14 @@ import { BusinessLicense } from 'pages/users/[user]/businesses/[business]/form/b
 import { BusinessTags } from 'pages/users/[user]/businesses/[business]/form/business.tags';
 import BusinessMenu from 'pages/users/[user]/businesses/metadata/business.menu';
 
-import SaveButton from 'components/Buttons/save.button';
+import SaveButton from '@/components/Buttons/save.button';
 
-import { fromForm } from 'utils/object';
+import { fromForm } from '@/utils/object';
 import { isLoading } from '@/utils/state';
 import { effectHook } from '@/utils/hooks';
 
 import styles from 'pages/users/[user]/businesses/businesses.module.less';
-import menuStyles from 'components/menu.less';
+import menuStyles from '@/components/menu.less';
 
 const { Info } = Main;
 

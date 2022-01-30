@@ -4,14 +4,14 @@ import { DownOutlined, PauseCircleTwoTone, PlayCircleTwoTone, SettingOutlined, S
 import { Button, Dropdown, Tag, Tooltip } from 'antd';
 
 import classnames from 'classnames';
-import { tsToLocaleDateTime } from 'utils/timestamp';
+import { tsToLocaleDateTime } from '@/utils/timestamp';
 import BusinessUserMenu from './metadata/business.user.menu';
 
 import { getRoleIcon } from 'pages/users/[user]/profile/profile.metadata';
-import { COLORS } from 'utils/colors';
+import { COLORS } from '@/utils/colors';
 
 import styles from 'pages/users/users.module.less';
-import menuStyles from 'components/menu.less';
+import menuStyles from '@/components/menu.less';
 
 /**
  * @export

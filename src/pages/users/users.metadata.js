@@ -11,16 +11,16 @@ import {
 import { Avatar, Button, Dropdown, Tag, Tooltip } from 'antd';
 
 import classnames from 'classnames';
-import { tsToLocaleDateTime } from 'utils/timestamp';
-import { COLORS } from 'utils/colors';
-import { BRANDS } from 'utils/brands';
+import { tsToLocaleDateTime } from '@/utils/timestamp';
+import { COLORS } from '@/utils/colors';
+import { BRANDS } from '@/utils/brands';
 
 import { showProfileModal } from 'pages/users/metadata/profile.modal';
 import UserMenu from 'pages/users/metadata/users.menu';
 
 import styles from 'pages/users/users.module.less';
-import tableStyles from 'components/Main/Table/table.module.less';
-import menuStyles from 'components/menu.less';
+import tableStyles from '@/components/Main/Table/table.module.less';
+import menuStyles from '@/components/menu.less';
 import { effectHook } from '@/utils/hooks';
 
 /**

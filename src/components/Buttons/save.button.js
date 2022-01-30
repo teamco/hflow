@@ -2,7 +2,7 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { SaveOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import { isLoading } from 'utils/state';
+import { isLoading } from '@/utils/state';
 
 /**
  * @export

@@ -2,9 +2,9 @@ import React from 'react';
 import { Modal, Tag } from 'antd';
 import { CheckCircleTwoTone, LockTwoTone, UnlockTwoTone, WarningTwoTone } from '@ant-design/icons';
 
-import { tsToLocaleDateTime } from 'utils/timestamp';
-import { COLORS } from 'utils/colors';
-import { BRANDS } from 'utils/brands';
+import { tsToLocaleDateTime } from '@/utils/timestamp';
+import { COLORS } from '@/utils/colors';
+import { BRANDS } from '@/utils/brands';
 import { getRoleIcon } from 'pages/users/[user]/profile/profile.metadata';
 
 import styles from '../users.module.less';

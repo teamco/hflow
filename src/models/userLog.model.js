@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import { commonModel } from 'models/common.model';
 import { fbReadAll, getRef } from 'services/firebase.service';
-import { isLocalHost } from 'utils/window';
+import { isLocalHost } from '@/utils/window';
 
 /**
  * @export

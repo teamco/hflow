@@ -1,4 +1,4 @@
-import request from 'utils/request';
+import request from '@/utils/request';
 import { xhrRequest } from 'services/authentication.service';
 import { API } from 'services/config/api.config';
 

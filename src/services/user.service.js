@@ -2,9 +2,9 @@ import { message } from 'antd';
 import _ from 'lodash';
 import gravatar from 'gravatar';
 
-import i18n from 'utils/i18n';
+import i18n from '@/utils/i18n';
 import { fbReadAll, fbReadBy, fbUpdate, firebaseAppAuth } from 'services/firebase.service';
-import { errorSaveMsg } from 'utils/message';
+import { errorSaveMsg } from '@/utils/message';
 import { isAdmin } from 'services/userRoles.service';
 
 /**

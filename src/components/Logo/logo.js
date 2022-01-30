@@ -1,7 +1,7 @@
 import React from 'react';
 import { history } from 'umi';
 
-import styles from 'components/Logo/logo.module.less';
+import styles from '@/components/Logo/logo.module.less';
 
 const logo = props => {
   const { imgSrc, title, description, url } = props;

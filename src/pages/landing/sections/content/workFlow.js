@@ -3,7 +3,7 @@ import { withTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { Col, Row } from 'antd';
 
-import Border from 'components/Border';
+import Border from '@/components/Border';
 
 import styles from 'pages/landing/landing.module.less';
 

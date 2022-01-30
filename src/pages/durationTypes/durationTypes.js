@@ -8,7 +8,7 @@ import FormComponents from '@/components/Form';
 import Main from '@/components/Main';
 
 import { fromForm } from '@/utils/object';
-import { Can } from 'utils/auth/can';
+import { Can } from '@/utils/auth/can';
 
 import styles from '@/pages/durationTypes/durationTypes.module.less';
 import ExportButton from '@/components/Buttons/export.button';

@@ -1,6 +1,6 @@
 import React  from 'react';
 
-import Page from 'components/Page';
+import Page from '@/components/Page';
 
 import styles from 'pages/home/home.module.less';
 import { effectHook } from '@/utils/hooks';

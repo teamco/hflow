@@ -4,10 +4,10 @@ import { Layout, Row, Spin } from 'antd';
 import classnames from 'classnames';
 import { withTranslation } from 'react-i18next';
 
-import { Can } from 'utils/auth/can';
+import { Can } from '@/utils/auth/can';
 import Page403 from 'pages/403';
 
-import styles from 'components/Page/page.module.less';
+import styles from '@/components/Page/page.module.less';
 
 const { Content } = Layout;
 

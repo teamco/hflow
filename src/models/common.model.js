@@ -2,7 +2,7 @@ import { getEntityFormIdx } from 'services/common.service';
 import { message } from 'antd';
 import { history } from 'umi';
 import { merge } from 'lodash';
-import i18n from 'utils/i18n';
+import i18n from '@/utils/i18n';
 import { fbFindById } from '@/services/firebase.service';
 
 const DEFAULT_FORM = [

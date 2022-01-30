@@ -6,9 +6,9 @@ import classnames from 'classnames';
 
 import { BellTwoTone, CommentOutlined, HeartTwoTone, PlusOutlined } from '@ant-design/icons';
 
-import SignIn from 'components/Authentication/signIn.connect';
+import SignIn from '@/components/Authentication/signIn.connect';
 
-import styles from 'components/Landing/landing.module.less';
+import styles from '@/components/Landing/landing.module.less';
 
 /**
  * @export

@@ -3,9 +3,9 @@ import { cleanup } from '@testing-library/react';
 
 import { Footer } from '../footer';
 
-import { expectations } from '../../../../__tests__/helper';
+import { expectations } from '__tests__/helper';
 
-describe('components/Footer', () => {
+describe('@/components/Footer', () => {
 
   // Note: running cleanup afterEach is done automatically for you in @testing-library/react@9.0.0 or higher
   // unmount and cleanup DOM after the test is finished.

@@ -1,4 +1,4 @@
-import { abilityMenuItem } from 'utils/abilityComponent/abilityMenuItem';
+import { abilityMenuItem } from '@/utils/abilityComponent/abilityMenuItem';
 
 export default {
   abilityMenuItem

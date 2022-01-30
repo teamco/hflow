@@ -81,7 +81,8 @@ const ExportButton = props => {
 
   return (
       <Can I={'export'} a={component}>
-        <Dropdown overlay={menu}>
+        <Dropdown overlay={menu}
+                  data-testid={'export-btn'}>
           <Button size={'small'}
                   loading={loading}
                   disabled={disabled}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { findObjectValue } from 'utils/object';
+import { findObjectValue } from '@/utils/object';
 
 import GenericPanel from './GenericPanel';
 import GenericTabs from './GenericTabs';
@@ -11,7 +11,7 @@ import Phone from './phone';
 import { Tooltip } from 'antd';
 import { CheckCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
 
-import { COLORS } from 'utils/colors';
+import { COLORS } from '@/utils/colors';
 
 /**
  * @export

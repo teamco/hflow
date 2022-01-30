@@ -2,13 +2,13 @@ import React  from 'react';
 import { Form, PageHeader } from 'antd';
 import { FontSizeOutlined } from '@ant-design/icons';
 
-import Page from 'components/Page';
-import SaveButton from 'components/Buttons/save.button';
-import FormComponents from 'components/Form';
-import Main from 'components/Main';
+import Page from '@/components/Page';
+import SaveButton from '@/components/Buttons/save.button';
+import FormComponents from '@/components/Form';
+import Main from '@/components/Main';
 
-import { Can } from 'utils/auth/can';
-import { fromForm } from 'utils/object';
+import { Can } from '@/utils/auth/can';
+import { fromForm } from '@/utils/object';
 
 import styles from 'pages/subscriptions/types/subscriptionTypes.module.less';
 import ExportButton from '@/components/Buttons/export.button';

@@ -3,7 +3,7 @@ import dvaModelExtend from 'dva-model-extend';
 import { message } from 'antd';
 import { commonModel } from 'models/common.model';
 import { REMOTE_SERVER } from 'services/config/server.config';
-import i18n from 'utils/i18n';
+import i18n from '@/utils/i18n';
 import moment from 'moment';
 import { history } from 'umi';
 

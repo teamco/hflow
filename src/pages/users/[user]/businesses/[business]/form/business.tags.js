@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FormComponents from 'components/Form';
+import FormComponents from '@/components/Form';
 
 const { GenericPanel, EditableTags } = FormComponents;
 

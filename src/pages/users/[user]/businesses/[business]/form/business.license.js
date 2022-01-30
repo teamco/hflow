@@ -1,8 +1,8 @@
 import React from 'react';
 import { DatePicker } from 'antd';
 
-import FormComponents from 'components/Form';
-import UploadFile from 'components/Upload';
+import FormComponents from '@/components/Form';
+import UploadFile from '@/components/Upload';
 
 const { GenericPanel } = FormComponents;
 

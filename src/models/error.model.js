@@ -2,7 +2,7 @@
 import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from 'models/common.model';
-import { monitorHistory } from 'utils/history';
+import { monitorHistory } from '@/utils/history';
 
 /**
  * @export

@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import styles from 'components/Iframe/Iframe.less';
+import styles from '@/components/Iframe/Iframe.less';
 
 class Iframe extends React.Component {
   render() {

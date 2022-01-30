@@ -2,12 +2,12 @@ import React  from 'react';
 import { Form, PageHeader } from 'antd';
 import { PieChartOutlined } from '@ant-design/icons';
 
-import Page from 'components/Page';
-import SaveButton from 'components/Buttons/save.button';
-import FormComponents from 'components/Form';
-import Main from 'components/Main';
+import Page from '@/components/Page';
+import SaveButton from '@/components/Buttons/save.button';
+import FormComponents from '@/components/Form';
+import Main from '@/components/Main';
 
-import { fromForm } from 'utils/object';
+import { fromForm } from '@/utils/object';
 
 import styles from 'pages/userRoles/userRoles.module.less';
 import { effectHook } from '@/utils/hooks';

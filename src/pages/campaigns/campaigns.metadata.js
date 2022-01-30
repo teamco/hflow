@@ -3,7 +3,7 @@ import { Button, Dropdown } from 'antd';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { NavLink } from 'umi';
 import { CampaignMenu } from './metadata/campaigns.menu';
-import menuStyles from 'components/menu.less';
+import menuStyles from '@/components/menu.less';
 import styles from './campaigns.module.less';
 
 /**

@@ -2,10 +2,10 @@ import React from 'react';
 import { SaveOutlined } from '@ant-design/icons';
 import { Button, Form, Modal } from 'antd';
 
-import styles from 'components/Authentication/authentication.module.less';
+import styles from '@/components/Authentication/authentication.module.less';
 
-import { emailPartial } from 'components/partials/email.partial';
-import { isLoading } from 'utils/state';
+import { emailPartial } from '@/components/partials/email.partial';
+import { isLoading } from '@/utils/state';
 
 /**
  * @constant

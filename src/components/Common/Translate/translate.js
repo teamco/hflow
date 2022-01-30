@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Input } from 'antd';
-import FormComponents from 'components/Form';
+import FormComponents from '@/components/Form';
 import { withTranslation } from 'react-i18next';
 
 const { GenericPanel } = FormComponents;

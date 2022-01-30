@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { DatePicker, Divider, Select, Slider } from 'antd';
-import FormComponents from 'components/Form';
+import FormComponents from '@/components/Form';
 import Duration from '@/components/Price/Range/Duration';
 import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 import moment from 'moment';

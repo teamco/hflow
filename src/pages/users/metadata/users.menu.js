@@ -14,9 +14,9 @@ import {
 
 import { NavLink } from 'umi';
 
-import { COLORS } from 'utils/colors';
+import { COLORS } from '@/utils/colors';
 
-import tableStyles from 'components/Main/Table/table.module.less';
+import tableStyles from '@/components/Main/Table/table.module.less';
 
 /**
  * @export

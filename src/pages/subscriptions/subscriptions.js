@@ -2,10 +2,10 @@ import React  from 'react';
 import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
-import Page from 'components/Page';
-import EmptyData from 'components/EmptyData';
+import Page from '@/components/Page';
+import EmptyData from '@/components/EmptyData';
 
-import { Can } from 'utils/auth/can';
+import { Can } from '@/utils/auth/can';
 
 import SubscriptionCard from 'pages/subscriptions/subscriptionCard';
 import { subscriptionCardMetadata } from 'pages/subscriptions/subscriptions.metadata';

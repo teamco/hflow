@@ -1,18 +1,18 @@
-import ErrorModal from 'components/Authentication/modals/error.modal';
+import ErrorModal from '@/components/Authentication/modals/error.modal';
 import React, { useState } from 'react';
 import { useParams } from 'umi';
 import { Button, Form, Input, PageHeader } from 'antd';
 import { LockTwoTone, ProfileTwoTone, SaveOutlined, UserAddOutlined } from '@ant-design/icons';
 
-import { onUpdateMeter } from 'components/Authentication/methods/meter';
-import { emailProps } from 'components/partials/email.partial';
+import { onUpdateMeter } from '@/components/Authentication/methods/meter';
+import { emailProps } from '@/components/partials/email.partial';
 
-import FormComponents from 'components/Form';
-import Strength from 'components/Authentication/strength';
-import Page from 'components/Page';
+import FormComponents from '@/components/Form';
+import Strength from '@/components/Authentication/strength';
+import Page from '@/components/Page';
 
 import styles from 'pages/finishSignUp/finishSignUp.module.less';
-import stylesAuth from 'components/Authentication/authentication.module.less';
+import stylesAuth from '@/components/Authentication/authentication.module.less';
 import { effectHook } from '@/utils/hooks';
 
 const { GenericPanel } = FormComponents;

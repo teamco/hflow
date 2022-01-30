@@ -30,6 +30,7 @@ const CommonTags = ({
 
   return (
       <GenericPanel header={header}
+                    data-testid={'common-tags'}
                     name={'tags'}>
         <div>
           <EditableTags label={t('form:tags')}

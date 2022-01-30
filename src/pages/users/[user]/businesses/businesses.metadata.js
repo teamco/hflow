@@ -1,18 +1,18 @@
 import React from 'react';
 import { NavLink, useParams } from 'umi';
 import classnames from 'classnames';
-import { Can } from 'utils/auth/can';
+import { Can } from '@/utils/auth/can';
 import { Button, Dropdown, Tooltip } from 'antd';
 import { DownOutlined, EyeTwoTone, ProfileTwoTone, SettingOutlined, ShopTwoTone } from '@ant-design/icons';
 
-import { tsToLocaleDateTime } from 'utils/timestamp';
-import { COLORS } from 'utils/colors';
+import { tsToLocaleDateTime } from '@/utils/timestamp';
+import { COLORS } from '@/utils/colors';
 
 import BusinessMenu from './metadata/business.menu';
 
 import styles from 'pages/users/users.module.less';
-import tableStyles from 'components/Main/Table/table.module.less';
-import menuStyles from 'components/menu.less';
+import tableStyles from '@/components/Main/Table/table.module.less';
+import menuStyles from '@/components/menu.less';
 
 export const metadata = ({
   t,

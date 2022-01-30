@@ -1,7 +1,7 @@
 import { Ability, AbilityBuilder } from '@casl/ability';
 import { fbFindById } from 'services/firebase.service';
 import { isAdmin, isContributor, isCurrent, isModerator, isReader } from 'services/userRoles.service';
-import i18n from 'utils/i18n';
+import i18n from '@/utils/i18n';
 
 /**
  * @export

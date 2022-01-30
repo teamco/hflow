@@ -3,7 +3,7 @@ import { Input, Tag, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { withTranslation } from 'react-i18next';
 
-import styles from 'components/Form/form.module.less';
+import styles from '@/components/Form/form.module.less';
 
 /**
  * @class EditableTags

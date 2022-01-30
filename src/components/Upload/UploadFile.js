@@ -6,8 +6,8 @@ import { Link } from 'umi';
 import ImgCrop from 'antd-img-crop';
 import classnames from 'classnames';
 
-import { downloadFromUrl, getExtension } from 'utils/file';
-import { errorDownloadMsg } from 'utils/message';
+import { downloadFromUrl, getExtension } from '@/utils/file';
+import { errorDownloadMsg } from '@/utils/message';
 
 import './upload.less';
 

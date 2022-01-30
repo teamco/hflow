@@ -1,7 +1,7 @@
 import React  from 'react';
 import { BackTop, Layout, Spin } from 'antd';
 
-import Footer from 'components/Footer';
+import Footer from '@/components/Footer';
 import HeaderSection from 'pages/landing/sections/header.section';
 
 import styles from 'pages/landing/landing.module.less';

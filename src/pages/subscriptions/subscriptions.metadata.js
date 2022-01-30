@@ -4,7 +4,7 @@ import { Dropdown } from 'antd';
 
 import SubscriptionMenu from './metadata/subscriptions.menu';
 
-import menuStyles from 'components/menu.less';
+import menuStyles from '@/components/menu.less';
 
 /**
  * @export

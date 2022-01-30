@@ -3,8 +3,8 @@ import { PageHeader, Tabs } from 'antd';
 import { NotificationOutlined } from '@ant-design/icons';
 import { useParams } from 'umi';
 
-import Page from 'components/Page';
-import Main from 'components/Main';
+import Page from '@/components/Page';
+import Main from '@/components/Main';
 
 import { notificationsMetadata } from 'pages/notifications/notifications.metadata';
 import { expendableNotification } from 'pages/notifications/metadata/notification.expendable';

@@ -3,12 +3,12 @@ import { Avatar, Dropdown, Tooltip } from 'antd';
 import { ContactsTwoTone, EllipsisOutlined, PauseCircleTwoTone, PlayCircleTwoTone } from '@ant-design/icons';
 import { NavLink } from 'umi';
 
-import { COLORS } from 'utils/colors';
+import { COLORS } from '@/utils/colors';
 
 import { showProfileModal } from './profile.modal';
 import UserMenu from './users.menu';
 
-import menuStyles from 'components/menu.less';
+import menuStyles from '@/components/menu.less';
 import styles from '../users.module.less';
 
 export const userCardMetadata = (t, props) => {

@@ -156,36 +156,38 @@ class GenericPanel extends Component {
     };
 
     return (
-        <Collapse collapsible={collapsible}
-                  className={classnames(styles.collapsePanel, className)}
-                  defaultActiveKey={defaultActiveKey}>
-          <Panel header={header}
-                 key={name}>
-            {collapsible === 'disabled' ? (
-                    <div className={styles.disabledPanel}>
-                      <Spin spinning={true}/>
-                    </div>
-                ) :
-                _getChildren(children).map((_rowChild, idx) => {
-                  const { inRow = true, gutter, colProps, style, className } = _rowChild?.props;
-                  return inRow ? (
-                      <AntHillRow key={idx}
-                                  style={style}
-                                  className={className}
-                                  gutter={gutter}
-                                  colProps={colProps}>
-                        {_formItem(_rowChild, idx)}
-                      </AntHillRow>
-                  ) : (
-                      <div key={idx}
-                           style={style}
-                           className={className}>
-                        {_formItem(_rowChild, idx)}
+        <div data-testid={this.props['data-testid']}>
+          <Collapse collapsible={collapsible}
+                    className={classnames(styles.collapsePanel, className)}
+                    defaultActiveKey={defaultActiveKey}>
+            <Panel header={header}
+                   key={name}>
+              {collapsible === 'disabled' ? (
+                      <div className={styles.disabledPanel}>
+                        <Spin spinning={true}/>
                       </div>
-                  );
-                })}
-          </Panel>
-        </Collapse>
+                  ) :
+                  _getChildren(children).map((_rowChild, idx) => {
+                    const { inRow = true, gutter, colProps, style, className } = _rowChild?.props;
+                    return inRow ? (
+                        <AntHillRow key={idx}
+                                    style={style}
+                                    className={className}
+                                    gutter={gutter}
+                                    colProps={colProps}>
+                          {_formItem(_rowChild, idx)}
+                        </AntHillRow>
+                    ) : (
+                        <div key={idx}
+                             style={style}
+                             className={className}>
+                          {_formItem(_rowChild, idx)}
+                        </div>
+                    );
+                  })}
+            </Panel>
+          </Collapse>
+        </div>
     );
   }
 }

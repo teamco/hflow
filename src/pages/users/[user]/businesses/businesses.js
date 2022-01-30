@@ -1,12 +1,12 @@
 import React  from 'react';
 import { useParams } from 'umi';
 
-import Page from 'components/Page';
+import Page from '@/components/Page';
 import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, TrademarkOutlined } from '@ant-design/icons';
-import Main from 'components/Main';
+import Main from '@/components/Main';
 
-import { Can } from 'utils/auth/can';
+import { Can } from '@/utils/auth/can';
 import ExportButton from '@/components/Buttons/export.button';
 
 import { metadata } from 'pages/users/[user]/businesses/businesses.metadata';

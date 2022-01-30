@@ -4,14 +4,14 @@ import { FormOutlined, LockTwoTone, LoginOutlined, ProfileTwoTone } from '@ant-d
 import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { onUpdateMeter } from 'components/Authentication/methods/meter';
-import { emailPartial } from 'components/partials/email.partial';
+import { onUpdateMeter } from '@/components/Authentication/methods/meter';
+import { emailPartial } from '@/components/partials/email.partial';
 
-import styles from 'components/Authentication/authentication.module.less';
+import styles from '@/components/Authentication/authentication.module.less';
 
-import Strength from 'components/Authentication/strength';
-import { isLoading } from 'utils/state';
-import { effectHook } from 'utils/hooks';
+import Strength from '@/components/Authentication/strength';
+import { isLoading } from '@/utils/state';
+import { effectHook } from '@/utils/hooks';
 
 
 export const signUp = props => {
