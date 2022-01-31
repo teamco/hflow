@@ -2,7 +2,6 @@ import React from 'react';
 import { cleanup } from '@testing-library/react';
 
 import { expectations } from '__tests__/helper';
-import { i18nMock } from '__tests__/mocks';
 
 import Common from '@/components/Common';
 import { stub } from '@/utils/function';
@@ -13,7 +12,7 @@ describe('@/components/Common/Tags', () => {
   // unmount and cleanup DOM after the test is finished.
   afterEach(cleanup);
 
-  i18nMock();
+  jest.mock('react-i18next');
 
   it('Top', () => {
     const _tagsDom = expectations(Common.Tags, 'common-tags', {
