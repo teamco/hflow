@@ -20,10 +20,10 @@ describe('@/components/Border', () => {
       }
     };
 
-    const _borderDom = expectations(Border, 'border', topProps);
+    const { component } = expectations(Border, 'border', topProps);
 
-    expect(_borderDom).toHaveClass('border top');
-    expect(_borderDom).toHaveStyle(
+    expect(component).toHaveClass('border top');
+    expect(component).toHaveStyle(
         'border-left-width: 15vw; border-right-width: 45vw; border-bottom-width: 15vh; border-bottom-color: rgb(241, 241, 241); border-bottom-style: solid;');
   });
 
@@ -37,10 +37,10 @@ describe('@/components/Border', () => {
       }
     };
 
-    const _borderDom = expectations(Border, 'border', bottomProps);
+    const { component } = expectations(Border, 'border', bottomProps);
 
-    expect(_borderDom).toHaveClass('border bottom');
-    expect(_borderDom).toHaveStyle(
+    expect(component).toHaveClass('border bottom');
+    expect(component).toHaveStyle(
         'border-left-width: 45vw; border-right-width: 15vw; border-top-width: 15vh; border-top-color: rgb(241, 241, 241); border-top-style: solid;');
   });
 });

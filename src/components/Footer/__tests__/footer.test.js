@@ -12,8 +12,8 @@ describe('@/components/Footer', () => {
   afterEach(cleanup);
 
   it('Footer', () => {
-    const _footerDom = expectations(Footer, 'footer', {});
+    const { component } = expectations(Footer, 'footer', {});
 
-    expect(_footerDom).toHaveClass('ant-layout-footer footer');
+    expect(component).toHaveClass('ant-layout-footer footer');
   });
 });

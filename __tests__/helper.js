@@ -14,7 +14,7 @@ import '@testing-library/jest-dom/extend-expect';
  * @return {*}
  */
 export const expectations = (Component, testId, props = {}, hooked = false) => {
-  const { asFragment } = render(<Component {...props}/>);
+  const _render = render(<Component {...props}/>);
 
   const _cmpReact = hooked ?
       renderHook(() => Component(props)) :
@@ -22,9 +22,9 @@ export const expectations = (Component, testId, props = {}, hooked = false) => {
 
   const _cmpDom = screen.getByTestId(testId);
 
-  // expect(asFragment()).toMatchSnapshot();
+  // expect(_render.asFragment()).toMatchSnapshot();
   expect(_cmpReact).toBeDefined();
   expect(_cmpDom).toBeInTheDocument();
 
-  return _cmpDom;
+  return { component: _cmpDom, render: _render };
 };
