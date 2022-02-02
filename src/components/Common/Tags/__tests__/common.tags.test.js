@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import { act, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 
