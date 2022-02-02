@@ -1,4 +1,12 @@
 module.exports = {
+  "reporters": [
+    "default",
+    ["jest-html-reporters", {
+      "publicPath": "./__report__",
+      "filename": "index.html",
+      "openReport": true
+    }]
+  ],
   testPathIgnorePatterns: ['<rootDir>/cypress/'],
   moduleNameMapper(memo) {
     return {

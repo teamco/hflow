@@ -61,9 +61,9 @@
   "devDependencies": {
     "@testing-library/dom": "^8.11.3",
     "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
     "@testing-library/react-hooks": "^7.0.2",
     "@testing-library/user-event": "^13.5.0",
-    "@testing-library/react": "^12.1.2",
     "@types/react": "^17.0.38",
     "@umijs/babel-preset-umi": "^3.5.20",
     "@umijs/preset-react": "^2.1.1",
@@ -73,6 +73,7 @@
     "cypress": "^8.7.0",
     "dayjs": "^1.10.7",
     "enzyme": "^3.11.0",
+    "jest-html-reporters": "^3.0.5",
     "lint-staged": "^12.3.3",
     "moment": "^2.29.1",
     "prettier": "^2.5.1",
