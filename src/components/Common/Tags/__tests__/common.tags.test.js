@@ -1,39 +1,63 @@
 import React from 'react';
-import { cleanup, fireEvent, waitFor } from '@testing-library/react';
+import { Form } from 'antd';
+import { act, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 
-import { expectations } from '__tests__/helper';
+import { expectations, mocksWorkaround } from '__tests__/helper';
 
 import Common from '@/components/Common';
 import { stub } from '@/utils/function';
 
 describe('@/components/Common/Tags', () => {
 
-  // Note: running cleanup afterEach is done automatically for you in @testing-library/react@9.0.0 or higher
-  // unmount and cleanup DOM after the test is finished.
-  afterEach(cleanup);
+  beforeAll(mocksWorkaround);
 
   jest.mock('react-i18next');
 
-  it('Hooked tags', async () => {
-    const { component, render: { getByText, getByRole } } = expectations(Common.Tags, 'common-tags', {
+  it('Hooked tags: Collapsed', async () => {
+    const { component, render: { queryByText, getByRole } } = expectations(Common.Tags, 'common-tags', {
       t: stub(),
-      tags: ['test'],
+      tags: ['test_1'],
       disabled: false
-    }, true);
+    }, true, Form);
 
-    fireEvent(
-        getByRole('button'),
-        new MouseEvent('click', {
-          bubbles: true,
-          cancelable: true
-        })
-    );
-
-    // wait for appearance inside an assertion
+    // Wait for appearance inside an assertion
     await waitFor(() => {
-      // expect(getByText('form:tags')).toBeInTheDocument();
+      expect(queryByText('test_1')).toBeNull();
+      expect(component.querySelectorAll('.ant-tag.siteTagDisabled')).toHaveLength(0);
+    });
+  });
+
+  it('Hooked tags: Expanded', async () => {
+    const { component, render: { queryByText } } = expectations(Common.Tags, 'common-tags', {
+      t: stub(),
+      tags: ['test_2'],
+      disabled: false,
+      name: 'test_2',
+      defaultActiveKey: 'test_2'
+    }, true, Form);
+
+    // Wait for appearance inside an assertion
+    await waitFor(() => {
+      expect(queryByText('test_2')).toBeInTheDocument();
+      expect(component.querySelectorAll('.ant-tag.siteTagDisabled')).toHaveLength(0);
+    });
+  });
+
+  it('Hooked tags: Disabled', async () => {
+    const { component, render: { queryByText } } = expectations(Common.Tags, 'common-tags', {
+      t: stub(),
+      tags: ['test_3'],
+      disabled: true,
+      name: 'test_3',
+      defaultActiveKey: 'test_3'
+    }, true, Form);
+
+    // Wait for appearance inside an assertion
+    await waitFor(() => {
+      expect(queryByText('test_3')).toBeInTheDocument();
+      expect(component.querySelectorAll('.ant-tag.siteTagDisabled')).toHaveLength(1);
     });
   });
 });

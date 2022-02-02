@@ -23,6 +23,8 @@ const CommonTags = ({
   tags = [],
   disabled,
   onUpdateTags = stub(),
+  name = 'tags',
+  defaultActiveKey = null,
   ...rest
 }) => {
 
@@ -31,7 +33,8 @@ const CommonTags = ({
   return (
       <GenericPanel header={header}
                     data-testid={'common-tags'}
-                    name={'tags'}>
+                    name={name}
+                    defaultActiveKey={defaultActiveKey}>
         <div>
           <EditableTags label={t('form:tags')}
                         name={'tags'}
