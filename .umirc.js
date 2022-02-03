@@ -27,9 +27,6 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none'
   },
-  analytics: {
-    ga: 'G-N3Y3KDBNCV'
-  },
   headScripts: [],
   plugins: [],
   manifest: {}
