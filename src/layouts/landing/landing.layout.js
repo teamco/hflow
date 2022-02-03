@@ -44,7 +44,7 @@ export const LandingLayout = (props) => {
 
   effectHook(() => {
     ReactGA.initialize('G-N3Y3KDBNCV');
-    ReactGA.send('Landing Page View');
+    ReactGA.send('pageview');
   });
 
   effectHook(() => {

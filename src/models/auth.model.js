@@ -169,6 +169,8 @@ export default dvaModelExtend(commonModel, {
             doc: _userExist.docId,
             data: { serverUserId: data?.serverUserId }
           });
+        } else {
+          yield put({ type: `userModel/sendVerification`, payload: { user: _userExist.data } });
         }
       }
     },
@@ -211,7 +213,7 @@ export default dvaModelExtend(commonModel, {
       const _user = { ..._userExist.data, id: _userExist.docId };
 
       yield put({ type: 'createServerProfile', payload: { _userExist } });
-      yield put({ type: 'updateToken', payload: { user: _user } });
+      _user.emailVerified && (yield put({ type: 'updateToken', payload: { user: _user } }));
 
       const data = { ..._user, roles: [...(_user?.roles || [])] };
 
