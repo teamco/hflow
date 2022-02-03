@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Helmet } from 'umi';
 import { Form, Layout } from 'antd';
 import ReactInterval from 'react-interval';
+import ReactGA from 'react-ga4';
 
 import Loader from '@/components/Loader';
 
@@ -40,6 +41,11 @@ export const LandingLayout = (props) => {
   } = appModel;
 
   const { user, ability } = authModel;
+
+  effectHook(() => {
+    ReactGA.initialize('G-N3Y3KDBNCV');
+    ReactGA.send('Landing Page View');
+  });
 
   effectHook(() => {
     props.onDefineAbilities();
