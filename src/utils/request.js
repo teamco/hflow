@@ -187,6 +187,11 @@ function xhr(opts, notice, errorHandler = stub, fallbackUrl = true) {
 
     errorHandler(error);
     console.error(error.response);
+
+    return {
+      data: undefined,
+      exists: false
+    };
   });
 }
 
