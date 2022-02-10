@@ -2,7 +2,7 @@ import request from 'umi-request';
 import { API_CONFIG } from 'services/config/api.config';
 import { stub } from './function';
 import { successSaveMsg } from '@/utils/message';
-import capitalize from 'capitalize-first-letter';
+import { history } from 'umi';
 
 /**
  * @constant
@@ -162,7 +162,7 @@ function toBase64(file) {
  * @param [fallbackUrl]
  * @return {Q.Promise<any> | undefined}
  */
-function xhr(opts, notice, errorHandler = stub, fallbackUrl) {
+function xhr(opts, notice, errorHandler = stub, fallbackUrl = true) {
   const { pathname } = window.location;
   const { url, method } = opts;
   delete opts.url;
@@ -179,16 +179,36 @@ function xhr(opts, notice, errorHandler = stub, fallbackUrl) {
 
   }).catch((error) => {
     const _st = setTimeout(() => {
-      if (fallbackUrl && !pathname.match(new RegExp(fallbackUrl))) {
-        history.replace(`${fallbackUrl}?referrer=${encodeURIComponent(pathname)}`);
+      if (fallbackUrl) {
+        handleResponseError(error.response.status, pathname);
       }
       clearTimeout(_st);
-    }, 2000);
+    }, 500);
 
     errorHandler(error);
     console.error(error.response);
-    throw new Error(error);
   });
+}
+
+/**
+ * @function
+ * @param {string} status
+ * @param {string} [referrer]
+ */
+function handleResponseError(status, referrer) {
+  const baseUrl = '/admin/errors';
+  const qs = referrer ? `?referrer=${encodeURIComponent(referrer)}` : '';
+
+  switch (status) {
+    case 403:
+    case 404:
+    case 500:
+      history.replace(`${baseUrl}/${status}${qs}`);
+      break;
+    default:
+      history.replace(`${baseUrl}/warning${qs}`);
+      break;
+  }
 }
 
 /**
