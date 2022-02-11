@@ -5,13 +5,16 @@ import { API } from 'services/config/api.config';
 /**
  * @async
  * @export
+ * @param {string} type
+ * @param {*} token
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const getFeatures = async ({ type }) => {
+export const getFeatures = async ({ type, token }) => {
   return xhrRequest({
     url: API.features.store,
     method: request.METHOD.get,
-    params: { type }
+    params: { type },
+    token
   });
 };
 

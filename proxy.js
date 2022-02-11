@@ -53,7 +53,8 @@ const proxyPops = {
 };
 
 const _proxy = {
-  [`${API_NS}/${API.auth.getToken}`]: { ...proxyPops },
+  [`${API_NS}/${API.auth.token}`]: { ...proxyPops },
+  [`${API_NS}/${API.auth.refresh}`]: { ...proxyPops },
   [`${API_NS}/${API.users.store}`]: { ...proxyPops },
   [`${API_NS}/${API.features.store}`]: { ...proxyPops },
   [`${API_NS}/${API.campaigns.store}`]: { ...proxyPops },
@@ -63,7 +64,10 @@ const _proxy = {
 /**
  * @export
  * @constant
- * @return {{[p: string]: {onProxyRes(*, *, *): void, onError(*, *, *): void, logLevel: string, changeOrigin: boolean, secure: boolean, ws: boolean, pathRewrite(*, *): void, onProxyReq(*, *, *): void, target: string}|{onProxyRes(*, *, *): void, onError(*, *, *): void, logLevel: string, changeOrigin: boolean, secure: boolean, ws: boolean, pathRewrite(*, *): void, onProxyReq(*, *, *): void, target: string}}}
+ * @return {{[p: string]: {onProxyRes(*, *, *): void, onError(*, *, *): void, logLevel: string, changeOrigin: boolean,
+ *     secure: boolean, ws: boolean, pathRewrite(*, *): void, onProxyReq(*, *, *): void, target: string}|{onProxyRes(*,
+ *     *, *): void, onError(*, *, *): void, logLevel: string, changeOrigin: boolean, secure: boolean, ws: boolean,
+ *     pathRewrite(*, *): void, onProxyReq(*, *, *): void, target: string}}}
  */
 export const getProxy = () => {
   console.log('\n\n==== CONFIG =====\n');
