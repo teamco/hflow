@@ -272,6 +272,16 @@ export const routes = [
             ]
           },
           {
+            component: '@/pages/warning',
+            breadcrumb: 'route:pageWarning',
+            path: '/admin/errors/warning'
+          },
+          {
+            component: '@/pages/500',
+            breadcrumb: 'route:page500',
+            path: '/admin/errors/500'
+          },
+          {
             component: '@/pages/403',
             breadcrumb: 'route:page403',
             path: '/admin/errors/403'

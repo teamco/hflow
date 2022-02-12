@@ -14,6 +14,8 @@
     "notFound": "{{entity}} not found",
     "page403": "Sorry, you are not authorized to access this page",
     "page404": "Sorry, the page you visited does not exist",
+    "page500": "Sorry, something went wrong",
+    "pageWarning": "There are some problems with your operation",
     "noPermissions": "Has no relevant permissions",
     "userExist": "The user already exist",
     "userAssigned": "The user already assigned to business",

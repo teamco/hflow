@@ -49,7 +49,8 @@ export const API_CONFIG = () => {
 
 export const API = {
   auth: {
-    getToken: 'authenticate'
+    token: 'authenticate',
+    refresh: 'token'
   },
   users: {
     get: 'users/:userKey',

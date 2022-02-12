@@ -2,6 +2,7 @@ import { message } from 'antd';
 
 import request from '@/utils/request';
 import { API } from '@/services/config/api.config';
+import { stub } from '@/utils/function';
 
 const { METHOD, HEADER_TYPE, CONTENT_TYPE } = request;
 
@@ -10,7 +11,7 @@ const { METHOD, HEADER_TYPE, CONTENT_TYPE } = request;
  * @param token
  * @return {`Bearer ${string}`}
  */
-const getBearer = token => `Bearer ${token.data.access_token}`;
+const getBearer = token => `Bearer ${token.access_token}`;
 
 /**
  * @async
@@ -25,30 +26,74 @@ const handleError = async (error, notice) => {
 
 /**
  * @export
+ * @async
  * @param [props]
  * @return {GlobalConfig.Promise<*>|undefined}
  */
-export const getXHRToken = (props = {}) => {
+export const getXHRToken = async (props = {}) => {
   const {
-    username = 'guest',
-    password = 'guest',
-    notice
+    token = { credentials: {} },
+    notice = false
   } = props;
 
-  const opts = request.config({
-    url: API.auth.getToken,
-    method: request.METHOD.post
-  });
+  const {
+    guest,
+    access_token,
+    refresh_token,
+    expiredAt,
+    credentials: {
+      username = 'guest',
+      password = 'guest'
+    },
+    updateState = stub
+  } = token;
 
-  const data = request.formData({ username, password });
+  /**
+   * @function
+   * @param {string} url
+   * @param {boolean} [refresh]
+   * @return {Bluebird.Promise<*>|undefined}
+   * @private
+   */
+  function _handleToken(url, refresh = false) {
+    const opts = request.config({
+      url,
+      method: request.METHOD.post
+    });
 
-  return request.xhr({
-        ...opts,
-        ...{ data }
-      },
-      false,
-      async (error) => await handleError(error, notice)
-  );
+    if (refresh) {
+      opts.headers = {
+        [HEADER_TYPE.authorization]: getBearer(refresh_token)
+      };
+    }
+
+    const data = request.formData({ username, password });
+
+    return request.xhr({
+          ...opts,
+          ...{ data }
+        },
+        notice,
+        async (error) => await handleError(error, notice)
+    );
+  }
+
+  let tokenData = { data: { ...token } };
+
+  if (access_token) {
+    if (+(new Date) > expiredAt) {
+      // Expired
+      tokenData = await _handleToken(API.auth.refresh, true);
+      debugger
+      updateState({});
+    }
+  } else if (guest?.access_token) {
+    tokenData = { data: { access_token: guest.access_token } };
+  } else {
+    tokenData = await _handleToken(API.auth.token);
+  }
+
+  return tokenData;
 };
 
 /**
@@ -70,21 +115,19 @@ export const xhrRequest = async (props) => {
   let {
     url,
     data = {},
-    user,
-    password,
     method = METHOD.post,
     notice = true,
     token,
     ...args
   } = props;
 
-  token = token || (await getXHRToken({ user, password, notice }));
+  const { data: { access_token } } = await getXHRToken({ token, notice });
 
   const opts = request.config({
     url,
     method,
     headers: {
-      [HEADER_TYPE.authorization]: getBearer(token),
+      [HEADER_TYPE.authorization]: getBearer({ access_token }),
       [HEADER_TYPE.contentType]: CONTENT_TYPE.json
     },
     ...args

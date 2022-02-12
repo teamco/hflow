@@ -81,8 +81,10 @@ export default dvaModelExtend(commonModel, {
   },
   effects: {
 
-    * query({ payload }, { put, call }) {
-      const { data = [] } = yield call(getFeatures, { type: 'Business' });
+    * query({ payload }, { put, call, select }) {
+      const { token } = yield select(state => state.authModel);
+
+      const { data = [] } = yield call(getFeatures, { type: 'Business', token });
       yield put({ type: 'updateState', payload: { data, touched: false } });
     },
 

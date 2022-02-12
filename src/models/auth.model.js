@@ -11,14 +11,21 @@ import { createServerProfile, getXHRToken } from '@/services/authentication.serv
 
 const MODEL_NAME = 'authModel';
 
+/**
+ * Refresh token (1min less then he will be expired).
+ * @type {number}
+ */
+const DELTA_TOKEN_VALIDITY = 60 * 1000;
+
 const DEFAULT_STATE = {
   user: null,
   serverUserId: null,
   token: {
     guest: null,
-    access: null,
-    refresh: null,
-    expiredAt: null
+    access_token: null,
+    refresh_token: null,
+    expiredAt: null,
+    credentials: {}
   }
 };
 
@@ -181,8 +188,13 @@ export default dvaModelExtend(commonModel, {
       const { user } = payload;
 
       const { data: { access_token, refresh_token, token_validity } } = yield call(getXHRToken, {
-        username: user.id,
-        password: user.email
+        token: {
+          ...token,
+          credentials: {
+            username: user.id,
+            password: user.email
+          }
+        }
       });
 
       yield put({
@@ -190,9 +202,14 @@ export default dvaModelExtend(commonModel, {
         payload: {
           token: {
             ...token,
-            access: access_token,
-            refresh: refresh_token,
-            expiredAt: parseInt(token_validity, 10)
+            access_token,
+            refresh_token,
+            expiredAt: +(new Date) + parseInt(token_validity, 10) - DELTA_TOKEN_VALIDITY,
+            credentials: {
+              username: user.id,
+              password: user.email
+            },
+            updateState: yield put
           }
         }
       });
