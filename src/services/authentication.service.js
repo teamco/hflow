@@ -8,6 +8,13 @@ const { METHOD, HEADER_TYPE, CONTENT_TYPE } = request;
 
 /**
  * @constant
+ * @param expiredAt
+ * @return {boolean}
+ */
+const isExpired = (expiredAt) => +(new Date) > expiredAt;
+
+/**
+ * @constant
  * @param token
  * @return {`Bearer ${string}`}
  */
@@ -81,7 +88,7 @@ export const getXHRToken = async (props = {}) => {
   let tokenData = { data: { ...token } };
 
   if (access_token) {
-    if (+(new Date) > expiredAt) {
+    if (isExpired(expiredAt)) {
       // Expired
       tokenData = await _handleToken(API.auth.refresh, true);
       debugger
