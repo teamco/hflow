@@ -12,9 +12,9 @@ export const routes = [
       },
       {
         exact: true,
-        path: '/subscriptions',
-        breadcrumb: 'route:subscriptions',
-        component: '@/pages/subscriptions'
+        path: '/profile',
+        breadcrumb: 'route:profile',
+        component: '@/pages/landing/profile'
       },
       {
         exact: false,
