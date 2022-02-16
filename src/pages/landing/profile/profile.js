@@ -7,6 +7,6 @@ const Profile = props => {
         <div>Profile</div>
       </LandingPage>
   );
-};
+}
 
 export default Profile;
