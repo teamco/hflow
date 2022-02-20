@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'umi';
 import { Badge, Layout, Tooltip } from 'antd';
-import { BellOutlined, BellTwoTone, CloudTwoTone } from '@ant-design/icons';
+import { BellOutlined, BellTwoTone, WifiOutlined } from '@ant-design/icons';
 
 import SignIn from '@/components/Authentication/signIn.connect';
 import { COLORS } from '@/utils/colors';
@@ -45,7 +45,7 @@ export default class MainHeader extends React.Component {
             )}
             <div className={'site-connection'}>
               <Tooltip title={isOnline ? t('msg:connected') : t('error:noConnection')}>
-                <CloudTwoTone twoToneColor={isOnline ? COLORS.success : COLORS.danger}/>
+                <WifiOutlined style={{ color: isOnline ? COLORS.success : COLORS.danger }}/>
               </Tooltip>
             </div>
           </div>
