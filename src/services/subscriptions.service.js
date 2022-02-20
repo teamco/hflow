@@ -4,25 +4,29 @@ import { xhrRequest } from '@/services/authentication.service';
 
 /**
  * @export
+ * @param {string} token
  * @return {Promise<{data: *[]}>}
  */
-export const getAllSubscriptions = async () => {
+export const getAllSubscriptions = async ({ token }) => {
   return xhrRequest({
     url: API.subscriptions.store,
-    method: request.METHOD.get
+    method: request.METHOD.get,
+    token
   });
 };
 
 /**
  * @export
  * @param id
+ * @param {string} token
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const getSubscription = async ({id}) => {
+export const getSubscription = async ({ id, token }) => {
   return xhrRequest({
     url: API.subscriptions.get,
     method: request.METHOD.get,
-    subscriptionsKey: id
+    subscriptionsKey: id,
+    token
   });
 };
 
@@ -31,14 +35,16 @@ export const getSubscription = async ({id}) => {
  * @export
  * @param {string} id
  * @param data
+ * @param {string} token
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const updateSubscription = async ({ id, data }) => {
+export const updateSubscription = async ({ id, data, token }) => {
   return xhrRequest({
     url: API.subscriptions.get,
     method: request.METHOD.put,
     subscriptionKey: id,
-    data
+    data,
+    token
   });
 };
 
@@ -46,10 +52,11 @@ export const updateSubscription = async ({ id, data }) => {
  * @async
  * @export
  * @param data
+ * @param {string} token
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const addSubscription = async ({ data }) => {
-  return xhrRequest({ url: API.subscriptions.store, data });
+export const addSubscription = async ({ data, token }) => {
+  return xhrRequest({ url: API.subscriptions.store, data, token });
 };
 
 

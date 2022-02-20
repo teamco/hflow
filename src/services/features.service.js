@@ -21,14 +21,16 @@ export const getFeatures = async ({ type, token }) => {
 /**
  * @async
  * @export
- * @param data
+ * @param {string} id
+ * @param {string} token
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const getFeature = async ({ id }) => {
+export const getFeature = async ({ id, token }) => {
   return xhrRequest({
     url: API.features.get,
     method: request.METHOD.get,
-    featureKey: id
+    featureKey: id,
+    token
   });
 };
 
@@ -36,15 +38,17 @@ export const getFeature = async ({ id }) => {
  * @async
  * @export
  * @param {string} id
+ * @param {string} token
  * @param data
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const updateFeature = async ({ id, data }) => {
+export const updateFeature = async ({ id, data, token }) => {
   return xhrRequest({
     url: API.features.get,
     method: request.METHOD.put,
     featureKey: id,
-    data
+    data,
+    token
   });
 };
 
@@ -52,8 +56,9 @@ export const updateFeature = async ({ id, data }) => {
  * @async
  * @export
  * @param data
+ * @param {string} token
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const addFeature = async ({ data }) => {
-  return xhrRequest({ url: API.features.store, data });
+export const addFeature = async ({ data, token }) => {
+  return xhrRequest({ url: API.features.store, data, token });
 };

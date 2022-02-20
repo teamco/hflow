@@ -57,8 +57,9 @@ export default dvaModelExtend(commonModel, {
   },
   effects: {
 
-    * query({ payload }, { put, call }) {
-      const { data } = yield call(getAllSubscriptions);
+    * query({ payload }, { put, call, select }) {
+      const { token } = yield select(state => state.authModel);
+      const { data } = yield call(getAllSubscriptions, { token });
 
       yield put({ type: 'features' });
       yield put({ type: 'updateState', payload: { subscriptions: data } });
@@ -82,16 +83,16 @@ export default dvaModelExtend(commonModel, {
     },
 
     * validateSubscription({ payload }, { call, put, select }) {
-      const { user, ability } = yield select(state => state.authModel);
+      const { user, ability, token } = yield select(state => state.authModel);
       const { subscriptionId } = payload;
 
       if (isNew(subscriptionId)) {
         // TODO (teamco): Do something.
-        yield put({ type: 'features'});
+        yield put({ type: 'features' });
 
       } else if (ability.can('read', ABILITY_FOR)) {
 
-        const subscription = yield call(getSubscription, { id: subscriptionId });
+        const subscription = yield call(getSubscription, { id: subscriptionId, token });
 
         if (subscription.exists) {
           const { price: { discount }, saleInfo } = subscription.data;
@@ -155,14 +156,15 @@ export default dvaModelExtend(commonModel, {
       yield put({ type: 'features', payload: { type } });
     },
 
-    * features({ payload = {} }, { call, put }) {
+    * features({ payload = {} }, { call, put, select }) {
+      const { token } = yield select(state => state.authModel);
       const { type = 'Business' } = payload;
-      const { data = [] } = yield call(getFeatures, { type });
+      const { data = [] } = yield call(getFeatures, { type, token });
       yield put({ type: 'updateState', payload: { features: data } });
     },
 
     * prepareToSave({ payload, params }, { call, select, put }) {
-      const { user, ability } = yield select(state => state.authModel);
+      const { user, ability, token } = yield select(state => state.authModel);
       const { selectedSubscription, isEdit } = yield select(state => state[MODEL_NAME]);
       const {
         price,
@@ -200,7 +202,7 @@ export default dvaModelExtend(commonModel, {
           },
           saleInfo: {
             startedAt: dateFormat(saleInfo[0]),
-            expiredAt: dateFormat(saleInfo[1]),
+            expiredAt: dateFormat(saleInfo[1])
           },
           translateKeys: { title, description },
           featuresByRef: Object.keys(featuresByRef).filter(key => featuresByRef[key]),
@@ -210,7 +212,7 @@ export default dvaModelExtend(commonModel, {
 
         if (isEdit) {
           if (selectedSubscription && params.subscription === selectedSubscription.id) {
-            const entity = yield call(updateSubscription, { id: selectedSubscription.id, data });
+            const entity = yield call(updateSubscription, { id: selectedSubscription.id, data, token });
 
             yield put({
               type: 'updateVersion',
@@ -236,7 +238,7 @@ export default dvaModelExtend(commonModel, {
             }
           };
 
-          const entity = yield call(addSubscription, { data });
+          const entity = yield call(addSubscription, { data, token });
 
           if (entity.exists) {
             yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });

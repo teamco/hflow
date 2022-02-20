@@ -106,14 +106,14 @@ export default dvaModelExtend(commonModel, {
     },
 
     * validateFeature({ payload }, { call, put, select }) {
-      const { user, ability } = yield select(state => state.authModel);
+      const { user, ability, token } = yield select(state => state.authModel);
       const { featureId } = payload;
 
       if (isNew(featureId)) {
         // TODO (teamco): Do something.
       } else if (ability.can('read', ABILITY_FOR)) {
 
-        const feature = yield call(getFeature, { id: featureId });
+        const feature = yield call(getFeature, { id: featureId, token });
 
         if (feature.exists) {
           const { price, trialPeriod, trialed } = feature.data;
@@ -155,7 +155,7 @@ export default dvaModelExtend(commonModel, {
     },
 
     * prepareToSave({ payload, params }, { call, select, put }) {
-      const { user, ability } = yield select(state => state.authModel);
+      const { user, ability, token } = yield select(state => state.authModel);
       const { selectedFeature, isEdit } = yield select(state => state[MODEL_NAME]);
       const { feature } = params;
       const {
@@ -204,7 +204,7 @@ export default dvaModelExtend(commonModel, {
         if (isEdit) {
           if (selectedFeature && feature === selectedFeature.id) {
             data.version = selectedFeature.version;
-            const entity = yield call(updateFeature, { id: feature, data });
+            const entity = yield call(updateFeature, { id: feature, data, token });
 
             yield put({
               type: 'updateVersion',
@@ -227,7 +227,7 @@ export default dvaModelExtend(commonModel, {
             createdByRef: user.id
           };
 
-          const entity = yield call(addFeature, { data });
+          const entity = yield call(addFeature, { data, token });
 
           if (entity.exists) {
             yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });

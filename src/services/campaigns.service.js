@@ -1,30 +1,33 @@
-import _ from 'lodash';
 import { xhrRequest } from './authentication.service';
 import { API } from './config/api.config';
-import request from '../utils/request';
+import request from '@/utils/request';
 
 /**
  * @export
+ * @param {string} token
  * @return {Promise<{data: *[]}>}
  */
-export const getAllCampaigns = async () => {
+export const getAllCampaigns = async ({ token }) => {
   return await xhrRequest({
     url: API.campaigns.store,
-    method: request.METHOD.get
+    method: request.METHOD.get,
+    token
   });
 };
 
 /**
-* @async
-* @export
-* @param data
-* @return {Promise<GlobalConfig.Promise<*>|undefined>}
-*/
-export const getCampaign = async ({ id }) => {
+ * @async
+ * @export
+ * @param data
+ * @param {string} token
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ */
+export const getCampaign = async ({ id, token }) => {
   return xhrRequest({
     url: API.campaigns.get,
     method: request.METHOD.get,
-    campaignKey: id
+    campaignKey: id,
+    token
   });
 };
 
@@ -33,14 +36,16 @@ export const getCampaign = async ({ id }) => {
  * @export
  * @param {string} id
  * @param data
+ * @param {string} token
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const updateCampaign = async ({ id, data }) => {
+export const updateCampaign = async ({ id, data, token }) => {
   return xhrRequest({
     url: API.campaigns.get,
     method: request.METHOD.put,
     campaignKey: id,
-    data
+    data,
+    token
   });
 };
 
@@ -48,10 +53,11 @@ export const updateCampaign = async ({ id, data }) => {
  * @async
  * @export
  * @param data
+ * @param {string} token
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
-export const addCampaign = async ({ data }) => {
-  return xhrRequest({ url: API.campaigns.store, data });
+export const addCampaign = async ({ data, token }) => {
+  return xhrRequest({ url: API.campaigns.store, data, token });
 };
 
 
