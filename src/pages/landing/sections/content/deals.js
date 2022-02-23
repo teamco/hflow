@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useIntl } from 'umi';
 import classnames from 'classnames';
 
 import Border from '@/components/Border';
@@ -7,7 +7,8 @@ import Border from '@/components/Border';
 import styles from 'pages/landing/landing.module.less';
 
 const Deals = props => {
-  const { t, className } = props;
+  const intl = useIntl();
+  const { className } = props;
 
   const topProps = {
     direction: 'top',
@@ -47,7 +48,7 @@ const Deals = props => {
       <div className={styles.dealsWrapper}>
         <Border {...topProps}/>
         <div className={classnames(className, styles.deals)}>
-          <h1>{t('landing:deals')}</h1>
+          <h1>{intl.formatMessage({id: 'landing.deals', defaultMessage: 'Deals'})}</h1>
 
         </div>
         <Border {...bottomProps}/>
@@ -55,4 +56,4 @@ const Deals = props => {
   );
 };
 
-export default withTranslation()(Deals);
+export default Deals;

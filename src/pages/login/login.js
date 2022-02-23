@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { useIntl } from 'umi';
 import { FacebookOutlined, GoogleOutlined, TwitterOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
 
@@ -18,7 +18,7 @@ import { effectHook } from '@/utils/hooks';
  * @return {JSX.Element}
  */
 export const Login = (props) => {
-
+  const intl = useIntl();
   /* These props are provided by withFirebaseAuth HOC */
   const {
     signInWithEmailAndPassword,
@@ -32,7 +32,6 @@ export const Login = (props) => {
   } = props;
 
   const {
-    t,
     authModel,
     isVisible = true
   } = props;
@@ -51,7 +50,7 @@ export const Login = (props) => {
 
   if (error) {
     errorProps = {
-      title: t('error:errorNum', { number: 400 }),
+      title: intl.formatMessage({id: 'error.errorNum', defaultMessage: 'Error: {number}'}, { number: 400 }),
       error
     };
 
@@ -96,7 +95,7 @@ export const Login = (props) => {
    * @return {JSX.Element}
    */
   const authBtn = (provider, icon, signInFn) => (
-      <Tooltip title={t('auth:signInWith', { provider })}>
+      <Tooltip title={intl.formatMessage({id: 'auth.signInWith', defaultMessage: 'Sign in with {provider}'},{ provider })}>
         <Button loading={isLoading(loading)}
                 onClick={() => handleCancel(signInFn)}
                 icon={icon}
@@ -149,7 +148,6 @@ export const Login = (props) => {
   };
 
   const signInProps = {
-    t,
     isSignInVisible,
     signInVisible: true,
     handleCancel,

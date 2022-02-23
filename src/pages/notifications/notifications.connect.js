@@ -1,8 +1,7 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
-
+import { useIntl } from 'umi';
 import { notifications } from './notifications';
-import i18n from '@/utils/i18n';
+
 import { STATUS } from '@/utils/message';
 
 export default connect(
@@ -20,10 +19,11 @@ export default connect(
         dispatch({ type: `notificationModel/setAsRead`, payload: { doc } });
       },
       onSendMessage({ props }, fields) {
+        const intl = useIntl();
         dispatch({
           type: 'notificationModel/createAndUpdate',
           payload: {
-            type: i18n.t('notifications:message'),
+            type: intl.formatMessage({id: 'notifications.message', defaultMessage: 'Message' }),
             status: STATUS.sent,
             replyTo: fields.replyTo,
             title: fields.title,
@@ -34,4 +34,4 @@ export default connect(
         });
       }
     })
-)(withTranslation()(notifications));
+)(notifications);

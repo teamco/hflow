@@ -10,7 +10,6 @@ import Rebate from '@/components/Price/Rebate';
  */
 export const CampaignDiscount = (props) => {
   const {
-    t,
     formRef,
     disabled,
     durationTypes = [],

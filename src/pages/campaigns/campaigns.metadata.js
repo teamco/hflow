@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Dropdown } from 'antd';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
-import { NavLink } from 'umi';
+import { NavLink, useIntl } from 'umi';
 import { CampaignMenu } from './metadata/campaigns.menu';
 import menuStyles from '@/components/menu.less';
 import styles from './campaigns.module.less';
@@ -14,7 +14,7 @@ import styles from './campaigns.module.less';
  * @return {*}
  */
 export const metadata = ({ t, ability, loading }) => {
-
+  const intl = useIntl();
   const menuProps = { t, loading, ability };
 
   return {

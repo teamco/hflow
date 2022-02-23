@@ -1,15 +1,16 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useIntl } from 'umi';
 import classnames from 'classnames';
 
 import styles from 'pages/landing/landing.module.less';
 
 const Trends = props => {
-  const { t, className, trends = [] } = props;
+  const intl = useIntl();
+  const { className, trends = [] } = props;
 
   return (
       <div className={classnames(className, styles.trends)}>
-        <h1>{t('landing:trends')}</h1>
+        <h1>{intl.formatMessage({id: 'landing.trends', defaultMessage: 'Trends'})}}</h1>
         {trends?.map((trend, idx) => (
             <div key={idx}>
               {trend.name}
@@ -19,4 +20,4 @@ const Trends = props => {
   );
 };
 
-export default withTranslation()(Trends);
+export default Trends;

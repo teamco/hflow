@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import { home } from './home';
 
@@ -13,4 +12,4 @@ export default connect(
     (dispatch) => ({
       dispatch
     })
-)(withTranslation()(home));
+)(home);

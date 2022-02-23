@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import { campaigns } from './campaigns';
 
@@ -18,4 +17,4 @@ export default connect(
         dispatch({ type: 'campaignModel/query' });
       }
     })
-)(withTranslation()(campaigns));
+)(campaigns);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
-import { NavLink } from 'umi';
+import { NavLink, useIntl } from 'umi';
 import { Menu, Popconfirm } from 'antd';
 import { DeleteTwoTone, ShoppingCartOutlined } from '@ant-design/icons';
 
@@ -15,8 +15,8 @@ import tableStyles from '@/components/Main/Table/table.module.less';
  * @return {JSX.Element}
  */
 export const CampaignMenu = props => {
+  const intl = useIntl();
   const {
-    t,
     ability,
     isEdit,
     component,
@@ -34,7 +34,7 @@ export const CampaignMenu = props => {
                                 twoToneColor={COLORS.success} />,
     children: (
         <NavLink to={`/admin/campaigns/${record.id}`}>
-          {t('actions:edit', { type: t('route:campaign') })}
+          {intl.formatMessage({id: 'campaigns.actions.edit', defaultMessage: "Edit Campaign"})}
         </NavLink>
     )
   };
@@ -48,7 +48,7 @@ export const CampaignMenu = props => {
         <Popconfirm title={t('msg:deleteConfirm', { instance: t('menu:campaign') })}
                     placement={'topRight'}
                     onConfirm={() => onDeleteCampaign(record)}>
-          {t('actions:delete')}
+          {intl.formatMessage({id: 'actions.delete', defaultMessage: 'Delete'})}
         </Popconfirm>
     )
   };
@@ -66,4 +66,4 @@ export const CampaignMenu = props => {
   );
 };
 
-export default withTranslation()(CampaignMenu);
+export default CampaignMenu;

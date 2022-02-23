@@ -1,6 +1,6 @@
 import ErrorModal from '@/components/Authentication/modals/error.modal';
 import React, { useState } from 'react';
-import { useParams } from 'umi';
+import { useParams, useIntl } from 'umi';
 import { Button, Form, Input, PageHeader } from 'antd';
 import { LockTwoTone, ProfileTwoTone, SaveOutlined, UserAddOutlined } from '@ant-design/icons';
 
@@ -23,7 +23,7 @@ const { GenericPanel } = FormComponents;
  * @return {JSX.Element}
  */
 export const finishSignUp = (props) => {
-
+  const intl = useIntl();
   /* These props are provided by withFirebaseAuth HOC */
   const {
     createUserWithEmailAndPassword,
@@ -61,7 +61,7 @@ export const finishSignUp = (props) => {
 
   if (error) {
     errorProps = {
-      title: t('error:errorNum', { number: 400 }),
+      title: intl.formatMessage({id: 'error.errorNum', defaultMessage: 'Error: {number}'}, { number: 400 }),
       error
     };
 
@@ -97,7 +97,7 @@ export const finishSignUp = (props) => {
   const subTitle = (
       <>
         <UserAddOutlined style={{ marginRight: 10 }}/>
-        {t('business:finishRegisterUser')}
+        {intl.formatMessage({id: 'business.finishRegisterUser', defaultMessage: 'Finish your Registration'})}
       </>
   );
 
@@ -118,7 +118,7 @@ export const finishSignUp = (props) => {
                               icon={<SaveOutlined/>}
                               onClick={() => formRef.submit()}
                               type={'primary'}>
-                        {t('auth:register')}
+                        {intl.formatMessage({id: 'auth.register', defaultMessage: 'Register'})}
                       </Button>
                     ]}/>
         <Form name={'auth_finish_signup'}
@@ -128,30 +128,30 @@ export const finishSignUp = (props) => {
               fields={entityForm}
               form={formRef}
               onFinish={onFinish}>
-          <GenericPanel header={t('business:usersDetails')}
+          <GenericPanel header={intl.formatMessage({id: 'business.usersDetails', defaultMessage: 'Business user details'})}
                         name={'usersDetails'}
                         defaultActiveKey={['usersDetails']}>
             <div>
               <Input type={'text'}
-                     label={t('business:invitedByUser')}
+                     label={intl.formatMessage({id: 'business.invitedByUser', defaultMessage: 'Invited by User'})}
                      disabled={true}
                      name={'invitedByUser'}
                      form={formRef}/>
               <Input type={'text'}
-                     label={t('business:assignedTo')}
+                     label={intl.formatMessage({id: 'business:assignedTo', defaultMessage: 'Assigned to Business'})}
                      disabled={true}
                      name={'assignedTo'}
                      form={formRef}/>
             </div>
             <div>
               <Input type={'text'}
-                     label={t('auth:email')}
+                     label={intl.formatMessage({id: 'auth.email', defaultMessage: 'Business Email'})}
                      disabled={true}
                      name={'email'}
                      form={formRef}
                      config={{ ...emailProps(t) }}/>
               <Input type={'text'}
-                     label={t('business:userRoles')}
+                     label={intl.formatMessage({id: 'business:userRoles', defaultMessage: 'Business User Roles'})}
                      disabled={true}
                      name={'userRoles'}
                      form={formRef}/>
@@ -159,13 +159,13 @@ export const finishSignUp = (props) => {
             <div>
               <Input prefix={<ProfileTwoTone/>}
                      name={'firstName'}
-                     label={t('form:firstName')}
+                     label={intl.formatMessage({id: 'form.firstName', defaultMessage: 'First Name'})}
                      allowClear={true}
                      form={formRef}
                      config={{ rules: [{ required: true }] }}/>
               <Input prefix={<ProfileTwoTone/>}
                      name={'lastName'}
-                     label={t('form:lastName')}
+                     label={intl.formatMessage({id: 'form.lastName', defaultMessage: 'Last Name'})}
                      allowClear={true}
                      form={formRef}
                      config={{ rules: [{ required: true }] }}/>
@@ -173,10 +173,10 @@ export const finishSignUp = (props) => {
             <div>
               <Input.Password prefix={<LockTwoTone/>}
                               name={'password'}
-                              label={t('auth:password')}
+                              label={intl.formatMessage({id: 'auth.password', defaultMessage: 'Password'})}
                               form={formRef}
                               autoComplete={'new-password'}
-                              extra={t('auth:passwordHelper', { length: MIN_PASSWORD_LENGTH })}
+                              extra={intl.formatMessage({id: 'auth.passwordHelper', defaultMessage: 'Use {length} or more characters with a mix of letters, numbers & symbols'}, { length: MIN_PASSWORD_LENGTH })}
                               onChange={e => onUpdateMeter({ e, setMeterValue, setMeterText })}
                               config={{
                                 rules: [
@@ -185,7 +185,8 @@ export const finishSignUp = (props) => {
                                     validator(_, value) {
                                       if (value && getFieldValue('password').length < MIN_PASSWORD_LENGTH) {
                                         return Promise.reject(
-                                            t('auth:passwordTooEasy', { length: MIN_PASSWORD_LENGTH }));
+                                            intl.formatMessage({id: 'auth.passwordTooEasy', defaultMessage: 'Use' +
+                                                  ' {length} characters or more for your password'}, { length: MIN_PASSWORD_LENGTH }));
                                       }
                                       return Promise.resolve();
                                     }
@@ -194,10 +195,10 @@ export const finishSignUp = (props) => {
                               }}/>
               <Input.Password prefix={<LockTwoTone/>}
                               name={'password_confirm'}
-                              label={t('auth:passwordConfirm')}
+                              label={intl.formatMessage({id: 'auth.passwordConfirm', defaultMessage: 'Password Confirmation'})}
                               form={formRef}
                               autoComplete={'new-password'}
-                              extra={t('auth:passwordHelper', { length: MIN_PASSWORD_LENGTH })}
+                              extra={intl.formatMessage({id: 'auth.passwordHelper', defaultMessage: 'Use {length} or more characters with a mix of letters, numbers & symbols'}, { length: MIN_PASSWORD_LENGTH })}
                               onChange={e => onUpdateMeter({ e, setMeterValue, setMeterText })}
                               config={{
                                 rules: [
@@ -208,7 +209,7 @@ export const finishSignUp = (props) => {
                                         return Promise.resolve();
                                       }
 
-                                      return Promise.reject(t('auth:passwordConfirmNotValid'));
+                                      return Promise.reject(intl.formatMessage({id: 'auth.passwordConfirmNotValid', defaultMessage: "The two passwords that you entered do not match"}));
                                     }
                                   })
                                 ]

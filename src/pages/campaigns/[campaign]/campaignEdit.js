@@ -13,7 +13,7 @@ import { CampaignDiscount } from '@/pages/campaigns/[campaign]/form/campaign.dis
 
 import CampaignMenu from '@/pages/campaigns/metadata/campaigns.menu';
 
-import { useParams } from 'umi';
+import { useParams, useIntl } from 'umi';
 
 import { fromForm } from '@/utils/object';
 import { isLoading } from '@/utils/state';
@@ -31,6 +31,7 @@ const { Info } = Main;
  * @return {JSX.Element}
  */
 export const campaignEdit = (props) => {
+  const intl = useIntl();
   const [formRef] = Form.useForm();
 
   const {
@@ -87,7 +88,6 @@ export const campaignEdit = (props) => {
   };
 
   const campaignInfoProps = {
-    t,
     formRef,
     disabled,
     campaignTypes,
@@ -111,7 +111,6 @@ export const campaignEdit = (props) => {
   } = fromForm(entityForm, 'metadata') || {};
 
   const infoProps = {
-    t,
     isEdit,
     touched,
     info: {
@@ -132,12 +131,11 @@ export const campaignEdit = (props) => {
   };
 
   const tagsProps = {
-    t,
     formRef,
     onUpdateTags,
     disabled,
     tags,
-    header: t('campaign:tags')
+    header: intl.formatMessage({id: 'campaigns.tags', defaultMessage: 'Tags'})
   };
 
   const translateProps = {
@@ -149,8 +147,8 @@ export const campaignEdit = (props) => {
       <>
         <TrademarkOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
-            t('actions:edit', { type: t('menu:campaign') }) :
-            t('actions:addNew', { type: t('menu:campaign') })
+            intl.formatMessage({id: 'campaigns.actions.edit', defaultMessage: 'Edit Campaign'}) :
+            intl.formatMessage({id: 'campaigns.actions.addNew', defaultMessage: 'Add new campaign' })
         }
       </>
   );
@@ -172,7 +170,7 @@ export const campaignEdit = (props) => {
                                 size={'small'}
                                 loading={isLoading(loading.effects['campaignModel/prepareToSave'])}
                                 onClick={() => onClose()}>
-                          {t('actions:close')}
+                          {intl.formatMessage({id: 'actions.close', defaultMessage: 'Close'})}
                         </Button>,
                         <SaveButton key={'save'}
                                     isEdit={isEdit}
@@ -187,7 +185,7 @@ export const campaignEdit = (props) => {
                           <Button size={'small'}
                                   icon={<SettingOutlined/>}
                                   className={menuStyles.customAction}>
-                            {t('actions:manage', { type: t('menu:campaign') })} <DownOutlined/>
+                            {intl.formatMessage({id: 'campaigns.actions:manage', defaultMessage: 'Manage Campaign' })} <DownOutlined/>
                           </Button>
                         </Dropdown>
                       ]}/>

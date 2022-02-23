@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import Profile from './profile';
 
@@ -14,4 +13,4 @@ export default connect(
     (dispatch) => ({
       dispatch
     })
-)(withTranslation()(Profile));
+)(Profile);

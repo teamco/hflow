@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import { landing } from './landing';
 
@@ -20,4 +19,4 @@ export default connect(
         dispatch({ type: 'landingModel/getContent' });
       }
     })
-)(withTranslation()(landing));
+)(landing);
