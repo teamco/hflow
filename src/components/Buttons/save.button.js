@@ -1,5 +1,4 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
 import { SaveOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { isLoading } from '@/utils/state';
@@ -13,7 +12,6 @@ import { isLoading } from '@/utils/state';
  */
 const saveButton = props => {
   const {
-    t,
     formRef,
     loading,
     isEdit,
@@ -30,9 +28,9 @@ const saveButton = props => {
               icon={<SaveOutlined/>}
               onClick={() => formRef.submit()}
               type={type}>
-        {isEdit ? t('actions:update') : t('actions:save')}
+        {isEdit ? intl.formatMessage({id: 'actions.update', defaultMessage: 'Update'}) : intl.formatMessage({id: 'actions.save', defaultMessage: 'Save'})}
       </Button>
   );
 };
 
-export default withTranslation()(saveButton);
+export default saveButton;

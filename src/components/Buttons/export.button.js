@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Dropdown, Menu, Modal } from 'antd';
 import { DownOutlined, ExportOutlined, EyeOutlined } from '@ant-design/icons';
 import ReactJson from 'react-json-view';
-import { withTranslation } from 'react-i18next';
+import { useIntl } from 'umi';
 
 import { Can } from '@/utils/auth/can';
 import { handleDownload } from '@/utils/file';
@@ -16,8 +16,8 @@ import styles from './button.module.less';
  * @constructor
  */
 const ExportButton = props => {
+  const intl = useIntl();
   const {
-    t,
     component,
     loading = false,
     disabled = false,
@@ -42,7 +42,7 @@ const ExportButton = props => {
    */
   const showExport = () => {
     Modal.info({
-      title: t('actions:export'),
+      title: intl.formatMessage({id: 'actions.export', defaultMessage: 'Export'}),
       icon: (<ExportOutlined/>),
       width: 550,
       centered: true,
@@ -54,7 +54,7 @@ const ExportButton = props => {
         size: 'small',
         icon: (<ExportOutlined/>)
       },
-      okText: t('actions:export')
+      okText: intl.formatMessage({id: 'actions.export', defaultMessage: 'Export'})
     });
   };
 
@@ -68,13 +68,13 @@ const ExportButton = props => {
             <Menu.Item key={'preview'}
                        onClick={showExport}
                        icon={<EyeOutlined/>}>
-              {t('form:preview')}
+              {intl.formatMessage({id: 'form.preview', defaultMessage: 'Preview'})}
             </Menu.Item>
         )}
         <Menu.Item key={'download'}
                    onClick={exportFile}
                    icon={<ExportOutlined/>}>
-          {t('actions:download')}
+          {intl.formatMessage({id: 'actions.download', defaultMessage: 'Download'})}
         </Menu.Item>
       </Menu>
   );
@@ -88,11 +88,11 @@ const ExportButton = props => {
                   disabled={disabled}
                   icon={<ExportOutlined/>}
                   type={'primary'}>
-            {t('actions:export')} <DownOutlined className={styles.export}/>
+            {intl.formatMessage({id: 'actions.export', defaultMessage: 'Export'})} <DownOutlined className={styles.export}/>
           </Button>
         </Dropdown>
       </Can>
   );
 };
 
-export default withTranslation()(ExportButton);
+export default ExportButton;

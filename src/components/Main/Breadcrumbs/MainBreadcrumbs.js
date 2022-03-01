@@ -1,6 +1,6 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
-import { withTranslation } from 'react-i18next';
+import { useIntl } from 'umi';
 import { NavLink } from 'umi';
 import { withBreadcrumbs } from '@/utils/breadcrumbs';
 
@@ -23,6 +23,7 @@ import { effectHook } from '@/utils/hooks';
  * @constructor
  */
 const Breadcrumbs = ({ breadcrumbs, meta, onUpdateDocumentMeta, onUpdate404, ...props }) => {
+  const intl = useIntl();
   const { t, is404 } = props;
   const title = breadcrumbs?.map(({ breadcrumb }) => t(breadcrumb))?.join(' / ');
 
@@ -40,7 +41,7 @@ const Breadcrumbs = ({ breadcrumbs, meta, onUpdateDocumentMeta, onUpdate404, ...
           const { match, breadcrumb } = data;
           return (
               <Breadcrumb.Item key={match.url}>
-                <NavLink to={match.url}>{t(breadcrumb)}</NavLink>
+                <NavLink to={match.url}>{intl.formatMessage({id: breadcrumb, defaultMessage: ''})}</NavLink>
               </Breadcrumb.Item>
           );
         })}
@@ -48,4 +49,4 @@ const Breadcrumbs = ({ breadcrumbs, meta, onUpdateDocumentMeta, onUpdate404, ...
   );
 };
 
-export default withBreadcrumbs(routes)(withTranslation()(Breadcrumbs));
+export default withBreadcrumbs(routes)(Breadcrumbs);

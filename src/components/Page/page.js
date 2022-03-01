@@ -1,8 +1,7 @@
 import React from 'react';
-import { Prompt, connect } from 'umi';
+import { Prompt, connect, useIntl } from 'umi';
 import { Layout, Row, Spin } from 'antd';
 import classnames from 'classnames';
-import { withTranslation } from 'react-i18next';
 
 import { Can } from '@/utils/auth/can';
 import Page403 from 'pages/403';
@@ -25,7 +24,6 @@ const { Content } = Layout;
  * @constructor
  */
 function Page({
-  t,
   pageModel,
   loading,
   spinEffects = [],
@@ -34,7 +32,7 @@ function Page({
   component,
   touched
 }) {
-
+  const intl = useIntl();
   const spinning = Object.keys(loading.effects).
       filter(effect =>
           spinEffects.indexOf(effect) > -1 &&
@@ -52,7 +50,7 @@ function Page({
                       <Prompt when={true}
                               message={location => {
                                 // TODO (teamco): Do something with location.
-                                return t('msg:unsaved');
+                                return intl.formatMessage({id: 'msg:unsaved', defaultMessage: 'You have unsaved changes that will be lost'});
                               }}/>
                   )}
                   <div component={component}>
@@ -71,4 +69,4 @@ function Page({
 export default connect(
     ({ pageModel, loading }) => ({ pageModel, loading }),
     (dispatch) => ({ dispatch })
-)(withTranslation()(Page));
+)(Page);

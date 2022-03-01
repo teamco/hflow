@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Collapse, Form, Spin } from 'antd';
-import { withTranslation } from 'react-i18next';
+import { useIntl } from 'umi';
 import classnames from 'classnames';
 
 import { getSuffix } from '@/components/Form';
@@ -31,7 +31,6 @@ class GenericPanel extends Component {
 
   render() {
     const {
-      t,
       children,
       defaultActiveKey,
       header,
@@ -80,6 +79,7 @@ class GenericPanel extends Component {
      * @private
      */
     const _formItem = (_rowChild, idx) => {
+      const intl = useIntl();
       return _getChildren(_rowChild.props.children || []).map((_child, _key) => {
         const {
           form,
@@ -98,10 +98,10 @@ class GenericPanel extends Component {
 
         const _isRequired = rules.find(rule => rule.required);
         if (_isRequired && !_isRequired.message) {
-          _isRequired.message = t('form:required', { field: label });
+          _isRequired.message = intl.formatMessage({id: 'form.required', defaultMessage: '{field} is required'}, { field: label });
         }
         const _placeholder = label ?
-            _handleProps(placeholder, t('form:placeholder', { field: label })) :
+            _handleProps(placeholder, intl.formatMessage({id: 'form.placeholder', defaultMessage: 'Enter {field}'}, { field: label })) :
             null;
 
         const _props = _cleanProps(_child, ['config', 'hasFeedback', 'form']);
@@ -192,4 +192,4 @@ class GenericPanel extends Component {
   }
 }
 
-export default withTranslation()(GenericPanel);
+export default GenericPanel;

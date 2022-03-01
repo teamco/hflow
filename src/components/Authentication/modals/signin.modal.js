@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Col, Divider, Form, Input, Modal, Row, Tooltip } from 'antd';
 import { FormOutlined, LockTwoTone, LoginOutlined } from '@ant-design/icons';
-
+import { useIntl } from 'umi';
 import { emailPartial } from '@/components/partials/email.partial';
 
 import styles from '@/components/Authentication/authentication.module.less';
@@ -15,8 +15,8 @@ import { isLoading } from '@/utils/state';
  * @constructor
  */
 const SignInModal = props => {
+  const intl = useIntl();
   const {
-    t,
     isSignInVisible,
     signInVisible,
     closable,
@@ -34,8 +34,8 @@ const SignInModal = props => {
 
   const modalHeader = (
       <div className={styles.modalHeader}>
-        <h4>{t('auth:signInTitle')}</h4>
-        <h6>{t('auth:signInDesc')}</h6>
+        <h4>{intl.formatMessage({id: 'auth.signInTitle', defaultMessage: 'Login to your account'})}</h4>
+        <h6>{intl.formatMessage({id: 'auth.signInDesc', defaultMessage: 'Sign in today for more experience'})}</h6>
       </div>
   );
 
@@ -56,34 +56,34 @@ const SignInModal = props => {
               onFinish={onFinish}>
           {emailPartial({ t, name: 'email' })}
           <Form.Item name={'password'}
-                     extra={t('auth:passwordHelper', { length: authModel.MIN_PASSWORD_LENGTH })}
+                     extra={intl.formatMessage({id: 'auth.passwordHelper', defaultMessage: 'Use {length} or more characters with a mix of letters, numbers & symbols'}, { length: authModel.MIN_PASSWORD_LENGTH })}
                      rules={[
                        {
                          required: true,
-                         message: t('form:required', { field: t('auth:password') })
+                         message: intl.formatMessage({id: 'form.required', defaultMessage: '{field} is required'}, { field: intl.formatMessage({id: 'auth.password', defaultMessage: 'Password'}) })
                        }
                      ]}>
             <Input.Password prefix={<LockTwoTone/>}
                             autoComplete={'new-password'}
-                            placeholder={t('auth:password')}/>
+                            placeholder={intl.formatMessage({id: 'auth.password', defaultMessage: 'Password'})}/>
           </Form.Item>
           <Form.Item>
             <Row gutter={[16, 16]}
                  className={styles.loginBtns}>
               <Col span={12}>
-                <Tooltip title={t('auth:signInTitle')}>
+                <Tooltip title={intl.formatMessage({id: 'auth.signInTitle', defaultMessage: 'Login to your account'})}>
                   <Button type={'primary'}
                           htmlType={'submit'}
                           icon={<LoginOutlined/>}
                           size={'default'}
                           block
                           loading={isLoading(loading)}>
-                    {t('auth:signIn')}
+                    {intl.formatMessage({id: 'auth.signIn', defaultMessage: 'Sign in'})}
                   </Button>
                 </Tooltip>
               </Col>
               <Col span={12}>
-                <Tooltip title={t('auth:registerTitle')}>
+                <Tooltip title={intl.formatMessage({id: 'auth.registerTitle', defaultMessage: 'Not a member? You can create an account'})}>
                   <Button type={'default'}
                           size={'default'}
                           block
@@ -93,13 +93,13 @@ const SignInModal = props => {
                           })}
                           loading={isLoading(loading)}
                           icon={<FormOutlined/>}>
-                    {t('auth:register')}
+                    {intl.formatMessage({id: 'auth.register', defaultMessage: 'Register'})}
                   </Button>
                 </Tooltip>
               </Col>
             </Row>
           </Form.Item>
-          <Divider plain>{t('auth:signInWith', { provider: null })}</Divider>
+          <Divider plain>{intl.formatMessage({id: 'auth.signInWith', defaultMessage: 'Sign in with {provider}'}, { provider: null })}</Divider>
           <Form.Item style={{ marginBottom: 0 }}>
             <Row gutter={[16, 16]}
                  className={styles.loginBtns}>

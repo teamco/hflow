@@ -1,6 +1,6 @@
 import React from 'react';
 import { CheckCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
-import { withTranslation } from 'react-i18next';
+import { useIntl } from 'umi';
 
 import { Can } from '@/utils/auth/can';
 import { COLORS } from '@/utils/colors';
@@ -14,27 +14,27 @@ import styles from 'pages/users/users.module.less';
  * @return {JSX.Element}
  */
 function emailVerified(props) {
-  const { t, data, verification = { component: null } } = props;
-
+  const { data, verification = { component: null } } = props;
+  const intl = useIntl();
   return (
       <div>
         {data.emailVerified ? (
             <>
               <CheckCircleTwoTone twoToneColor={COLORS.success}/>
-              <strong>{t('auth:emailVerified')}</strong>
+              <strong>{intl.formatMessage({id: 'auth.emailVerified', defaultMessage: 'Verified'})}</strong>
             </>
         ) : (
             <>
               <WarningTwoTone twoToneColor={COLORS.warning}/>
-              <strong>{t('auth:emailNotVerified')}</strong>
+              <strong>{intl.formatMessage({id: 'auth.emailNotVerified', defaultMessage: 'Not Verified'})}</strong>
               {verification.onSendVerification && (
                   <Can I={'sendVerificationEmail'} a={verification.component}>
                     {verification.verificationSent && (
-                        <div>{t('auth:pendingVerification')}</div>
+                        <div>{intl.formatMessage({id: 'auth.pendingVerification', defaultMessage: 'Pending Verification'})}</div>
                     )}
                     <div className={styles.verification}
                          onClick={() => verification.onSendVerification(data)}>
-                      {verification.verificationSent ? t('auth:reSendVerification') : t('auth:sendVerification')}
+                      {verification.verificationSent ? intl.formatMessage({id: 'auth.reSendVerification', defaultMessage: 'e-Send Email Verification'}) : intl.formatMessage({id: 'auth.sendVerification', defaultMessage: 'Send Email Verification'})}
                     </div>
                   </Can>
               )}
@@ -44,4 +44,4 @@ function emailVerified(props) {
   );
 }
 
-export default withTranslation()(emailVerified);
+export default emailVerified;

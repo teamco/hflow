@@ -1,5 +1,4 @@
 import { connect, history } from 'umi';
-import { withTranslation } from 'react-i18next';
 import { AppLayout } from './app.layout';
 
 export default connect(
@@ -29,4 +28,4 @@ export default connect(
         dispatch({ type: 'appModel/updateDocumentMeta', payload: { meta } });
       }
     })
-)(withTranslation()(AppLayout));
+)(AppLayout);

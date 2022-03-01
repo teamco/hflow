@@ -1,7 +1,7 @@
 import React from 'react';
 import { SaveOutlined } from '@ant-design/icons';
 import { Button, Form, Modal } from 'antd';
-
+import { useIntl } from 'umi';
 import styles from '@/components/Authentication/authentication.module.less';
 
 import { emailPartial } from '@/components/partials/email.partial';
@@ -14,15 +14,15 @@ import { isLoading } from '@/utils/state';
  * @constructor
  */
 const UpdateEmailModal = props => {
+  const intl = useIntl();
   const {
-    t,
     isNAEmailVisible,
     handleNAEmailCancel,
     handleNAEmailOk,
     loading
   } = props;
   return (
-      <Modal title={t('auth:updateEmail')}
+      <Modal title={intl.formatMessage({id: 'auth.updateEmail', defaultMessage: 'Update Email'})}
              visible={isNAEmailVisible}
              footer={null}
              closable={false}>
@@ -38,7 +38,7 @@ const UpdateEmailModal = props => {
                       icon={<SaveOutlined/>}
                       size={'default'}
                       loading={isLoading(loading)}>
-                {t('actions:update')}
+                {intl.formatMessage({id: 'actions.update', defaultMessage: 'Update'})}
               </Button>
             </div>
           </Form.Item>

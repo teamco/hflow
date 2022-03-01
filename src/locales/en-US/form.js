@@ -1,7 +1,7 @@
 export default {
   "form.entityInfo": "{entity} Information",
   "form.required": "{field} is required",
-  "form.placeholder": "Enter {{field}}",
+  "form.placeholder": "Enter {field}",
   "form.invalidLayout": "Not compatible layout",
   "form.cloneFrom": "Clone from {{instance}}",
   "form.fullName": "Full Name",
@@ -16,7 +16,7 @@ export default {
   "form.uploadHint": "Support for a single or bulk upload. Strictly prohibit from uploading company data or other" +
       " band" +
       " files",
-  "form.uploadTypeError": "{{name}} is not a valid file type",
+  "form.uploadTypeError": "{name} is not a valid file type",
   "form.translate": "Translate Keys",
   "form.helper": "Show Helper",
   "form.title": "Title",

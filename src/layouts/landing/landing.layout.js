@@ -22,9 +22,7 @@ const { Content } = Layout;
  * @constructor
  */
 export const LandingLayout = (props) => {
-
   const {
-    t,
     children,
     appModel,
     authModel,

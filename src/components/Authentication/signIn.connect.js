@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import withFirebaseAuth from 'react-with-firebase-auth';
 import { firebaseAppAuth, providers } from 'services/firebase.service';
@@ -29,4 +28,4 @@ export default connect(
         dispatch({ type: 'authModel/updateEmail', payload: { user, email } });
       }
     })
-)(withTranslation()(createComponentWithAuth(signIn)));
+)(createComponentWithAuth(signIn));

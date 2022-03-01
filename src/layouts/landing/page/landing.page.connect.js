@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 import { LandingPage } from './landing.page.layout';
 
 export default connect(
@@ -14,4 +13,4 @@ export default connect(
         dispatch({ type: 'authModel/signOut', payload: {} });
       }
     })
-)(withTranslation()(LandingPage));
+)(LandingPage);
