@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'umi';
+import { NavLink, useIntl } from 'umi';
 import {
   ContactsTwoTone,
   DownOutlined,
@@ -57,7 +57,7 @@ export const metadata = ({
 
   effectHook(() => {
   }, []);
-
+  const intl = useIntl();
   const menuProps = {
     loading,
     ability,
@@ -76,7 +76,7 @@ export const metadata = ({
     size: 'middle',
     columns: [
       {
-        title: t('table:name'),
+        title: intl.formatMessage({id: 'table.name', defaultMessage: 'Name'}),
         dataIndex: 'displayName',
         key: 'displayName',
         render(name, data) {
@@ -84,7 +84,7 @@ export const metadata = ({
           const isSignedIn = data.metadata.signedIn;
           const color = isSignedIn ? COLORS.success : COLORS.disabled;
           const signed = {
-            title: t(isSignedIn ? 'auth:signedIn' : 'auth:signedOut'),
+            title: intl.formatMessage({id: isSignedIn ? 'auth.signedIn' : 'auth.signedOut', defaultMessage:  isSignedIn ? 'Signed in' : 'Sign out'}),
             icon: isSignedIn ?
                 (<PlayCircleTwoTone twoToneColor={color}/>) :
                 (<PauseCircleTwoTone twoToneColor={color}/>)
@@ -126,7 +126,7 @@ export const metadata = ({
         sortable: multiple
       },
       {
-        title: t('auth:provider'),
+        title: intl.formatMessage({id: 'auth.provider', defaultMessage: 'Provider'}),
         dataIndex: 'metadata',
         render: metadata => (
             <Tag color={metadata.signedIn ? BRANDS[metadata.providerId]?.color : null}
@@ -144,19 +144,19 @@ export const metadata = ({
       //   sortable: multiple
       // },
       {
-        title: t('auth:lastSignInTime'),
+        title: intl.formatMessage({id: 'auth.lastSignInTime', defaultMessage: 'Last Sign In'}),
         dataIndex: 'metadata',
         key: 'lastSignInTime',
         render: metadata => tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))
       },
       {
-        title: t('table:action'),
+        title: intl.formatMessage({id: 'table.action', defaultMessage: 'Action'}),
         fixed: 'right',
         width: 200,
         render: record =>
             data.length ? (
                 <div className={styles.nowrap}>
-                  <Tooltip title={t('auth:showProfile')}>
+                  <Tooltip title={intl.formatMessage({id: 'auth.showProfile', defaultMessage: 'Show Profile'})}>
                     <ContactsTwoTone className={tableStyles.action}
                                      onClick={() => showProfileModal(t, record)}
                                      twoToneColor={COLORS.tags.blue}/>
@@ -168,7 +168,7 @@ export const metadata = ({
                     <Button size={'small'}
                             icon={<SettingOutlined/>}
                             className={menuStyles.customAction}>
-                      {t('actions:manage', { type: t('auth:user') })} <DownOutlined/>
+                      {intl.formatMessage({id: 'user.actions.manage', defaultMessage: 'Manage User'})} <DownOutlined/>
                     </Button>
                   </Dropdown>
                 </div>

@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import { Menu, Popconfirm } from 'antd';
 import { withTranslation } from 'react-i18next';
-import { NavLink } from 'umi';
+import { NavLink, useIntl } from 'umi';
 
 import { abilityMenuItem } from '@/utils/abilityComponent/abilityMenuItem';
 import { COLORS } from '@/utils/colors';
@@ -21,8 +21,8 @@ import tableStyles from '@/components/Main/Table/table.module.less';
  * @return {JSX.Element}
  */
 const BusinessMenu = props => {
+  const intl = useIntl();
   const {
-    t,
     isEdit,
     ability,
     loading,
@@ -40,7 +40,7 @@ const BusinessMenu = props => {
     icon: <UsergroupAddOutlined />,
     children: (
           <NavLink to={`/admin/users/${params.user}/businesses/${record.id}/users`}>
-            {t('actions:manage', { type: t('auth:users') })}
+            {intl.formatMessage({id: 'user.actions.manage', defaultMessage: 'Manage User'}) }
           </NavLink>
     )
   };
@@ -51,7 +51,7 @@ const BusinessMenu = props => {
     icon: <EditOutlined />,
     children: (
         <NavLink to={`/admin/users/${params.user}/businesses/${record.id}`}>
-          {t('actions:edit', { type: t('business') })}
+          {intl.formatMessage({id: 'business.actions.edit', defaultMessage: 'Edit Business'})}
         </NavLink>
     )
   };
@@ -62,7 +62,7 @@ const BusinessMenu = props => {
     canI: isEdit && ability?.can('activate', 'business'),
     icon: <FileDoneOutlined />,
     onClick: () => onActivateBusiness(params.business),
-    children: t('actions:activate')
+    children: intl.formatMessage({id: 'actions.activate', defaultMessage: 'Activate'})
   };
 
   const holdProps = {
@@ -71,7 +71,7 @@ const BusinessMenu = props => {
     canI: isEdit && ability?.can('hold', 'business'),
     icon: <PauseCircleOutlined />,
     onClick: () => onHoldBusiness(params.business),
-    children: t('actions:hold')
+    children: intl.formatMessage({id: 'actions.hold', defaultMessage: 'Hold'})
   };
 
   const deleteProps = {
@@ -80,10 +80,10 @@ const BusinessMenu = props => {
     icon: <DeleteTwoTone className={tableStyles.action}
                          twoToneColor={COLORS.danger} />,
     children: (
-          <Popconfirm title={t('msg:deleteConfirm', { instance: t('business') })}
+          <Popconfirm title={intl.formatMessage({id: 'business.msg.deleteConfirm', defaultMessage: 'Are you sure to delete this Business?'})}
                       placement={'topRight'}
                       onConfirm={() => onDeleteBusiness(params.business)}>
-            {t('actions:delete')}
+            {intl.formatMessage('actions:delete')}
           </Popconfirm>
     )
   };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { DeleteTwoTone, ShoppingCartOutlined } from '@ant-design/icons';
-import { NavLink } from 'umi';
+import { NavLink, useIntl } from 'umi';
 import { Menu, Popconfirm } from 'antd';
 import { withTranslation } from 'react-i18next';
 
@@ -15,8 +15,8 @@ import tableStyles from '@/components/Main/Table/table.module.less';
  * @return {JSX.Element}
  */
 export const SubscriptionMenu = props => {
+  const intl = useIntl();
   const {
-    t,
     ability,
     isEdit,
     component,
@@ -34,7 +34,7 @@ export const SubscriptionMenu = props => {
                                 twoToneColor={COLORS.success} />,
     children: (
         <NavLink to={`/admin/subscriptions/${record.id}`}>
-          {t('actions:edit', { type: t('route:subscription') })}
+          {intl.formatMessage({id: 'actions.edit', defaultMessage: 'Edit Subscriptions'})}
         </NavLink>
     )
   };
@@ -45,10 +45,12 @@ export const SubscriptionMenu = props => {
     icon: <DeleteTwoTone className={tableStyles.action}
                          twoToneColor={COLORS.danger} />,
     children: (
-        <Popconfirm title={t('msg:deleteConfirm', { instance: t('menu:subscription') })}
+        <Popconfirm title={intl.formatMessage({id: 'subscription.msg.deleteConfirm', defaultMessage: '"Are you sure' +
+              ' to' +
+              ' delete this subscription'})}
                     placement={'topRight'}
                     onConfirm={() => onDeleteSubscription(record)}>
-          {t('actions:delete')}
+          {intl.formatMessage({id: 'actions.delete', defaultMessage: "Delete"})}
         </Popconfirm>
     )
   };

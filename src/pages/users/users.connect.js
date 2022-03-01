@@ -1,8 +1,7 @@
-import { connect } from 'umi';
+import { connect, useIntl } from 'umi';
 import { message } from 'antd';
 import i18n from '@/utils/i18n';
 
-import { withTranslation } from 'react-i18next';
 import { users } from './users';
 import { STATUS } from '@/utils/message';
 
@@ -40,10 +39,11 @@ export default connect(
         dispatch({ type: `userModel/unlock`, payload: { user } });
       },
       onSendMessage({ props }, fields) {
+        const intl = useIntl();
         dispatch({
           type: 'notificationModel/createAndUpdate',
           payload: {
-            type: i18n.t('notifications:message'),
+            type: intl.formatMessage({id: 'notifications.message', defaultMessage: 'Message'}),
             title: fields.title,
             description: fields.description,
             status: STATUS.sent,
@@ -53,13 +53,14 @@ export default connect(
         });
       },
       onSendVerification(user) {
+        const intl = useIntl();
         if (user.email) {
           dispatch({ type: `userModel/sendVerification`, payload: { user } });
         } else {
-          message.warning(i18n.t('msg:errorSentEmail')).then(() => {
-            message.warning(i18n.t('error:noEmail')).then();
+          message.warning(intl.formatMessage({id: 'msg.errorSentEmail', defaultMessage: ''})).then(() => {
+            message.warning(i18n.formatMessage({id: 'error.noEmail', defaultMessage: 'Email address is required'})).then();
           });
         }
       }
     })
-)(withTranslation()(users));
+)(users);

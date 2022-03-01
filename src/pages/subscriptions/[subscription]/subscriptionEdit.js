@@ -1,7 +1,7 @@
 import React  from 'react';
 import { DownOutlined, SettingOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
-import { useParams } from 'umi';
+import { useParams, useIntl } from 'umi';
 
 import SaveButton from '@/components/Buttons/save.button';
 
@@ -32,9 +32,8 @@ const { Info } = Main;
  */
 export const subscriptionEdit = (props) => {
   const [formRef] = Form.useForm();
-
+  const intl = useIntl();
   const {
-    t,
     authModel,
     subscriptionModel,
     loading,
@@ -85,7 +84,6 @@ export const subscriptionEdit = (props) => {
   };
 
   const subscriptionInfoProps = {
-    t,
     formRef,
     disabled,
     subscriptionTypes,
@@ -95,7 +93,6 @@ export const subscriptionEdit = (props) => {
   };
 
   const featuresProps = {
-    t,
     isEdit,
     formRef,
     disabled,
@@ -122,7 +119,7 @@ export const subscriptionEdit = (props) => {
     onUpdateTags,
     disabled,
     tags,
-    header: t('subscription:tags')
+    header: intl.formatMessage({id: 'subscription.tags', defaultMessage: 'Tags'})
   };
 
   const {
@@ -157,8 +154,8 @@ export const subscriptionEdit = (props) => {
       <>
         <ShoppingCartOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
-            t('actions:edit', { type: t('menu:subscription') }) :
-            t('actions:addNew', { type: t('menu:subscription') })
+            intl.formatMessage({id: 'subscription.actions.edit', defaultMessage: 'Edit Subscriptions'}) :
+            intl.formatMessage({id: 'subscription.actions.addNew', defaultMessage: 'Add new Subscriptions' })
         }
       </>
   );
@@ -183,7 +180,7 @@ export const subscriptionEdit = (props) => {
                                 size={'small'}
                                 loading={isLoading(loading.effects['subscriptionModel/prepareToSave'])}
                                 onClick={() => onClose()}>
-                          {t('actions:close')}
+                          {intl.formatMessage({id: 'actions.close', defaultMessage: 'Close'})}
                         </Button>,
                         <SaveButton key={'save'}
                                     isEdit={isEdit}
@@ -198,7 +195,7 @@ export const subscriptionEdit = (props) => {
                           <Button size={'small'}
                                   icon={<SettingOutlined/>}
                                   className={menuStyles.customAction}>
-                            {t('actions:manage', { type: t('menu:subscription') })} <DownOutlined/>
+                            {intl.formatMessage({id: 'subscription.actions:manage', defaultMessage: 'Manage Subscriptions'})} <DownOutlined/>
                           </Button>
                         </Dropdown>
                       ]}/>

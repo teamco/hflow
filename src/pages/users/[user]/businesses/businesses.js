@@ -1,5 +1,5 @@
 import React  from 'react';
-import { useParams } from 'umi';
+import { useParams, useIntl } from 'umi';
 
 import Page from '@/components/Page';
 import { Button, PageHeader } from 'antd';
@@ -17,8 +17,8 @@ import { effectHook } from '@/utils/hooks';
 const { Table } = Main;
 
 export const businesses = (props) => {
+  const intl = useIntl();
   const {
-    t,
     businessModel,
     authModel,
     loading,
@@ -47,7 +47,7 @@ export const businesses = (props) => {
   const subTitle = (
       <>
         <TrademarkOutlined style={{ marginRight: 10 }}/>
-        {t('business')}
+        {intl.formatMessage({id: 'business.meta', defaultMessage: 'Business'})}
       </>
   );
 
@@ -78,14 +78,13 @@ export const businesses = (props) => {
                                   icon={<AppstoreAddOutlined/>}
                                   onClick={() => onNew(user)}
                                   type={'primary'}>
-                            {t('actions:new')}
+                            {intl.formatMessage({id: 'actions:new', defaultMessage: 'New'})}
                           </Button>
                         </Can>
                       ]}>
           </PageHeader>
           <Table data={data}
                  {...metadata({
-                   t,
                    data,
                    user,
                    isEdit: false,

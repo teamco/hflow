@@ -1,9 +1,7 @@
 import React from 'react';
 import { Modal } from 'antd';
-
+import { useIntl } from 'umi';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-
-import i18n from './i18n';
 
 const { confirm } = Modal;
 
@@ -15,8 +13,8 @@ const { confirm } = Modal;
  * @return {Promise<unknown>}
  */
 export const showModal = ({ type, buttons = {}, ...rest }) => {
-  const DEFAULT_OK = i18n.t('actions:ok');
-  const DEFAULT_CANCEL = i18n.t('actions:cancel');
+  const DEFAULT_OK = useIntl().formatMessage({id: 'actions.ok', defaultMessage: 'Ok'});
+  const DEFAULT_CANCEL = useIntl().formatMessage({id: 'actions.cancel', defaultMessage: 'Cancel'});
 
   return new Promise((resolve) => {
     Modal[type]({
@@ -37,9 +35,9 @@ export const showModal = ({ type, buttons = {}, ...rest }) => {
  */
 export function showConfirm(onOk, okText = i18n.t('actions:ok'), okType = 'primary') {
   confirm({
-    title: i18n.t('actions:delete'),
+    title: useIntl().formatMessage({id: 'actions.delete', defaultMessage: 'Delete'}),
     icon: <QuestionCircleOutlined/>,
-    content: i18n.t('msg:deleteConfirm', { instance: '$t(instance:website)' }),
+    content: useIntl().formatMessage({id: 'msg:deleteConfirm', defaultMessage: 'Are you sure to delete this {instance}?'}, { instance: '$t(instance:website)' }),
     onOk,
     okText,
     okType

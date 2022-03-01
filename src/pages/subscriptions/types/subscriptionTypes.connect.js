@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import { subscriptionTypes } from './subscriptionTypes';
 
@@ -33,4 +32,4 @@ export default connect(
         });
       }
     })
-)(withTranslation()(subscriptionTypes));
+)(subscriptionTypes);

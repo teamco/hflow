@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, PageHeader } from 'antd';
 import { SaveOutlined, UserSwitchOutlined } from '@ant-design/icons';
-
+import { useIntl } from 'umi';
 import { Can } from '@/utils/auth/can';
 import { isLoading } from '@/utils/state';
 import { effectHook } from '@/utils/hooks';
@@ -25,8 +25,8 @@ const { Table, Card } = Main;
  * @return {JSX.Element}
  */
 export const users = (props) => {
+  const intl = useIntl();
   const {
-    t,
     authModel,
     userModel,
     userRoleModel,
@@ -78,7 +78,7 @@ export const users = (props) => {
   const subTitle = (
       <>
         <UserSwitchOutlined style={{ marginRight: 10 }}/>
-        {t('actions:manage', { type: t('auth:users') })}
+        {intl.formatMessage({id: 'user.actions.manage', defaultMessage: 'Manage User'})}
       </>
   );
 
@@ -89,7 +89,6 @@ export const users = (props) => {
   const tableProps = selectedUser ? {
     pagination: false,
     expandable: expendableProfile(
-        t,
         authModel?.user?.roles,
         component,
         verificationSent,
@@ -104,7 +103,6 @@ export const users = (props) => {
   } : {};
 
   const sendProps = {
-    t,
     onSendMessage,
     visibleMessage,
     setVisibleMessage
@@ -169,7 +167,7 @@ export const users = (props) => {
                                     icon={<SaveOutlined/>}
                                     onClick={updateProfile}
                                     type={'primary'}>
-                              {t('actions:update')}
+                              {intl.formatMessage({id: 'actions.update', defaultMessage: 'Update'})}
                             </Button>
                           </Can>
                       )

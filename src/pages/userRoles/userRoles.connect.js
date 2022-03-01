@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import { userRoles } from './userRoles';
 
@@ -35,4 +34,4 @@ export default connect(
         });
       }
     })
-)(withTranslation()(userRoles));
+)(userRoles);

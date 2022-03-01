@@ -1,7 +1,7 @@
 import React  from 'react';
 import Page from '@/components/Page';
 import userStyles from 'pages/users/users.module.less';
-import { useParams } from 'umi';
+import { useParams, useIntl } from 'umi';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
 
@@ -26,9 +26,9 @@ const { Info } = Main;
 
 export const businessEdit = (props) => {
   const [formRef] = Form.useForm();
+  const intl = useIntl();
 
   const {
-    t,
     authModel,
     businessModel,
     simpleModel,
@@ -172,8 +172,8 @@ export const businessEdit = (props) => {
       <>
         <TrademarkOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
-            t('actions:edit', { type: t('business') }) :
-            t('actions:addNew', { type: t('business') })
+            intl.formatMessage({id: 'business.actions.edit', defaultMessage: 'Edit Business'}) :
+            intl.formatMessage({id: 'business.actions.addNew', defaultMessage: 'New Business'})
         }
       </>
   );
@@ -195,7 +195,7 @@ export const businessEdit = (props) => {
                                 size={'small'}
                                 loading={isLoading(loading.effects['businessModel/prepareToSave'])}
                                 onClick={() => onClose(params.user)}>
-                          {t('actions:close')}
+                          {intl.formatMessage({id: 'actions.close', defaultMessage: 'Close'})}
                         </Button>,
                         <SaveButton key={'save'}
                                     isEdit={isEdit}
@@ -214,7 +214,7 @@ export const businessEdit = (props) => {
                           <Button size={'small'}
                                   icon={<SettingOutlined/>}
                                   className={menuStyles.customAction}>
-                            {t('actions:manage', { type: t('business') })} <DownOutlined/>
+                            {intl.formatMessage({id: 'business.actions.manage', defaultMessage: 'Manage Business'})} <DownOutlined/>
                           </Button>
                         </Dropdown>
                       ]}/>

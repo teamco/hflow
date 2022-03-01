@@ -15,7 +15,6 @@ const { Option } = Select;
  */
 export const FeatureInfo = (props) => {
   const {
-    t,
     formRef,
     disabled,
     featureTypes = [],
@@ -37,13 +36,13 @@ export const FeatureInfo = (props) => {
   };
 
   return (
-      <GenericPanel header={t('feature:info')}
+      <GenericPanel header={intl.formatMessage({id: 'feature.info', defaultMessage: 'Feature Info'})}
                     name={'info'}
                     defaultActiveKey={['info']}>
         <div>
           <Select name={'type'}
                   form={formRef}
-                  label={t('feature:type')}
+                  label={intl.formatMessage({id: 'feature.type', defaultMessage: 'Type'})}
                   disabled={disabled}
                   config={{ rules: [{ required: true }] }}>
             {[...featureTypes]?.sort()?.map((type, idx) => (
@@ -53,20 +52,20 @@ export const FeatureInfo = (props) => {
                 </Option>
             ))}
           </Select>
-          <Switch label={t('feature:status')}
+          <Switch label={intl.formatMessage({id: 'feature.status', defaultMessage: 'Default State'})}
                   disabled={disabled}
                   form={formRef}
                   config={{ valuePropName: 'checked' }}
-                  checkedChildren={t('actions:yes')}
-                  unCheckedChildren={t('actions:no')}
+                  checkedChildren={intl.formatMessage({id: 'actions.yes', defaultMessage: 'Yes'})}
+                  unCheckedChildren={intl.formatMessage({id: 'actions.no', defaultMessage: 'No'})}
                   name={'selectedByDefault'}/>
-          <Switch label={t('price:trialed')}
+          <Switch label={intl.formatMessage({id: 'price.trialed', defaultMessage: 'Is Trialed?'})}
                   disabled={disabled}
                   form={formRef}
                   onChange={handleTrialToggling}
                   config={{ valuePropName: 'checked' }}
-                  checkedChildren={t('actions:yes')}
-                  unCheckedChildren={t('actions:no')}
+                  checkedChildren={intl.formatMessage({id: 'actions.yes', defaultMessage: 'Yes'})}
+                  unCheckedChildren={intl.formatMessage({id: 'actions.no', defaultMessage: 'No'})}
                   name={'trialed'}/>
         </div>
       </GenericPanel>

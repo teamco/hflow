@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import { profile } from './profile';
 
@@ -17,4 +16,4 @@ export default connect(
         dispatch({ type: `userModel/getUser`, payload: { selectedUser, userId } });
       }
     })
-)(withTranslation()(profile));
+)(profile);

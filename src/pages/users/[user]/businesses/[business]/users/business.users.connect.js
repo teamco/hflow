@@ -1,8 +1,6 @@
-import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
+import { connect, useIntl} from 'umi';
 import { businessUsers } from './business.users';
 import { message } from 'antd';
-import i18n from '@/utils/i18n';
 
 export default connect(
     ({ businessModel, userRoleModel, userModel, loading }) => ({
@@ -27,11 +25,12 @@ export default connect(
         dispatch({ type: `businessModel/unassignUser`, payload: { user } });
       },
       onSendVerification(user) {
+        const intl = useIntl();
         if (user.email) {
           dispatch({ type: `userModel/sendVerification`, payload: { user } });
         } else {
-          message.warning(i18n.t('msg:errorSentEmail')).then(() => {
-            message.warning(i18n.t('error:noEmail')).then();
+          message.warning(intl.formatMessage({id: 'msg:errorSentEmail', defaultMessage: 'Error Message Been Send'})).then(() => {
+            message.warning(intl.formatMessage({id: 'error.noEmail', defaultMessage: 'Email address is required'})).then();
           });
         }
       },

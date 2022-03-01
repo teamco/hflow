@@ -7,7 +7,7 @@ export default {
   "actions.ok": "Ok",
   "actions.export": "Export",
   "actions.edit": "Edit {{type}}",
-  "actions.show": "Show {{type}}",
+  "actions.show": "Show {type}",
   "actions.download": "Download file",
   "actions.save": "Save",
   "actions.activate": "Activate",

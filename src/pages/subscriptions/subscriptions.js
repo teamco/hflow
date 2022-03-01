@@ -1,7 +1,7 @@
 import React  from 'react';
 import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-
+import { useIntl } from 'umi';
 import Page from '@/components/Page';
 import EmptyData from '@/components/EmptyData';
 
@@ -21,8 +21,8 @@ import { effectHook } from '@/utils/hooks';
  * @return {JSX.Element}
  */
 export const subscriptions = (props) => {
+  const intl = useIntl();
   const {
-    t,
     authModel,
     subscriptionModel,
     onQuery,
@@ -49,7 +49,7 @@ export const subscriptions = (props) => {
   const subTitle = (
       <>
         <ShoppingCartOutlined style={{ marginRight: 10 }}/>
-        {t('menu:subscriptions')}
+        {intl.formatMessage({id: 'menu.subscriptions', defaultMessage: 'Subscriptions'})}
       </>
   );
 
@@ -89,7 +89,7 @@ export const subscriptions = (props) => {
                                   icon={<AppstoreAddOutlined/>}
                                   onClick={() => onNew()}
                                   type={'primary'}>
-                            {t('actions:new')}
+                            {intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
                           </Button>
                         </Can>
                       ]}>
@@ -97,14 +97,13 @@ export const subscriptions = (props) => {
           <div className={styles.subscriptionCards}>
             {subscriptions?.length ? subscriptions?.map((data, idx) => {
               const props = {
-                t,
                 isEdit: true,
                 colorsToType,
                 features: {
                   all: features,
                   selected: data.featuresByRef
                 },
-                ...subscriptionCardMetadata(t, {
+                ...subscriptionCardMetadata({
                   data,
                   className: styles.subscriptionCard,
                   menuProps,

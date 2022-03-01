@@ -1,5 +1,5 @@
 import React  from 'react';
-import { useParams } from 'umi';
+import { useParams, useIntl } from 'umi';
 import { Button, Form, Modal, Select, Tooltip } from 'antd';
 import { FormOutlined } from '@ant-design/icons';
 
@@ -21,7 +21,6 @@ const { Option } = Select;
 export const registerUser = props => {
 
   const {
-    t,
     isRegisterVisible,
     setIsRegisterVisible,
     loading,
@@ -82,7 +81,7 @@ export const registerUser = props => {
   return businessRoles?.roles ? (
       <div className={styles.authWrapper}>
         <>
-          <Modal title={t('business:registerUser')}
+          <Modal title={intl.formatMessage({id: 'business.registerUser', defaultMessage: 'Register Business users'})}
                  visible={isRegisterVisible}
                  maskClosable={false}
                  onCancel={handleCancel}
@@ -92,17 +91,17 @@ export const registerUser = props => {
                   size={'large'}
                   form={formRef}
                   onFinish={onFinish}>
-              {emailPartial({ t, emailRef, name: 'email' })}
+              {emailPartial({ emailRef, name: 'email' })}
               <Form.Item name={'userRoles'}
                          rules={[
                            {
                              required: true,
-                             message: t('form:required', { field: t('panel:businessRoles') })
+                             message: intl.formatMessage({id: 'form.required', defaultMessage: '{field} is required'}, { field: intl.formatMessage({id: 'panel.businessRoles', defaultMessage: 'Business Roles'}) })
                            }
                          ]}>
                 <Select size={'large'}
                         mode={'multiple'}
-                        placeholder={t('panel:businessRoles')}
+                        placeholder={intl.formatMessage({id: 'panel.businessRoles', defaultMessage: 'Business Roles'})}
                         style={{ width: '100%' }}>
                   {roles.map((role, idx) => (
                       <Option key={idx}
@@ -113,7 +112,7 @@ export const registerUser = props => {
                 </Select>
               </Form.Item>
               <Form.Item style={{ marginBottom: 0, marginTop: 20 }}>
-                <Tooltip title={t('auth:registerTitle')}>
+                <Tooltip title={intl.formatMessage({id: 'auth.registerTitle', defaultMessage: 'Not a member? You can create an account'})}>
                   <Button type={'primary'}
                           size={'default'}
                           htmlType={'submit'}
@@ -122,7 +121,7 @@ export const registerUser = props => {
                           loading={isLoading(loading.effects['userRoleModel/query'])}
                           icon={<FormOutlined/>}
                           className={styles.loginBtns}>
-                    {t('auth:register')}
+                    {intl.formatMessage({id: 'auth.register', defaultMessage: 'Re-Send Invitation'})}
                   </Button>
                 </Tooltip>
               </Form.Item>

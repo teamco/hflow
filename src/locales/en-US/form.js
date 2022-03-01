@@ -1,6 +1,6 @@
 export default {
-  "form.entityInfo": "{{entity}} Information",
-  "form.required": "{{field}} is required",
+  "form.entityInfo": "{entity} Information",
+  "form.required": "{field} is required",
   "form.placeholder": "Enter {{field}}",
   "form.invalidLayout": "Not compatible layout",
   "form.cloneFrom": "Clone from {{instance}}",

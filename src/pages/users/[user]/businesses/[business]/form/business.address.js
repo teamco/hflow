@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input, Select } from 'antd';
 import countryCodes from 'country-codes-list';
-
+import { useIntl } from 'umi';
 import { sortBy } from '@/utils/array';
 
 import FormComponents from '@/components/Form';
@@ -28,8 +28,8 @@ const { GenericPanel, MandatoryTextarea, Phone } = FormComponents;
  * @constructor
  */
 export const BusinessAddress = props => {
+  const intl = useIntl();
   const {
-    t,
     formRef,
     countries = [],
     states = [],
@@ -42,18 +42,18 @@ export const BusinessAddress = props => {
   } = props;
 
   return (
-      <GenericPanel header={t('business:address')}
+      <GenericPanel header={intl.formatMessage({id: 'business.address', defaultMessage: 'Business Address'})}
                     name={'address'}
                     defaultActiveKey={['address']}>
         <div>
           <Phone t={t}
-                 label={t('business:phone')}
+                 label={intl.formatMessage({id: 'business.phone', defaultMessage: 'Phone Number'})}
                  formRef={formRef}
                  disabled={disabled}
                  countryData={getSelectedCountry(formRef)}
                  required={true}/>
           <Input type={'text'}
-                 label={t('business:website')}
+                 label={intl.formatMessage({id: 'business.website', defaultMessage: 'Website'})}
                  name={'website'}
                  form={formRef}
                  disabled={disabled}
@@ -63,7 +63,8 @@ export const BusinessAddress = props => {
                        validator(_, value) {
                          return !value || value.match(/^http/) ?
                              Promise.resolve() :
-                             Promise.reject(t('business:formError', { type: t('business:website') }));
+                             Promise.reject(intl.formatMessage({id: 'business:formError', defaultMessage: 'The' +
+                                   ' {type} supplied did not seem to be a {type}'}, { type: intl.formatMessage({id: 'business.website', defaultMessage: 'Website'}) }));
                        }
                      })
                    ]
@@ -72,7 +73,7 @@ export const BusinessAddress = props => {
         <div>
           <Select name={'country'}
                   form={formRef}
-                  label={t('address:country')}
+                  label={intl.formatMessage({id: 'address.country', defaultMessage: 'Country'})}
                   disabled={disabled}
                   onSelect={value => {
                     onHandleStates(value);
@@ -90,7 +91,7 @@ export const BusinessAddress = props => {
               <Select name={'state'}
                       form={formRef}
                       disabled={disabled}
-                      label={t('address:stateProvince')}
+                      label={intl.formatMessage({id: 'address.stateProvince', defaultMessage: 'State / Province'})}
                       config={{ rules: [{ required: true }] }}>
                 {sortBy(states, 'name').map(state => (
                     <Option key={state?.short}
@@ -103,7 +104,7 @@ export const BusinessAddress = props => {
         </div>
         <div>
           <Input type={'text'}
-                 label={t('address:zip')}
+                 label={intl.formatMessage({id: 'address.zip', defaultMessage: 'Postal Code'})}
                  name={'zip'}
                  form={formRef}
                  disabled={disabled}
@@ -117,7 +118,7 @@ export const BusinessAddress = props => {
           <></>
         </div>
         <div>
-          <MandatoryTextarea label={t('address')}
+          <MandatoryTextarea label={intl.formatMessage({id: 'address', defaultMessage: 'Address'})}
                              name={'address'}
                              disabled={disabled}
                              form={formRef}

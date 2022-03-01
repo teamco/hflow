@@ -1,6 +1,6 @@
 import React  from 'react';
 import ReactJson from 'react-json-view';
-
+import { useIntl } from 'umi';
 import Page from '@/components/Page';
 import Main from '@/components/Main';
 
@@ -14,8 +14,8 @@ import { effectHook } from '@/utils/hooks';
 const { Table } = Main;
 
 export const userLogs = (props) => {
+  const intl = useIntl();
   const {
-    t,
     authModel,
     userLogModel,
     loading,
@@ -33,7 +33,7 @@ export const userLogs = (props) => {
   const subTitle = (
       <>
         <UserSwitchOutlined style={{ marginRight: 10 }}/>
-        {t('actions:manage', { type: t('user:logs') })}
+        {intl.formatMessage({id: 'user.actions.manage', defaultMessage: 'Manage User'})}
       </>
   );
 
@@ -53,11 +53,11 @@ export const userLogs = (props) => {
                    return (
                        <div className={styles.logInfo}>
                          <div>
-                           <strong>{t('form:createdBy')}</strong>
-                           <span>{record.createdBy || t('auth:anonymous')}</span>
+                           <strong>{intl.formatMessage({id: 'form.createdBy', defaultMessage: 'Created by'})}</strong>
+                           <span>{record.createdBy || intl.formatMessage({id: 'auth.anonymous', defaultMessage: 'Anonymous'})}</span>
                          </div>
                          <div>
-                           <strong>{t('logs:referrer')}</strong>
+                           <strong>{intl.formatMessage({id: 'logs.referrer', defaultMessage: 'Referral URL'})}</strong>
                            <a href={record.referrer}>{record.referrer}</a>
                          </div>
                          <ReactJson src={record.metadata}
@@ -68,7 +68,6 @@ export const userLogs = (props) => {
                  rowExpandable: record => record.eventType
                }}
                {...userLogsMetadata({
-                 t,
                  data,
                  loading
                })} />

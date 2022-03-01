@@ -1,7 +1,7 @@
 import React  from 'react';
 import { Form, PageHeader } from 'antd';
 import { FontSizeOutlined } from '@ant-design/icons';
-
+import { useIntl } from 'umi';
 import Page from '@/components/Page';
 import SaveButton from '@/components/Buttons/save.button';
 import FormComponents from '@/components/Form';
@@ -23,10 +23,10 @@ const { Info } = Main;
  * @return {JSX.Element}
  */
 export const subscriptionTypes = props => {
+  const intl = useIntl();
   const [formRef] = Form.useForm();
 
   const {
-    t,
     simpleModel,
     authModel,
     loading,
@@ -56,7 +56,7 @@ export const subscriptionTypes = props => {
   const subTitle = (
       <>
         <FontSizeOutlined style={{ marginRight: 10 }}/>
-        {t('panel:subscriptionConfig')}
+        {intl.formatMessage({id: 'panel.subscriptionConfig', defaultMessage: 'Subscription Config'})}
       </>
   );
 
@@ -68,7 +68,6 @@ export const subscriptionTypes = props => {
   } = fromForm(entityForm, 'metadata') || {};
 
   const infoProps = {
-    t,
     isEdit,
     touched,
     info: {
@@ -109,14 +108,14 @@ export const subscriptionTypes = props => {
                 form={formRef}
                 fields={entityForm}
                 onFinish={onFinish}>
-            <GenericPanel header={t('panel:subscriptionTypes')}
+            <GenericPanel header={intl.formatMessage({id: 'panel.subscriptionTypes', defaultMessage: 'Types'})}
                           name={'subscriptionTypes'}
                           defaultActiveKey={['subscriptionTypes']}>
               <div>
                 <EditableTags label={false}
                               name={'tags'}
                               disabled={disabled}
-                              newTag={t('actions:new')}
+                              newTag={intl.formatMessage({id: 'actions.new', formatMessage: 'New'})}
                               onChange={onUpdateTags}
                               tags={tags}/>
               </div>

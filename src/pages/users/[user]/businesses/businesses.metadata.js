@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useParams } from 'umi';
+import { NavLink, useParams, useIntl } from 'umi';
 import classnames from 'classnames';
 import { Can } from '@/utils/auth/can';
 import { Button, Dropdown, Tooltip } from 'antd';
@@ -15,7 +15,6 @@ import tableStyles from '@/components/Main/Table/table.module.less';
 import menuStyles from '@/components/menu.less';
 
 export const metadata = ({
-  t,
   data,
   user,
   isEdit = true,
@@ -31,7 +30,7 @@ export const metadata = ({
    * @type {{user, business}}
    */
   const params = useParams();
-
+  const intl = useIntl();
   const menuProps = {
     isEdit,
     loading,
@@ -51,7 +50,7 @@ export const metadata = ({
     scroll: { x: 900 },
     columns: [
       {
-        title: t('table:name'),
+        title: intl.formatMessage({id: 'table.name', defaultMessage: 'Name'}),
         dataIndex: 'name',
         key: 'name',
         filterable: multiple,
@@ -73,7 +72,7 @@ export const metadata = ({
         }
       },
       {
-        title: t('auth:email'),
+        title: intl.formatMessage({id: 'auth.email', defaultMessage: 'Email'}),
         dataIndex: 'email',
         key: 'email',
         width: 200,
@@ -81,7 +80,7 @@ export const metadata = ({
         sortable: multiple
       },
       {
-        title: t('business:type'),
+        title: intl.formatMessage({id: 'business.type', defaultMessage: 'Business'}),
         dataIndex: 'businessType',
         width: 200,
         key: 'businessType',
@@ -89,14 +88,14 @@ export const metadata = ({
         sortable: multiple
       },
       {
-        title: t('form:updatedAt'),
+        title: intl.formatMessage({id: 'form.updatedAt', defaultMessage: 'Updated at'}),
         dataIndex: 'metadata',
         width: 150,
         key: 'metadata.updatedAt',
         render: metadata => tsToLocaleDateTime(metadata.updatedAt)
       },
       {
-        title: t('table:action'),
+        title: intl.formatMessage({id: 'table.action', defaultMessage: 'Action'}),
         fixed: 'right',
         width: 210,
         render(record) {
@@ -106,7 +105,7 @@ export const metadata = ({
           return data.length ? (
               <div className={styles.nowrap}>
                 <Can I={'read'} a={'businesses'}>
-                  <Tooltip title={t('actions:show', { type: t('route:businessShow') })}>
+                  <Tooltip title={intl.formatMessage({id: 'business.actions.show', defaultMessage: 'Show Business'})}>
                     <NavLink to={`${businessUrl}`}>
                       <EyeTwoTone className={tableStyles.action}
                                   twoToneColor={COLORS.success}/>
@@ -114,7 +113,7 @@ export const metadata = ({
                   </Tooltip>
                 </Can>
                 <Can I={'update'} a={'businesses'}>
-                  <Tooltip title={t('actions:edit', { type: t('menu:business') })}>
+                  <Tooltip title={intl.formatMessage({id: 'business.actions.edit', defaultMessage: 'Edit Business'})}>
                     <NavLink to={`${businessUrl}`}>
                       <ProfileTwoTone className={tableStyles.action}
                                       twoToneColor={COLORS.success}/>
@@ -128,7 +127,7 @@ export const metadata = ({
                   <Button size={'small'}
                           icon={<SettingOutlined/>}
                           className={menuStyles.customAction}>
-                    {t('actions:manage', { type: t('business') })} <DownOutlined/>
+                    {intl.formatMessage({id: 'business.actions.manage', defaultMessage: 'Manage Business'})} <DownOutlined/>
                   </Button>
                 </Dropdown>
               </div>

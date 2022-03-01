@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Divider, Form, Input, Switch } from 'antd';
-
+import { useIntl } from 'umi';
 import FormComponents from '@/components/Form';
 import { effectHook } from '@/utils/hooks';
 
@@ -13,8 +13,8 @@ const { GenericPanel } = FormComponents;
  * @constructor
  */
 export const FeatureTranslate = (props) => {
+  const intl = useIntl();
   const {
-    t,
     formRef,
     disabled
   } = props;
@@ -75,18 +75,18 @@ export const FeatureTranslate = (props) => {
   };
 
   return (
-      <GenericPanel header={t('form:translate')}
+      <GenericPanel header={intl.formatMessage({id: 'form.translate', defaultMessage: 'Translate Keys'})}
                     name={'translate'}
                     defaultActiveKey={['translate']}>
         <div>
           <>
-            <Form.Item label={t('form:helper')}
+            <Form.Item label={intl.formatMessage({id: 'form.helper', defaultMessage: 'Show Helper'})}
                        valuePropName={'checked'}>
               <Switch disabled={disabled}
                       checked={enableHelper}
                       onChange={toggleHelper}
-                      checkedChildren={t('actions:yes')}
-                      unCheckedChildren={t('actions:no')}/>
+                      checkedChildren={intl.formatMessage({id: 'actions.yes', defaultMessage: 'Yes'})}
+                      unCheckedChildren={intl.formatMessage({id: 'actions.No', defaultMessage: 'No'})}/>
             </Form.Item>
           </>
         </div>
@@ -100,7 +100,7 @@ export const FeatureTranslate = (props) => {
                  config={{ rules: [{ required: true }] }}/>
 
           <Input type={'text'}
-                 label={t('form:description')}
+                 label={intl.formatMessage({id: 'form.description', defaultMessage: 'Description'})}
                  name={['translateKeys', 'description']}
                  form={formRef}
                  disabled={disabled || disabledDescription}
@@ -109,7 +109,7 @@ export const FeatureTranslate = (props) => {
         </div>
         <div>
           <Input type={'text'}
-                 label={t('feature:translateOn')}
+                 label={intl.formatMessage({id: 'feature.translateOn', defaultMessage: 'On'})}
                  name={['translateKeys', 'on']}
                  form={formRef}
                  disabled={disabled}
@@ -117,7 +117,7 @@ export const FeatureTranslate = (props) => {
                  config={{ rules: [{ required: true }] }}/>
 
           <Input type={'text'}
-                 label={t('feature:translateOff')}
+                 label={intl.formatMessage({id: 'feature.translateOff', defaultMessage: 'Off'})}
                  name={['translateKeys', 'off']}
                  form={formRef}
                  disabled={disabled}
@@ -126,11 +126,11 @@ export const FeatureTranslate = (props) => {
         </div>
         <div>
           <>
-            <Divider orientation={'left'}>{t('feature:example')}</Divider>
-            <Form.Item label={t(trTitle)}
-                       tooltip={t(trDescription)}>
-              <Switch checkedChildren={t(trOn)}
-                      unCheckedChildren={t(trOff)}/>
+            <Divider orientation={'left'}>{intl.formatMessage({id: 'feature.example', defaultMessage: 'Example'})}</Divider>
+            <Form.Item label={intl.formatMessage({id: trTitle})}
+                       tooltip={intl.formatMessage({id: trDescription})}>
+              <Switch checkedChildren={intl.formatMessage({id: trOn})}
+                      unCheckedChildren={intl.formatMessage({id: trOff})}/>
             </Form.Item>
           </>
         </div>

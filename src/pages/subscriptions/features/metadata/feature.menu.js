@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'umi';
+import { NavLink, useIntl } from 'umi';
 import { COLORS } from '@/utils/colors';
 import { DeleteTwoTone, ControlOutlined } from '@ant-design/icons';
 import { Menu, Popconfirm } from 'antd';
@@ -13,8 +13,8 @@ import tableStyles from '@/components/Main/Table/table.module.less';
  * @return {JSX.Element}
  */
 export const FeatureMenu = props => {
+  const intl = useIntl();
   const {
-    t,
     ability,
     isEdit,
     component,
@@ -32,7 +32,7 @@ export const FeatureMenu = props => {
                                 twoToneColor={COLORS.success} />,
     children: (
         <NavLink to={`/admin/features/${record.id}`}>
-          {t('actions:edit', { type: t('menu:feature') })}
+          {intl.formatMessage({id: 'feature.actions.edit', defaultMessage: 'Edit Feature'})}
         </NavLink>
     )
   };
@@ -43,10 +43,11 @@ export const FeatureMenu = props => {
     icon: <DeleteTwoTone className={tableStyles.action}
                          twoToneColor={COLORS.danger} />,
     children: (
-        <Popconfirm title={t('msg:deleteConfirm', { instance: t('menu:feature') })}
+        <Popconfirm title={intl.formatMessage({id: 'feature.msg.deleteConfirm', defaultMessage: 'Are you sure to' +
+              ' delete this Feature?'})}
                     placement={'topRight'}
                     onConfirm={() => onDeleteFeature(record)}>
-          {t('actions:delete')}
+          {intl.formatMessage({id: 'actions.delete', defaultMessage: 'Delete'})}
         </Popconfirm>
     )
   };

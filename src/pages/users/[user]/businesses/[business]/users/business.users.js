@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'umi';
+import { useParams, useIntl } from 'umi';
 import { Button, PageHeader } from 'antd';
 import { UserAddOutlined, UserOutlined } from '@ant-design/icons';
 
@@ -24,8 +24,8 @@ const { Table } = Main;
  * @return {JSX.Element}
  */
 export const businessUsers = (props) => {
+  const intl = useIntl();
   const {
-    t,
     businessModel,
     userRoleModel,
     userModel,
@@ -68,7 +68,6 @@ export const businessUsers = (props) => {
 
   const tableProps = {
     expandable: expandable({
-      t,
       businessRoles,
       onUpdateRole,
       component,
@@ -86,7 +85,7 @@ export const businessUsers = (props) => {
   const subTitle = (
       <>
         <UserOutlined style={{ marginRight: 10 }}/>
-        {t('actions:manage', { type: t('business:users') })}
+        {intl.formatMessage({id: 'business.actions.manage', defaultMessage: 'Manage Business'})}
       </>
   );
 
@@ -107,14 +106,13 @@ export const businessUsers = (props) => {
                                   setIsRegisterVisible(true);
                                 }}
                                 type={'primary'}>
-                          {t('actions:addNew', { type: t('auth:user') })}
+                          {intl.formatMessage({id: 'actions:addNew', defaultMessage: 'Add New User'})}
                         </Button>
                       </Can>
                     ]}/>
         <Table data={assignedUsers}
                {...tableProps}
                {...metadata({
-                 t,
                  data: assignedUsers,
                  multiple: true,
                  loading,

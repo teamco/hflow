@@ -1,4 +1,3 @@
-import { withTranslation } from 'react-i18next';
 import { connect, history } from 'umi';
 
 import { subscriptionEdit } from './subscriptionEdit';
@@ -38,4 +37,4 @@ export default connect(
       onDeleteSubscription() {
       }
     })
-)(withTranslation()(subscriptionEdit));
+)(subscriptionEdit);

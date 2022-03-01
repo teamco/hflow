@@ -1,5 +1,4 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
 import { Menu, Popconfirm } from 'antd';
 import {
   ApiTwoTone,
@@ -12,7 +11,7 @@ import {
   UnlockTwoTone
 } from '@ant-design/icons';
 
-import { NavLink } from 'umi';
+import { NavLink, useIntl } from 'umi';
 
 import { COLORS } from '@/utils/colors';
 
@@ -24,8 +23,8 @@ import tableStyles from '@/components/Main/Table/table.module.less';
  * @return {JSX.Element}
  */
 export const UserMenu = props => {
+  const intl = useIntl();
   const {
-    t,
     ability,
     loading,
     record,
@@ -50,7 +49,7 @@ export const UserMenu = props => {
                        icon={<ProfileTwoTone className={tableStyles.action}
                                              twoToneColor={COLORS.success}/>}>
               <NavLink to={`/admin/users/${record.id}`}>
-                {t('menu:userProfile')}
+                {intl.formatMessage({id: 'menu.userProfile', defaultMessage: 'User Profile'})}
               </NavLink>
             </Menu.Item>
         )}
@@ -58,7 +57,7 @@ export const UserMenu = props => {
                    icon={<TrademarkCircleTwoTone className={tableStyles.action}
                                                  twoToneColor={COLORS.success}/>}>
           <NavLink to={`/admin/users/${record.id}/businesses`}>
-            {t('route:businesses')}
+            {intl.formatMessage({id: 'route.businesses', defaultMessage: 'Business'})}
           </NavLink>
         </Menu.Item>
         <Menu.Divider/>
@@ -66,7 +65,7 @@ export const UserMenu = props => {
                    icon={<NotificationTwoTone className={tableStyles.action}
                                               twoToneColor={COLORS.warning}/>}>
           <NavLink to={`/admin/users/${record.id}/notifications`}>
-            {t('route:notifications')}
+            {intl.formatMessage({id: 'route.notifications', defaultMessage: 'Notifications'})}
           </NavLink>
         </Menu.Item>
         {(currentUser?.uid !== record.uid) && (
@@ -76,7 +75,7 @@ export const UserMenu = props => {
                        }}
                        icon={<MessageTwoTone className={tableStyles.action}
                                              twoToneColor={COLORS.warning}/>}>
-              {t('auth:sendMessage')}
+              {intl.formatMessage({id: 'auth.sendMessage', defaultMessage: 'Send Message'})}
             </Menu.Item>
         )}
         <Menu.Divider/>
@@ -87,14 +86,14 @@ export const UserMenu = props => {
                                        className={tableStyles.action}/>)
                    }>
           {isLocked ? (
-              <Popconfirm title={t('auth:unlockConfirm', { instance: record.email })}
+              <Popconfirm title={intl.formatMessage({id: 'auth.unlockConfirm', defaultMessage: 'Are you sure to unlock user {instance}?'}, { instance: record.email })}
                           placement={'topRight'}
                           onConfirm={() => onUnlockUser(record)}>
-                {t('auth:unlock')}
+                {intl.formatMessage({id: 'auth.unlock', defaultMessage: 'Unlock'})}
               </Popconfirm>
           ) : (
               <div onClick={() => onLockUser(record)}>
-                {t('auth:lock')}
+                {intl.formatMessage({id: 'auth.lock', defaultMessage: 'Lock'})}
               </div>
           )}
         </Menu.Item>
@@ -106,26 +105,26 @@ export const UserMenu = props => {
                                    className={tableStyles.action}/>
                    )}>
           {signedIn ? (
-              <Popconfirm title={t('auth:signOutConfirm', { instance: record.email })}
+              <Popconfirm title={intl.formatMessage({id: 'auth.signOutConfirm', defaultMessage: 'Are you sure to sign out user {instance}?'}, { instance: record.email })}
                           placement={'topRight'}
                           onConfirm={() => onSignOutUser(record)}>
-                {t('auth:forceSignOut')}
+                {intl.formatMessage({id: 'auth.forceSignOut', defaultMessage: 'Force SignOut'})}
               </Popconfirm>
-          ) : t('auth:forceSignOut')
+          ) : intl.formatMessage({id: 'auth.forceSignOut', defaultMessage: 'Force SignOut'})
           }
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item key={'delete'}
                    icon={<DeleteTwoTone className={tableStyles.action}
                                         twoToneColor={COLORS.danger}/>}>
-          <Popconfirm title={t('msg:deleteConfirm', { instance: record.email })}
+          <Popconfirm title={intl.formatMessage({id: 'msg:deleteConfirm', defaultMessage: 'Are you sure to delete this {instance}?'}, { instance: record.email })}
                       placement={'topRight'}
                       onConfirm={() => onDeleteUser(record)}>
-            {t('actions:delete')}
+            {intl.formatMessage({id: 'actions.delete', defaultMessage: 'Delete'})}
           </Popconfirm>
         </Menu.Item>
       </Menu>
   );
 };
 
-export default withTranslation()(UserMenu);
+export default UserMenu;

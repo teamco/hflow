@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import { features } from './features';
 
@@ -32,4 +31,4 @@ export default connect(
         });
       }
     })
-)(withTranslation()(features));
+)(features);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Avatar, Dropdown, Tooltip } from 'antd';
 import { ContactsTwoTone, EllipsisOutlined, PauseCircleTwoTone, PlayCircleTwoTone } from '@ant-design/icons';
-import { NavLink } from 'umi';
+import { NavLink, useIntl } from 'umi';
 
 import { COLORS } from '@/utils/colors';
 
@@ -12,6 +12,7 @@ import menuStyles from '@/components/menu.less';
 import styles from '../users.module.less';
 
 export const userCardMetadata = (t, props) => {
+  const intl = useIntl();
   const {
     className,
     currentUser,
@@ -36,7 +37,7 @@ export const userCardMetadata = (t, props) => {
   const isSignedIn = metadata.signedIn;
   const color = isSignedIn ? COLORS.success : COLORS.disabled;
   const signed = {
-    status: t(isSignedIn ? 'auth:signedIn' : 'auth:signedOut'),
+    status: intl.formatMessage({id: isSignedIn ? 'auth:signedIn' : 'auth:signedOut', defaultMessage:  isSignedIn ? 'Signed in' : 'Sign out'}),
     icon: isSignedIn ?
         (<PlayCircleTwoTone twoToneColor={color}/>) :
         (<PauseCircleTwoTone twoToneColor={color}/>)
@@ -58,7 +59,7 @@ export const userCardMetadata = (t, props) => {
         </NavLink>
     ),
     actions: [
-      <Tooltip title={t('auth:showProfile')}
+      <Tooltip title={intl.formatMessage({id: 'auth.showProfile', defaultMessage: 'Show Profile'})}
                key={'profile'}>
         <ContactsTwoTone onClick={() => showProfileModal(t, props.user)}
                          twoToneColor={COLORS.tags.blue}/>

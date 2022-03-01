@@ -1,5 +1,4 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
 import { Divider } from 'antd';
 
 import Rebate from '@/components/Price/Rebate';
@@ -13,7 +12,6 @@ import Duration from '@/components/Price/Range/Duration';
  */
 const FeatureTrial = (props) => {
   const {
-    t,
     formRef,
     disabled,
     durationTypes = [],
@@ -24,16 +22,16 @@ const FeatureTrial = (props) => {
   return (
       <Rebate.Discount formRef={formRef}
                        disabled={disabled}
-                       header={t('panel:trialPriceInfo')}
+                       header={intl.formatMessage({id: 'panel.trialPriceInfo', defaultMessage: 'Trial Period'})}
                        prefix={['trialPeriod', 'price']}
                        namespace={'discount'}
                        priceMin={0}
                        currencies={currencies}
                        durationTypes={durationTypes}
                        discountTypes={discountTypes}>
-        <Divider orientation={'left'}>{t('price:trial')}</Divider>
+        <Divider orientation={'left'}>{intl.formatMessage({id: 'price.trial', defaultMessage: 'Is Trialed?'})}</Divider>
         <Duration form={formRef}
-                  label={t('price:trialDuration')}
+                  label={intl.formatMessage({id: 'price.trialDuration', defaultMessage: 'Trial Period Duration'})}
                   disabled={disabled}
                   prefix={['trialPeriod']}
                   required={true}
@@ -42,4 +40,4 @@ const FeatureTrial = (props) => {
   );
 };
 
-export default withTranslation()(FeatureTrial);
+export default FeatureTrial;

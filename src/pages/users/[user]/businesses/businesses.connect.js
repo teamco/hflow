@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import { businesses } from './businesses';
 
@@ -24,4 +23,4 @@ export default connect(
       onActivateBusiness() {
       }
     })
-)(withTranslation()(businesses));
+)(businesses);

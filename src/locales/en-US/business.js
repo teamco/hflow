@@ -3,7 +3,7 @@ export default {
   "business.name": "Legal Business Name",
   "business.operating": "Business Operating as",
   "business.phone": "Phone Number",
-  "business.formError": "The {{type}} supplied did not seem to be a {{type}}",
+  "business.formError": "The {type} supplied did not seem to be a {type}",
   "business.address": "Business Address",
   "business.email": "Business Email",
   "business.type": "Business Type",
@@ -24,5 +24,10 @@ export default {
   "business.invitedByUser": "Invited by User",
   "business.assignedTo": "Assigned to Business",
   "business.userRoles": "Business User Roles",
-
+  "business.actions.show": "Show Business",
+  "business.actions.edit": "Edit Business",
+  "business.actions.addNew": "New Business",
+  "business.actions.manage": "Manage Business",
+  "business.meta": "Business",
+  "business.msg.deleteConfirm": "Are you sure to delete this Business?"
 }

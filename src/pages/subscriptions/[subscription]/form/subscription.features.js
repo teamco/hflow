@@ -1,6 +1,6 @@
 import React  from 'react';
 import { Select, Switch } from 'antd';
-
+import { useIntl } from 'umi';
 import FormComponents from '@/components/Form';
 import EmptyData from '@/components/EmptyData';
 
@@ -17,8 +17,8 @@ const { Option } = Select;
  * @constructor
  */
 export const SubscriptionFeatures = (props) => {
+  const intl = useIntl();
   const {
-    t,
     isEdit,
     formRef,
     disabled,
@@ -40,13 +40,13 @@ export const SubscriptionFeatures = (props) => {
   const colProps = { xs: 24, sm: 12, md: 8, lg: 8, xl: 6, xxl: 4 };
 
   return (
-      <GenericPanel header={t('subscription:features')}
+      <GenericPanel header={intl.formatMessage({id: 'subscription.features', defaultMessage: 'Features'})}
                     name={'features'}
                     defaultActiveKey={['features']}>
         <div colProps={colProps}>
           <Select name={'featureType'}
                   form={formRef}
-                  label={t('feature:type')}
+                  label={intl.formatMessage({id: 'feature.type', defaultMessage: 'Subscription Type'})}
                   disabled={disabled}
                   onChange={onChangeFeatureType}
                   config={{ rules: [{ required: true }] }}>
@@ -63,17 +63,17 @@ export const SubscriptionFeatures = (props) => {
               {sortBy(features, 'translateKeys.title', t).map((pref, idx) => {
                 const { title, description, on, off } = pref.translateKeys;
 
-                const _helper = description ? t(description) : null;
+                const _helper = description ? intl.formatMessage({id: description, defaultMessage: ''}) : null;
 
                 return (
                     <Switch key={idx}
-                            label={t(title)}
+                            label={intl.formatMessage({id: title, defaultMessage: ''})}
                             disabled={disabled}
                             form={formRef}
                             tooltip={_helper}
                             config={{ valuePropName: 'checked' }}
-                            checkedChildren={t(on)}
-                            unCheckedChildren={t(off)}
+                            checkedChildren={intl.formatMessage({id: on, defaultMessage: ''})}
+                            unCheckedChildren={intl.formatMessage({id: off, defaultMessage: ''})}
                             name={['featuresByRef', pref.id]}/>
                 );
               })}

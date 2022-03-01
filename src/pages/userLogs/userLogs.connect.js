@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import { userLogs } from './userLogs';
 
@@ -17,4 +16,4 @@ export default connect(
         dispatch({ type: `userLogModel/query` });
       }
     })
-)(withTranslation()(userLogs));
+)(userLogs);

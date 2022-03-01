@@ -7,7 +7,7 @@ import {
   SettingOutlined,
   ShoppingCartOutlined
 } from '@ant-design/icons';
-import { NavLink } from 'umi';
+import { NavLink, useIntl } from 'umi';
 
 import { FeatureMenu } from './metadata/feature.menu';
 
@@ -23,7 +23,7 @@ import { COLORS } from '@/utils/colors';
  * @return {*}
  */
 export const metadata = ({ t, ability, loading }) => {
-
+  const intl = useIntl();
   const menuProps = { t, loading, ability };
 
   return {
@@ -32,14 +32,14 @@ export const metadata = ({ t, ability, loading }) => {
     scroll: { x: 700 },
     columns: [
       {
-        title: t('feature:info'),
+        title: intl.formatMessage({id: 'feature.info', defaultMessage: 'Feature Info'}),
         dataIndex: 'translateKeys',
         key: 'translateKeys',
         render(translateKeys, record) {
           return (
               <div className={styles.example}>
                 <NavLink to={`/admin/features/${record.id}`}>
-                  {t(translateKeys.title)}
+                  {intl.formatMessage({id: translateKeys.title, defaultMessage: ''})}
                 </NavLink>
               </div>
           );
@@ -47,7 +47,7 @@ export const metadata = ({ t, ability, loading }) => {
       },
       {
         title: (
-            <Tooltip title={t('price:discounted')}>
+            <Tooltip title={intl.formatMessage({id: 'price.discounted', defaultMessage: 'Is Discounted?'})}>
               <ShoppingCartOutlined/>
             </Tooltip>
         ),
@@ -62,13 +62,13 @@ export const metadata = ({ t, ability, loading }) => {
         }
       },
       {
-        title: t('feature:type'),
+        title: intl.formatMessage({id: 'feature.type', defaultMessage: 'Type'}),
         dataIndex: 'type',
         key: 'type',
         width: 100
       },
       {
-        title: t('feature:status'),
+        title: intl.formatMessage({id: 'feature.status', defaultMessage: 'Default State'}),
         dataIndex: 'selectedByDefault',
         key: 'selectedByDefault',
         align: 'center',
@@ -80,14 +80,14 @@ export const metadata = ({ t, ability, loading }) => {
                 <Switch defaultChecked={selectedByDefault}
                         disabled
                         size={'small'}
-                        checkedChildren={t(translateKeys.on)}
-                        unCheckedChildren={t(translateKeys.off)}/>
+                        checkedChildren={intl.formatMessage({id: translateKeys.on, defaultMessage: ''})}
+                        unCheckedChildren={intl.formatMessage({id: translateKeys.off, defaultMessage: ''})}/>
               </div>
           );
         }
       },
       {
-        title: t('table:action'),
+        title: intl.formatMessage({id: 'table.action', defaultMessage: 'Action'}),
         align: 'center',
         fixed: 'right',
         width: 200,
@@ -101,7 +101,7 @@ export const metadata = ({ t, ability, loading }) => {
                   <Button size={'small'}
                           icon={<SettingOutlined/>}
                           className={menuStyles.customAction}>
-                    {t('actions:manage', { type: t('menu:feature') })} <DownOutlined/>
+                    {intl.formatMessage({id: 'feature.actions.manage', defaultMessage: 'Manage Feature' })} <DownOutlined/>
                   </Button>
                 </Dropdown>
               </div>
@@ -131,7 +131,7 @@ export const expandableFeature = (props) => {
 
       let _offPrice = null;
       if (discounted) {
-        _offPrice = `(${discount.value}${discount.type === 'Percent' ? '%' : currency} ${t('feature:translateOff')})`;
+        _offPrice = `(${discount.value}${discount.type === 'Percent' ? '%' : currency} ${intl.formatMessage({id: 'feature.translateOff', defaultMessage: 'Off'})})`;
       }
 
       return (
@@ -139,17 +139,17 @@ export const expandableFeature = (props) => {
             <Row {...rowProps}>
               <Col {...colProps}>
                 <Form layout={'vertical'}>
-                  <Form.Item label={t(title)}
-                             tooltip={t(description)}>
-                    <Switch checkedChildren={t(on)}
-                            unCheckedChildren={t(off)}/>
+                  <Form.Item label={intl.formatMessage({id: title})}
+                             tooltip={intl.formatMessage({id: description})}>
+                    <Switch checkedChildren={intl.formatMessage({id: on, defaultMessage: 'On'})}
+                            unCheckedChildren={intl.formatMessage({id: off, defaultMessage: 'Off'})}/>
                   </Form.Item>
                 </Form>
               </Col>
               <Col {...colProps}>
                 <>
                   <div className={'ant-form-horizontal ant-form-item-label'}>
-                    <label>{t('price:originalPrice')}</label>
+                    <label>{intl.formatMessage({id: 'price.originalPrice', defaultMessage: 'Original Price'})}</label>
                   </div>
                   <div>{originalPrice}{currency}</div>
                 </>
@@ -159,7 +159,7 @@ export const expandableFeature = (props) => {
                     <Col {...colProps}>
                       <div>
                         <div className={'ant-form-horizontal ant-form-item-label'}>
-                          <label>{t('price:discountedPrice')}</label>
+                          <label>{intl.formatMessage({id: 'price.discountedPrice', defaultMessage: 'Discounted Price'})}</label>
                         </div>
                         <div>{discountedPrice} {_offPrice}</div>
                       </div>
@@ -167,7 +167,7 @@ export const expandableFeature = (props) => {
                     <Col {...colProps}>
                       <div>
                         <div className={'ant-form-horizontal ant-form-item-label'}>
-                          <label>{t('price:discountDuration')}</label>
+                          <label>{intl.formatMessage({id: 'price.discountDuration', defaultMessage: 'Discount Duration'})}</label>
                         </div>
                         <div>{discount.duration.period} {discount.duration.type}</div>
                       </div>
@@ -175,7 +175,7 @@ export const expandableFeature = (props) => {
                     <Col {...colProps}>
                       <div>
                         <div className={'ant-form-horizontal ant-form-item-label'}>
-                          <label>{t('price:discountStartedAt')}</label>
+                          <label>{intl.formatMessage({id: 'price.discountStartedAt', defaultMessage: 'Started at'})}</label>
                         </div>
                         <div>{discount.startedAt}</div>
                       </div>

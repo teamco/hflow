@@ -10,10 +10,15 @@ export default {
   "subscription.saleStart": "Started at",
   "subscription.saleEnd": "Expired at",
   "subscription.discount": "Discount",
-  "subscription.discountInfo": "Discount {{discount}}",
+  "subscription.discountInfo": "Discount {discount}",
   "subscription.info": "Subscription Info",
   "subscription.price": "Price",
   "subscription.notice": "Notice",
   "subscription.users": "Maximum of Business users",
-  "subscription.usersInfo": "Upto to {{users}} users"
+  "subscription.usersInfo": "Upto to {users} users",
+  "subscription.actions.edit": "Edit Subscriptions",
+  "subscription.actions.addNew": "Add new Subscriptions",
+  'subscription.actions:manage': 'Manage Subscriptions',
+  "subscription.msg.deleteConfirm": "Are you sure to delete this subscription",
+  "subscription.tags": 'Tags'
 }
