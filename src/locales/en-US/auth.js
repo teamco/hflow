@@ -50,6 +50,6 @@ export default {
   "auth.lastSignInTime": "Last Sign In",
   "auth.signOutConfirm": "Are you sure to sign out user {instance}?",
   "auth.unlockConfirm": "Are you sure to unlock user {{instance}}?",
-  "auth.errorLockedDelete": "Unable to delete {{instance}}, user is locked",
+  "auth.errorLockedDelete": "Unable to delete {instance}, user is locked",
   "auth.pending": "Pending"
 }

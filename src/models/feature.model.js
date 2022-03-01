@@ -4,9 +4,8 @@ import dvaModelExtend from 'dva-model-extend';
 import { commonModel } from 'models/common.model';
 import { custDiscountType, isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
-import { history } from 'umi';
+import { history, useIntl } from 'umi';
 
-import i18n from '@/utils/i18n';
 import { monitorHistory } from '@/utils/history';
 import { errorSaveMsg } from '@/utils/message';
 import { addFeature, getFeature, getFeatures, updateFeature } from 'services/features.service';
@@ -183,7 +182,7 @@ export default dvaModelExtend(commonModel, {
 
         const data = {
           id: selectedFeature?.id,
-          name: i18n.t(title),
+          name: useIntl().formatMessage({id: title, defaultMessage: ''}),
           selectedByDefault,
           trialPeriod: { ..._defineTrialed(trialed, trialPeriod) },
           price: { ..._definePrice(price) },

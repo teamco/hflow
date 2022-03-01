@@ -1,7 +1,7 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 import { message } from 'antd';
-
+import { useIntl } from 'umi';
 import { commonModel } from '@/models/common.model';
 import { fbFindById, fbUpdate } from '@/services/firebase.service';
 import {
@@ -12,7 +12,6 @@ import {
 } from '@/services/user.service';
 import { defineAbilityFor } from '@/utils/auth/ability';
 import { monitorHistory } from '@/utils/history';
-import i18n from '@/utils/i18n';
 
 const MODEL_NAME = 'userModel';
 
@@ -88,7 +87,7 @@ export default dvaModelExtend(commonModel, {
       const { user } = payload;
 
       if (user.metadata.isLocked) {
-        return message.warning(i18n.t('auth:errorLockedDelete', { instance: user.email })).then();
+        return message.warning(useIntl().formatMessage({id: 'auth.errorLockedDelete', defaultMessage: 'Unable to delete {instance}, user is locked'}, { instance: user.email })).then();
       } else {
       }
     },
