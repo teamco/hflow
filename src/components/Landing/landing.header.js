@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { withTranslation } from 'react-i18next';
-import { history, NavLink } from 'umi';
+import { history, NavLink, useIntl } from 'umi';
 import { Col, Dropdown, Menu, Row } from 'antd';
 import classnames from 'classnames';
 
@@ -17,9 +16,8 @@ import styles from '@/components/Landing/landing.module.less';
  * @return {JSX.Element}
  */
 const landingHeader = props => {
-
+  const intl = useIntl();
   const {
-    t,
     icon,
     title,
     topUnder,
@@ -97,14 +95,14 @@ const landingHeader = props => {
           <Col span={6}>
             <img src={icon}
                  className={styles.icon}
-                 alt={t(title)}/>
+                 alt={intl.formatMessage({id: title, defaultMessage: ''})}/>
           </Col>
           <Col span={18}>
             <Row justify={'end'}
                  gutter={[16, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
               <Col className={styles.headerText}>
                 <CommentOutlined/>
-                <span>{t('landing:help')}</span>
+                <span>{intl.formatMessage({id: 'landing.help', defaultMessage: 'Help'})}</span>
               </Col>
               <Col className={styles.headerText}>
                 <SignIn forceLogin={true}
@@ -122,20 +120,20 @@ const landingHeader = props => {
                         <NavLink to={`/admin/users/${user.id}/notifications`}
                                  className={styles.ads}>
                           <PlusOutlined/>
-                          {t('landing:ads')}
+                          {intl.formatMessage({id: 'landing.ads', defaultMessage: 'Advertise'})}
                         </NavLink>
                       </div>
                       <Dropdown overlay={menu}
                                 trigger={['click']}
                                 placement={'bottomRight'}>
                         <span>
-                          {t(user.displayName)}
+                          {intl.formatMessage({id: user.displayName, defaultMessage: ''})}
                         </span>
                       </Dropdown>
                     </div>
                 ) : (
                     <>
-                      <span onClick={handleSignIn}>{t('auth:signIn')}</span>
+                      <span onClick={handleSignIn}>{intl.formatMessage({id: 'auth.signIn', defaultMessage: 'Sign In'})}</span>
                     </>
                 )}
               </Col>
@@ -146,4 +144,4 @@ const landingHeader = props => {
   );
 };
 
-export default withTranslation()(landingHeader);
+export default landingHeader;

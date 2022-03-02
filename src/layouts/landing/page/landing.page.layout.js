@@ -18,7 +18,6 @@ const { Content } = Layout;
  */
 export const LandingPage = (props) => {
   const {
-    t,
     landingModel,
     authModel,
     loading,

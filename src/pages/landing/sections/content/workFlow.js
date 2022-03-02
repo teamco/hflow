@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useIntl } from 'umi';
 import classnames from 'classnames';
 import { Col, Row } from 'antd';
 
@@ -8,7 +8,8 @@ import Border from '@/components/Border';
 import styles from 'pages/landing/landing.module.less';
 
 const WorkFlow = props => {
-  const { t, className } = props;
+  const intl = useIntl();
+  const { className } = props;
 
   const topProps = {
     direction: 'top',
@@ -48,7 +49,7 @@ const WorkFlow = props => {
       <div className={styles.workFlowWrapper}>
         <Border {...topProps}/>
         <div className={classnames(className, styles.workFlow)}>
-          <h1>{t('landing:workFlow')}</h1>
+          <h1>{intl.formatMessage({id: 'landing.workFlow', defaultMessage: 'Work Flow'})}</h1>
           <Row gutter={[20, 20]}>
             <Col {...colPropsLeft}>
               <h3 className={styles.textRight}>
@@ -104,4 +105,4 @@ const WorkFlow = props => {
   );
 };
 
-export default withTranslation()(WorkFlow);
+export default WorkFlow;

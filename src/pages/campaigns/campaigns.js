@@ -1,7 +1,7 @@
 import React  from 'react';
 import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-
+import { useIntl } from 'umi';
 import Page from '@/components/Page';
 import Main from '@/components/Main';
 import { Can } from '@/utils/auth/can';
@@ -20,6 +20,7 @@ const { Table } = Main;
  * @return {JSX.Element}
  */
 export const campaigns = (props) => {
+  const intl = useIntl();
   const {
     t,
     authModel,
@@ -45,7 +46,7 @@ export const campaigns = (props) => {
   const subTitle = (
       <>
         <ShoppingCartOutlined style={{ marginRight: 10 }}/>
-        {t('menu:campaigns')}
+        {intl.formatMessage({id: 'menu.campaigns', defaultMessage: 'Campaigns'})}
       </>
   );
   const campaignProps = {
@@ -80,14 +81,14 @@ export const campaigns = (props) => {
                                   icon={<AppstoreAddOutlined/>}
                                   onClick={() => onNew()}
                                   type={'primary'}>
-                            {t('actions:new')}
+                            {intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
                           </Button>
                         </Can>
                       ]}>
           </PageHeader>
           <Table data={data}
                  {...tableProps}
-                 {...metadata({ t, ...campaignProps })} />
+                 {...metadata({...campaignProps })} />
         </div>
       </Page>
   );

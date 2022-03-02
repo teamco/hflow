@@ -3,7 +3,7 @@ import { Button, Popconfirm } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { isLoading } from '@/utils/state';
 
-import i18n from './i18n';
+import { useIntl } from 'umi';
 import { COLORS } from './colors';
 
 /**
@@ -39,7 +39,7 @@ export const buttonsMetadata = ({ model, props }) => {
 export const saveBtn = (isEdit, onClick, loading) => (
     <Button size={'small'} type={'primary'} onClick={onClick} htmlType={'submit'} loading={isLoading(loading)}
             key={'save'}>
-      {isEdit ? i18n.t('actions:update') : i18n.t('actions:save')}
+      {isEdit ? useIntl().formatMessage({id: 'actions.update', defaultMessage: 'Update'}) : useIntl().formatMessage({id: 'actions.save', defaultMessage: 'Save'})}
     </Button>
 );
 
@@ -51,7 +51,7 @@ export const saveBtn = (isEdit, onClick, loading) => (
  */
 export const closeBtn = (onClick, loading) => (
     <Button size={'small'} onClick={onClick} htmlType={'submit'} loading={isLoading(loading)} key={'close'}>
-      {i18n.t('actions:close')}
+      {useIntl().formatMessage({id: 'actions.close', defaultMessage: 'Close'})}
     </Button>
 );
 
@@ -63,7 +63,7 @@ export const closeBtn = (onClick, loading) => (
  * @return {JSX.Element}
  */
 export const deleteBtn = (onClick, loading, instance) => (
-    <Popconfirm title={i18n.t('msg:deleteConfirm', { instance })}
+    <Popconfirm title={useIntl().formatMessage({id: 'msg:deleteConfirm', defaultMessage: 'Are you sure to delete this {instance}?'}, { instance })}
                 key={'delete-confirm'}
                 placement={'bottomRight'}
                 onConfirm={onClick}
@@ -73,7 +73,7 @@ export const deleteBtn = (onClick, loading, instance) => (
               htmlType={'submit'}
               loading={isLoading(loading)}
               key={'delete'}>
-        {i18n.t('actions:delete')}
+        {useIntl().formatMessage({id: 'actions.delete', defaultMessage: 'Delete'})}
       </Button>
     </Popconfirm>
 );
@@ -91,6 +91,6 @@ export const newBtn = (onClick, loading) => (
             htmlType={'submit'}
             loading={isLoading(loading)}
             key={'new'}>
-      {i18n.t('actions:new')}
+      {useIntl().formatMessage({id: 'actions.new', defaultMessage: 'New'})}
     </Button>
 );

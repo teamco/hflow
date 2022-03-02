@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, InputNumber, Select } from 'antd';
-import { withTranslation } from 'react-i18next';
+import { useIntl } from 'umi';
 import HiddenField from '@/components/Form/HiddenField';
 import { complexFormKey, updateComplexForm } from '@/utils/form';
 
@@ -13,8 +13,8 @@ const { Option } = Select;
  * @constructor
  */
 const Duration = props => {
+  const intl = useIntl();
   const {
-    t,
     form,
     min = 1,
     label,
@@ -65,13 +65,13 @@ const Duration = props => {
                    rules={[
                      {
                        required,
-                       message: t('form:required', { field: label })
+                       message: intl.formatMessage({id: 'form.required', defaultMessage: '{field} is required'}, { field: label })
                      }
                    ]}>
           <InputNumber addonBefore={selectDurationBefore}
                        min={min}
                        disabled={disabled}
-                       placeholder={t('form:placeholder', { field: label })}/>
+                       placeholder={intl.formatMessage({id: 'form.placeholder', defaultMessage: 'Enter {field}'}, { field: label })}/>
         </Form.Item>
         <HiddenField name={[...prefix, namespace, 'type']}
                      form={form}
@@ -81,4 +81,4 @@ const Duration = props => {
   );
 };
 
-export default withTranslation()(Duration);
+export default Duration;

@@ -23,7 +23,7 @@ export const expendableNotification = props => {
               <Col {...colProps}>
                 <div>
                   <MessageTwoTone/>
-                  <strong>{t('form:description')}</strong>
+                  <strong>{t.formatMessage({id: 'form.description', defaultMessage: 'Description'})}</strong>
                 </div>
                 {record?.description}
               </Col>
@@ -31,7 +31,7 @@ export const expendableNotification = props => {
                   <Col {...colProps}>
                     <div>
                       <MessageTwoTone/>
-                      <strong>{t('status:answered')}</strong>
+                      <strong>{t.formatMessage({id: 'status.answered', defaultMessage: 'Answered' })}</strong>
                     </div>
                     {record?.replyedTo?.title}
                   </Col>
@@ -42,7 +42,7 @@ export const expendableNotification = props => {
                   <Col {...colProps}>
                     <div>
                       <MailTwoTone/>
-                      <strong>{t('notifications:from')}</strong>
+                      <strong>{t.formatMessage({id: 'notifications.from', defaultMessage: 'From'})}</strong>
                     </div>
                     <div className={styles.reply}
                          onClick={() => {
@@ -55,14 +55,14 @@ export const expendableNotification = props => {
                              }
                            });
                          }}>
-                      {t('notifications:re', { sender: record?.sentFrom?.email })}
+                      {t.formatMessage({id: 'notifications.re', defaultMessage: 'RE: {sender}'},{ sender: record?.sentFrom?.email })}
                     </div>
                   </Col>
               )}
               <Col {...colProps}>
                 <div>
                   <MailTwoTone/>
-                  <strong>{t('notifications:to')}</strong>
+                  <strong>{t.formatMessage({id: 'notifications:to', defaultMessage: 'To'})}</strong>
                 </div>
                 {record?.sentTo}
               </Col>

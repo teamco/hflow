@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Tag } from 'antd';
+import { useIntl } from 'umi';
 import { CheckCircleTwoTone, LockTwoTone, UnlockTwoTone, WarningTwoTone } from '@ant-design/icons';
 
 import { tsToLocaleDateTime } from '@/utils/timestamp';
@@ -15,14 +16,15 @@ import styles from '../users.module.less';
  * @param t
  * @param record
  */
-export const showProfileModal = (t, record) => {
+export const showProfileModal = (record) => {
   const { metadata } = record;
+  const intl = useIntl();
 
   Modal.info({
     title: false,
     icon: false,
     width: 500,
-    okText: t('actions:close'),
+    okText: intl.formatMessage({id: 'actions.close', defaultMessage: 'Close'}),
     okButtonProps: { size: 'small' },
     content: (
         <div className={styles.profile}>
@@ -32,21 +34,21 @@ export const showProfileModal = (t, record) => {
                    alt={record.displayName}/>
           )}
           <div style={{ flex: '40%' }}>
-            <div><strong>{t('table:name')}</strong></div>
-            <div><strong>{t('auth:email')}</strong></div>
-            <div><strong>{t('form:createdAt')}</strong></div>
-            <div><strong>{t('auth:lastSignInTime')}</strong></div>
-            <div><strong>{t('auth:emailVerified')}</strong></div>
+            <div><strong>{intl.formatMessage({id: 'table.name', defaultMessage: 'Name'})}</strong></div>
+            <div><strong>{intl.formatMessage({id: 'auth.email', defaultMessage: 'Email'})}</strong></div>
+            <div><strong>{intl.formatMessage({id: 'form.createdAt', defaultMessage: 'Created at'})}</strong></div>
+            <div><strong>{intl.formatMessage({id: 'auth.lastSignInTime', defaultMessage: 'Last Sign In'})}</strong></div>
+            <div><strong>{intl.formatMessage({id: 'auth.emailVerified', defaultMessage: 'Verified'})}</strong></div>
             <div style={{ marginTop: '20px' }}>
-              <strong>{t('auth:provider')}</strong>
+              <strong>{intl.formatMessage({id: 'auth.provider', defaultMessage: 'Provider'})}</strong>
             </div>
             <div style={{ marginTop: '20px' }}>
-              <strong>{t('auth:roles')}</strong>
+              <strong>{intl.formatMessage({id: 'auth.roles', defaultMessage: 'Roles'})}</strong>
             </div>
           </div>
           <div style={{ flex: '60%' }}>
             <div>{record.displayName}</div>
-            <div>{record.email || t('error:na')}</div>
+            <div>{record.email || intl.formatMessage({id: 'error.na', defaultMessage: 'None'})}</div>
             <div>{tsToLocaleDateTime(+(new Date(metadata.creationTime)))}</div>
             <div>{tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))}</div>
             <div>

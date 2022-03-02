@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import { featureTypes } from './featureTypes';
 
@@ -33,4 +32,4 @@ export default connect(
         });
       }
     })
-)(withTranslation()(featureTypes));
+)(featureTypes);

@@ -1,5 +1,5 @@
 import React, { Suspense, useState } from 'react';
-import { Helmet } from 'umi';
+import { Helmet, useIntl } from 'umi';
 import { Form, Layout } from 'antd';
 import * as queryString from 'querystring';
 
@@ -24,13 +24,12 @@ const { Content } = Layout;
  * @constructor
  */
 export const AppLayout = (props) => {
-
+  const intl = useIntl();
   const { mode } = queryString.parse(window.location.search);
 
   const [isSignInVisible, setIsSignInVisible] = useState(false);
 
   const {
-    t,
     children,
     appModel,
     authModel,
@@ -103,7 +102,7 @@ export const AppLayout = (props) => {
                       </div>
                     </Form.Provider>
                   </Content>
-                  {mainFooter && <Main.Footer author={t('author', { year: 2020 })}/>}
+                  {mainFooter && <Main.Footer author={intl.formatMessage({id: 'author', defaultMessage: 'Author'}, { year: 2020 })}/>}
                 </Layout>
               </Layout>
             </Suspense>

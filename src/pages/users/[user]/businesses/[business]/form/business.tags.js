@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useIntl } from 'umi';
 import FormComponents from '@/components/Form';
 
 const { GenericPanel, EditableTags } = FormComponents;
@@ -15,20 +15,20 @@ const { GenericPanel, EditableTags } = FormComponents;
  * @constructor
  */
 export const BusinessTags = ({
-  t,
   formRef,
   tags,
   disabled,
   onUpdateTags
 }) => {
+  const intl = useIntl();
   return (
-      <GenericPanel header={t('business:tags')}
+      <GenericPanel header={intl.formatMessage({id: 'business.tags', defaultMessage: 'Tags'})}
                     name={'tags'}>
         <div>
-          <EditableTags label={t('form:tags')}
+          <EditableTags label={intl.formatMessage({id: 'form.tags', defaultMessage: 'Tags'})}
                         name={'tags'}
                         disabled={disabled}
-                        newTag={t('actions:new')}
+                        newTag={intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
                         onChange={onUpdateTags}
                         tags={tags}/>
         </div>

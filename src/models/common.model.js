@@ -1,8 +1,8 @@
 import { getEntityFormIdx } from 'services/common.service';
 import { message } from 'antd';
-import { history } from 'umi';
+import { history, useIntl } from 'umi';
 import { merge } from 'lodash';
-import i18n from '@/utils/i18n';
+
 import { fbFindById } from '@/services/firebase.service';
 
 const DEFAULT_FORM = [
@@ -188,7 +188,7 @@ const commonModel = {
           key,
           redirect,
           type: 404,
-          message: i18n.t('error:notFound', { entity })
+          message: useIntl().formatMessage({id: 'error:notFound', defaultMessage: '{entity} not found'}, { entity })
         }
       });
     },
@@ -201,7 +201,7 @@ const commonModel = {
           key,
           redirect,
           type: 403,
-          message: i18n.t('error:noPermissions')
+          message: useIntl.formatMessage({id: 'error:noPermissions', defaultMessage: 'Has no relevant permissions'})
         }
       });
     }

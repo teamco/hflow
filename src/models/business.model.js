@@ -3,7 +3,7 @@ import dvaModelExtend from 'dva-model-extend';
 import { message } from 'antd';
 import { commonModel } from 'models/common.model';
 import { REMOTE_SERVER } from 'services/config/server.config';
-import i18n from '@/utils/i18n';
+import {useIntl} from 'umi';
 import moment from 'moment';
 import { history } from 'umi';
 
@@ -370,11 +370,11 @@ export default dvaModelExtend(commonModel, {
         yield put({
           type: 'notificationModel/createAndUpdate',
           payload: {
-            type: i18n.t('notifications:invitation'),
+            type: useIntl().formatMessage({id: 'notifications:invitation', defaultMessage: 'Invitation'}),
             title: isResend ?
-                i18n.t('notifications:reSentInvitation') :
-                i18n.t('notifications:sentInvitation'),
-            description: i18n.t('error:na'),
+                useIntl().formatMessage({id: 'notifications.reSentInvitation', defaultMessage: 'Resent business user invitation'}) :
+                useIntl().formatMessage({id: 'notifications.sentInvitation', defaultMessage: 'Sent business user invitation'}),
+            description: useIntl().formatMessage({id: 'error.na', defaultMessage: 'None'}),
             status: STATUS.pending,
             isPrivate: true,
             sentTo: email
@@ -399,7 +399,7 @@ export default dvaModelExtend(commonModel, {
         let _tempExist = yield call(findBusinessTempUser, { email });
 
         if (_tempExist.docId) {
-          return yield call(message.warning, i18n.t('error:userExist'));
+          return yield call(message.warning, useIntl().formatMessage({id: 'error.userExist', defaultMessage: 'The user already exist'}));
         }
 
         const data = {
@@ -458,7 +458,7 @@ export default dvaModelExtend(commonModel, {
 
         } else {
 
-          yield call(message.warning, i18n.t('error:userAssigned'));
+          yield call(message.warning, useIntl().formatMessage({id: 'error.userAssigned', defaultMessage: 'The user already assigned to business'}));
           history.push(`/errors/404`);
         }
       }

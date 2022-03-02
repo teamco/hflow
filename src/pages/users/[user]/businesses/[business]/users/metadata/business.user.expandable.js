@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'antd';
+import { useIntl } from 'umi';
 import { CalendarTwoTone, MailTwoTone } from '@ant-design/icons';
 import { tsToLocaleDateTime } from '@/utils/timestamp';
 import EmailVerified from '@/components/Profile/email.verified';
@@ -13,7 +14,6 @@ import styles from 'pages/users/users.module.less';
  */
 export const expandable = (props) => {
   const {
-    t,
     component,
     verificationSent,
     businessRoles,
@@ -36,15 +36,15 @@ export const expandable = (props) => {
               <Col span={8}>
                 <div>
                   <MailTwoTone/>
-                  <strong>{t('auth:email')}</strong>
+                  <strong>{intl.formatMessage({id: 'auth.email', defaultMessage: 'Email'})}</strong>
                 </div>
-                <div>{record.email || t('error:na')}</div>
+                <div>{record.email || intl.formatMessage({id: 'error:na', defaultMessage: 'None'})}</div>
               </Col>
               {pending ? null : (
                   <Col span={8}>
                     <div>
                       <CalendarTwoTone/>
-                      <strong>{t('form:createdAt')}</strong>
+                      <strong>{intl.formatMessage({id: 'form.createdAt', defaultMessage: 'Created at'})}</strong>
                     </div>
                     <div>{tsToLocaleDateTime(+(new Date(creationTime)))}</div>
                   </Col>
@@ -53,7 +53,7 @@ export const expandable = (props) => {
                   <Col span={8}>
                     <div>
                       <CalendarTwoTone/>
-                      <strong>{t('form:invitedAt')}</strong>
+                      <strong>{intl.formatMessage({id: 'form.invitedAt', defaultMessage: 'Invited at'})}</strong>
                     </div>
                     <div>
                       {tsToLocaleDateTime(invitedAt)}
@@ -63,7 +63,7 @@ export const expandable = (props) => {
                                  onResendRegisterLink(record);
                                  setShowSendInvitation(false);
                                }}>
-                            {t('auth:reSendRegisterLink')}
+                            {intl.formatMessage({id: 'auth.reSendRegisterLink', defaultMessage: 'Re-Send Invitation'})}
                           </div>
                       )}
                     </div>

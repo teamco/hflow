@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
-
 import LandingHeader from '@/components/Landing/landing.header';
 
 import styles from 'pages/landing/landing.module.less';
@@ -11,9 +9,7 @@ import styles from 'pages/landing/landing.module.less';
  * @return {JSX.Element}
  */
 const headerSection = props => {
-
   const {
-    t,
     icon,
     user,
     topUnder,
@@ -49,4 +45,4 @@ const headerSection = props => {
   );
 };
 
-export default withTranslation()(headerSection);
+export default headerSection;

@@ -1,4 +1,3 @@
-import { withTranslation } from 'react-i18next';
 import { history, connect } from 'umi';
 
 import { featureEdit } from './featureEdit';
@@ -42,4 +41,4 @@ export default connect(
       onDeleteFeature() {
       }
     })
-)(withTranslation()(featureEdit));
+)(featureEdit);

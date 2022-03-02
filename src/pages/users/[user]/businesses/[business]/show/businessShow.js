@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'umi';
+import { useParams, useIntl } from 'umi';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
 import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
 
@@ -19,9 +19,8 @@ const { Info } = Main;
 
 export const businessShow = (props) => {
   const [formRef] = Form.useForm();
-
+  const intl = useIntl();
   const {
-    t,
     authModel,
     businessModel,
     loading,
@@ -65,7 +64,6 @@ export const businessShow = (props) => {
   ]);
 
   const businessInfoProps = {
-    t,
     formRef,
     disabled,
     businessTypes,
@@ -149,7 +147,7 @@ export const businessShow = (props) => {
   const subTitle = (
       <>
         <TrademarkOutlined style={{ marginRight: 10 }}/>
-        {t('actions:show', { type: t('business') })}
+        {intl.formatMessage({id: 'business.actions.show', defaultMessage: 'Show Business'})}
       </>
   );
 
@@ -167,7 +165,7 @@ export const businessShow = (props) => {
                         <Button key={'close'}
                                 size={'small'}
                                 onClick={() => onClose(params.user)}>
-                          {t('actions:close')}
+                          {intl.formatMessage({id: 'actions.close', defaultMessage: 'Close'})}
                         </Button>,
                         <Dropdown overlay={<BusinessMenu record={{ id: params?.business }} {...menuProps} />}
                                   trigger={['click']}
@@ -176,7 +174,7 @@ export const businessShow = (props) => {
                           <Button size={'small'}
                                   icon={<SettingOutlined/>}
                                   className={menuStyles.customAction}>
-                            {t('actions:manage', { type: t('business') })} <DownOutlined/>
+                            {intl.formatMessage({id: 'business.actions.manage', defaultMessage: 'Manage Business'})} <DownOutlined/>
                           </Button>
                         </Dropdown>
                       ]}/>

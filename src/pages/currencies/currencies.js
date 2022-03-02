@@ -1,7 +1,7 @@
 import React  from 'react';
 import { Form, PageHeader } from 'antd';
 import { FontSizeOutlined } from '@ant-design/icons';
-
+import { useIntl  } from 'umi';
 import Page from '@/components/Page';
 import SaveButton from '@/components/Buttons/save.button';
 import FormComponents from '@/components/Form';
@@ -23,10 +23,10 @@ const { Info } = Main;
  * @return {JSX.Element}
  */
 export const currencies = props => {
+  const intl = useIntl();
   const [formRef] = Form.useForm();
 
   const {
-    t,
     simpleModel,
     authModel,
     loading,
@@ -56,7 +56,7 @@ export const currencies = props => {
   const subTitle = (
       <>
         <FontSizeOutlined style={{ marginRight: 10 }}/>
-        {t('panel:featureConfig')}
+        {intl.formatMessage({id: 'panel.featureConfig', defaultMessage: 'Feature Configuration'})}
       </>
   );
 
@@ -68,7 +68,6 @@ export const currencies = props => {
   } = fromForm(entityForm, 'metadata') || {};
 
   const infoProps = {
-    t,
     isEdit,
     touched,
     info: {
@@ -109,14 +108,14 @@ export const currencies = props => {
                 form={formRef}
                 fields={entityForm}
                 onFinish={onFinish}>
-            <GenericPanel header={t('panel:currencies')}
+            <GenericPanel header={intl.formatMessage({id: 'panel.currencies', defaultMessage: 'Currencies'})}
                           name={'currencies'}
                           defaultActiveKey={['currencies']}>
               <div>
                 <EditableTags label={false}
                               name={'tags'}
                               disabled={disabled}
-                              newTag={t('actions:new')}
+                              newTag={intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
                               onChange={onUpdateTags}
                               tags={tags}/>
               </div>

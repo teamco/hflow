@@ -1,0 +1,23 @@
+export default {
+  "route.page403": "Page 403",
+  "route.page404": "Page 404",
+  "route.home": "Home",
+  "route.admin": "Admin",
+  "route.users": "Users",
+  "route.manageRoles": "Manage Roles",
+  "route.businessTypes": "Types",
+  "route.userProfile": "Profile",
+  "route.businesses": "Businesses",
+  "route.subscriptions": "Subscriptions",
+  "route.subscription": "Subscription",
+  "route.subscriptionTypes": "Subscription Types",
+  "route.features": "Subscription Features",
+  "route.subscriptionPref": "Feature",
+  "route.campaigns": "Campaigns",
+  "route.campaign": "Campaign",
+  "route.business": "Business",
+  "route.businessShow": "Business Profile",
+  "route.businessEdit": "Edit",
+  "route.notifications": "Notifications",
+  "route.businessUsers": "Assigned Users"
+}

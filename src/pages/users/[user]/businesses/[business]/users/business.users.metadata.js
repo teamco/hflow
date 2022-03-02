@@ -1,6 +1,6 @@
 import React from 'react';
 import { DownOutlined, PauseCircleTwoTone, PlayCircleTwoTone, SettingOutlined, SyncOutlined } from '@ant-design/icons';
-
+import { useIntl } from 'umi';
 import { Button, Dropdown, Tag, Tooltip } from 'antd';
 
 import classnames from 'classnames';
@@ -28,7 +28,6 @@ import menuStyles from '@/components/menu.less';
  * @return {*}
  */
 export const metadata = ({
-  t,
   ability,
   currentUser,
   data,
@@ -39,7 +38,7 @@ export const metadata = ({
   onUnassignUser,
   onResendRegisterLink
 }) => {
-
+  const intl = useIntl();
   const menuProps = {
     ability,
     loading,
@@ -54,14 +53,14 @@ export const metadata = ({
     size: 'middle',
     columns: [
       {
-        title: t('table:name'),
+        title: intl.formatMessage({id: 'table.name', defaultMessage: 'Name'}),
         dataIndex: 'displayName',
         key: 'displayName',
         render(name, data) {
           const { pending, signedIn } = data?.metadata || {};
           const color = signedIn ? COLORS.success : COLORS.disabled;
           const signed = {
-            title: t(signedIn ? 'auth:signedIn' : 'auth:signedOut'),
+            title: intl.formatMessage({id: signedIn ? 'auth.signedIn' : 'auth.signedOut', defaultMessage: signedIn ? 'Signed in' : 'Sign out'}),
             icon: signedIn ?
                 (<PlayCircleTwoTone twoToneColor={color}/>) :
                 (<PauseCircleTwoTone twoToneColor={color}/>)
@@ -78,7 +77,7 @@ export const metadata = ({
                   {pending ? (
                           <Tag icon={<SyncOutlined spin/>}
                                color={COLORS.tags.processing}>
-                            {t('auth:pending')}
+                            {intl.formatMessage({id: 'auth.pending', defaultMessage: 'Pending'})}
                           </Tag>
                       ) :
                       name}
@@ -90,7 +89,7 @@ export const metadata = ({
         sortable: multiple
       },
       {
-        title: t('auth:roles'),
+        title: intl.formatMessage({id: 'auth.roles', defaultMessage: 'Roles'}),
         dataIndex: ['userRoles'],
         key: 'roles',
         render(name, data) {
@@ -111,14 +110,14 @@ export const metadata = ({
         }
       },
       {
-        title: t('auth:lastSignInTime'),
+        title: intl.formatMessage({id: 'auth.lastSignInTime', defaultMessage: 'Last Sign In'}),
         dataIndex: 'metadata',
         key: 'lastSignInTime',
-        render: metadata => metadata?.pending ? t('error:na') :
+        render: metadata => metadata?.pending ? intl.formatMessage({id: 'error.na', defaultMessage: 'None'}) :
             tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))
       },
       {
-        title: t('table:action'),
+        title: intl.formatMessage({id: 'table.action', defaultMessage: 'Action'}),
         fixed: 'right',
         width: 150,
         render: record => data.length ? (
@@ -129,7 +128,7 @@ export const metadata = ({
                 <Button size={'small'}
                         icon={<SettingOutlined/>}
                         className={menuStyles.customAction}>
-                  {t('actions:manage', { type: t('menu:users') })} <DownOutlined/>
+                  {intl.formatMessage({id: 'user.actions.manage', defaultMessage: 'Manage User' })} <DownOutlined/>
                 </Button>
               </Dropdown>
             </div>

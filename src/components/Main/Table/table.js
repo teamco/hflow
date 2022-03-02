@@ -1,7 +1,6 @@
 import { Table } from 'antd';
 import React from 'react';
-import { withTranslation } from 'react-i18next';
-
+import { useIntl } from 'umi';
 import styles from '@/components/Main/Table/table.module.less';
 
 /**
@@ -11,7 +10,7 @@ import styles from '@/components/Main/Table/table.module.less';
  * @return {JSX.Element}
  */
 function MainTable(props) {
-
+  const intl = useIntl();
   /**
    * Add keys to dataSource
    * @type {[]}
@@ -72,10 +71,10 @@ function MainTable(props) {
       <Table className={styles.grid}
              scroll={props.scroll}
              expandable={gridProps.expandable}
-             footer={() => `${props.t('table:total')}: ${total}`}
+             footer={() => `${intl.formatMessage({id: 'table.total', defaultMessage: 'Total'})}: ${total}`}
              columns={columns}
              {...gridProps} />
   );
 }
 
-export default withTranslation()(MainTable);
+export default MainTable;

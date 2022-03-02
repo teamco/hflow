@@ -1,8 +1,7 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
 import { Button, message, Tooltip, Upload } from 'antd';
 import { FileDoneOutlined, FormOutlined, InboxOutlined, UploadOutlined } from '@ant-design/icons';
-import { Link } from 'umi';
+import { Link, useIntl } from 'umi';
 import ImgCrop from 'antd-img-crop';
 import classnames from 'classnames';
 
@@ -18,10 +17,9 @@ class UploadFile extends React.Component {
     ableToDownload: true,
     showUpload: false
   };
-
+  intl = useIntl();
   render() {
     const {
-      t,
       field,
       limit = 1,
       type = 'image',
@@ -82,7 +80,7 @@ class UploadFile extends React.Component {
       listType,
       beforeUpload(file) {
         if (allowed.indexOf(file.type) < 0) {
-          return message.error(t('form:uploadTypeError', { name: file.name }));
+          return message.error(intl.formatMessage({id: 'form.uploadTypeError', defaultMessage: '{name} is not a valid file type'}, { name: file.name }));
         }
         onFileRemove({ file, field });
         onFileChange({ file, field });
@@ -111,7 +109,7 @@ class UploadFile extends React.Component {
       hideStyle = null;
     }
 
-    const _card = (<div><UploadOutlined/> {t('form:selectFile')}</div>);
+    const _card = (<div><UploadOutlined/> {intl.formatMessage({id: 'form.selectFile', defaultMessage: 'Select File'})}</div>);
     const _button = (
         <Button type={'primary'}>
           {_card}
@@ -122,8 +120,10 @@ class UploadFile extends React.Component {
         <Dragger {...uploadProps}
                  style={hideStyle}>
           <p className={'ant-upload-drag-icon'}><InboxOutlined/></p>
-          <p className={'ant-upload-text'}>{t('form:uploadText')}</p>
-          <p className={'ant-upload-hint'}>{t('form:uploadHint')}</p>
+          <p className={'ant-upload-text'}>{intl.formatMessage({id: 'form.uploadText', defaultMessage: 'Click or drag file to this area to upload'})}</p>
+          <p className={'ant-upload-hint'}>{intl.formatMessage({id: 'form.uploadHint', defaultMessage: 'Support for a single or bulk upload. Strictly prohibit from uploading company data or other" +\n' +
+                '      " band" +\n' +
+                '      " files'})}</p>
         </Dragger>
     );
 
@@ -192,7 +192,7 @@ class UploadFile extends React.Component {
         <div className={'file-info'}>
           <Link to={'/downloadFile'}
                 onClick={onDownloadFile}>
-            <Tooltip title={t('actions:download')}>{content}</Tooltip>
+            <Tooltip title={intl.formatMessage({id: 'actions.download', defaultMessage: 'Download file'})}>{content}</Tooltip>
           </Link>
         </div>
     );
@@ -223,7 +223,7 @@ class UploadFile extends React.Component {
                         icon={<FormOutlined/>}
                         onClick={() => this.setState({ showUpload: true })}
                         type={'primary'}>
-                  {t('actions:change')}
+                  {intl.formatMessage({id: 'actions:change', defaultMessage: 'Change'})}
                 </Button>
             )}
           </div>
@@ -233,4 +233,4 @@ class UploadFile extends React.Component {
   }
 }
 
-export default withTranslation()(UploadFile);
+export default UploadFile;

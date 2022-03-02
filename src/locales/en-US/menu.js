@@ -1,0 +1,22 @@
+export default {
+  "menu.users": "Users",
+  "menu.userProfile": "User Profile",
+  "menu.manageUsers": "Manage Users",
+  "menu.manageRoles": "Manage Roles",
+  "menu.businessTypes": "Business Types",
+  "menu.campaigns": "Campaigns",
+  "menu.campaign": "Campaign",
+  "menu.subscriptions": "Subscriptions",
+  "menu.subscription": "Subscription",
+  "menu.subscriptionTypes": "Subscription Types",
+  "menu.features": "Features",
+  "menu.featureTypes": "Feature Types",
+  "menu.durationTypes": "Duration Types",
+  "menu.business": "Business",
+  "menu.currencies": "Currencies",
+  "menu.businesses": "Businesses",
+  "menu.notifications": "User Notifications",
+  "menu.systemLogs": "System Logs",
+  "menu.errorLogs": "Error Logs",
+  "menu.userLogs": "User Logs"
+}

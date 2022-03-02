@@ -1,7 +1,7 @@
 import React  from 'react';
 import { Form, PageHeader } from 'antd';
 import { FontSizeOutlined } from '@ant-design/icons';
-
+import { useIntl } from 'umi';
 import Page from '@/components/Page';
 import SaveButton from '@/components/Buttons/save.button';
 import FormComponents from '@/components/Form';
@@ -24,9 +24,8 @@ const { Info } = Main;
  */
 export const businessTypes = props => {
   const [formRef] = Form.useForm();
-
+  const intl = useIntl();
   const {
-    t,
     simpleModel,
     authModel,
     loading,
@@ -56,7 +55,7 @@ export const businessTypes = props => {
   const subTitle = (
       <>
         <FontSizeOutlined style={{ marginRight: 10 }}/>
-        {t('panel:businessConfig')}
+        {intl.formatMessage({id: 'panel.businessConfig', defaultMessage: 'Business Config'})}
       </>
   );
 
@@ -68,7 +67,6 @@ export const businessTypes = props => {
   } = fromForm(entityForm, 'metadata') || {};
 
   const infoProps = {
-    t,
     isEdit,
     touched,
     info: {
@@ -109,14 +107,14 @@ export const businessTypes = props => {
                 form={formRef}
                 fields={entityForm}
                 onFinish={onFinish}>
-            <GenericPanel header={t('panel:businessTypes')}
+            <GenericPanel header={intl.formatMessage({id: 'panel:businessTypes', defaultMessage: 'Types'})}
                           name={'businessTypes'}
                           defaultActiveKey={['businessTypes']}>
               <div>
                 <EditableTags label={false}
                               name={'tags'}
                               disabled={disabled}
-                              newTag={t('actions:new')}
+                              newTag={intl.formatMessage({id: 'actions:new', defaultMessage: ''})}
                               onChange={onUpdateTags}
                               tags={tags}/>
               </div>

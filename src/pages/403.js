@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'umi';
+import { connect, useIntl } from 'umi';
 import { Result } from 'antd';
 import Page from '@/components/Page';
 import { withTranslation } from 'react-i18next';
@@ -15,13 +15,13 @@ import { Can } from '@/utils/auth/can';
  * @return {JSX.Element}
  */
 function page403({ t, component, errorModel }) {
-
+  const intl = useIntl();
   const _403 = (
         <Page component={'page403'}>
           <Result status={'403'}
                   title={'403'}
                   className={styles.page403}
-                  subTitle={t('error:page403')}/>
+                  subTitle={intl.formatMessage({id: 'error.page403', defaultMessage: 'Sorry, you are not authorized to access this page'})}/>
         </Page>
   );
 
@@ -35,4 +35,4 @@ export default connect(({ errorModel, loading }) => ({
       loading
     }),
     dispatch => ({})
-)(withTranslation()(page403));
+)(page403);

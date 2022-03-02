@@ -1,6 +1,6 @@
 import React from 'react';
 import { DatePicker } from 'antd';
-
+import { useIntl } from 'umi';
 import FormComponents from '@/components/Form';
 import UploadFile from '@/components/Upload';
 
@@ -15,21 +15,21 @@ const { GenericPanel } = FormComponents;
  * @constructor
  */
 export const BusinessLicense = ({
-  t,
   formRef,
   disabled,
   uploadLicense
 }) => {
+  const intl = useIntl();
   return (
-      <GenericPanel header={t('business:license')}
+      <GenericPanel header={intl.formatMessage({id: 'business.license', defaultMessage: 'Proof of License'})}
                     name={'license'}>
         <div>
-          <UploadFile label={t('business:subLicense')}
+          <UploadFile label={intl.formatMessage({id: 'business.subLicense', defaultMessage: 'License'})}
                       name={'license'}
                       disabled={disabled}
                       {...uploadLicense}
                       form={formRef}/>
-          <DatePicker label={t('business:licenseExpiration')}
+          <DatePicker label={intl.formatMessage({id: 'business.licenseExpiration', defaultMessage: 'License expiration date'})}
                       name={'licenseExpiration'}
                       disabled={disabled}
                       form={formRef}/>

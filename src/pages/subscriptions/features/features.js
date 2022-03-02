@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, PageHeader } from 'antd';
 import { AppstoreAddOutlined, ControlOutlined } from '@ant-design/icons';
-
+import { useIntl } from 'umi';
 import Page from '@/components/Page';
 import Main from '@/components/Main';
 import ExportButton from '@/components/Buttons/export.button';
@@ -21,8 +21,8 @@ const { Table } = Main;
  * @return {JSX.Element}
  */
 export const features = props => {
+  const intl = useIntl();
   const {
-    t,
     authModel,
     featureModel,
     loading,
@@ -47,7 +47,7 @@ export const features = props => {
   const subTitle = (
       <>
         <ControlOutlined style={{ marginRight: 10 }}/>
-        {t('panel:featureConfig')}
+        {intl.formatMessage({id: 'panel.featureConfig', defaultMessage: 'Feature Configuration'})}
       </>
   );
 
@@ -82,14 +82,14 @@ export const features = props => {
                                   icon={<AppstoreAddOutlined/>}
                                   onClick={onNew}
                                   type={'primary'}>
-                            {t('actions:new')}
+                            {intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
                           </Button>
                         </Can>
                       ]}>
           </PageHeader>
           <Table data={data}
                  {...tableProps}
-                 {...metadata({ t, ...userProps })} />
+                 {...metadata({ ...userProps })} />
         </div>
       </Page>
   );

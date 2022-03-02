@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input, Tag, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { withTranslation } from 'react-i18next';
+import { useIntl } from 'umi';
 
 import styles from '@/components/Form/form.module.less';
 
@@ -15,7 +15,7 @@ class EditableTags extends React.Component {
     editInputIndex: -1,
     editInputValue: ''
   };
-
+  intl = useIntl();
   /**
    * @function
    * @param removedTag
@@ -105,8 +105,8 @@ class EditableTags extends React.Component {
 
   render() {
     const { inputVisible, inputValue, editInputIndex, editInputValue } = this.state;
-    const { t, tags, disabled, size = 'small' } = this.props;
-    const { newTag = t('actions:newTag') } = this.props;
+    const { tags, disabled, size = 'small' } = this.props;
+    const { newTag = intl.formatMessage({id: 'actions.newTag', defaultMessage: 'New Tag'}) } = this.props;
 
     return (
         <div>
@@ -175,4 +175,4 @@ class EditableTags extends React.Component {
   }
 }
 
-export default withTranslation()(EditableTags);
+export default EditableTags;

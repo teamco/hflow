@@ -1,7 +1,7 @@
 import React from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-
+import { useintl } from 'umi';
 import { COLORS } from '@/utils/colors';
 import { currencyFormat } from '@/utils/currency';
 import { stub } from '@/utils/function';
@@ -15,8 +15,8 @@ import styles from 'pages/subscriptions/subscriptions.module.less';
  * @return {JSX.Element}
  */
 const SubscriptionCard = (props) => {
+  const intl = useintl();
   const {
-    t,
     actions,
     data = {},
     isEdit = false,
@@ -49,7 +49,7 @@ const SubscriptionCard = (props) => {
       _discount = currencyFormat({ price: discount });
     }
 
-    return t('subscription:discountInfo', { discount: _discount });
+    return intl.formatMessage({id: 'subscription.discountInfo', defaultMessage: 'Discount {discount}'}, { discount: _discount });
   };
 
   /**
@@ -78,7 +78,7 @@ const SubscriptionCard = (props) => {
         }>
           {subscriptionType}
         </h1>
-        <p>{t('subscription:usersInfo', { users })}</p>
+        <p>{intl.formatMessage({id: 'subscription.usersInfo', defaultMessage: 'Upto to {users} users'}, { users })}</p>
         <ul>
           {sortBy(features.all, 'translateKeys.title', t).map((_pref, idx) => {
             const isActive = features.selected.includes(_pref.id);
@@ -92,11 +92,11 @@ const SubscriptionCard = (props) => {
                   {simple ? icon : isTrue(true)}
                   <h3 className={simple ? (isActive ? styles.active : null) : styles.active}>
                     {simple ? (
-                        <span>{t(title)}</span>
+                        <span>{intl.formatMessage({id: title, defaultMessage: ''})}</span>
                     ) : (
                         <div className={isActive ? styles.complex : null}>
-                          {t(isActive ? on : off)}
-                          <span>{t(title)}</span>
+                          {intl.formatMessage({id: isActive ? on : off, defaultMessage: ''})}
+                          <span>{intl.formatMessage({id: title, defaultMessage: ''})}</span>
                         </div>
                     )}
                   </h3>
@@ -107,7 +107,7 @@ const SubscriptionCard = (props) => {
         <h1>{currencyFormat({ price: _price })}</h1>
         <h4>{data?.paymentDuration?.type}</h4>
         <h2>{discountInfo(discount)}</h2>
-        <Button onClick={onSelectSubscription}>{t('subscription:select')}</Button>
+        <Button onClick={onSelectSubscription}>{intl.formatMessage({id: 'subscription.select', defaultMessage: 'Select'})}</Button>
       </div>
   );
 };

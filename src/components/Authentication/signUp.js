@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, message, Modal, Row, Tooltip } from 'antd';
+import { useIntl } from 'umi';
 import { FormOutlined, LockTwoTone, LoginOutlined, ProfileTwoTone } from '@ant-design/icons';
 import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,7 +16,7 @@ import { effectHook } from '@/utils/hooks';
 
 
 export const signUp = props => {
-
+  const intl = useIntl();
   /* These props are provided by withFirebaseAuth HOC */
   const {
     isRegisterVisible,
@@ -28,7 +29,6 @@ export const signUp = props => {
   } = props;
 
   const {
-    t,
     MIN_PASSWORD_LENGTH,
     registerData,
     signInVisible,
@@ -73,8 +73,8 @@ export const signUp = props => {
   const modalHeader = (
       <div className={styles.modalHeader}>
         <div className={styles.icon}><FontAwesomeIcon icon={faUserCircle}/></div>
-        <h4>{t('auth:signUpTitle')}</h4>
-        <h6>{t('auth:signUpDesc')}</h6>
+        <h4>{intl.formatMessage({id: 'auth.signUpTitle', defaultMessage: 'Sign up to create an account'})}</h4>
+        <h6>{intl.formatMessage({id: 'auth.signUpDesc', defaultMessage: 'Enter your credentials below'})}</h6>
       </div>
   );
 
@@ -103,11 +103,12 @@ export const signUp = props => {
                                rules={[
                                  {
                                    required: true,
-                                   message: t('form:required', { field: t('form:firstName') })
+                                   message: intl.formatMessage({id: 'form.required', defaultMessage: '{field} is' +
+                                         ' required'}, { field: intl.formatMessage({id: 'form.firstName', defaultMessage: 'First Name'}) })
                                  }
                                ]}>
                       <Input prefix={<ProfileTwoTone/>}
-                             placeholder={t('form:firstName')}/>
+                             placeholder={intl.formatMessage({id: 'form.firstName', defaultMessage: 'First Name'})}/>
                     </Form.Item>
                   </Col>
                   <Col span={12}>
@@ -116,11 +117,12 @@ export const signUp = props => {
                                rules={[
                                  {
                                    required: true,
-                                   message: t('form:required', { field: t('form:lastName') })
+                                   message: intl.formatMessage({id: 'form.required', defaultMessage: '{field} is' +
+                                         ' required'}, { field: intl.formatMessage({id: 'form.lastName', defaultMessage: 'Last Name'}) })
                                  }
                                ]}>
                       <Input prefix={<ProfileTwoTone/>}
-                             placeholder={t('form:lastName')}/>
+                             placeholder={intl.formatMessage({id: 'form.lastName', defaultMessage: 'Last Name'})}/>
                     </Form.Item>
                   </Col>
                 </Row>
@@ -131,18 +133,19 @@ export const signUp = props => {
                   <Col span={12}>
                     <Form.Item name={'password'}
                                hasFeedback
-                               extra={t('auth:passwordHelper', { length: MIN_PASSWORD_LENGTH })}
+                               extra={intl.formatMessage({id: 'auth.passwordHelper', defaultMessage: 'Use {length} or more characters with a mix of letters, numbers & symbols'}, { length: MIN_PASSWORD_LENGTH })}
                                onChange={e => onUpdateMeter({ e, setMeterText, setMeterValue })}
                                rules={[
                                  {
                                    required: true,
-                                   message: t('form:required', { field: t('auth:password') })
+                                   message: intl.formatMessage({id: 'form.required', defaultMessage: '{field} is' +
+                                         ' required'}, { field: intl.formatMessage({id: 'auth.password', defaultMessage: 'Password'}) })
                                  },
                                  ({ getFieldValue }) => ({
                                    validator(_, value) {
                                      if (value && getFieldValue('password').length < MIN_PASSWORD_LENGTH) {
                                        return Promise.reject(
-                                           t('auth:passwordTooEasy', { length: MIN_PASSWORD_LENGTH }));
+                                           intl.formatMessage({id: 'auth.passwordTooEasy',defaultMessage: 'Use {length} characters or more for your password'}, { length: MIN_PASSWORD_LENGTH }));
                                      }
                                      return Promise.resolve();
                                    }
@@ -150,7 +153,7 @@ export const signUp = props => {
                                ]}>
                       <Input.Password prefix={<LockTwoTone/>}
                                       autoComplete={'new-password'}
-                                      placeholder={t('auth:password')}/>
+                                      placeholder={intl.defaultMessage({id: 'auth.password', defaultMessage: 'Password'})}/>
                     </Form.Item>
                   </Col>
                   <Col span={12}>
@@ -160,7 +163,8 @@ export const signUp = props => {
                                rules={[
                                  {
                                    required: true,
-                                   message: t('form:required', { field: t('auth:passwordConfirm') })
+                                   message: intl.formatMessage({id: 'form.required', defaultMessage: '{field} is' +
+                                         ' required'}, { field: intl.formatMessage({id: 'auth.passwordConfirm', defaultMessage: 'Password Confirmation'}) })
                                  },
                                  ({ getFieldValue }) => ({
                                    validator(_, value) {
@@ -168,13 +172,13 @@ export const signUp = props => {
                                        return Promise.resolve();
                                      }
 
-                                     return Promise.reject(t('auth:passwordConfirmNotValid'));
+                                     return Promise.reject(intl.formatMessage({id: 'auth.passwordConfirmNotValid', defaultMessage: 'The two passwords that you entered do not match'}));
                                    }
                                  })
                                ]}>
                       <Input.Password prefix={<LockTwoTone/>}
                                       autoComplete={'new-password'}
-                                      placeholder={t('auth:passwordConfirm')}/>
+                                      placeholder={intl.formatMessage({id: 'auth.passwordConfirm', defaultMessage: 'Password Confirmation'})}/>
                     </Form.Item>
                   </Col>
                 </Row>
@@ -186,20 +190,20 @@ export const signUp = props => {
                 <Row gutter={[16, 16]}
                      className={styles.loginBtns}>
                   <Col span={12}>
-                    <Tooltip title={t('auth:registerTitle')}>
+                    <Tooltip title={intl.formatMessage({id: 'auth.registerTitle', defaultMessage: 'Not a member? You can create an account'})}>
                       <Button type={'primary'}
                               size={'default'}
                               htmlType={'submit'}
                               block
                               loading={isLoading(loading)}
                               icon={<FormOutlined/>}>
-                        {t('auth:register')}
+                        {intl.formatMessage({id: 'auth.register', defaultMessage: 'Register'})}
                       </Button>
                     </Tooltip>
                   </Col>
                   {isSignInAble && (
                       <Col span={12}>
-                        <Tooltip title={t('auth:signInTitle')}>
+                        <Tooltip title={intl.formatMessage({id: 'auth.signInTitle', defaultMessage: 'Login to your account'})}>
                           <Button type={'default'}
                                   icon={<LoginOutlined/>}
                                   size={'default'}
@@ -209,7 +213,7 @@ export const signUp = props => {
                                     setIsSignInVisible(true);
                                     setIsRegisterVisible(false);
                                   }}>
-                            {t('auth:signIn')}
+                            {intl.formatMessage({id: 'auth.signIn', defaultMessage: 'Sign in'})}
                           </Button>
                         </Tooltip>
                       </Col>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { useIntl } from 'umi';
 import { DatePicker, Select } from 'antd';
 import FormComponents from '@/components/Form';
 import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
@@ -17,8 +17,8 @@ const { RangePicker } = DatePicker;
  * @constructor
  */
 export const CampaignInfo = (props) => {
+  const intl = useIntl();
   const {
-    t,
     formRef,
     disabled,
     subscriptions
@@ -51,7 +51,7 @@ export const CampaignInfo = (props) => {
         features?.map((item, idx) => (
             <Option key={idx}
                     value={item.id}>
-              {t(item.translateKeys.title)}
+              {intl.formatMessage({id: item.translateKeys.title})}
             </Option>
         ));
   };
@@ -63,13 +63,13 @@ export const CampaignInfo = (props) => {
    */
 
   return (
-      <GenericPanel header={t('campaign:info')}
+      <GenericPanel header={intl.formatMessage({id: 'campaign.info', defaultMessage: 'Campaign Info'})}
                     name={'info'}
                     defaultActiveKey={['info']}>
         <div>
           <Select name={'type'}
                   form={formRef}
-                  label={t('subscription:type')}
+                  label={intl.formatMessage({id: 'subscription.type', defaultMessage: 'Subscription Type'})}
                   disabled={disabled}
                   onChange={(id) => handleSubscriptionType(id)}
                   config={{ rules: [{ required: true }] }}>
@@ -82,7 +82,7 @@ export const CampaignInfo = (props) => {
           </Select>
           <Select name={'featuresByRef'}
                   mode={'multiple'}
-                  label={t('subscription:features')}
+                  label={intl.formatMessage({id: 'subscription.features', defaultMessage: 'Features'})}
                   allowClear
                   style={{ width: '100%' }}>
             {subscriptionId && getOptions()}
@@ -94,9 +94,9 @@ export const CampaignInfo = (props) => {
                        format={DEFAULT_DATE_FORMAT}
                        disabledDate={current => current && current < moment().endOf('day')}
                        disabled={disabled}
-                       placeholder={[t('subscription:saleStart'), t('subscription:saleEnd')]}
+                       placeholder={[intl.formatMessage({id: 'subscription.saleStart', defaultMessage: 'Started at'}), intl.formatMessage({id: 'subscription.saleEnd', defaultMessage: 'Expired at'})]}
                        config={{ rules: [{ type: 'array', required: true }] }}
-                       label={t('subscription:saleAt')}/>
+                       label={intl.formatMessage({id: 'subscription.saleAt', defaultMessage: 'Sale Started / Expired (at)'})}/>
         </div>
         <>
           <HiddenField name={['subscriptionType']}

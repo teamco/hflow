@@ -1,13 +1,12 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 import { message } from 'antd';
-import { history } from 'umi';
+import { history, useIntl } from 'umi';
 
 import { commonModel } from '@/models/common.model';
 import { getNotifications } from '@/services/notification.service';
 import { fbAdd, fbFindById, fbUpdate, getRef } from '@/services/firebase.service';
 
-import i18n from '@/utils/i18n';
 import { STATUS } from '@/utils/message';
 import { monitorHistory } from '@/utils/history';
 
@@ -64,7 +63,7 @@ export default dvaModelExtend(commonModel, {
 
       } else {
 
-        yield call(message.warning, i18n.t('error:page403'));
+        yield call(message.warning, useIntl().formatMessage({id: 'error:page403', defaultMessage: 'Sorry, you are not authorized to access this page'}));
         history.push(`/errors/403`);
       }
     },

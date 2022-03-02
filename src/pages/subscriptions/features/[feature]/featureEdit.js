@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ControlOutlined, DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Form, PageHeader } from 'antd';
+import { useIntl } from 'umi';
 
 import SaveButton from '@/components/Buttons/save.button';
 import Main from '@/components/Main';
@@ -33,9 +34,9 @@ const { Info } = Main;
  */
 export const featureEdit = (props) => {
   const [formRef] = Form.useForm();
+  const intl = useIntl();
 
   const {
-    t,
     authModel,
     featureModel,
     loading,
@@ -97,7 +98,6 @@ export const featureEdit = (props) => {
   } = fromForm(entityForm, 'metadata') || {};
 
   const prefsProps = {
-    t,
     formRef,
     disabled,
     featureTypes,
@@ -112,13 +112,11 @@ export const featureEdit = (props) => {
   };
 
   const translateProps = {
-    t,
     formRef,
     disabled
   };
 
   const infoProps = {
-    t,
     isEdit,
     touched,
     formRef,
@@ -132,7 +130,6 @@ export const featureEdit = (props) => {
   };
 
   const menuProps = {
-    t,
     ability,
     isEdit,
     loading,
@@ -145,8 +142,8 @@ export const featureEdit = (props) => {
       <>
         <ControlOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
-            t('actions:edit', { type: t('menu:feature') }) :
-            t('actions:addNew', { type: t('menu:feature') })
+            intl.formatMessage({id: 'feature.actions.edit', defaultMessage: 'Edit Feature'}) :
+            intl.formatMessage({id: 'feature.msg.addNew', defaultMessage: 'Add new Feature?'})
         }
       </>
   );
@@ -167,7 +164,7 @@ export const featureEdit = (props) => {
                                 size={'small'}
                                 loading={isLoading(loading.effects['featureModel/prepareToSave'])}
                                 onClick={() => onClose()}>
-                          {t('actions:close')}
+                          {intl.formatMessage({id: 'actions.close', defaultMessage: 'Add new Feature?'})}
                         </Button>,
                         <SaveButton key={'save'}
                                     isEdit={isEdit}
@@ -182,7 +179,7 @@ export const featureEdit = (props) => {
                           <Button size={'small'}
                                   icon={<SettingOutlined/>}
                                   className={menuStyles.customAction}>
-                            {t('actions:manage', { type: t('menu:feature') })} <DownOutlined/>
+                            {intl.formatMessage({id: 'feature.actions.manage', defaultMessage: 'Manage Feature'})} <DownOutlined/>
                           </Button>
                         </Dropdown>
                       ]}/>

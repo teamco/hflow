@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 
 import { currencies } from './currencies';
 
@@ -33,4 +32,4 @@ export default connect(
         });
       }
     })
-)(withTranslation()(currencies));
+)(currencies);

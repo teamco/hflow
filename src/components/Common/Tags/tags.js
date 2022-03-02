@@ -1,8 +1,7 @@
 import React from 'react';
-
+import { useIntl } from 'umi';
 import FormComponents from '@/components/Form';
 import { stub } from '@/utils/function';
-import { withTranslation } from 'react-i18next';
 
 const { GenericPanel, EditableTags } = FormComponents;
 
@@ -18,7 +17,6 @@ const { GenericPanel, EditableTags } = FormComponents;
  * @constructor
  */
 const CommonTags = ({
-  t,
   formRef,
   tags = [],
   disabled,
@@ -27,8 +25,8 @@ const CommonTags = ({
   defaultActiveKey = null,
   ...rest
 }) => {
-
-  const { header = t('form:tags') } = rest;
+  const intl = useIntl();
+  const { header = intl.formatMessage({id: 'form.tags', defaultMessage: 'Tags'}) } = rest;
 
   return (
       <GenericPanel header={header}
@@ -36,11 +34,11 @@ const CommonTags = ({
                     name={name}
                     defaultActiveKey={defaultActiveKey}>
         <div>
-          <EditableTags label={t('form:tags')}
+          <EditableTags label={intl.formatMessage({id: 'form.tags', defaultMessage: 'Tags'})}
                         name={'tags'}
                         form={formRef}
                         disabled={disabled}
-                        newTag={t('actions:new')}
+                        newTag={intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
                         onChange={onUpdateTags}
                         tags={tags}/>
         </div>
@@ -48,4 +46,4 @@ const CommonTags = ({
   );
 };
 
-export default withTranslation()(CommonTags);
+export default CommonTags;

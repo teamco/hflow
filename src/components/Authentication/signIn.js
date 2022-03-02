@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
-
+import { useIntl } from 'umi';
 import { Button, Tooltip } from 'antd';
 import { FacebookOutlined, GoogleOutlined, LoginOutlined, LogoutOutlined, TwitterOutlined } from '@ant-design/icons';
 
@@ -20,7 +20,7 @@ import styles from '@/components/Authentication/authentication.module.less';
  * @return {JSX.Element}
  */
 export const signIn = props => {
-
+  const intl = useIntl();
   /* These props are provided by withFirebaseAuth HOC */
   const {
     signInWithEmailAndPassword,
@@ -81,7 +81,7 @@ export const signIn = props => {
 
   if (error) {
     errorProps = {
-      title: t('error:errorNum', { number: 400 }),
+      title: intl.formatMessage({id: 'error.errorNum', defaultMessage: 'Error: {number}'}, { number: 400 }),
       error
     };
 
@@ -162,7 +162,7 @@ export const signIn = props => {
    * @return {JSX.Element}
    */
   const authBtn = (provider, icon, signInFn) => (
-      <Tooltip title={t('auth:signInWith', { provider })}>
+      <Tooltip title={intl.formatMessage({id: 'auth.signInWith', defaultMessage: 'Sign in with {provider}'}, { provider })}>
         <Button loading={isLoading(loading)}
                 className={styles.authBtn}
                 onClick={() => handleCancel(signInFn)}
@@ -228,7 +228,7 @@ export const signIn = props => {
               onClick={_signOut}
               icon={<LogoutOutlined/>}
               size={'small'}>
-        {t('auth:signOut')}
+        {intl.formatMessage({id: 'auth.signOut', defaultMessage: 'Sign out'})}
       </Button>
   );
 
@@ -242,7 +242,6 @@ export const signIn = props => {
   };
 
   const signInProps = {
-    t,
     isSignInVisible,
     signInVisible,
     closable,
@@ -275,7 +274,7 @@ export const signIn = props => {
                           size={'small'}
                           icon={<LoginOutlined/>}
                           onClick={showSignIn}>
-                    {t('auth:signIn')}
+                    {intl.formatMessage({id: 'auth.signIn', defaultMessage: 'Sign in'})}
                   </Button>
               )}
             </>

@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Input } from 'antd';
 import FormComponents from '@/components/Form';
-import { withTranslation } from 'react-i18next';
-
+import { useIntl } from 'umi';
 const { GenericPanel } = FormComponents;
 
 /**
@@ -13,17 +12,17 @@ const { GenericPanel } = FormComponents;
  * @constructor
  */
 const CommonTranslate = (props) => {
+  const intl = useIntl();
   const {
-    t,
     formRef,
     disabled,
     prefix = ['translateKeys']
   } = props;
 
   const {
-    header = t('form:translate'),
-    title = t('form:title'),
-    description = t('form:description')
+    header = intl.formatMessage({id: 'form.translate', defaultMessage: 'Translate Keys'}),
+    title = intl.formatMessage({id: 'form.title', defaultMessage: 'Title'}),
+    description = intl.formatMessage({id: 'form.description', defaultMessage: 'Description'})
   } = props;
 
   return (
@@ -47,4 +46,4 @@ const CommonTranslate = (props) => {
   );
 };
 
-export default withTranslation()(CommonTranslate);
+export default CommonTranslate;

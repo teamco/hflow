@@ -13,7 +13,7 @@ import menuStyles from '@/components/menu.less';
  * @return {{rest: Pick<*, Exclude<keyof *, "className"|"style"|"component"|"menuProps"|"data">>, data, style,
  *     className, actions: JSX.Element}}
  */
-export const subscriptionCardMetadata = (t, props) => {
+export const subscriptionCardMetadata = (props) => {
   const {
     className,
     data,

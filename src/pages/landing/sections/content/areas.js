@@ -1,17 +1,18 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useIntl } from 'umi';
 import classnames from 'classnames';
 
 import styles from 'pages/landing/landing.module.less';
 
 const Areas = props => {
-  const { t, className, trends = [] } = props;
+  const intl = useIntl();
+  const { className, trends = [] } = props;
 
   return (
       <div className={classnames(className, styles.areas)}>
-        <h1>{t('landing:areas')}</h1>
+        <h1>{intl.formatMessage({id: 'landing.areas', defaultMessage: 'Most Requested Areas'})}</h1>
       </div>
   );
 };
 
-export default withTranslation()(Areas);
+export default Areas;

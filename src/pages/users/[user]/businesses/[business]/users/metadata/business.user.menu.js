@@ -1,9 +1,8 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
 import { Menu, Popconfirm } from 'antd';
 import { DeleteTwoTone, MessageTwoTone, NotificationTwoTone, PaperClipOutlined } from '@ant-design/icons';
 
-import { NavLink } from 'umi';
+import { NavLink, useIntl } from 'umi';
 
 import { COLORS } from '@/utils/colors';
 
@@ -15,8 +14,8 @@ import tableStyles from '@/components/Main/Table/table.module.less';
  * @return {JSX.Element}
  */
 const BusinessUserMenu = props => {
+  const intl = useIntl();
   const {
-    t,
     ability,
     loading,
     record,
@@ -36,7 +35,7 @@ const BusinessUserMenu = props => {
                        onClick={() => onResendRegisterLink(record)}
                        icon={<PaperClipOutlined className={tableStyles.action}
                                                 twoToneColor={COLORS.warning}/>}>
-              {t('auth:reSendRegisterLink')}
+              {intl.formatMessage({id: 'auth.reSendRegisterLink', defaultMessage: 'Re-Send Invitation'})}
             </Menu.Item>
         ) : (
             <>
@@ -44,7 +43,7 @@ const BusinessUserMenu = props => {
                          icon={<NotificationTwoTone className={tableStyles.action}
                                                     twoToneColor={COLORS.warning}/>}>
                 <NavLink to={`/admin/users/${record.id}/notifications`}>
-                  {t('route:notifications')}
+                  {intl.formatMessage({id: 'route.notifications', defaultMessage: 'Notifications'})}
                 </NavLink>
               </Menu.Item>
               <Menu.Item key={'message'}
@@ -53,7 +52,7 @@ const BusinessUserMenu = props => {
                          }}
                          icon={<MessageTwoTone className={tableStyles.action}
                                                twoToneColor={COLORS.warning}/>}>
-                {t('auth:sendMessage')}
+                {intl.formatMessage({id: 'auth.sendMessage', defaultMessage: 'Send Message'})}
               </Menu.Item>
             </>
         )}
@@ -61,14 +60,14 @@ const BusinessUserMenu = props => {
         <Menu.Item key={'delete'}
                    icon={<DeleteTwoTone className={tableStyles.action}
                                         twoToneColor={COLORS.danger}/>}>
-          <Popconfirm title={t('msg:unassignConfirm', { instance: record.email })}
+          <Popconfirm title={intl.formatMessage({id: 'msg:unassignConfirm', defaultMessage: 'Are you sure to unassign this {instance}?'},{ instance: record.email })}
                       placement={'topRight'}
                       onConfirm={() => onUnassignUser(record)}>
-            {t('actions:unassign')}
+            {intl.formatMessage({id: 'actions:unassign', defaultMessage: 'Unassign'})}
           </Popconfirm>
         </Menu.Item>
       </Menu>
   );
 };
 
-export default withTranslation()(BusinessUserMenu);
+export default BusinessUserMenu;

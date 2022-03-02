@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Select } from 'antd';
-
+import { useIntl } from 'umi';
 import { emailProps } from '@/components/partials/email.partial';
 import FormComponents from '@/components/Form';
 import UploadFile from '@/components/Upload';
@@ -20,20 +20,20 @@ const { Option } = Select;
  * @constructor
  */
 export const BusinessInfo = ({
-  t,
   formRef,
   businessTypes,
   disabled,
   uploadLogo
 }) => {
+  const intl = useIntl();
   return (
-      <GenericPanel header={t('business:info')}
+      <GenericPanel header={intl.formatMessage({id: 'business.info', defaultMessage: 'Business Information'})}
                     name={'info'}
                     defaultActiveKey={['info']}>
         <div>
           <Select name={'businessType'}
                   form={formRef}
-                  label={t('business:type')}
+                  label={intl.formatMessage({id: 'business.type', defaultMessage: 'Business Type'})}
                   disabled={disabled}
                   config={{ rules: [{ required: true }] }}>
             {sortBy(businessTypes, 'name').map((type, idx) => (
@@ -47,13 +47,13 @@ export const BusinessInfo = ({
         </div>
         <div>
           <Input type={'text'}
-                 label={t('business:name')}
+                 label={intl.formatMessage({id: 'business.name', defaultMessage: 'Legal Business Name'})}
                  name={'name'}
                  form={formRef}
                  disabled={disabled}
                  config={{ rules: [{ required: true }] }}/>
           <Input type={'text'}
-                 label={t('business:email')}
+                 label={intl.formatMessage({id: 'business.email', defaultMessage: 'Business Email'})}
                  name={'email'}
                  form={formRef}
                  disabled={disabled}
@@ -61,14 +61,14 @@ export const BusinessInfo = ({
         </div>
         <div>
           <TextArea type={'text'}
-                    label={t('form:description')}
+                    label={intl.formatMessage({id: 'form.description', defaultMessage: 'Description'})}
                     name={'description'}
                     rows={4}
                     showCount
                     maxLength={300}
                     disabled={disabled}
                     form={formRef}/>
-          <UploadFile label={t('business:logo')}
+          <UploadFile label={intl.formatMessage({id: 'business.logo', defaultMessage: 'Business Logo'})}
                       name={'logo'}
                       disabled={disabled}
                       {...uploadLogo}

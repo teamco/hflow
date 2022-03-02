@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PageHeader, Tabs } from 'antd';
 import { NotificationOutlined } from '@ant-design/icons';
-import { useParams } from 'umi';
+import { useParams, useIntl } from 'umi';
 
 import Page from '@/components/Page';
 import Main from '@/components/Main';
@@ -22,6 +22,7 @@ const { TabPane } = Tabs;
  * @return {JSX.Element}
  */
 export const notifications = (props) => {
+  const intl = useIntl();
   const {
     t,
     authModel,
@@ -51,7 +52,7 @@ export const notifications = (props) => {
   const subTitle = (
       <>
         <NotificationOutlined style={{ marginRight: 10 }}/>
-        {t('actions:manage', { type: t('menu:notifications') })}
+        {intl.formatMessage({id: 'notifications.actions.manage', defaultMessage: 'Manage User Notifications'})}
       </>
   );
 
@@ -87,15 +88,15 @@ export const notifications = (props) => {
         <Tabs defaultActiveKey={'inbox'}
               onChange={key => setActiveTab(key)}
               tabPosition={'left'}>
-          <TabPane tab={t('notifications:inbox')} key={'inbox'}>
+          <TabPane tab={intl.formatMessage({id: 'notifications:inbox', defaultMessage: 'Inbox'})} key={'inbox'}>
             <Table data={notifications.inbox}
                    {...tableProps}
-                   {...notificationsMetadata({ t, loading })} />
+                   {...notificationsMetadata({ t: intl, loading })} />
           </TabPane>
           <TabPane tab={t('notifications:sent')} key={'sent'}>
             <Table data={notifications.sent}
                    {...tableProps}
-                   {...notificationsMetadata({ t, loading })} />
+                   {...notificationsMetadata({ t: intl, loading })} />
           </TabPane>
         </Tabs>
         <SendMessage {...sendProps}/>

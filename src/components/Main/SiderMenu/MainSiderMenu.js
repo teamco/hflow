@@ -1,7 +1,6 @@
 import { Layout, Menu } from 'antd';
 import React from 'react';
-import { withTranslation } from 'react-i18next';
-import { NavLink } from 'umi';
+import { NavLink, useIntl } from 'umi';
 import { abilityMenuItem } from '@/utils/abilityComponent/abilityMenuItem';
 
 const { Sider } = Layout;
@@ -14,8 +13,8 @@ const { SubMenu } = Menu;
  * @constructor
  */
 const MainSiderMenu = props => {
-  const { t, collapsed, onCollapse, onRoute, data, model, ability } = props;
-
+  const { collapsed, onCollapse, onRoute, data, model, ability } = props;
+  const intl = useIntl();
   /**
    * @constant
    * @param key
@@ -30,7 +29,7 @@ const MainSiderMenu = props => {
     children: (
         <NavLink to={menu?.url}
                  activeClassName={'selected'}>
-          {t(menu?.key)}
+          {intl.formatMessage({id: menu?.key, defaultMessage: ''})}
         </NavLink>
     )
   });
@@ -48,7 +47,7 @@ const MainSiderMenu = props => {
                   _menu(`${menu?.key}_${idx_m}`, menu) : (
                       <SubMenu key={idx_m}
                                icon={menu?.icon}
-                               title={t(menu?.key)}>
+                               title={intl.formatMessage({id: menu?.key, defaultMessage: ''})}>
                         {menu?.items?.map((s_menu, idx_i) => {
                           return s_menu.divider ? (
                                   <Menu.Divider key={`${s_menu?.url}_${idx_m}_${idx_i}`}/>
@@ -63,4 +62,4 @@ const MainSiderMenu = props => {
   );
 };
 
-export default withTranslation()(MainSiderMenu);
+export default MainSiderMenu;

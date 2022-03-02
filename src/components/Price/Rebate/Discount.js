@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DatePicker, Divider, Input, InputNumber, Select, Switch } from 'antd';
-import { withTranslation } from 'react-i18next';
+import { useIntl } from 'umi';
 import moment from 'moment';
 
 import FormComponents from '@/components/Form';
@@ -23,8 +23,8 @@ const DISCOUNT_TYPES = ['%', 'currency'];
  * @constructor
  */
 const Discount = props => {
+  const intl = useIntl();
   const {
-    t,
     formRef,
     disabled,
     collapsed = false,
@@ -37,7 +37,7 @@ const Discount = props => {
     children
   } = props;
 
-  const { header = t('panel:priceInfo') } = props;
+  const { header = intl.formatMessage({id: 'panel.priceInfo', defaultMessage: 'Trial Period'}) } = props;
 
   const wrapper = formRef.getFieldValue(prefix[0]);
 
@@ -127,37 +127,37 @@ const Discount = props => {
                     defaultActiveKey={collapsed ? null : [namespace]}>
         <div colProps={{ xs: 24, sm: 12, md: 12, lg: 8, xl: 6, xxl: 4 }}>
           <InputNumber addonBefore={selectCurrencyBefore}
-                       label={t('price:originalPrice')}
+                       label={intl.formatMessage({id: 'price.originalPrice', defaultMessage: 'Original Price'})}
                        name={[...prefix, 'originalPrice']}
                        form={formRef}
                        min={priceMin}
                        disabled={disabled}
                        config={{ rules: [{ required: true }] }}/>
-          <Input label={t('price:discountedPrice')}
+          <Input label={intl.formatMessage({id: 'price.discountedPrice', defaultMessage: 'Discounted Price'})}
                  name={[...prefix, 'discountedPrice']}
                  form={formRef}
                  min={priceMin}
                  readOnly={true}
                  bordered={false}
-                 placeholder={t('price:discountedCalc')}
+                 placeholder={intl.formatMessage({id: 'price.discountedCalc', defaultMessage: 'Will be Calculated'})}
                  disabled={disabled}/>
         </div>
         <div colProps={layout.fullColumn}>
-          <Divider orientation={'left'}>{t('subscription:discount')}</Divider>
+          <Divider orientation={'left'}>{intl.formatMessage({id: 'subscription.discount', defaultMessage: 'Discount'})}</Divider>
         </div>
         <div>
-          <Switch label={t('price:discounted')}
+          <Switch label={intl.formatMessage({id: 'price.discounted', defaultMessage: 'Is Discounted?'})}
                   disabled={disabled}
                   form={formRef}
                   onChange={handleDisabled}
                   config={{ valuePropName: 'checked' }}
-                  checkedChildren={t('actions:yes')}
-                  unCheckedChildren={t('actions:no')}
+                  checkedChildren={intl.formatMessage({id: 'actions.yes', defaultMessage: 'Yes'})}
+                  unCheckedChildren={intl.formatMessage({id: 'actions.no', defaultMessage: 'No'})}
                   name={[...prefix, 'discounted']}/>
         </div>
         <div colProps={{ xs: 24, sm: 12, md: 12, lg: 8, xl: 8, xxl: 8 }}>
           <InputNumber addonBefore={selectDiscountBefore}
-                       label={t('price:discount')}
+                       label={intl.formatMessage({id: 'price.discount', defaultMessage: 'Is Discounted?'})}
                        name={[...prefix, namespace, 'value']}
                        form={formRef}
                        min={1}
@@ -169,7 +169,7 @@ const Discount = props => {
                       disabledDate={current => current && current < moment().endOf('day')}
                       disabled={disabled || !isDiscounted}
                       config={{ rules: [{ required: isDiscounted }] }}
-                      label={t('price:discountStartedAt')}/>
+                      label={intl.formatMessage({id: 'price.discountStartedAt', defaultMessage: 'Started at'})}/>
         </div>
         <div>
           <HiddenField form={formRef}
@@ -183,7 +183,7 @@ const Discount = props => {
         </div>
         <div>
           <Duration form={formRef}
-                    label={t('price:discountDuration')}
+                    label={intl.formatMessage({id: 'price.discountDuration', defaultMessage: 'Discount Duration'})}
                     disabled={disabled || !isDiscounted}
                     prefix={[...prefix, namespace]}
                     required={isDiscounted}
@@ -194,4 +194,4 @@ const Discount = props => {
   );
 };
 
-export default withTranslation()(Discount);
+export default Discount;

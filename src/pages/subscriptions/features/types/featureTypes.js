@@ -1,7 +1,7 @@
 import React  from 'react';
 import { Form, PageHeader } from 'antd';
 import { FontSizeOutlined } from '@ant-design/icons';
-
+import {useIntl} from 'umi';
 import Page from '@/components/Page';
 import SaveButton from '@/components/Buttons/save.button';
 import FormComponents from '@/components/Form';
@@ -24,9 +24,9 @@ const { Info } = Main;
  */
 export const featureTypes = props => {
   const [formRef] = Form.useForm();
+  const intl = useIntl();
 
   const {
-    t,
     simpleModel,
     authModel,
     loading,
@@ -56,7 +56,7 @@ export const featureTypes = props => {
   const subTitle = (
       <>
         <FontSizeOutlined style={{ marginRight: 10 }}/>
-        {t('panel:featureConfig')}
+        {intl.formatMessage({id: 'panel:featureConfig'})}
       </>
   );
 
@@ -109,14 +109,14 @@ export const featureTypes = props => {
                 form={formRef}
                 fields={entityForm}
                 onFinish={onFinish}>
-            <GenericPanel header={t('panel:featureTypes')}
+            <GenericPanel header={intl.formatMessage({id: 'panel.featureTypes', defaultMessage: 'Types'})}
                           name={'featureTypes'}
                           defaultActiveKey={['featureTypes']}>
               <div>
                 <EditableTags label={false}
                               name={'tags'}
                               disabled={disabled}
-                              newTag={t('actions:new')}
+                              newTag={intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
                               onChange={onUpdateTags}
                               tags={tags}/>
               </div>

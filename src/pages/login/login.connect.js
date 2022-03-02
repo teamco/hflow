@@ -1,5 +1,4 @@
 import { connect } from 'umi';
-import { withTranslation } from 'react-i18next';
 import withFirebaseAuth from 'react-with-firebase-auth';
 import { firebaseAppAuth, providers } from 'services/firebase.service';
 
@@ -19,4 +18,4 @@ export default connect(
         dispatch({ type: 'authModel/signIn', payload: { user } });
       }
     })
-)(withTranslation()(createComponentWithAuth(Login)));
+)(createComponentWithAuth(Login));

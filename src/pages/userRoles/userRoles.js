@@ -1,7 +1,7 @@
 import React  from 'react';
 import { Form, PageHeader } from 'antd';
 import { PieChartOutlined } from '@ant-design/icons';
-
+import { useIntl } from 'umi';
 import Page from '@/components/Page';
 import SaveButton from '@/components/Buttons/save.button';
 import FormComponents from '@/components/Form';
@@ -22,9 +22,8 @@ const { Info } = Main;
  */
 export const userRoles = props => {
   const [formRef] = Form.useForm();
-
+  const intl = useIntl();
   const {
-    t,
     userRoleModel,
     authModel,
     loading,
@@ -57,7 +56,7 @@ export const userRoles = props => {
   const subTitle = (
       <>
         <PieChartOutlined style={{ marginRight: 10 }}/>
-        {t('panel:manageRoles')}
+        {intl.formatMessage({id: 'panel.manageRoles', defaultMessage: 'Roles'})}
       </>
   );
 
@@ -69,7 +68,6 @@ export const userRoles = props => {
   } = fromForm(entityForm, 'metadata') || {};
 
   const infoProps = {
-    t,
     isEdit,
     touched,
     info: {
@@ -103,26 +101,26 @@ export const userRoles = props => {
                 form={formRef}
                 fields={entityForm}
                 onFinish={onFinish}>
-            <GenericPanel header={t('panel:userRoles')}
+            <GenericPanel header={intl.formatMessage({id: 'panel.userRoles', defaultMessage: 'User Roles'})}
                           name={'userRoles'}
                           defaultActiveKey={['userRoles']}>
               <div>
                 <EditableTags label={false}
                               name={'tags'}
                               disabled={disabled}
-                              newTag={t('actions:new')}
+                              newTag={intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
                               onChange={onUpdateUserRoles}
                               tags={userRoles?.roles}/>
               </div>
             </GenericPanel>
-            <GenericPanel header={t('panel:businessRoles')}
+            <GenericPanel header={intl.formatMessage({id: 'panel.businessRoles', defaultMessage: 'Business Roles'})}
                           name={'businessRoles'}
                           defaultActiveKey={['businessRoles']}>
               <div>
                 <EditableTags label={false}
                               name={'tags'}
                               disabled={disabled}
-                              newTag={t('actions:new')}
+                              newTag={intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
                               onChange={onUpdateBusinessRoles}
                               tags={businessRoles?.roles}/>
               </div>

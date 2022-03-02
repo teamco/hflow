@@ -2,6 +2,7 @@ import { Ability, AbilityBuilder } from '@casl/ability';
 import { fbFindById } from 'services/firebase.service';
 import { isAdmin, isContributor, isCurrent, isModerator, isReader } from 'services/userRoles.service';
 import i18n from '@/utils/i18n';
+import { useIntl } from 'umi';
 
 /**
  * @export
@@ -13,7 +14,7 @@ import i18n from '@/utils/i18n';
 export async function defineAbilityFor({ user, userId, business }) {
   const { can, cannot, build } = new AbilityBuilder(Ability);
   const selectedUser = userId && (await fbFindById({ collection: 'users', doc: userId })).data();
-
+  const intl = useIntl();
   if (user) {
     if (isAdmin(user.roles)) {
 
@@ -41,9 +42,9 @@ export async function defineAbilityFor({ user, userId, business }) {
 
       } else {
 
-        cannot(['read', 'update'], 'users').because(i18n.t('error:noPermissions'));
-        cannot(['read', 'update'], 'profile').because(i18n.t('error:noPermissions'));
-        cannot(['read', 'update'], 'businesses').because(i18n.t('error:noPermissions'));
+        cannot(['read', 'update'], 'users').because(intl.formatMessage({id: 'error.noPermissions', defaultMessage: 'Has no relevant permissions'}));
+        cannot(['read', 'update'], 'profile').because(intl.formatMessage({id: 'error.noPermissions', defaultMessage: 'Has no relevant permissions'}));
+        cannot(['read', 'update'], 'businesses').because(intl.formatMessage({id: 'error.noPermissions', defaultMessage: 'Has no relevant permissions'}));
 
       }
     }

@@ -1,6 +1,4 @@
 import { history, connect } from 'umi';
-import { withTranslation } from 'react-i18next';
-
 import { businessEdit } from './businessEdit';
 
 export default connect(
@@ -76,4 +74,4 @@ export default connect(
       onActivateBusiness() {
       }
     })
-)(withTranslation()(businessEdit));
+)(businessEdit);

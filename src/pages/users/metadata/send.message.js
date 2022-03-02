@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, Modal, Switch } from 'antd';
 import { MailOutlined, MessageTwoTone } from '@ant-design/icons';
-
-import { withTranslation } from 'react-i18next';
+import { useIntl } from 'umi';
 
 import HiddenField from '@/components/Form/HiddenField';
 
@@ -14,8 +13,8 @@ import styles from '@/pages/users/users.module.less';
  * @param props
  */
 const SendMessage = (props) => {
+  const intl = useIntl();
   const {
-    t,
     onSendMessage,
     visibleMessage,
     setVisibleMessage
@@ -66,7 +65,7 @@ const SendMessage = (props) => {
              footer={[
                <Button key={'back'}
                        onClick={onCancel}>
-                 {t('actions:cancel')}
+                 {intl.formatMessage({id: 'actions.cancel', defaultMessage: 'Cancel'})}
                </Button>,
                <Button key={'submit'}
                        type={'primary'}
@@ -80,7 +79,7 @@ const SendMessage = (props) => {
                            console.warn('Validate Failed:', info);
                          });
                        }}>
-                 {t('actions:sendMessage')}
+                 {intl.formatMessage({id: 'actions.sendMessage', defaultMessage: 'Send Message'})}
                </Button>
              ]}>
         <Form form={form}
@@ -92,33 +91,33 @@ const SendMessage = (props) => {
                 to: to?.email,
                 replyTo: replyTo?.id
               }}>
-          <Form.Item label={t('notifications:to')}
+          <Form.Item label={intl.formatMessage({id: 'notifications.to', defaultMessage: 'To'})}
                      name={'to'}>
             <Input disabled/>
           </Form.Item>
-          <Form.Item label={t('notifications:from')}
+          <Form.Item label={intl.formatMessage({id: 'notifications.from', defaultMessage: 'From'})}
                      name={'from'}>
             <Input disabled/>
           </Form.Item>
           {replyTo && (
-              <HiddenField label={t('notifications:re')}
+              <HiddenField label={intl.formatMessage({id: 'notifications.re', defaultMessage: 'Re: {sender'}, {sender: replyTo})}
                            name={'replyTo'}/>
           )}
-          <Form.Item label={t('table:title')}
-                     tooltip={t('form:required', { field: t('table:title') })}
+          <Form.Item label={intl.formatMessage({id: 'table.title', defaultMessage: 'Title'})}
+                     tooltip={intl.formatMessage({id: 'form.required', defaultMessage: '{field} is required'}, { field: intl.formatMessage({id: 'table.title', defaultMessage: 'Title'}) })}
                      name={'title'}>
             <Input onChange={e => handleSend({ title: e.target.value })}/>
           </Form.Item>
-          <Form.Item label={t('table:description')}
-                     tooltip={t('form:required', { field: t('table:description') })}
+          <Form.Item label={intl.formatMessage({id: 'table.description', defaultMessage: 'Description'})}
+                     tooltip={intl.formatMessage({id: 'form.required', defaultMessage: '{field} is required'}, { field: t('table:description') })}
                      name={'description'}>
             <Input.TextArea type={'textarea'}
                             onChange={e => handleSend({ description: e.target.value })}/>
           </Form.Item>
           <Form.Item name={'isPrivate'}
                      valuePropName={'checked'}>
-            <Switch checkedChildren={t('notifications:private')}
-                    unCheckedChildren={t('notifications:public')}
+            <Switch checkedChildren={intl.formatMessage({id: 'notifications.private', defaultMessage: 'Private'})}
+                    unCheckedChildren={intl.formatMessage({id: 'notifications.public', defaultMessage: 'Public'})}
                     defaultChecked/>
           </Form.Item>
         </Form>
@@ -126,4 +125,4 @@ const SendMessage = (props) => {
   );
 };
 
-export default withTranslation()(SendMessage);
+export default SendMessage;

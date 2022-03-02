@@ -4,7 +4,7 @@ import dvaModelExtend from 'dva-model-extend';
 import { commonModel } from 'models/common.model';
 import { custDiscountType, isNew } from 'services/common.service';
 import { detailsInfo } from 'services/cross.model.service';
-import { history } from 'umi';
+import { history, useIntl } from 'umi';
 import {
   addSubscription,
   getAllSubscriptions,
@@ -18,7 +18,6 @@ import { setAs } from '@/utils/object';
 import { getFeatures } from '@/services/features.service';
 import moment from 'moment';
 import { dateFormat } from '@/utils/timestamp';
-import i18n from '@/utils/i18n';
 
 const DEFAULT_STATE = {
   subscriptions: [],
@@ -191,7 +190,7 @@ export default dvaModelExtend(commonModel, {
 
         let data = {
           id: selectedSubscription?.id,
-          name: i18n.t(title),
+          name: useIntl().formatMessage({id: title, defaultMessage: ''}),
           price: {
             ...price,
             discount: {

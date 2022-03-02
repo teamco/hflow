@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, Row, Select, Tag } from 'antd';
+import { useIntl } from 'umi';
 import {
   AndroidOutlined,
   BoldOutlined,
@@ -48,7 +49,6 @@ export const getRoleIcon = role => {
  * @return {JSX.Element}
  */
 export const expendableProfile = (
-    t,
     currentUserRoles,
     component,
     verificationSent,
@@ -69,6 +69,8 @@ export const expendableProfile = (
     setCurrentRoles([...currentRoles, value]);
     setTouched(true);
   };
+
+  const intl = useIntl();
 
   /**
    * @constant
@@ -105,18 +107,18 @@ export const expendableProfile = (
           <>
             <div>
               <ControlTwoTone/>
-              <strong>{`${t('actions:assign')} ${t('auth:roles')}`}</strong>
+              <strong>{`${intl.formatMessage({id: 'actions.assign', defaultMessage: 'Assign'})} ${t('auth:roles')}`}</strong>
             </div>
-            <Select value={t('actions:select')}
+            <Select value={intl.formatMessage({id: 'actions.select', defaultMessage: 'Select'})}
                     onSelect={handleRoleTags}
                     size={'small'}
                     style={{ width: 200 }}>
-              <OptGroup label={t('panel:userRoles')}>
+              <OptGroup label={intl.formatMessage({id: 'panel.userRoles', defaultMessage: 'User Roles'})}>
                 {filterRoles(currentRoles, userRoles?.roles).map((role, idx) => (
                     <Option key={`ur.${idx}`} value={role}>{role}</Option>
                 ))}
               </OptGroup>
-              <OptGroup label={t('panel:businessRoles')}>
+              <OptGroup label={intl.formatMessage({id: 'panel.businessRoles', defaultMessage: 'Business Roles'})}>
                 {filterRoles(currentRoles, businessRoles?.roles).map((role, idx) => (
                     <Option key={`br.${idx}`} value={role}>{role}</Option>
                 ))}
@@ -139,14 +141,14 @@ export const expendableProfile = (
               <Col {...colProps}>
                 <div>
                   <MailTwoTone/>
-                  <strong>{t('auth:email')}</strong>
+                  <strong>{intl.formatMessage({id: 'auth.email', defaultMessage: 'Email'})}</strong>
                 </div>
-                <div>{record.email || t('error:na')}</div>
+                <div>{record.email || intl.formatMessage({id: 'error.na', defaultMessage: 'None'})}</div>
               </Col>
               <Col {...colProps}>
                 <div>
                   <CalendarTwoTone/>
-                  <strong>{t('form:createdAt')}</strong>
+                  <strong>{intl.formatMessage({id: 'form.createdAt', defaultMessage: 'Created at'})}</strong>
                 </div>
                 <div>{tsToLocaleDateTime(+(new Date(record.metadata.creationTime)))}</div>
               </Col>
@@ -163,7 +165,7 @@ export const expendableProfile = (
               <Col {...colProps}>
                 <div>
                   <ControlTwoTone/>
-                  <strong>{t('auth:roles')}</strong>
+                  <strong>{intl.formatMessage({id: 'auth.roles', defaultMessage: 'Roles'})}</strong>
                 </div>
                 <div>
                   {currentRoles.map((role, idx) => (

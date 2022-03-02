@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, Empty } from 'antd';
 import classnames from 'classnames';
-import { withTranslation } from 'react-i18next';
 
 import styles from './mainCard.module.less';
 
@@ -38,4 +37,4 @@ const MainCard = props => {
   );
 };
 
-export default withTranslation()(MainCard);
+export default MainCard;

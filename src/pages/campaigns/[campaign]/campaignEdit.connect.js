@@ -1,4 +1,3 @@
-import { withTranslation } from 'react-i18next';
 import { history, connect } from 'umi';
 
 import { campaignEdit } from './campaignEdit';
@@ -43,4 +42,4 @@ export default connect(
         dispatch({ type: 'campaignModel/campaignSubscriptions', payload });
       }
     })
-)(withTranslation()(campaignEdit));
+)(campaignEdit);

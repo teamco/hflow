@@ -13,7 +13,6 @@ import userStyles from 'pages/users/users.module.less';
 
 export const profile = (props) => {
   const {
-    t,
     authModel,
     userModel,
     loading,
