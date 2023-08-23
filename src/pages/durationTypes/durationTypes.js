@@ -1,18 +1,20 @@
-import React  from 'react';
-import { Form, PageHeader } from 'antd';
+import React, { useRef } from 'react';
+import { Form } from 'antd';
 import { FontSizeOutlined } from '@ant-design/icons';
-import { useIntl } from 'umi';
-import Page from '@/components/Page';
-import SaveButton from '@/components/Buttons/save.button';
+import { useIntl } from '@umijs/max';
+
+import Page from '@/components/Page/page.connect';
 import FormComponents from '@/components/Form';
 import Main from '@/components/Main';
+import { SubHeader } from '@/components/Page/page.subheader';
 
 import { fromForm } from '@/utils/object';
-import { Can } from '@/utils/auth/can';
+import { effectHook } from '@/utils/hooks';
+import { componentAbilities } from '@/utils/auth/component.setting';
+import { t } from '@/utils/i18n';
+import { layout } from '@/utils/layout';
 
 import styles from '@/pages/durationTypes/durationTypes.module.less';
-import ExportButton from '@/components/Buttons/export.button';
-import { effectHook } from '@/utils/hooks';
 
 const { GenericPanel, EditableTags } = FormComponents;
 const { Info } = Main;
@@ -42,21 +44,10 @@ export const durationTypes = props => {
     touched
   } = simpleModel;
 
-  effectHook(() => {
-    onQuery();
-  }, [authModel.user]);
-
-  /**
-   * @constant
-   */
-  const onFinish = () => {
-    onSave();
-  };
-
   const subTitle = (
       <>
         <FontSizeOutlined style={{ marginRight: 10 }}/>
-        {intl.formatMessage({id: 'panel.durationTypesConfig', defaultMessage: 'Duration Types Config'})}
+        {t(intl, 'panel.durationTypesConfig')}
       </>
   );
 
@@ -78,50 +69,77 @@ export const durationTypes = props => {
     }
   };
 
-  const { ability } = authModel;
-  const component = 'durationTypes';
-  const disabled = ability.cannot('update', component);
+  const component = 'duration.types';
+
+  const {
+    ableFor,
+    disabled,
+    canUpdate,
+    canDelete,
+    canCreate,
+    canRead,
+    canExport
+  } = componentAbilities(authModel, component, isEdit);
+
+  effectHook(() => {
+    (canUpdate || canRead) && onQuery();
+  }, [canRead, canUpdate]);
+
+  /**
+   * @constant
+   */
+  const onFinish = () => {
+    canUpdate && onSave();
+  };
+
+  const MODEL_NAME = 'simpleModel';
+  const refTarget = useRef(null);
+
+  const pageHeaderProps = {
+    subTitle,
+    loading,
+    disabled,
+    MODEL_NAME,
+    component,
+    actions: {
+      closeBtn: false,
+      menuBtn: false,
+      newBtn: false,
+      exportBtn: { refTarget, tags, disabled: !canExport },
+      saveBtn: { ableFor, touched, formRef }
+    }
+  };
 
   return (
-      <Page spinEffects={['simpleModel/query']}
+      <Page spinEffects={[`${MODEL_NAME}/query`]}
+            ableFor={ableFor}
             touched={touched}
             component={component}>
         <div className={styles.preparationWrapper}>
-          <PageHeader ghost={false}
-                      subTitle={subTitle}
-                      extra={[
-                        <ExportButton key={'export'}
-                                      disabled={disabled}
-                                      component={component}
-                                      json={tags}/>,
-                        <Can I={'create'} a={component} key={'add'}>
-                          <SaveButton key={'save'}
-                                      isEdit={isEdit}
-                                      disabled={disabled || !touched}
-                                      formRef={formRef}
-                                      loading={loading.effects['simpleModel/prepareToSave']}/>
-                        </Can>
-                      ]}>
-          </PageHeader>
-          <Form layout={'vertical'}
-                className={styles.form}
-                form={formRef}
-                fields={entityForm}
-                onFinish={onFinish}>
-            <GenericPanel header={intl.formatMessage({id: 'panel.durationTypes', defaultMessage: 'Duration Types'})}
-                          name={'durationTypes'}
-                          defaultActiveKey={['durationTypes']}>
-              <div>
-                <EditableTags label={false}
-                              name={'tags'}
-                              disabled={disabled}
-                              newTag={intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
-                              onChange={onUpdateTags}
-                              tags={tags}/>
-              </div>
-            </GenericPanel>
-            <Info {...infoProps} />
-          </Form>
+          <SubHeader {...pageHeaderProps}/>
+          <div ref={refTarget}>
+            <Form layout={'vertical'}
+                  className={styles.form}
+                  form={formRef}
+                  fields={entityForm}
+                  onFinish={onFinish}>
+              <GenericPanel header={t(intl, 'panel.durationTypes')}
+                            name={'durationTypes'}
+                            defaultActiveKey={['durationTypes']}>
+                <div colProps={layout.fullColumn}>
+                  <EditableTags name={'tags'}
+                                formRef={formRef}
+                                canDelete={canDelete}
+                                canUpdate={canUpdate}
+                                canCreate={canCreate}
+                                disabled={disabled}
+                                onChange={onUpdateTags}
+                                tags={tags}/>
+                </div>
+              </GenericPanel>
+              <Info {...infoProps} />
+            </Form>
+          </div>
         </div>
       </Page>
   );

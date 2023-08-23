@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import { fbReadAll, fbReadBy, getRef } from 'services/firebase.service';
+import { fbReadAll, fbReadBy, getRef } from '@/services/firebase.service';
 
 export const getAllBusinesses = async () => {
-  const businesses = await fbReadAll({ collection: 'businesses' });
+  const businesses = await fbReadAll({ collectionPath: 'businesses' });
 
   let data = [];
   businesses.forEach(doc => {
@@ -18,14 +18,14 @@ export const getAllBusinesses = async () => {
  */
 export const getBusinesses = async ({ userId }) => {
   let data = [];
-  const userRef = await getRef({ collection: 'users', doc: userId });
+  const userRef = await getRef({ collectionPath: 'users', document: userId });
 
   /**
    * @constant
    * @type {{forEach}}
    */
   const businesses = await fbReadBy({
-    collection: 'businesses',
+    collectionPath: 'businesses',
     field: 'metadata.belongsToRef',
     value: userRef
   });
@@ -70,7 +70,7 @@ export const findBusinessTempUser = async ({ email }) => {
    * @type {{forEach}}
    */
   const users = await fbReadBy({
-    collection: 'tempBusinessUsers',
+    collectionPath: 'tempBusinessUsers',
     field: 'email',
     value: email
   });
@@ -99,7 +99,7 @@ export const getBusinessUsers = async ({ businessRef }) => {
    * @type {{forEach}}
    */
   const users = await fbReadBy({
-    collection: 'users',
+    collectionPath: 'users',
     field: 'business.metadata.businessRef',
     value: businessRef
   });
@@ -119,7 +119,7 @@ export const getBusinessUsers = async ({ businessRef }) => {
 export const getTempBusinessUsers = async ({ businessRef }) => {
   let data = [];
   const tempBusinessUsers = await fbReadBy({
-    collection: 'tempBusinessUsers',
+    collectionPath: 'tempBusinessUsers',
     field: 'metadata.businessRef',
     value: businessRef
   });

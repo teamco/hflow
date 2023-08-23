@@ -1,6 +1,72 @@
 .export {
+  position: relative;
+  top: -2px;
+
   svg {
     width: 10px;
     height: 10px;
+  }
+}
+
+.screenshot {
+  padding: 0;
+  background-color: transparent !important;
+
+  span[role="img"] {
+    margin-right: 4px;
+  }
+}
+
+.checkboxWrapper {
+  display: flex;
+  column-gap: 3px;
+  row-gap: 3px;
+
+  :global {
+    label {
+      padding: 3px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      margin: 0;
+
+      &.ant-checkbox-wrapper-checked {
+        text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
+        box-shadow: 0 2px 0 rgb(0 0 0 / 5%);
+      }
+    }
+  }
+
+  &.primary {
+    :global {
+      label {
+        margin: 0;
+
+        &.ant-checkbox-wrapper-checked {
+          color: #fff;
+          border-color: #1890ff;
+          background: #1890ff;
+        }
+      }
+    }
+  }
+
+  &.hide {
+    :global {
+      .ant-checkbox-inner {
+        display: none;
+      }
+    }
+  }
+}
+
+.csv {
+  padding: 0 8px;
+  background: none;
+  border: none;
+  color: #1890ff;
+  cursor: pointer;
+
+  &:hover {
+    color: #69b1ff
   }
 }

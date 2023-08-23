@@ -1,31 +1,34 @@
 import React, { useState } from 'react';
-import { ControlOutlined, DownOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Form, PageHeader } from 'antd';
-import { useIntl } from 'umi';
+import { ControlOutlined } from '@ant-design/icons';
+import { Col, Form, Row } from 'antd';
+import { useIntl, useParams } from '@umijs/max';
 
-import SaveButton from '@/components/Buttons/save.button';
 import Main from '@/components/Main';
-import Page from '@/components/Page';
+import Page from '@/components/Page/page.connect';
 import Common from '@/components/Common';
+import { formProps } from '@/components/Form/formProps';
+import { SubHeader } from '@/components/Page/page.subheader';
 import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
-
-import { useParams } from 'umi';
+import { validateFieldsOnLoad } from '@/components/Form';
 
 import { fromForm } from '@/utils/object';
-import { isLoading } from '@/utils/state';
 import { effectHook } from '@/utils/hooks';
+import { t } from '@/utils/i18n';
+import { layout } from '@/utils/layout';
+import { componentAbilities } from '@/utils/auth/component.setting';
 
 import { FeatureInfo } from './form/feature.info';
 import { FeatureDiscount } from './form/feature.discount';
-import { FeatureTranslate } from './form/feature.translate';
-import { FeatureMenu } from '@/pages/subscriptions/features/metadata/feature.menu';
+
+import { featureMenu } from '@/pages/subscriptions/features/metadata/feature.menu';
 import FeatureTrial from '@/pages/subscriptions/features/[feature]/form/feature.trial';
 
-import menuStyles from '@/components/menu.less';
 import styles from '@/pages/subscriptions/features/features.module.less';
 import userStyles from '@/pages/users/users.module.less';
 
 const { Info } = Main;
+
+const MODEL_NAME = 'featureModel';
 
 /**
  * @export
@@ -40,6 +43,7 @@ export const featureEdit = (props) => {
     authModel,
     featureModel,
     loading,
+    testId,
     onEditFeature,
     onFieldsChange,
     onUpdateTags,
@@ -61,33 +65,35 @@ export const featureEdit = (props) => {
     currencies,
     isEdit,
     tags,
-    touched
+    touched,
+    translateMessages
   } = featureModel;
 
-  const { ability } = authModel;
   const component = 'features';
-  const disabled = ability.cannot('update', component);
-  const canUpdate = ability.can('update', component);
+
+  const {
+    ability,
+    ableFor,
+    disabled,
+    canUpdate
+  } = componentAbilities(authModel, component, isEdit);
 
   const [isTrialed, setIsTrialed] = useState(false);
 
   effectHook(() => {
-    canUpdate && onEditFeature(params);
-  }, [authModel.user, canUpdate]);
+    if (canUpdate) {
+      onEditFeature(params);
+    }
+  }, [canUpdate]);
 
-  /**
-   * @constant
-   * @param formValues
-   */
-  const onFinish = formValues => {
-    onSave(formValues, params);
-  };
+  validateFieldsOnLoad(formRef, entityForm);
 
   const tagsProps = {
     formRef,
     onUpdateTags,
     disabled,
-    tags
+    tags,
+    loading
   };
 
   const {
@@ -101,19 +107,24 @@ export const featureEdit = (props) => {
     formRef,
     disabled,
     featureTypes,
-    setIsTrialed
+    setIsTrialed,
+    loading
   };
 
   const discountProps = {
     formRef,
     disabled,
     currencies,
-    durationTypes
+    durationTypes,
+    setIsTrialed,
+    loading
   };
 
   const translateProps = {
     formRef,
-    disabled
+    loading,
+    disabled,
+    translateMessages
   };
 
   const infoProps = {
@@ -121,6 +132,7 @@ export const featureEdit = (props) => {
     touched,
     formRef,
     disabled,
+    loading,
     info: {
       createdBy,
       updatedBy,
@@ -132,6 +144,7 @@ export const featureEdit = (props) => {
   const menuProps = {
     ability,
     isEdit,
+    intl,
     loading,
     params,
     component,
@@ -142,56 +155,75 @@ export const featureEdit = (props) => {
       <>
         <ControlOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
-            intl.formatMessage({id: 'feature.actions.edit', defaultMessage: 'Edit Feature'}) :
-            intl.formatMessage({id: 'feature.msg.addNew', defaultMessage: 'Add new Feature?'})
+            t(intl, 'feature.actions.edit') :
+            t(intl, 'feature.msg.addNew')
         }
       </>
   );
+
+  const gutter = { xs: 8, sm: 16, md: 18, lg: 24 };
+
+  const onChangeFormProps = {
+    touched,
+    entityForm,
+    loading,
+    spinOn: [
+      `${MODEL_NAME}/validateFeature`,
+      `${MODEL_NAME}/editFeature`,
+      `${MODEL_NAME}/getSimpleEntity`,
+      `${MODEL_NAME}/updateLocales`,
+      `${MODEL_NAME}/cleanForm`
+    ],
+    onFinish(formValues) {
+      canUpdate && onSave(formValues, params);
+    },
+    onFieldsChange
+  };
+
+  const pageHeaderProps = {
+    subTitle,
+    loading,
+    disabled,
+    MODEL_NAME,
+    isEdit,
+    component,
+    actions: {
+      exportBtn: false,
+      newBtn: false,
+      closeBtn: { onClose },
+      saveBtn: { ableFor, touched, formRef },
+      menuBtn: {
+        selectedEntity: selectedFeature,
+        label: t(intl, 'feature.actions.manage'),
+        menuProps: {
+          ...menuProps,
+          onDeleteFeature
+        },
+        dropDownMenu: featureMenu,
+        testId: `${testId}.menuBtn`
+      }
+    }
+  };
 
   return (
       <Page className={userStyles.users}
             component={component}
             touched={!disabled && touched}
+            ableFor={ableFor}
             spinEffects={[
-              'featureModel/editFeature',
-              'featureModel/prepareToSave'
+              `${MODEL_NAME}/validateFeature`,
+              `${MODEL_NAME}/editFeature`,
+              `${MODEL_NAME}/getSimpleEntity`,
+              `${MODEL_NAME}/cleanForm`,
+              `${MODEL_NAME}/handleUpdate`,
+              `${MODEL_NAME}/handleSave`,
+              `${MODEL_NAME}/prepareToSave`
             ]}>
         <div className={styles.featureWrapper}>
-          <PageHeader ghost={false}
-                      subTitle={subTitle}
-                      extra={[
-                        <Button key={'close'}
-                                size={'small'}
-                                loading={isLoading(loading.effects['featureModel/prepareToSave'])}
-                                onClick={() => onClose()}>
-                          {intl.formatMessage({id: 'actions.close', defaultMessage: 'Add new Feature?'})}
-                        </Button>,
-                        <SaveButton key={'save'}
-                                    isEdit={isEdit}
-                                    disabled={!touched || disabled}
-                                    formRef={formRef}
-                                    loading={loading.effects['featureModel/prepareToSave']}/>,
-                        <Dropdown overlay={<FeatureMenu record={selectedFeature} {...menuProps} />}
-                                  disabled={!isEdit || disabled}
-                                  trigger={['click']}
-                                  overlayClassName={menuStyles.customActionMenu}
-                                  key={'custom'}>
-                          <Button size={'small'}
-                                  icon={<SettingOutlined/>}
-                                  className={menuStyles.customAction}>
-                            {intl.formatMessage({id: 'feature.actions.manage', defaultMessage: 'Manage Feature'})} <DownOutlined/>
-                          </Button>
-                        </Dropdown>
-                      ]}/>
-          <Form layout={'vertical'}
-                className={styles.form}
+          <SubHeader {...pageHeaderProps}/>
+          <Form {...formProps(onChangeFormProps)}
                 form={formRef}
-                fields={entityForm}
-                scrollToFirstError={true}
-                onFinish={onFinish}
-                onFieldsChange={onFieldsChange}
                 initialValues={{
-                  helper: true,
                   trialed: false,
                   selectedByDefault: true,
                   ...DEFAULT_PRICE_VALUES(currencies[0]),
@@ -206,14 +238,22 @@ export const featureEdit = (props) => {
                   },
                   featureType: featureTypes[0],
                   translateKeys: {
-                    on: 'actions:yes',
-                    off: 'actions:no'
+                    title: '',
+                    description: ''
                   }
                 }}>
             <FeatureInfo {...prefsProps} />
-            <FeatureDiscount {...discountProps} />
-            {isTrialed && (<FeatureTrial {...discountProps} />)}
-            <FeatureTranslate {...translateProps} />
+            <Row gutter={gutter} className={styles.stretched}>
+              <Col {...layout.halfColumn}>
+                <FeatureDiscount {...discountProps} />
+              </Col>
+              {isTrialed && (
+                  <Col {...layout.halfColumn}>
+                    <FeatureTrial {...discountProps} />
+                  </Col>
+              )}
+            </Row>
+            <Common.Translate {...translateProps} />
             <Common.Tags {...tagsProps} />
             <Info {...infoProps} />
           </Form>

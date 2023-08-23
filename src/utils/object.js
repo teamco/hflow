@@ -24,15 +24,13 @@ const { Option } = Select;
  * @return {*}
  */
 export function findObjectValue(object, keys, nsDeep) {
-  if (!object) {
-    return object;
-  }
-  object = object[keys[nsDeep]];
+  if (!object) return null;
+
+  const _object = object[keys[nsDeep]];
   if (nsDeep < keys.length - 1) {
-    nsDeep += 1;
-    return findObjectValue(object, keys, nsDeep);
+    return findObjectValue(_object, keys, nsDeep + 1);
   } else {
-    return object;
+    return _object;
   }
 }
 
@@ -42,7 +40,7 @@ export function findObjectValue(object, keys, nsDeep) {
  * @param {string} key
  * @return {null|*}
  */
-export function findObjectByKey(object, key) {
+export function findObjectByKey(key, object = {}) {
 
   /**
    * @constant
@@ -111,3 +109,13 @@ export const asSortedTags = (tags = [], key = 'name') => {
       </Option>
   ));
 };
+
+/**
+ * @export
+ * @param obj1
+ * @param obj2
+ * @returns {boolean}
+ */
+export const isDiff = (obj1, obj2) => {
+  return JSON.stringify(obj1 || obj2) !== JSON.stringify(obj2);
+}

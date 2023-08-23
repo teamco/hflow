@@ -1,38 +1,40 @@
 import React from 'react';
-import { NavLink, useIntl } from 'umi';
-import { COLORS } from '@/utils/colors';
+import { NavLink } from '@umijs/max';
 import { DeleteTwoTone, ControlOutlined } from '@ant-design/icons';
-import { Menu, Popconfirm } from 'antd';
+import { Popconfirm } from 'antd';
+
+import { COLORS } from '@/utils/colors';
 import { abilityMenuItem } from '@/utils/abilityComponent/abilityMenuItem';
+import { t } from '@/utils/i18n';
 
 import tableStyles from '@/components/Main/Table/table.module.less';
 
 /**
  * @export
  * @param props
- * @return {JSX.Element}
+ * @return {*[]}
  */
-export const FeatureMenu = props => {
-  const intl = useIntl();
+export const featureMenu = props => {
   const {
     ability,
     isEdit,
     component,
     record,
+    intl,
+    canUpdate,
+    canDelete,
     onDeleteFeature
   } = props;
 
-  const canEdit = ability.can('edit', component);
-  const canDelete = ability.can('delete', component);
-
   const editProps = {
     key: 'edit',
-    canI: canEdit,
+    canI: canUpdate,
+    divider: true,
     icon: <ControlOutlined className={tableStyles.action}
-                                twoToneColor={COLORS.success} />,
+                           twoToneColor={COLORS.success}/>,
     children: (
-        <NavLink to={`/admin/features/${record.id}`}>
-          {intl.formatMessage({id: 'feature.actions.edit', defaultMessage: 'Edit Feature'})}
+        <NavLink to={`/admin/features/${record?.id}`}>
+          {t(intl, 'feature.actions.edit')}
         </NavLink>
     )
   };
@@ -41,28 +43,21 @@ export const FeatureMenu = props => {
     key: 'delete',
     canI: canDelete,
     icon: <DeleteTwoTone className={tableStyles.action}
-                         twoToneColor={COLORS.danger} />,
+                         twoToneColor={COLORS.danger}/>,
     children: (
-        <Popconfirm title={intl.formatMessage({id: 'feature.msg.deleteConfirm', defaultMessage: 'Are you sure to' +
-              ' delete this Feature?'})}
+        <Popconfirm title={t(intl, 'feature.msg.deleteConfirm')}
                     placement={'topRight'}
+                    disabled={!canDelete}
                     onConfirm={() => onDeleteFeature(record)}>
-          {intl.formatMessage({id: 'actions.delete', defaultMessage: 'Delete'})}
+          {t(intl, 'actions.delete')}
         </Popconfirm>
     )
   };
 
-  return (
-      <Menu>
-        {!isEdit && (
-            <>
-              {abilityMenuItem(editProps)}
-              <Menu.Divider key={'divider'} />
-            </>
-        )}
-        {abilityMenuItem(deleteProps)}
-      </Menu>
-  );
-};
+  const editItems = isEdit ? [] : [...abilityMenuItem(editProps)];
 
-export default FeatureMenu;
+  return [
+    ...editItems,
+    ...abilityMenuItem(deleteProps)
+  ];
+};

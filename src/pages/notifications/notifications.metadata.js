@@ -1,29 +1,36 @@
 import React from 'react';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
+
+import { t } from '@/utils/i18n';
+import { adaptTranslations } from '@/locales';
 
 /**
  * @export
- * @param t
  * @param loading
  * @return {*}
  */
 export const notificationsMetadata = ({ loading }) => {
   const intl = useIntl();
+
   return {
     width: '100%',
     size: 'middle',
     columns: [
       {
-        title: intl.formatMessage({id: 'notifications.type', defaultMessage: 'Type'}),
+        title: t(intl, 'notifications.type'),
         dataIndex: 'type',
         key: 'type',
         filterable: true,
-        sortable: true
+        sortable: true,
+        render(type) {
+          return t(intl, adaptTranslations(type, 'notifications'));
+        }
       },
       {
-        title: intl.formatMessage({id: 'table.title', defaultMessage: 'Title'}),
+        title: t(intl, 'table.title'),
         dataIndex: 'title',
         key: 'title',
+        width: 300,
         filterable: true,
         sortable: true,
         render(title, record) {
@@ -31,22 +38,30 @@ export const notificationsMetadata = ({ loading }) => {
         }
       },
       {
-        title: intl.formatMessage({id: 'notifications.status', defaultMessage: 'Status'}),
+        title: t(intl, 'notifications.status'),
         dataIndex: 'status',
         key: 'status',
         filterable: true,
-        sortable: true
+        sortable: true,
+        render(status) {
+          return t(intl, adaptTranslations(status, 'status'));
+        }
       },
       {
-        title: intl.formatMessage({id: 'form.createdAt', defaultMessage: 'Created at'}),
+        title: t(intl, 'form.createdAt'),
         dataIndex: 'metadata',
         key: 'metadata',
         render(metadata) {
           const date = new Date(metadata.createdAt);
-          return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+          const options = {
+            // https://www.jsman.net/manual/Standard-Global-Objects/Date/toLocaleTimeString
+            year: 'numeric', month: 'short', day: '2-digit',
+            hour: '2-digit', minute: '2-digit'
+          };
+          return `${date.toLocaleTimeString('en-US', options)}`;
         }
       }
     ],
     loading: loading.effects['notifications/query']
-  }
+  };
 };

@@ -1,0 +1,29 @@
+@import "@/theme/variables.less";
+
+.breadcrumbs {
+  padding: 10px 20px;
+  background: cornsilk;
+  box-shadow: 1px 1px 4px -2px lightslategray;
+  border-top: 1px solid #ededed;
+  position: relative;
+  z-index: 1;
+  margin-top: @header-height;
+
+  .ant-breadcrumb-link {
+    max-width: 150px;
+    display: table-cell;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  ol {
+    margin-bottom: 0;
+    padding-left: 0;
+    display: flex;
+  }
+
+  li {
+    display: flex;
+  }
+}

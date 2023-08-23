@@ -1,8 +1,11 @@
 import React from 'react';
 import { Col, Row } from 'antd';
 import { MailTwoTone, MessageTwoTone } from '@ant-design/icons';
+import { useIntl } from '@umijs/max';
 
-import styles from '../notifications.module.less';
+import { t } from '@/utils/i18n';
+
+import styles from '@/pages/notifications/notifications.module.less';
 
 /**
  * @export
@@ -10,12 +13,14 @@ import styles from '../notifications.module.less';
  * @return {JSX.Element|{expandedRowRender(*): *, rowExpandable: (function(*): boolean)}}
  */
 export const expendableNotification = props => {
-  const { t, setVisibleMessage } = props;
+
+  const intl = useIntl();
+  const { setVisibleMessage } = props;
 
   return {
     expandedRowRender(record) {
       const rowProps = { gutter: { xs: 8, sm: 16, md: 24, lg: 32 } };
-      const colProps = { sm: 12, md: 8, style: { marginTop: 10 } };
+      const colProps = { sm: 12, md: 12, style: { marginTop: 10 } };
 
       return (
           <div className={styles.notificationsInfo}>
@@ -23,7 +28,7 @@ export const expendableNotification = props => {
               <Col {...colProps}>
                 <div>
                   <MessageTwoTone/>
-                  <strong>{t.formatMessage({id: 'form.description', defaultMessage: 'Description'})}</strong>
+                  <strong>{t(intl, 'form.description')}</strong>
                 </div>
                 {record?.description}
               </Col>
@@ -31,7 +36,7 @@ export const expendableNotification = props => {
                   <Col {...colProps}>
                     <div>
                       <MessageTwoTone/>
-                      <strong>{t.formatMessage({id: 'status.answered', defaultMessage: 'Answered' })}</strong>
+                      <strong>{t(intl, 'status.answered')}</strong>
                     </div>
                     {record?.replyedTo?.title}
                   </Col>
@@ -42,7 +47,7 @@ export const expendableNotification = props => {
                   <Col {...colProps}>
                     <div>
                       <MailTwoTone/>
-                      <strong>{t.formatMessage({id: 'notifications.from', defaultMessage: 'From'})}</strong>
+                      <strong>{t(intl, 'notifications.from')}</strong>
                     </div>
                     <div className={styles.reply}
                          onClick={() => {
@@ -55,14 +60,14 @@ export const expendableNotification = props => {
                              }
                            });
                          }}>
-                      {t.formatMessage({id: 'notifications.re', defaultMessage: 'RE: {sender}'},{ sender: record?.sentFrom?.email })}
+                      {t(intl, 'notifications.re',{ sender: record?.sentFrom?.email })}
                     </div>
                   </Col>
               )}
               <Col {...colProps}>
                 <div>
                   <MailTwoTone/>
-                  <strong>{t.formatMessage({id: 'notifications:to', defaultMessage: 'To'})}</strong>
+                  <strong>{t(intl, 'notifications.to')}</strong>
                 </div>
                 {record?.sentTo}
               </Col>

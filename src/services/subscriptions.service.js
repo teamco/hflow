@@ -1,6 +1,7 @@
-import { API } from '@/services/config/api.config';
 import request from '@/utils/request';
 import { xhrRequest } from '@/services/authentication.service';
+
+const { API } = require('@/services/config/api.config');
 
 /**
  * @export
@@ -25,7 +26,7 @@ export const getSubscription = async ({ id, token }) => {
   return xhrRequest({
     url: API.subscriptions.get,
     method: request.METHOD.get,
-    subscriptionsKey: id,
+    subscriptionKey: id,
     token
   });
 };
@@ -57,6 +58,22 @@ export const updateSubscription = async ({ id, data, token }) => {
  */
 export const addSubscription = async ({ data, token }) => {
   return xhrRequest({ url: API.subscriptions.store, data, token });
+};
+
+/**
+ * @async
+ * @export
+ * @param {string} id
+ * @param {string} token
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ */
+export const deleteSubscription = async ({ id, token }) => {
+  return xhrRequest({
+    url: API.subscriptions.delete,
+    method: request.METHOD.delete,
+    subscriptionKey: id,
+    token
+  });
 };
 
 

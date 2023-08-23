@@ -1,0 +1,61 @@
+.skeleton {
+  justify-content: center;
+  width: 100%;
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(89, 107, 130, .4);
+  transition: all 0.5s ease-in-out;
+
+
+  svg {
+    width: 24px;
+    height: 24px;
+    transition: all 0.5s ease-in-out;
+  }
+
+  &:hover {
+    color: rgb(89, 107, 130);
+
+    svg {
+      transform: scale(1.1);
+    }
+  }
+
+  .left {
+    cursor: pointer;
+  }
+
+  .right {
+    cursor: pointer;
+    left: -8px;
+    position: relative;
+  }
+
+  .null {
+    width: 24px;
+  }
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  :global {
+    .ant-carousel {
+      width: 100%;
+    }
+
+    .slick-slide {
+      div[tabindex] {
+        display: flex !important;
+        align-items: center;
+        padding: 0 0 16px 16px;
+      }
+    }
+  }
+}

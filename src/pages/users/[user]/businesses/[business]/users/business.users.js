@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
-import { useParams, useIntl } from 'umi';
-import { Button, PageHeader } from 'antd';
+import React, { useRef, useState } from 'react';
+import { useParams, useIntl } from '@umijs/max';
+import { Button } from 'antd';
 import { UserAddOutlined, UserOutlined } from '@ant-design/icons';
 
-import Page from '@/components/Page';
+import Page from '@/components/Page/page.connect';
 import Main from '@/components/Main';
+import { SubHeader } from '@/components/Page/page.subheader';
 
-import RegisterUser from 'pages/users/[user]/businesses/[business]/users/register';
-import { metadata } from 'pages/users/[user]/businesses/[business]/users/business.users.metadata';
-import { expandable } from 'pages/users/[user]/businesses/[business]/users/metadata/business.user.expandable';
+import RegisterUser from '@/pages/users/[user]/businesses/[business]/users/register';
+import { metadata } from '@/pages/users/[user]/businesses/[business]/users/business.users.metadata';
+import { expandable } from '@/pages/users/[user]/businesses/[business]/users/metadata/business.user.expandable';
 
+import { effectHook } from '@/utils/hooks';
+import { t } from '@/utils/i18n';
 import { Can } from '@/utils/auth/can';
 import { fromForm } from '@/utils/object';
 
-import styles from 'pages/users/users.module.less';
-import { effectHook } from '@/utils/hooks';
+import styles from '@/pages/users/users.module.less';
+import { componentAbilities } from '@/utils/auth/component.setting';
 
 const { Table } = Main;
 
@@ -25,10 +28,12 @@ const { Table } = Main;
  */
 export const businessUsers = (props) => {
   const intl = useIntl();
+
   const {
     businessModel,
-    userRoleModel,
+    roleModel,
     userModel,
+    authModel,
     onSendVerification,
     onResendRegisterLink,
     loading,
@@ -49,7 +54,7 @@ export const businessUsers = (props) => {
 
   let {
     entityForm
-  } = userRoleModel;
+  } = roleModel;
 
   /**
    * @type {{user, business}}
@@ -62,9 +67,20 @@ export const businessUsers = (props) => {
     onQuery(params);
   }, []);
 
-  const businessRoles = fromForm(entityForm, 'tags') || [];
+  const component = 'business.users';
+  const {
+    ability,
+    disabled,
+    canUpdate,
+    canDelete,
+    canExport
+  } = componentAbilities(authModel, component, true);
 
-  const component = 'businessUsers';
+  const MODEL_NAME = 'businessModel';
+
+  const refTarget = useRef(null);
+
+  const businessRoles = fromForm(entityForm, 'tags') || [];
 
   const tableProps = {
     expandable: expandable({
@@ -85,36 +101,51 @@ export const businessUsers = (props) => {
   const subTitle = (
       <>
         <UserOutlined style={{ marginRight: 10 }}/>
-        {intl.formatMessage({id: 'business.actions.manage', defaultMessage: 'Manage Business'})}
+        {t(intl, 'business.actions.manage')}
       </>
   );
+
+  const pageHeaderProps = {
+    subTitle,
+    loading,
+    disabled,
+    MODEL_NAME,
+    component,
+    actions: {
+      exportBtn: { refTarget, data: assignedUsers, disabled: !canExport },
+      closeBtn: false,
+      newBtn: false,
+      saveBtn: false,
+      menuBtn: false,
+      extra: [
+        <Can I={'assign'} a={component} key={'add'}>
+          <Button size={'small'}
+                  icon={<UserAddOutlined/>}
+                  onClick={() => {
+                    setIsRegisterVisible(true);
+                  }}
+                  type={'primary'}>
+            {t(intl, 'actions.addNew')}
+          </Button>
+        </Can>
+      ]
+    }
+  };
 
   return (
       <Page className={styles.users}
             component={component}
             spinEffects={[
               'businessModel/usersQuery',
-              'userRoleModel/query'
+              'roleModel/query'
             ]}>
-        <PageHeader ghost={false}
-                    subTitle={subTitle}
-                    extra={[
-                      <Can I={'assign'} a={component} key={'add'}>
-                        <Button size={'small'}
-                                icon={<UserAddOutlined/>}
-                                onClick={() => {
-                                  setIsRegisterVisible(true);
-                                }}
-                                type={'primary'}>
-                          {intl.formatMessage({id: 'actions:addNew', defaultMessage: 'Add New User'})}
-                        </Button>
-                      </Can>
-                    ]}/>
+        <SubHeader {...pageHeaderProps}/>
         <Table data={assignedUsers}
                {...tableProps}
                {...metadata({
                  data: assignedUsers,
                  multiple: true,
+                 disabled,
                  loading,
                  onAssignUser,
                  onUnassignUser,

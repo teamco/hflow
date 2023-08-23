@@ -1,31 +1,36 @@
-import { Menu } from 'antd';
 import React from 'react';
+import {Outlet} from '@umijs/max';
+
 import { stub } from '@/utils/function';
 
 /**
  * @export
  * @param props
- * @return {JSX.Element|null}
- * @constructor
+ * @return {[{children, icon, disabled: boolean, label: JSX.Element, key}]}
  */
 export const abilityMenuItem = props => {
   const {
     canI,
     icon,
-    children,
     key,
-    loading,
+    divider = false,
     onClick = stub
   } = props;
 
-  return (
-      <Menu.Item icon={icon}
-                 disabled={!canI}
-                 loading={loading}
-                 key={key}
-                 onClick={onClick}>
-        {children}
-      </Menu.Item>
-  );
+  const dividerItem = divider ? [{ type: 'divider' }] : [];
+
+  return [
+    {
+      label: (
+          <span onClick={onClick}>
+            {props.children}
+          </span>
+      ),
+      disabled: !canI,
+      key,
+      icon
+    },
+    ...dividerItem
+  ];
 };
 

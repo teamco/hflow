@@ -1,0 +1,157 @@
+@import "@/theme/variables.less";
+
+.rolesManager {
+  padding: 20px;
+
+  .tableHeader {
+    display: flex;
+    padding-left: 12px;
+    column-gap: 12px;
+
+    h1 {
+      font-size: 16px;
+      margin: 0;
+    }
+  }
+
+  td.tableCell {
+    vertical-align: top;
+    transition: @main-transition !important;
+
+    &:hover {
+      box-shadow: 0 0 5px @main-shadow-color;
+      transform: scale(1.02);
+      overflow: hidden;
+      position: relative;
+      border-radius: 12px;
+      z-index: 1;
+    }
+  }
+
+  .connected {
+    padding-left: 12px;
+    display: flex;
+    align-items: center;
+    column-gap: 12px;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .noConnected {
+    display: flex;
+    align-items: center;
+    column-gap: 12px;
+    justify-content: space-between;
+  }
+
+  .connectedTags {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+
+    > div:first-child {
+      background-color: @metadata-bg;
+      border-bottom: 1px solid @main-border-color;
+      margin: -12px -8px;
+      padding: 8px;
+      display: flex;
+      column-gap: 8px;
+    }
+
+    > div:last-child {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      column-gap: 0;
+      row-gap: 4px;
+      flex-wrap: wrap;
+    }
+  }
+
+  .connectedActions {
+    background-color: @metadata-bg;
+  }
+
+  .info {
+    margin: 20px 0;
+
+    :global {
+      .ant-collapse {
+        .ant-collapse-content-box {
+          padding: 16px;
+        }
+      }
+    }
+  }
+
+  :global {
+    .ant-collapse {
+      .ant-collapse-header {
+        align-items: center;
+      }
+
+      .ant-collapse-content-box {
+        padding: 0 0 16px 0;
+      }
+    }
+
+    .ant-table-wrapper {
+      .ant-pagination {
+        margin-bottom: 4px;
+      }
+    }
+  }
+}
+
+.transferWrapper {
+  .transfer {
+    height: 400px;
+
+    :global {
+      .ant-transfer-list {
+        height: 100%;
+        width: 50%;
+      }
+
+      .ant-transfer-list-footer {
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+  }
+
+  .transferTitle {
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    column-gap: 6px;
+
+    span[role="img"] {
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+
+  :global {
+    .ant-modal-title {
+      font-weight: 500;
+      display: flex;
+      column-gap: 12px;
+
+      svg {
+        height: 24px;
+        width: 24px;
+      }
+    }
+  }
+
+  .reload {
+    margin: 4px 8px;
+  }
+}

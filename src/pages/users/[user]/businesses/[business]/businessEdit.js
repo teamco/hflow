@@ -1,38 +1,42 @@
-import React  from 'react';
-import Page from '@/components/Page';
-import userStyles from 'pages/users/users.module.less';
-import { useParams, useIntl } from 'umi';
-import { Button, Dropdown, Form, PageHeader } from 'antd';
-import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
+import React from 'react';
+import { useIntl, useParams } from '@umijs/max';
+import { Form } from 'antd';
+import { TrademarkOutlined } from '@ant-design/icons';
 
 import Main from '@/components/Main';
 
-import { BusinessAddress } from 'pages/users/[user]/businesses/[business]/form/business.address';
-import { BusinessInfo } from 'pages/users/[user]/businesses/[business]/form/business.info';
-import { BusinessLicense } from 'pages/users/[user]/businesses/[business]/form/business.license';
-import { BusinessTags } from 'pages/users/[user]/businesses/[business]/form/business.tags';
-import BusinessMenu from 'pages/users/[user]/businesses/metadata/business.menu';
+import { BusinessAddress } from '@/pages/users/[user]/businesses/[business]/form/business.address';
+import { BusinessInfo } from '@/pages/users/[user]/businesses/[business]/form/business.info';
+import { BusinessLicense } from '@/pages/users/[user]/businesses/[business]/form/business.license';
+import { BusinessTags } from '@/pages/users/[user]/businesses/[business]/form/business.tags';
+import { businessMenu } from '@/pages/users/[user]/businesses/metadata/business.menu';
 
-import SaveButton from '@/components/Buttons/save.button';
+import Page from '@/components/Page/page.connect';
+import { SubHeader } from '@/components/Page/page.subheader';
+import { formProps } from '@/components/Form/formProps';
+import { validateFieldsOnLoad } from '@/components/Form';
 
+import { t } from '@/utils/i18n';
 import { fromForm } from '@/utils/object';
-import { isLoading } from '@/utils/state';
 import { effectHook } from '@/utils/hooks';
+import { componentAbilities } from '@/utils/auth/component.setting';
 
-import styles from 'pages/users/[user]/businesses/businesses.module.less';
-import menuStyles from '@/components/menu.less';
+import styles from '@/pages/users/[user]/businesses/businesses.module.less';
+import userStyles from '@/pages/users/users.module.less';
 
 const { Info } = Main;
 
 export const businessEdit = (props) => {
-  const [formRef] = Form.useForm();
   const intl = useIntl();
+
+  const [formRef] = Form.useForm();
 
   const {
     authModel,
     businessModel,
     simpleModel,
     loading,
+    testId,
     onEditBusiness,
     onFieldsChange,
     onUpdateTags,
@@ -66,25 +70,21 @@ export const businessEdit = (props) => {
     touched
   } = businessModel;
 
-  const { ability } = authModel;
   const component = 'businesses';
-  const disabled = ability.cannot('update', component);
-  const canUpdate = ability.can('update', component);
+  const {
+    ability,
+    ableFor,
+    disabled,
+    canUpdate
+  } = componentAbilities(authModel, component, isEdit);
 
   effectHook(() => {
     canUpdate && onEditBusiness(params);
-  }, [authModel.user, params.user, canUpdate]);
+  }, [canUpdate, params.user]);
 
-  /**
-   * @constant
-   * @param formValues
-   */
-  const onFinish = formValues => {
-    onSave(formValues, params);
-  };
+  validateFieldsOnLoad(formRef, entityForm);
 
   const businessInfoProps = {
-    t,
     formRef,
     disabled,
     businessTypes,
@@ -98,12 +98,12 @@ export const businessEdit = (props) => {
       ui: 'dragger',
       uploadedFiles,
       onFileRemove,
-      onFileChange
+      onFileChange,
+      formRef
     }
   };
 
   const licenseProps = {
-    t,
     formRef,
     disabled,
     uploadLicense: {
@@ -118,12 +118,12 @@ export const businessEdit = (props) => {
       ui: 'dragger',
       uploadedFiles,
       onFileRemove,
-      onFileChange
+      onFileChange,
+      formRef
     }
   };
 
   const addressProps = {
-    t,
     formRef,
     disabled,
     countries,
@@ -132,11 +132,13 @@ export const businessEdit = (props) => {
   };
 
   const tagsProps = {
-    t,
     formRef,
     onUpdateTags,
     disabled,
-    tags
+    tags,
+    canDelete: canUpdate,
+    canCreate: canUpdate,
+    canUpdate
   };
 
   const {
@@ -147,7 +149,6 @@ export const businessEdit = (props) => {
   } = fromForm(entityForm, 'metadata') || {};
 
   const infoProps = {
-    t,
     isEdit,
     touched,
     info: {
@@ -158,76 +159,96 @@ export const businessEdit = (props) => {
     }
   };
 
-  const menuProps = {
-    ability,
-    isEdit,
+  const subTitle = (
+      <>
+        <TrademarkOutlined style={{ marginRight: 10 }}/>
+        {isEdit ?
+            t(intl, 'business.actions.edit') :
+            t(intl, 'business.actions.addNew')
+        }
+      </>
+  );
+
+  const MODEL_NAME = 'businessModel';
+
+  const onChangeFormProps = {
+    touched,
+    entityForm,
     loading,
+    spinOn: [
+      'simpleModel/query',
+      `${MODEL_NAME}/editBusiness`,
+    ],
+    onFinish(formValues) {
+      canUpdate && onSave(formValues, params);
+    },
+    onFieldsChange
+  };
+
+  const metaProps = {
+    intl,
+    loading,
+    ability,
+    disabled,
+    formRef,
+    component,
+    MODEL_NAME
+  };
+
+  const menuProps = {
+    ...metaProps,
+    isEdit,
     params,
     onActivateBusiness,
     onHoldBusiness,
     onDeleteBusiness
   };
 
-  const subTitle = (
-      <>
-        <TrademarkOutlined style={{ marginRight: 10 }}/>
-        {isEdit ?
-            intl.formatMessage({id: 'business.actions.edit', defaultMessage: 'Edit Business'}) :
-            intl.formatMessage({id: 'business.actions.addNew', defaultMessage: 'New Business'})
-        }
-      </>
-  );
+  const pageHeaderProps = {
+    subTitle,
+    loading,
+    disabled,
+    MODEL_NAME,
+    isEdit,
+    component,
+    actions: {
+      exportBtn: false,
+      newBtn: false,
+      closeBtn: { onClose: () => onClose(params.user) },
+      saveBtn: { ableFor, touched, formRef },
+      menuBtn: {
+        selectedEntity: selectedBusiness,
+        label: t(intl, 'business.actions.manage'),
+        menuProps: {
+          ...menuProps,
+          isEdit,
+          params,
+          intl,
+          onDeleteBusiness
+        },
+        dropDownMenu: businessMenu,
+        testId: `${testId}.menuBtn`
+      }
+    }
+  };
 
   return (
       <Page className={userStyles.users}
             component={component}
             touched={!disabled && touched}
+            ableFor={ableFor}
             spinEffects={[
               'simpleModel/query',
-              'businessModel/editBusiness',
-              'businessModel/prepareToSave'
+              `${MODEL_NAME}/editBusiness`,
+              `${MODEL_NAME}/prepareToSave`
             ]}>
         <div className={styles.businessWrapper}>
-          <PageHeader ghost={false}
-                      subTitle={subTitle}
-                      extra={[
-                        <Button key={'close'}
-                                size={'small'}
-                                loading={isLoading(loading.effects['businessModel/prepareToSave'])}
-                                onClick={() => onClose(params.user)}>
-                          {intl.formatMessage({id: 'actions.close', defaultMessage: 'Close'})}
-                        </Button>,
-                        <SaveButton key={'save'}
-                                    isEdit={isEdit}
-                                    disabled={!touched || disabled}
-                                    formRef={formRef}
-                                    loading={
-                                        loading.effects['simpleModel/query'] ||
-                                        loading.effects['businessModel/query'] ||
-                                        loading.effects['businessModel/prepareToSave']
-                                    }/>,
-                        <Dropdown overlay={<BusinessMenu record={selectedBusiness} {...menuProps} />}
-                                  disabled={!isEdit || disabled}
-                                  trigger={['click']}
-                                  overlayClassName={menuStyles.customActionMenu}
-                                  key={'custom'}>
-                          <Button size={'small'}
-                                  icon={<SettingOutlined/>}
-                                  className={menuStyles.customAction}>
-                            {intl.formatMessage({id: 'business.actions.manage', defaultMessage: 'Manage Business'})} <DownOutlined/>
-                          </Button>
-                        </Dropdown>
-                      ]}/>
-          <Form layout={'vertical'}
-                className={styles.form}
+          <SubHeader {...pageHeaderProps}/>
+          <Form {...formProps(onChangeFormProps)}
                 form={formRef}
-                fields={entityForm}
-                scrollToFirstError={true}
-                onFinish={onFinish}
                 initialValues={{
                   country: selectedCountry
-                }}
-                onFieldsChange={onFieldsChange}>
+                }}>
             <BusinessInfo {...businessInfoProps} />
             <BusinessAddress {...addressProps} />
             <BusinessLicense {...licenseProps} />

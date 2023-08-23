@@ -1,6 +1,6 @@
+import React from 'react';
 import { Empty } from 'antd';
 import classnames from 'classnames';
-import React from 'react';
 
 import styles from './emptyData.less';
 

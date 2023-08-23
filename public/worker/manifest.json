@@ -1,0 +1,7 @@
+{
+  "name" : "Welcome Home",
+  "short_name" : "WH",
+  "lang" : "en-US",
+  "start_url" : "./cache/index.html",
+  "display" : "standalone"
+}

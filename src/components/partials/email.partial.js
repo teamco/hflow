@@ -1,37 +1,62 @@
 import React from 'react';
 import { MailTwoTone } from '@ant-design/icons';
-import { Form, Input } from 'antd';
+import { Form, Input, Tag } from 'antd';
+import { useIntl } from '@umijs/max';
+
+import { t } from '@/utils/i18n';
+
+import { requiredField } from '@/components/Form';
 
 /**
  * @export
- * @param t
- * @return {{extra, rules: [{type: string, message: *}, {message: *, required: boolean}]}}
+ * @constant
  */
-export const emailProps = t => ({
-  extra: t('auth:emailHelper'),
-  rules: [
-    { type: 'email', message: t('auth:emailNotValid') },
-    { required: true, message: t('form:required', { field: t('auth:email') }) }
-  ]
-});
+export const emailProps = () => {
+  const intl = useIntl();
+
+  const emailField = t(intl, 'auth.email');
+
+  return {
+    extra: t(intl, 'auth.emailHelper'),
+    rules: [
+      {
+        type: 'email',
+        message: t(intl, 'auth.emailNotValid')
+      },
+      requiredField(intl, emailField)
+    ]
+  };
+};
 
 /**
  * @export
- * @param t
- * @param name
- * @param className
- * @param emailRef
+ * @param props
  * @return {JSX.Element}
  */
-export const emailPartial = ({ t, name, className, emailRef }) => {
+export const EmailPartial = (props) => {
+  const intl = useIntl();
+
+  const {
+    name,
+    disabled = false,
+    className,
+    emailRef,
+    autoComplete = 'off',
+    placeholder = t(intl, 'auth.email'),
+    prefix = <MailTwoTone/>,
+    suffix = null
+  } = props;
+
   return (
       <Form.Item name={name}
                  className={className}
-                 {...emailProps(t)}>
-        <Input prefix={<MailTwoTone/>}
+                 {...emailProps()}>
+        <Input prefix={prefix}
+               suffix={suffix}
                ref={emailRef}
-               autoComplete={'off'}
-               placeholder={t('auth:email')}/>
+               disabled={disabled}
+               autoComplete={autoComplete}
+               placeholder={placeholder}/>
       </Form.Item>
   );
 };

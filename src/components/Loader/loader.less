@@ -1,46 +1,23 @@
-@anthill-spinner-bg: transparent;
-
 .loader {
-  background-color: @anthill-spinner-bg;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1001;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 1;
-  text-align: center;
+  display: block;
 
   &.fullScreen {
-    position: fixed;
-  }
+    height: 100%;
+    position: relative;
 
-  &.contained {
-    position: static;
-  }
+    :global {
+      .ant-spin-nested-loading {
+        height: inherit;
+        max-height: 100vh;
+      }
 
-  &.page {
-    background-color: @anthill-spinner-bg !important;
-  }
-
-  &.sider {
-    background-color: @anthill-spinner-bg !important;
-  }
-
-  .wrapper {
-    width: 100px;
-    height: 100px;
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: space-around;
-  }
-
-  &.hidden {
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 1s ease 0.5s, z-index 0.1s ease 1.5s;
+      .ant-spin {
+        height: inherit;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
   }
 }

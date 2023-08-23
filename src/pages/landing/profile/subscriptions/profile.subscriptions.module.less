@@ -1,0 +1,106 @@
+@import "@/theme/variables.less";
+
+@logo-radius: 8px;
+
+.profileForm {
+  margin: @main-margin;
+
+  * {
+    margin: 0;
+  }
+}
+
+.profileSubscriptionCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  padding: 24px;
+  border: 1px solid @main-border-color;
+  transition: @main-transition;
+  background-color: #fff;
+  justify-content: space-between;
+  row-gap: 32px;
+
+  &:hover {
+    box-shadow: 0 0 5px @main-shadow-color;
+  }
+
+  h1 {
+    font-size: 36px;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+
+  h3 {
+    margin: 0;
+    padding: 0;
+
+    div, span {
+      font-size: 16px;
+      color: #999;
+    }
+
+    &.active {
+      div, span {
+        color: #333;
+      }
+    }
+  }
+
+  button {
+    width: 200px;
+    margin: auto;
+  }
+
+  p {
+    text-align: center;
+    font-size: 16px;
+    min-height: 25px;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+
+    li {
+      display: flex;
+      align-items: center;
+
+      div {
+        span {
+          margin: 0 5px;
+        }
+
+        &.complex {
+          font-weight: bold;
+
+          span {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+
+  h4 {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  span[role="img"] {
+    margin-right: 16px;
+
+    svg {
+      height: 18px;
+      width: 18px;
+    }
+  }
+}

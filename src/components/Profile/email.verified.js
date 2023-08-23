@@ -1,11 +1,12 @@
 import React from 'react';
 import { CheckCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
 
 import { Can } from '@/utils/auth/can';
 import { COLORS } from '@/utils/colors';
 
-import styles from 'pages/users/users.module.less';
+import styles from '@/pages/users/users.module.less';
+import { t } from '@/utils/i18n';
 
 /**
  * @export
@@ -14,27 +15,30 @@ import styles from 'pages/users/users.module.less';
  * @return {JSX.Element}
  */
 function emailVerified(props) {
-  const { data, verification = { component: null } } = props;
+  const { data, verification = { component: null }, className } = props;
   const intl = useIntl();
+
   return (
-      <div>
-        {data.emailVerified ? (
+      <div className={className}>
+        {data?.emailVerified ? (
             <>
               <CheckCircleTwoTone twoToneColor={COLORS.success}/>
-              <strong>{intl.formatMessage({id: 'auth.emailVerified', defaultMessage: 'Verified'})}</strong>
+              <strong>{t(intl, 'auth.emailVerified')}</strong>
             </>
         ) : (
             <>
               <WarningTwoTone twoToneColor={COLORS.warning}/>
-              <strong>{intl.formatMessage({id: 'auth.emailNotVerified', defaultMessage: 'Not Verified'})}</strong>
+              <strong>{t(intl, 'auth.emailNotVerified')}</strong>
               {verification.onSendVerification && (
-                  <Can I={'sendVerificationEmail'} a={verification.component}>
+                  <Can I={'email.verification'} a={verification.component}>
                     {verification.verificationSent && (
-                        <div>{intl.formatMessage({id: 'auth.pendingVerification', defaultMessage: 'Pending Verification'})}</div>
+                        <div>{t(intl, 'auth.pendingVerification')}</div>
                     )}
                     <div className={styles.verification}
-                         onClick={() => verification.onSendVerification(data)}>
-                      {verification.verificationSent ? intl.formatMessage({id: 'auth.reSendVerification', defaultMessage: 'e-Send Email Verification'}) : intl.formatMessage({id: 'auth.sendVerification', defaultMessage: 'Send Email Verification'})}
+                         onClick={() => verification.onSendVerification(data, intl)}>
+                      {verification.verificationSent ?
+                          t(intl, 'auth.reSendVerification') :
+                          t(intl, 'auth.sendVerification')}
                     </div>
                   </Can>
               )}

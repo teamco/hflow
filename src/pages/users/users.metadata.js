@@ -1,66 +1,55 @@
 import React from 'react';
-import { NavLink, useIntl } from 'umi';
+import { NavLink } from '@umijs/max';
 import {
   ContactsTwoTone,
-  DownOutlined,
   PauseCircleTwoTone,
-  PlayCircleTwoTone,
-  SettingOutlined
+  PlayCircleTwoTone
 } from '@ant-design/icons';
 
-import { Avatar, Button, Dropdown, Tag, Tooltip } from 'antd';
-
+import { Avatar, Tag, Tooltip } from 'antd';
 import classnames from 'classnames';
+
 import { tsToLocaleDateTime } from '@/utils/timestamp';
 import { COLORS } from '@/utils/colors';
 import { BRANDS } from '@/utils/brands';
+import { t } from '@/utils/i18n';
 
-import { showProfileModal } from 'pages/users/metadata/profile.modal';
-import UserMenu from 'pages/users/metadata/users.menu';
+import { showProfileModal } from '@/pages/users/metadata/profile.modal';
+import { userMenu } from '@/pages/users/metadata/users.menu';
+import DropdownButton from '@/components/Buttons/dropdown.button';
 
-import styles from 'pages/users/users.module.less';
+import styles from '@/pages/users/users.module.less';
 import tableStyles from '@/components/Main/Table/table.module.less';
-import menuStyles from '@/components/menu.less';
-import { effectHook } from '@/utils/hooks';
+
+const { API } = require('@/services/config/api.config');
 
 /**
  * @export
- * @param t
- * @param ability
- * @param data
- * @param loading
- * @param multiple
- * @param visibleMessage
- * @param setVisibleMessage
- * @param currentUser
- * @param onDeleteUser
- * @param onSignOutUser
- * @param onSendMessage
- * @param onUnlockUser
- * @param onLockUser
+ * @param props
  * @return {*}
  */
-export const metadata = ({
-  t,
-  ability,
-  data,
-  loading,
-  multiple,
-  currentUser = {},
-  setVisibleMessage,
-  onDeleteUser,
-  onSignOutUser,
-  onSendMessage,
-  onUnlockUser,
-  onLockUser
-}) => {
+export const metadata = (props) => {
+  const {
+    ability,
+    data,
+    disabled = false,
+    intl,
+    loading,
+    multiple,
+    modal,
+    currentUser = {},
+    setVisibleMessage,
+    onDeleteUser,
+    onSignOutUser,
+    onSendMessage,
+    onUnlockUser,
+    onLockUser
+  } = props;
 
-  effectHook(() => {
-  }, []);
-  const intl = useIntl();
   const menuProps = {
     loading,
     ability,
+    intl,
     currentUser,
     multiple,
     onSignOutUser,
@@ -76,7 +65,7 @@ export const metadata = ({
     size: 'middle',
     columns: [
       {
-        title: intl.formatMessage({id: 'table.name', defaultMessage: 'Name'}),
+        title: t(intl, 'table.name'),
         dataIndex: 'displayName',
         key: 'displayName',
         render(name, data) {
@@ -84,7 +73,7 @@ export const metadata = ({
           const isSignedIn = data.metadata.signedIn;
           const color = isSignedIn ? COLORS.success : COLORS.disabled;
           const signed = {
-            title: intl.formatMessage({id: isSignedIn ? 'auth.signedIn' : 'auth.signedOut', defaultMessage:  isSignedIn ? 'Signed in' : 'Sign out'}),
+            title: t(intl, isSignedIn ? 'auth.signedIn' : 'auth.signedOut'),
             icon: isSignedIn ?
                 (<PlayCircleTwoTone twoToneColor={color}/>) :
                 (<PauseCircleTwoTone twoToneColor={color}/>)
@@ -100,24 +89,20 @@ export const metadata = ({
                 <div className={styles.avatarWrapper}>
                   {data.metadata.photoURL ? (
                       <img src={data.metadata.photoURL}
-                           referrerPolicy={'no-referrer'}
                            alt={name}
+                           referrerPolicy={'no-referrer'}
                            className={styles.gridImg}/>
                   ) : (
-                      <Avatar src={'https://joeschmoe.io/api/v1/random'}
+                      <Avatar src={API.avatar}
                               className={styles.avatar}/>
                   )}
                 </div>
                 {multiple ? (
-                    <NavLink to={`/admin/users/${data.id}`}>
-                      <span className={isCurrentStyle}>
-                        {name}
-                      </span>
+                    <NavLink to={`/admin/users/${data?.id}`}>
+                      <span className={isCurrentStyle}>{name}</span>
                     </NavLink>
                 ) : (
-                    <span className={isCurrentStyle}>
-                      {name}
-                    </span>
+                    <span className={isCurrentStyle}>{name}</span>
                 )}
               </div>
           );
@@ -126,7 +111,7 @@ export const metadata = ({
         sortable: multiple
       },
       {
-        title: intl.formatMessage({id: 'auth.provider', defaultMessage: 'Provider'}),
+        title: t(intl, 'auth.provider'),
         dataIndex: 'metadata',
         render: metadata => (
             <Tag color={metadata.signedIn ? BRANDS[metadata.providerId]?.color : null}
@@ -136,41 +121,36 @@ export const metadata = ({
             </Tag>
         )
       },
-      // {
-      //   title: t('auth:email'),
-      //   dataIndex: 'email',
-      //   key: 'email',
-      //   filterable: multiple,
-      //   sortable: multiple
-      // },
       {
-        title: intl.formatMessage({id: 'auth.lastSignInTime', defaultMessage: 'Last Sign In'}),
+        title: t(intl, 'user.type'),
+        render: (data) => data.business ?
+            (<strong>{t(intl, 'user.business')}</strong>) :
+            t(intl, 'user.regular')
+      },
+      {
+        title: t(intl, 'auth.lastSignInTime'),
         dataIndex: 'metadata',
         key: 'lastSignInTime',
         render: metadata => tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))
       },
       {
-        title: intl.formatMessage({id: 'table.action', defaultMessage: 'Action'}),
+        title: t(intl, 'table.action'),
         fixed: 'right',
         width: 200,
         render: record =>
             data.length ? (
                 <div className={styles.nowrap}>
-                  <Tooltip title={intl.formatMessage({id: 'auth.showProfile', defaultMessage: 'Show Profile'})}>
+                  <Tooltip title={t(intl, 'auth.showProfile')}>
                     <ContactsTwoTone className={tableStyles.action}
-                                     onClick={() => showProfileModal(t, record)}
+                                     onClick={() => showProfileModal({ ...record }, modal, intl)}
                                      twoToneColor={COLORS.tags.blue}/>
                   </Tooltip>
-                  <Dropdown overlay={<UserMenu record={record} {...menuProps} />}
-                            overlayClassName={menuStyles.customActionMenu}
-                            trigger={['click']}
-                            key={'custom'}>
-                    <Button size={'small'}
-                            icon={<SettingOutlined/>}
-                            className={menuStyles.customAction}>
-                      {intl.formatMessage({id: 'user.actions.manage', defaultMessage: 'Manage User'})} <DownOutlined/>
-                    </Button>
-                  </Dropdown>
+                  <DropdownButton key={'manage'}
+                                  overlay={userMenu({ record, ...menuProps })}
+                                  data-testid={'user-mng'}
+                                  disabled={disabled}
+                                  loading={loading}
+                                  label={t(intl, 'user.actions.manage')}/>
                 </div>
             ) : null
       }

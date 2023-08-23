@@ -1,0 +1,41 @@
+@import "@/theme/variables.less";
+
+.historyWrapper {
+  min-height: 100vh;
+  margin: @main-margin;
+
+  .header {
+    padding: 10px 20px;
+    background: cornsilk;
+    box-shadow: 1px 1px 4px -2px @main-shadow-color;
+    border-top: 1px solid #ededed;
+    position: relative;
+    z-index: 1;
+    align-items: center;
+    display: flex;
+    justify-content: end;
+
+    .headerActions {
+      display: flex;
+      column-gap: 24px;
+    }
+
+    .history {
+
+    }
+  }
+
+  .chart {
+    padding: 42px 24px 0 24px;
+  }
+}
+
+.apartmentCardWrapper {
+  & > div {
+    width: 100%;
+
+    .apartmentCard {
+
+    }
+  }
+}

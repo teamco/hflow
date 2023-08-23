@@ -1,4 +1,4 @@
-import { connect } from 'umi';
+import { connect } from '@umijs/max';
 
 import { home } from './home';
 

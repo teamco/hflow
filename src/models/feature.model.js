@@ -1,62 +1,22 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 
-import { commonModel } from 'models/common.model';
-import { custDiscountType, isNew } from 'services/common.service';
-import { detailsInfo } from 'services/cross.model.service';
-import { history, useIntl } from 'umi';
+import { commonModel } from '@/models/common.model';
+import { isNew } from '@/services/common.service';
+import { detailsInfo } from '@/services/cross.model.service';
+import { history } from '@umijs/max';
 
 import { monitorHistory } from '@/utils/history';
 import { errorSaveMsg } from '@/utils/message';
-import { addFeature, getFeature, getFeatures, updateFeature } from 'services/features.service';
+import { getFeature, getFeatures, updateFeature, deleteFeature, addFeature } from '@/services/features.service';
 import { setAs } from '@/utils/object';
-import moment from 'moment';
-import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
+import { definePrice, defineTrialed } from '@/services/price.service';
 
 const DEFAULT_STATE = {};
 
 const MODEL_NAME = 'featureModel';
 const BASE_URL = '/admin/features';
-const ABILITY_FOR = 'features';
-
-/**
- * @constant
- * @param {{discount, discounted: boolean}} price
- * @param {boolean} [format]
- * @return {{price: (*&{discount: (*&{startedAt: string, type: string})})}}
- * @private
- */
-const _definePrice = (price = {}, format = true) => {
-  const { discount = {}, discounted } = price;
-  const startedAt = discount?.startedAt ?
-      format ? `${moment(discount?.startedAt).format(DEFAULT_DATE_FORMAT)} 00:00:00` :
-          moment(discount?.startedAt) : null;
-
-  return {
-    ...price,
-    discount: discounted ? {
-      ...discount,
-      startedAt,
-      type: custDiscountType(discount?.type),
-      duration: { ...discount?.duration }
-    } : null
-  };
-};
-
-/**
- * @constant
- * @param {boolean} trialed
- * @param {{price}} trialPeriod
- * @param {boolean} [format]
- * @return {{price: {price: *}}}
- * @private
- */
-const _defineTrialed = (trialed, trialPeriod = {}, format = true) => {
-  return trialed ? {
-    ...trialPeriod,
-    price: { ..._definePrice(trialPeriod?.price, format) }
-  } : null;
-};
+const COMPONENT_NAME = 'features';
 
 /**
  * @export
@@ -72,7 +32,7 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, MODEL_NAME);
+      monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
       // TODO (teamco): Do something.
@@ -83,23 +43,21 @@ export default dvaModelExtend(commonModel, {
     * query({ payload }, { put, call, select }) {
       const { token } = yield select(state => state.authModel);
 
-      const { data = [] } = yield call(getFeatures, { type: 'Business', token });
+      const { data = [] } = yield call(getFeatures, { token });
+
+      if (data?.error) return false;
+
       yield put({ type: 'updateState', payload: { data, touched: false } });
     },
 
     * newFeature({ payload }, { put }) {
-      yield put({ type: 'cleanForm' });
-
-      history.push(`${BASE_URL}/new`);
-
       yield put({
-        type: 'updateState',
+        type: 'handleNew',
         payload: {
-          ...DEFAULT_STATE,
-          ...{
-            isEdit: false,
-            touched: false
-          }
+          component: COMPONENT_NAME,
+          BASE_URL,
+          state: DEFAULT_STATE,
+          selected: 'selectedFeature'
         }
       });
     },
@@ -109,18 +67,25 @@ export default dvaModelExtend(commonModel, {
       const { featureId } = payload;
 
       if (isNew(featureId)) {
-        // TODO (teamco): Do something.
-      } else if (ability.can('read', ABILITY_FOR)) {
 
+        yield put({ type: 'newFeature' });
+        // TODO (teamco): Do something.
+
+      } else if (ability.can('read', COMPONENT_NAME)) {
         const feature = yield call(getFeature, { id: featureId, token });
 
+        if (feature?.data?.error) return false;
+
         if (feature.exists) {
+
+          history.push(`${BASE_URL}/${featureId}`);
+
           const { price, trialPeriod, trialed } = feature.data;
 
           let selectedFeature = {
             ...feature.data,
-            trialPeriod: { ..._defineTrialed(trialed, trialPeriod, false) },
-            price: { ..._definePrice(price, false) }
+            trialPeriod: { ...defineTrialed(trialed, trialPeriod, false) },
+            price: { ...definePrice(price, false) }
           };
 
           const _feature = { ...selectedFeature };
@@ -148,15 +113,17 @@ export default dvaModelExtend(commonModel, {
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(feature) } });
       yield put({ type: 'validateFeature', payload: { featureId: feature } });
-      yield put({ type: 'getSimpleEntity', payload: { doc: 'currencies' } });
-      yield put({ type: 'getSimpleEntity', payload: { doc: 'durationTypes' } });
-      yield put({ type: 'getSimpleEntity', payload: { doc: 'featureTypes' } });
+      yield put({ type: 'getSimpleEntity', payload: { docName: 'currencies' } });
+      yield put({ type: 'getSimpleEntity', payload: { docName: 'durationTypes' } });
+      yield put({ type: 'getSimpleEntity', payload: { docName: 'featureTypes' } });
+      yield put({ type: 'updateLocales', payload: { MODEL_NAME } });
     },
 
-    * prepareToSave({ payload, params }, { call, select, put }) {
-      const { user, ability, token } = yield select(state => state.authModel);
+    * prepareToSave({ payload, params }, { select, put }) {
+      const { user } = yield select(state => state.authModel);
       const { selectedFeature, isEdit } = yield select(state => state[MODEL_NAME]);
       const { feature } = params;
+
       const {
         selectedByDefault,
         price,
@@ -165,45 +132,55 @@ export default dvaModelExtend(commonModel, {
         trialed,
         translateKeys: {
           title,
-          description,
-          on,
-          off
+          description
         },
         tags
       } = payload;
 
-      if (user && ability.can('update', ABILITY_FOR)) {
+      const metadata = {
+        ...selectedFeature?.metadata,
+        updatedAt: (new Date).toISOString(),
+        updatedByRef: user.id
+      };
 
-        const metadata = {
-          ...selectedFeature?.metadata,
-          updatedAt: +(new Date).toISOString(),
-          updatedByRef: user.id
-        };
+      const data = {
+        id: selectedFeature?.id,
+        name: title,
+        selectedByDefault,
+        trialPeriod: { ...defineTrialed(trialed, trialPeriod) },
+        price: { ...definePrice(price) },
+        type, trialed,
+        translateKeys: {
+          description: setAs(description, null),
+          title
+        },
+        metadata,
+        tags: setAs(tags, [])
+      };
 
-        const data = {
-          id: selectedFeature?.id,
-          name: useIntl().formatMessage({id: title, defaultMessage: ''}),
-          selectedByDefault,
-          trialPeriod: { ..._defineTrialed(trialed, trialPeriod) },
-          price: { ..._definePrice(price) },
-          type, trialed,
-          translateKeys: {
-            description: setAs(description, null),
-            title, on, off
-          },
-          metadata,
-          tags: setAs(tags, [])
-        };
-
-        // TODO (teamco): Workaround for un-updated trial period (as a new component issue).
+      if (trialed) {
         if (!trialPeriod?.price?.currency) {
           data.trialPeriod.price.currency = price.currency;
         }
+      } else {
+        data.trialPeriod = null;
+      }
 
+      yield put({ type: 'handleUpdate', payload: { data, isEdit, selectedFeature, id: feature } });
+      yield put({ type: 'handleSave', payload: { data, isEdit, metadata } });
+    },
+
+    * handleUpdate({ payload }, { put, call, select }) {
+      const { user, ability, token } = yield select(state => state.authModel);
+      const { isEdit, selectedFeature, id, data } = payload;
+
+      if (user && ability.can('update', COMPONENT_NAME)) {
         if (isEdit) {
-          if (selectedFeature && feature === selectedFeature.id) {
+          if (selectedFeature && id === selectedFeature.id) {
             data.version = selectedFeature.version;
-            const entity = yield call(updateFeature, { id: feature, data, token });
+            const entity = yield call(updateFeature, { id, data, token });
+
+            if (entity?.data?.error) return false;
 
             yield put({
               type: 'updateVersion',
@@ -215,9 +192,25 @@ export default dvaModelExtend(commonModel, {
             });
 
           } else {
-            errorSaveMsg(true, 'Feature');
-          }
 
+            errorSaveMsg(true, 'Feature').then();
+          }
+        } else {
+          // TODO (teamco): Going to save.
+        }
+      } else {
+
+        yield put({ type: 'noPermissions', payload: { key: 'handleUpdate' } });
+      }
+    },
+
+    * handleSave({ payload }, { put, call, select }) {
+      const { user, ability, token } = yield select(state => state.authModel);
+      const { isEdit, metadata, data } = payload;
+
+      if (user && ability.can('update', COMPONENT_NAME)) {
+        if (isEdit) {
+          // TODO (teamco): Going to update.
         } else {
 
           data.metadata = {
@@ -228,15 +221,25 @@ export default dvaModelExtend(commonModel, {
 
           const entity = yield call(addFeature, { data, token });
 
-          if (entity.exists) {
+          if (entity?.data?.error) return false;
+
+          if (entity?.exists && entity?.data?.id) {
             yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });
-            history.push(`${BASE_URL}/${entity?.data?.id}`);
+            yield put({ type: 'editFeature', payload: { params: { feature: entity?.data?.id } } });
           }
         }
       } else {
 
-        yield put({ type: 'noPermissions', payload: { key: 'selectedFeature' } });
+        yield put({ type: 'noPermissions', payload: { key: 'handleSave' } });
       }
+    },
+
+    * deleteFeature({ payload }, { call, select, put }) {
+      const { token } = yield select(state => state.authModel);
+      const { id } = payload;
+      const status = yield call(deleteFeature, { id, token });
+      const { data = [] } = yield call(getFeatures, { token });
+      yield put({ type: 'updateState', payload: { data, touched: false } });
     }
   },
   reducers: {}

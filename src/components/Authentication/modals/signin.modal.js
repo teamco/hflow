@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, Col, Divider, Form, Input, Modal, Row, Tooltip } from 'antd';
 import { FormOutlined, LockTwoTone, LoginOutlined } from '@ant-design/icons';
-import { useIntl } from 'umi';
-import { emailPartial } from '@/components/partials/email.partial';
+import { useIntl } from '@umijs/max';
+import { EmailPartial } from '@/components/partials/email.partial';
 
 import styles from '@/components/Authentication/authentication.module.less';
-
-import { isLoading } from '@/utils/state';
+import { t } from '@/utils/i18n';
+import { requiredField } from '@/components/Form';
 
 /**
  * @constant
@@ -16,6 +16,7 @@ import { isLoading } from '@/utils/state';
  */
 const SignInModal = props => {
   const intl = useIntl();
+
   const {
     isSignInVisible,
     signInVisible,
@@ -23,67 +24,67 @@ const SignInModal = props => {
     handleCancel,
     authModel,
     onFinish,
-    loading,
     setIsSignInVisible,
     setIsRegisterVisible,
-    buttons: {
-      _googleBtn,
-      _twitterBtn
-    }
+    mask = true,
+    maskStyle,
+    wrapClassName,
+    buttons = []
   } = props;
 
   const modalHeader = (
       <div className={styles.modalHeader}>
-        <h4>{intl.formatMessage({id: 'auth.signInTitle', defaultMessage: 'Login to your account'})}</h4>
-        <h6>{intl.formatMessage({id: 'auth.signInDesc', defaultMessage: 'Sign in today for more experience'})}</h6>
+        <h4>{t(intl, 'auth.signInTitle')}</h4>
+        <h6>{t(intl, 'auth.signInDesc')}</h6>
       </div>
   );
+
+  const passField = t(intl, 'auth.password');
 
   return (
       <Modal title={modalHeader}
              destroyOnClose={true}
-             visible={isSignInVisible}
+             open={isSignInVisible}
              closable={closable || !signInVisible}
              onCancel={handleCancel}
              className={styles.authModal}
              width={350}
              centered
-             maskStyle={signInVisible ? { backgroundColor: 'rgba(0, 0, 0, 0.45)' } : null}
+             mask={mask}
+             wrapClassName={wrapClassName}
+             maskStyle={maskStyle || signInVisible ? { backgroundColor: 'rgba(0, 0, 0, 0.45)' } : null}
              footer={null}>
         <Form name={'auth_login'}
               className={styles.loginForm}
               size={'large'}
               onFinish={onFinish}>
-          {emailPartial({ t, name: 'email' })}
+          <EmailPartial name={'email'}/>
           <Form.Item name={'password'}
-                     extra={intl.formatMessage({id: 'auth.passwordHelper', defaultMessage: 'Use {length} or more characters with a mix of letters, numbers & symbols'}, { length: authModel.MIN_PASSWORD_LENGTH })}
+                     extra={t(intl, 'auth.passwordHelper', { length: authModel.MIN_PASSWORD_LENGTH })}
                      rules={[
-                       {
-                         required: true,
-                         message: intl.formatMessage({id: 'form.required', defaultMessage: '{field} is required'}, { field: intl.formatMessage({id: 'auth.password', defaultMessage: 'Password'}) })
-                       }
+                         requiredField(intl, passField)
                      ]}>
             <Input.Password prefix={<LockTwoTone/>}
                             autoComplete={'new-password'}
-                            placeholder={intl.formatMessage({id: 'auth.password', defaultMessage: 'Password'})}/>
+                            placeholder={t(intl, 'auth.password')}/>
           </Form.Item>
           <Form.Item>
             <Row gutter={[16, 16]}
                  className={styles.loginBtns}>
               <Col span={12}>
-                <Tooltip title={intl.formatMessage({id: 'auth.signInTitle', defaultMessage: 'Login to your account'})}>
+                <Tooltip
+                    title={t(intl, 'auth.signInTitle')}>
                   <Button type={'primary'}
                           htmlType={'submit'}
                           icon={<LoginOutlined/>}
                           size={'default'}
-                          block
-                          loading={isLoading(loading)}>
-                    {intl.formatMessage({id: 'auth.signIn', defaultMessage: 'Sign in'})}
+                          block>
+                    {t(intl, 'auth.signIn')}
                   </Button>
                 </Tooltip>
               </Col>
               <Col span={12}>
-                <Tooltip title={intl.formatMessage({id: 'auth.registerTitle', defaultMessage: 'Not a member? You can create an account'})}>
+                <Tooltip title={t(intl, 'auth.registerTitle')}>
                   <Button type={'default'}
                           size={'default'}
                           block
@@ -91,20 +92,20 @@ const SignInModal = props => {
                             setIsSignInVisible(false);
                             setIsRegisterVisible(true);
                           })}
-                          loading={isLoading(loading)}
                           icon={<FormOutlined/>}>
-                    {intl.formatMessage({id: 'auth.register', defaultMessage: 'Register'})}
+                    {t(intl, 'auth.register')}
                   </Button>
                 </Tooltip>
               </Col>
             </Row>
           </Form.Item>
-          <Divider plain>{intl.formatMessage({id: 'auth.signInWith', defaultMessage: 'Sign in with {provider}'}, { provider: null })}</Divider>
+          <Divider plain>{t(intl, 'auth.signInWith',{ provider: null })}</Divider>
           <Form.Item style={{ marginBottom: 0 }}>
             <Row gutter={[16, 16]}
                  className={styles.loginBtns}>
-              <Col span={8}>{_googleBtn}</Col>
-              <Col span={8}>{_twitterBtn}</Col>
+              {buttons?.map((button, idx) => (
+                  <Col span={8} key={idx}>{button}</Col>
+              ))}
             </Row>
           </Form.Item>
         </Form>

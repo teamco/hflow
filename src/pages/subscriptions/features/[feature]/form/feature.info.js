@@ -1,8 +1,13 @@
 import React from 'react';
+import { useIntl } from '@umijs/max';
+import { Form, Select, Switch } from 'antd';
 
-import { Select, Switch } from 'antd';
 import FormComponents from '@/components/Form';
+
 import { effectHook } from '@/utils/hooks';
+import { t } from '@/utils/i18n';
+
+import formStyles from '@/components/Form/form.module.less';
 
 const { GenericPanel } = FormComponents;
 const { Option } = Select;
@@ -14,35 +19,21 @@ const { Option } = Select;
  * @constructor
  */
 export const FeatureInfo = (props) => {
+  const intl = useIntl();
   const {
     formRef,
     disabled,
-    featureTypes = [],
-    setIsTrialed
+    featureTypes = []
   } = props;
 
-  const isChecked = formRef.getFieldValue('trialed');
-
-  effectHook(() => {
-    handleTrialToggling(isChecked);
-  }, [isChecked]);
-
-  /**
-   * @constant
-   * @param {boolean} checked
-   */
-  const handleTrialToggling = checked => {
-    setIsTrialed(checked);
-  };
-
   return (
-      <GenericPanel header={intl.formatMessage({id: 'feature.info', defaultMessage: 'Feature Info'})}
+      <GenericPanel header={t(intl, 'feature.info')}
                     name={'info'}
                     defaultActiveKey={['info']}>
         <div>
           <Select name={'type'}
                   form={formRef}
-                  label={intl.formatMessage({id: 'feature.type', defaultMessage: 'Type'})}
+                  label={t(intl, 'feature.type')}
                   disabled={disabled}
                   config={{ rules: [{ required: true }] }}>
             {[...featureTypes]?.sort()?.map((type, idx) => (
@@ -52,21 +43,6 @@ export const FeatureInfo = (props) => {
                 </Option>
             ))}
           </Select>
-          <Switch label={intl.formatMessage({id: 'feature.status', defaultMessage: 'Default State'})}
-                  disabled={disabled}
-                  form={formRef}
-                  config={{ valuePropName: 'checked' }}
-                  checkedChildren={intl.formatMessage({id: 'actions.yes', defaultMessage: 'Yes'})}
-                  unCheckedChildren={intl.formatMessage({id: 'actions.no', defaultMessage: 'No'})}
-                  name={'selectedByDefault'}/>
-          <Switch label={intl.formatMessage({id: 'price.trialed', defaultMessage: 'Is Trialed?'})}
-                  disabled={disabled}
-                  form={formRef}
-                  onChange={handleTrialToggling}
-                  config={{ valuePropName: 'checked' }}
-                  checkedChildren={intl.formatMessage({id: 'actions.yes', defaultMessage: 'Yes'})}
-                  unCheckedChildren={intl.formatMessage({id: 'actions.no', defaultMessage: 'No'})}
-                  name={'trialed'}/>
         </div>
       </GenericPanel>
   );

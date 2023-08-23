@@ -1,57 +1,26 @@
 import React from 'react';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
 import classnames from 'classnames';
 
 import Border from '@/components/Border';
+import { bottomProps, topProps } from '@/components/Border/border.config';
 
-import styles from 'pages/landing/landing.module.less';
+import { t } from '@/utils/i18n';
+
+import styles from '@/pages/landing/landing.module.less';
 
 const Deals = props => {
   const intl = useIntl();
   const { className } = props;
 
-  const topProps = {
-    direction: 'top',
-    dims: {
-      left: { width: '15vw' },
-      right: { width: '45vw' },
-      bottom: { width: '15vh', color: 'rgb(241, 241, 241)', style: 'solid' }
-    }
-  };
-
-  const bottomProps = {
-    direction: 'bottom',
-    dims: {
-      left: { width: '45vw' },
-      right: { width: '15vw' },
-      top: { width: '15vh', color: 'rgb(241, 241, 241)', style: 'solid' }
-    }
-  };
-
-  const colPropsLeft = {
-    xs: 24,
-    sm: 24,
-    md: 24,
-    lg: 14,
-    xl: 14
-  };
-
-  const colPropsRight = {
-    xs: 24,
-    sm: 24,
-    md: 24,
-    lg: 10,
-    xl: 10
-  };
-
   return (
       <div className={styles.dealsWrapper}>
-        <Border {...topProps}/>
+        <Border {...topProps()}/>
         <div className={classnames(className, styles.deals)}>
-          <h1>{intl.formatMessage({id: 'landing.deals', defaultMessage: 'Deals'})}</h1>
+          <h1>{t(intl, 'landing.deals')}</h1>
 
         </div>
-        <Border {...bottomProps}/>
+        <Border {...bottomProps()}/>
       </div>
   );
 };

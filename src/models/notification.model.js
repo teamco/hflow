@@ -1,17 +1,23 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
-import { message } from 'antd';
-import { history, useIntl } from 'umi';
+import { history } from '@umijs/max';
 
 import { commonModel } from '@/models/common.model';
-import { getNotifications } from '@/services/notification.service';
-import { fbAdd, fbFindById, fbUpdate, getRef } from '@/services/firebase.service';
 
-import { STATUS } from '@/utils/message';
+import { getNotifications } from '@/services/notification.service';
+import {
+  fbAdd,
+  fbFindById,
+  fbUpdate,
+  getRef,
+  isFbConnected
+} from '@/services/firebase.service';
+
 import { monitorHistory } from '@/utils/history';
+import { logger } from '@/utils/console';
 
 const MODEL_NAME = 'notificationModel';
-const ABILITY_FOR = 'notifications';
+const COMPONENT_NAME = 'notifications';
 
 /**
  * @export
@@ -19,7 +25,9 @@ const ABILITY_FOR = 'notifications';
 export default dvaModelExtend(commonModel, {
   namespace: MODEL_NAME,
   state: {
-    badge: {
+    isOnline: false,
+    isFBConnected: true,
+    notificationBadge: {
       count: 0,
       overflow: 10
     },
@@ -30,7 +38,7 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, MODEL_NAME);
+      monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
       // TODO (teamco): Do something.
@@ -40,52 +48,95 @@ export default dvaModelExtend(commonModel, {
 
     * query({ payload }, { call, put, select }) {
       let { user, ability } = yield select(state => state.authModel);
-      const { userId } = payload;
+      const { userId, type = 'inbox' } = payload;
 
-      if (user && ability.can('read', ABILITY_FOR)) {
+      if (user && ability.can('read', COMPONENT_NAME)) {
         if (userId && ability.can('read', 'profile')) {
           const _user = yield call(fbFindById, {
-            collection: 'users',
-            doc: userId
+            collectionPath: 'users',
+            docName: userId
           });
 
-          if (_user.exists) {
+          if (_user.exists()) {
             user = _user.data();
           } else {
-            return yield put({ type: 'notFound', payload: { entity: 'User', key: 'selectedUser' } });
+            return yield put({
+              type: 'notFound',
+              payload: { entity: 'User', key: 'selectedUser' }
+            });
           }
         }
 
-        const { sent = [], inbox = [] } = yield call(getNotifications, { userId: user.id, email: user.email });
+        const {
+          sent = [],
+          inbox = []
+        } = yield call(getNotifications, {
+          userId: user.id,
+          email: user.email,
+          type
+        });
 
-        yield put({ type: 'updateState', payload: { notifications: { sent, inbox } } });
-        yield put({ type: 'getCount', payload: inbox });
+        yield put({
+          type: 'updateState',
+          payload: { notifications: { sent, inbox } }
+        });
+
+        if (type === 'inbox') {
+          yield put({ type: 'getCount', payload: inbox });
+        }
 
       } else {
 
-        yield call(message.warning, useIntl().formatMessage({id: 'error:page403', defaultMessage: 'Sorry, you are not authorized to access this page'}));
         history.push(`/errors/403`);
       }
     },
 
+    * refreshNotification(_, { put, call }) {
+      DEBUG && logger({ log: 'Notification' });
+
+      // const isFBConnected = yield call(isFbConnected, {});
+
+      yield put({ type: 'userModel/getUser' });
+      yield put({ type: 'handleOnline' });
+      yield put({ type: 'getCount' });
+    },
+
+    * handleOnline({ payload = {} }, { put, select }) {
+      const state = yield select(state => state[MODEL_NAME]);
+      const {
+        isOnline = window.navigator.onLine,
+        isFBConnected = state.isFBConnected
+      } = payload;
+
+      yield put({
+        type: 'updateState',
+        payload: { isOnline: isOnline && isFBConnected }
+      });
+    },
+
     * getCount({ payload = {} }, { put, call, select }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { badge } = yield select(state => state[MODEL_NAME]);
+      const { notificationBadge } = yield select(state => state[MODEL_NAME]);
       let { inbox = [] } = payload;
 
-      if (user && ability.can('read', ABILITY_FOR)) {
+      if (user && ability.can('read', COMPONENT_NAME)) {
 
         if (!inbox.length) {
-          const notifications = yield call(getNotifications, { userId: user.id, email: user.email });
+          const notifications = yield call(getNotifications, {
+            userId: user.id,
+            email: user.email,
+            type: 'inbox'
+          });
+
           inbox = notifications.inbox;
         }
 
         yield put({
           type: 'updateState',
           payload: {
-            badge: {
+            notificationBadge: {
               count: inbox.filter(n => !n.read).length,
-              overflow: badge.overflow
+              overflow: notificationBadge.overflow
             }
           }
         });
@@ -94,21 +145,37 @@ export default dvaModelExtend(commonModel, {
 
     * createAndUpdate({ payload }, { put, call, select }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { type, status, replyTo, sentTo, title, description, isPrivate, read = false } = payload;
+      const {
+        type,
+        status,
+        replyTo,
+        sentTo,
+        title,
+        description,
+        isPrivate,
+        read = false
+      } = payload;
 
-      if (user && ability.can('create', ABILITY_FOR)) {
+      if (user && ability.can('create', COMPONENT_NAME)) {
 
         let replyRef = null;
         if (replyTo) {
-          replyRef = getRef({ collection: 'notifications', doc: replyTo });
-          yield put({ type: 'setAsRead', payload: { doc: replyTo, status: STATUS.answered } });
+          replyRef = getRef({
+            collectionPath: 'notifications',
+            document: replyTo
+          });
+
+          yield put({
+            type: 'setAsRead',
+            payload: { docName: replyTo, status: 'status.answered' }
+          });
         }
 
-        const userRef = getRef({ collection: 'users', doc: user.id });
+        const userRef = getRef({ collectionPath: 'users', document: user.id });
 
         // Create notification
         yield call(fbAdd, {
-          collection: 'notifications',
+          collectionPath: 'notifications',
           data: {
             type,
             title,
@@ -132,14 +199,16 @@ export default dvaModelExtend(commonModel, {
     * setAsRead({ payload }, { put, call, select }) {
       const { user, ability } = yield select(state => state.authModel);
       const { notifications } = yield select(state => state[MODEL_NAME]);
-      const { doc, status = STATUS.read } = payload;
+      const { docName, status = 'status.read' } = payload;
 
-      if (user && ability.can('update', ABILITY_FOR)) {
+      if (user && ability.can('update', COMPONENT_NAME)) {
 
         // Update notifications
         yield call(fbUpdate, {
-          collection: 'notifications',
-          doc,
+          collectionPath: 'notifications',
+          caller: 'setAsRead',
+          docName,
+          notice: true,
           data: {
             read: true,
             status,
@@ -151,25 +220,28 @@ export default dvaModelExtend(commonModel, {
         let updatedNotices = [];
 
         for (key in notifications) {
-          const instances = notifications[key];
-          if (key === 'inbox') {
-            for (i = 0; i < instances.length; i++) {
-              updatedNotices = [...instances];
-              msg = { ...[...instances][i] };
-              if (msg.id === doc) {
-                msg.read = true;
-                msg.status = status;
-                updatedNotices[i] = msg;
+          if (notifications.hasOwnProperty(key)) {
+            const instances = notifications[key];
 
-                yield put({
-                  type: 'updateState',
-                  payload: {
-                    notifications: {
-                      ...notifications,
-                      [key]: updatedNotices
+            if (key === 'inbox') {
+              for (i = 0; i < instances.length; i++) {
+                updatedNotices = [...instances];
+                msg = { ...[...instances][i] };
+                if (msg.id === docName) {
+                  msg.read = true;
+                  msg.status = status;
+                  updatedNotices[i] = msg;
+
+                  yield put({
+                    type: 'updateState',
+                    payload: {
+                      notifications: {
+                        ...notifications,
+                        [key]: updatedNotices
+                      }
                     }
-                  }
-                });
+                  });
+                }
               }
             }
           }

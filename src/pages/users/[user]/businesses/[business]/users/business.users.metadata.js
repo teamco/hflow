@@ -1,45 +1,43 @@
 import React from 'react';
-import { DownOutlined, PauseCircleTwoTone, PlayCircleTwoTone, SettingOutlined, SyncOutlined } from '@ant-design/icons';
-import { useIntl } from 'umi';
-import { Button, Dropdown, Tag, Tooltip } from 'antd';
-
+import { PauseCircleTwoTone, PlayCircleTwoTone, SyncOutlined } from '@ant-design/icons';
+import { useIntl } from '@umijs/max';
+import { Tag, Tooltip } from 'antd';
 import classnames from 'classnames';
+
+import DropdownButton from '@/components/Buttons/dropdown.button';
+
+import { businessUserMenu } from '@/pages/users/[user]/businesses/[business]/users/metadata/business.user.menu';
+import { getRoleIcon } from '@/pages/users/[user]/profile/profile.metadata';
+
 import { tsToLocaleDateTime } from '@/utils/timestamp';
-import BusinessUserMenu from './metadata/business.user.menu';
-
-import { getRoleIcon } from 'pages/users/[user]/profile/profile.metadata';
 import { COLORS } from '@/utils/colors';
+import { t } from '@/utils/i18n';
 
-import styles from 'pages/users/users.module.less';
-import menuStyles from '@/components/menu.less';
+import styles from '@/pages/users/users.module.less';
 
 /**
  * @export
- * @param t
- * @param data
- * @param ability
- * @param currentUser
- * @param setVisibleMessage
- * @param loading
- * @param multiple
- * @param onAssignUser
- * @param onUnassignUser
- * @param onResendRegisterLink
+ * @param props
  * @return {*}
  */
-export const metadata = ({
-  ability,
-  currentUser,
-  data,
-  loading,
-  multiple,
-  setVisibleMessage,
-  onAssignUser,
-  onUnassignUser,
-  onResendRegisterLink
-}) => {
+export const metadata = (props) => {
   const intl = useIntl();
+
+  const {
+    ability,
+    currentUser,
+    data,
+    loading,
+    multiple,
+    disabled,
+    setVisibleMessage,
+    onAssignUser,
+    onUnassignUser,
+    onResendRegisterLink
+  } = props;
+
   const menuProps = {
+    intl,
     ability,
     loading,
     currentUser,
@@ -53,14 +51,14 @@ export const metadata = ({
     size: 'middle',
     columns: [
       {
-        title: intl.formatMessage({id: 'table.name', defaultMessage: 'Name'}),
+        title: t(intl, 'table.name'),
         dataIndex: 'displayName',
         key: 'displayName',
         render(name, data) {
           const { pending, signedIn } = data?.metadata || {};
           const color = signedIn ? COLORS.success : COLORS.disabled;
           const signed = {
-            title: intl.formatMessage({id: signedIn ? 'auth.signedIn' : 'auth.signedOut', defaultMessage: signedIn ? 'Signed in' : 'Sign out'}),
+            title: t(intl, signedIn ? 'auth.signedIn' : 'auth.signedOut'),
             icon: signedIn ?
                 (<PlayCircleTwoTone twoToneColor={color}/>) :
                 (<PauseCircleTwoTone twoToneColor={color}/>)
@@ -77,7 +75,7 @@ export const metadata = ({
                   {pending ? (
                           <Tag icon={<SyncOutlined spin/>}
                                color={COLORS.tags.processing}>
-                            {intl.formatMessage({id: 'auth.pending', defaultMessage: 'Pending'})}
+                            {t(intl, 'auth.pending')}
                           </Tag>
                       ) :
                       name}
@@ -89,7 +87,7 @@ export const metadata = ({
         sortable: multiple
       },
       {
-        title: intl.formatMessage({id: 'auth.roles', defaultMessage: 'Roles'}),
+        title: t(intl, 'auth.roles'),
         dataIndex: ['userRoles'],
         key: 'roles',
         render(name, data) {
@@ -110,27 +108,24 @@ export const metadata = ({
         }
       },
       {
-        title: intl.formatMessage({id: 'auth.lastSignInTime', defaultMessage: 'Last Sign In'}),
+        title: t(intl, 'auth.lastSignInTime'),
         dataIndex: 'metadata',
         key: 'lastSignInTime',
-        render: metadata => metadata?.pending ? intl.formatMessage({id: 'error.na', defaultMessage: 'None'}) :
+        render: metadata => metadata?.pending ? t(intl, 'error.na') :
             tsToLocaleDateTime(+(new Date(metadata.lastSignInTime)))
       },
       {
-        title: intl.formatMessage({id: 'table.action', defaultMessage: 'Action'}),
+        title: t(intl, 'table.action'),
         fixed: 'right',
         width: 150,
         render: record => data.length ? (
             <div className={styles.nowrap}>
-              <Dropdown overlay={<BusinessUserMenu record={record} {...menuProps} />}
-                        overlayClassName={menuStyles.customActionMenu}
-                        key={'custom'}>
-                <Button size={'small'}
-                        icon={<SettingOutlined/>}
-                        className={menuStyles.customAction}>
-                  {intl.formatMessage({id: 'user.actions.manage', defaultMessage: 'Manage User' })} <DownOutlined/>
-                </Button>
-              </Dropdown>
+              <DropdownButton key={'manage'}
+                              overlay={businessUserMenu({ record, ...menuProps })}
+                              data-testid={'business-edit'}
+                              disabled={disabled}
+                              loading={loading}
+                              label={t(intl, 'user.actions.manage')}/>
             </div>
         ) : null
       }

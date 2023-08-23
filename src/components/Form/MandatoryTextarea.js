@@ -16,7 +16,7 @@ const { TextArea } = Input;
  * @return {JSX.Element}
  * @constructor
  */
-const MandatoryTextarea = props => {
+const MandatoryTextarea = ({ props }) => {
   const {
     form,
     name,
@@ -27,7 +27,7 @@ const MandatoryTextarea = props => {
     showCount = true,
     maxLength = 300,
     className = null,
-    config
+    config = {}
   } = props;
 
   const [mandatory, setMandatory] = useState('');
@@ -48,7 +48,7 @@ const MandatoryTextarea = props => {
   const { rules = [] } = config;
 
   return (
-      <Form.Item label={label}
+      <Form.Item label={false}
                  name={name}
                  shouldUpdate
                  form={form}

@@ -1,0 +1,34 @@
+@import "@/theme/variables.less";
+
+.form {
+  padding: 0;
+  row-gap: @main-margin;
+  display: flex;
+  flex-direction: column;
+
+  :global {
+    .ant-divider {
+      &:last-child {
+        display: none;
+      }
+    }
+  }
+}
+
+.formHelper {
+  cursor: pointer;
+  position: absolute;
+  right: @main-margin;
+  top: @main-margin;
+  z-index: 1;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.question {
+  display: flex;
+  column-gap: 8px;
+}

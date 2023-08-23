@@ -16,7 +16,7 @@ export default dvaModelExtend(commonModel, {
   state: {},
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, MODEL_NAME);
+      monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
       // TODO (teamco): Do something.
@@ -26,17 +26,16 @@ export default dvaModelExtend(commonModel, {
 
     * query({ payload }, { call, put, select, take }) {
       const { user, ability } = yield select(state => state.authModel);
-      const { doc, component } = payload;
+      const { docName, component } = payload;
 
       let businessEntities = { tags: [] };
 
       if (user && ability.can('read', component)) {
-
-        const fbEntities = yield call(fbFindById, { collection: 'simpleEntities', doc });
+        const fbEntities = yield call(fbFindById, { collectionPath: 'simpleEntities', docName });
 
         let data = {};
 
-        if (fbEntities.exists) {
+        if (fbEntities.exists()) {
           businessEntities = fbEntities.data();
           data = businessEntities?.metadata ? businessEntities : {};
         }
@@ -56,7 +55,7 @@ export default dvaModelExtend(commonModel, {
           payload: {
             touched: false,
             tags: [...businessEntities?.tags],
-            isEdit: !!(fbEntities.exists)
+            isEdit: !!(fbEntities.exists())
           }
         });
       }
@@ -67,16 +66,16 @@ export default dvaModelExtend(commonModel, {
     * prepareToSave({ payload }, { call, put, select }) {
       const { user, ability } = yield select(state => state.authModel);
       const { tags } = yield select(state => state[MODEL_NAME]);
-      const { doc, component, ...rest } = payload;
+      const { docName, component, ...rest } = payload;
 
-      const _db = { collection: 'simpleEntities', doc };
+      const _db = { collectionPath: 'simpleEntities', docName };
 
       if (user && ability.can('update', component)) {
         let entity = yield call(fbFindById, _db);
 
         const userRef = getRef({
-          collection: 'users',
-          doc: user.id
+          collectionPath: 'users',
+          document: user.id
         });
 
         const metadata = {
@@ -84,12 +83,14 @@ export default dvaModelExtend(commonModel, {
           updatedByRef: userRef
         };
 
-        if (entity.exists) {
+        if (entity.exists()) {
 
           entity = entity.data();
 
           yield call(fbUpdate, {
+            caller: 'prepareToSave',
             ..._db,
+            notice: true,
             data: {
               metadata: {
                 ...entity.metadata,

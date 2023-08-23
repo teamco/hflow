@@ -1,4 +1,4 @@
-import { connect } from 'umi';
+import { connect } from '@umijs/max';
 
 import { businessTypes } from './businessTypes';
 
@@ -14,8 +14,8 @@ export default connect(
         dispatch({
           type: `simpleModel/query`,
           payload: {
-            component: 'businessTypes',
-            doc: 'businessTypes'
+            component: 'business.types',
+            docName: 'businessTypes'
           }
         });
       },
@@ -26,8 +26,8 @@ export default connect(
         dispatch({
           type: 'simpleModel/prepareToSave',
           payload: {
-            component: 'businessTypes',
-            doc: 'businessTypes'
+            component: 'business.types',
+            docName: 'businessTypes'
           }
         });
       }

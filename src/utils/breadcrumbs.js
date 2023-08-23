@@ -1,179 +1,329 @@
-import React from 'react';
-import { matchPath, withRouter } from 'umi';
-
 /**
- * Combine paths.
- * @param {string} parent
- * @param {string} child
- * @returns {string}
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * This script exports a hook that accepts a routes array of objects
+ * and an options object.
+ *
+ * API:
+ *
+ * useBreadcrumbs(
+ *   routes?: Array<Route>,
+ *   options? Object<Options>,
+ * ): Array<BreadcrumbData>
+ *
+ * More Info:
+ *
+ * https://github.com/icd2k3/use-react-router-breadcrumbs
+ *
  */
-export const combinePaths = (parent = '', child = '') =>
-    `${parent.replace(/\/$/, '')}/${child.replace(/^\//, '')}`;
+import React, { createElement } from 'react';
+import { matchPath, useLocation } from '@umijs/max';
 
-/**
- * Recursively build paths for each navigation item.
- * @param routes
- * @param {string} parentPath
- * @returns {*}
- */
-export const buildPaths = (routes, parentPath = '') =>
-    routes.map(route => {
-      const path = combinePaths(parentPath, route.path);
+const joinPaths = (paths) => paths.join('/').replace(/\/\/+/g, '/');
 
-      return route.path ? {
-        ...route,
-        path,
-        ...(route.routes && { routes: buildPaths(route.routes, path) })
-      } : {
-        ...route,
-        ...(route.routes && { routes: buildPaths(route.routes, path) })
-      };
-    });
+const paramRe = /^:\w+$/;
+const dynamicSegmentValue = 3;
+const indexRouteValue = 2;
+const emptySegmentValue = 1;
+const staticSegmentValue = 10;
+const splatPenalty = -2;
+const isSplat = (s) => s === '*';
 
-/**
- * Recursively provide parent reference for each navigation item.
- * @param routes
- * @param parentRoute
- * @returns {*}
- */
-export const setupParents = (routes, parentRoute = null) =>
-    routes.map(route => {
-      const withParent = {
-        ...route,
-        ...(parentRoute && { parent: parentRoute })
-      };
-
-      return {
-        ...withParent,
-        ...(withParent.routes && {
-          routes: setupParents(withParent.routes, withParent)
-        })
-      };
-    });
-
-/**
- * Convert navigation tree into flat array.
- * @param routes
- * @returns {any[]}
- */
-export const flattenRoutes = routes =>
-    routes.map(route => [route.routes ? flattenRoutes(route.routes) : [], route]).flat(Infinity);
-
-/**
- * Combine all the above functions together.
- * @param routes
- * @returns {any[]}
- */
-export const generateRoutes = routes => {
-  const _routes = flattenRoutes(setupParents(buildPaths(routes)));
-  return _routes.map(route => {
-    const _matcher = /\/admin\/admin/;
-    return route?.path?.match(_matcher) ? {
-      ...route,
-      path: route?.path?.replace(_matcher, '/admin')
-    } : route;
-  });
-};
-
-/**
- * Provides path from root to the element
- * @param route
- * @returns {any[]}
- */
-export const pathTo = route => {
-  if (!route.parent) {
-    return [route];
+function computeScore(path, index) {
+  const segments = path.split('/');
+  let initialScore = segments.length;
+  if (segments.some(isSplat)) {
+    initialScore += splatPenalty;
   }
 
-  return [...pathTo(route.parent), route];
+  if (index) {
+    initialScore += indexRouteValue;
+  }
+
+  return segments.filter((s) => !isSplat(s)).reduce((score, segment) => {
+    if (paramRe.test(segment)) {
+      return score + dynamicSegmentValue;
+    }
+    if (segment === '') {
+      return score + emptySegmentValue;
+    }
+    return score + staticSegmentValue;
+  }, initialScore);
+}
+
+function compareIndexes(a, b) {
+  const siblings = a.length === b.length && a.slice(0, -1).every((n, i) => n === b[i]);
+  return siblings ? a[a.length - 1] - b[b.length - 1] : 0;
+}
+
+function flattenRoutes(
+    routes = [],
+    branches = [],
+    parentsMeta = [],
+    parentPath = ''
+) {
+  routes.forEach((item, index) => {
+    const route = item.path ? item : item.route;
+    const meta = {
+      relativePath: route?.path || '',
+      childrenIndex: index,
+      route
+    };
+
+    if (meta.relativePath.charAt(0) === '/') {
+      if (!meta.relativePath.startsWith(parentPath)) {
+        throw new Error('useBreadcrumbs: The absolute path of the child route must start with the parent path');
+      }
+
+      meta.relativePath = meta.relativePath.slice(parentPath.length);
+    }
+
+    const path = joinPaths([parentPath, meta.relativePath]);
+    const routesMeta = parentsMeta.concat(meta);
+
+    if (item?.route?.children && item?.route?.children.length) {
+      if (item?.route?.index) {
+        throw new Error('useBreadcrumbs: Index route cannot have child routes');
+      }
+      flattenRoutes(item?.route?.children, branches, routesMeta, path);
+    }
+
+    branches.push({
+      path,
+      score: computeScore(path, item?.route?.index),
+      routesMeta
+    });
+  });
+  return branches;
+}
+
+function rankRouteBranches(branches) {
+  return branches.sort((a, b) => (
+      a.score !== b.score ?
+          // Higher score first
+          b.score - a.score :
+          compareIndexes(
+              a.routesMeta.map((meta) => meta.childrenIndex),
+              b.routesMeta.map((meta) => meta.childrenIndex)
+          )));
+}
+
+// Begin: useBreadcrumbs
+const NO_BREADCRUMB = Symbol('NO_BREADCRUMB');
+
+/**
+ * Renders and returns the breadcrumb complete
+ * with `match`, `location`, and `key` props.
+ */
+const render = ({ Breadcrumb, match, location, props = {} }) => {
+  const componentProps = {
+    match,
+    location,
+    key: match.pathname,
+    ...props
+  };
+
+  return {
+    ...componentProps,
+    breadcrumb: typeof Breadcrumb === 'string' ? (
+        createElement('span', { ...componentProps }, Breadcrumb)
+    ) : (
+        <Breadcrumb {...componentProps} />
+    )
+  };
 };
 
 /**
- * @constant
- * @type {{exact: boolean}}
+ * Small helper method to get a default breadcrumb if the user hasn't provided one.
  */
-const DEFAULT_MATCH_OPTIONS = { exact: true };
+const getDefaultBreadcrumb = (props) => {
+  const {
+    currentSection,
+    location,
+    pathSection,
+    defaultFormatter
+  } = props;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const match = matchPath({
+        end: true,
+        path: pathSection
+      },
+      pathSection
+  );
 
-/**
- * If user is passing a function (component) as a breadcrumb, make sure we
- * pass the match object into it. Else just return the string.
- * @param breadcrumb
- * @param match
- * @return {*}
- */
-const renderer = ({ breadcrumb, match }) => {
-  if (typeof breadcrumb === 'function') { return breadcrumb({ match }); }
-  return breadcrumb;
+  return render({
+    Breadcrumb: defaultFormatter ? defaultFormatter(currentSection) : currentSection,
+    match,
+    location
+  });
 };
 
 /**
- * @export
- * @param routes
- * @param pathname
- * @return {{_isRouted: boolean, matches: *[]}}
+ * Loops through the route array (if provided) and returns either a
+ * user-provided breadcrumb OR a sensible default (if enabled)
  */
-export const getBreadcrumbs = ({ routes, pathname }) => {
-  const matches = [];
-  let _isRouted = false;
+const getBreadcrumbMatch = (props) => {
+  const {
+    currentSection,
+    disableDefaults,
+    defaultFormatter,
+    excludePaths,
+    location,
+    pathSection,
+    branches
+  } = props;
 
-  pathname
-      // remove trailing slash "/" from pathname (avoids multiple of the same match)
-      .replace(/\/$/, '')
-      // split pathname into sections
-      .split('/')
-      // reduce over the sections and find matches from `routes` prop
-      .reduce((previous, current) => {
-        // combine the last route section with the current
-        // ex `pathname = /1/2/3 results in match checks for
-        // `/1`, `/1/2`, `/1/2/3`
-        const pathSection = `${previous}/${current}`;
+  let breadcrumb;
 
-        let breadcrumbMatch;
+  // Check the optional `excludePaths` option in `options` to see if the
+  // current path should not include a breadcrumb.
+  const getIsPathExcluded = (path) => matchPath({
+        path,
+        end: true
+      },
+      pathSection
+  ) !== null;
 
-        _isRouted = generateRoutes(routes).some((data = {}) => {
-          const { breadcrumb, path, ...rest } = data;
-          const matchOptions = rest.exact === 'boolean' ? { exact: rest.exact } : DEFAULT_MATCH_OPTIONS;
-          const match = matchPath(pathSection, { ...matchOptions, path });
+  if (excludePaths && excludePaths.some(getIsPathExcluded)) {
+    return NO_BREADCRUMB;
+  }
 
-          // if a route match is found ^ break out of the loop with a rendered breadcrumb
-          // and match object to add to the `matches` array
-          if (match) {
-            breadcrumbMatch = {
-              breadcrumb: renderer({ breadcrumb, match }),
-              path,
-              match
-            };
-            return true;
-          }
+  // Loop through the route array and see if the user has provided a custom breadcrumb.
+  branches.some(({ path, routesMeta }) => {
+    const { route = {} } = routesMeta[routesMeta.length - 1];
+    let userProvidedBreadcrumb = route?.breadcrumb;
 
-          return false;
-        });
+    // If the route is an index, but no breadcrumb is set,
+    // We try to use the breadcrumbs of the parent route instead
+    if (!userProvidedBreadcrumb && route?.index) {
+      const parentMeta = routesMeta[routesMeta.length - 2];
+      if (parentMeta && parentMeta.route.breadcrumb) {
+        userProvidedBreadcrumb = parentMeta.route.breadcrumb;
+      }
+    }
 
-        breadcrumbMatch && matches.push(breadcrumbMatch);
+    const { caseSensitive, props } = route;
+    const match = matchPath({
+          path,
+          end: true,
+          caseSensitive
+        },
+        pathSection
+    );
 
-        return pathSection;
+    // If user passed breadcrumb: null
+    // we need to know NOT to add it to the matches array
+    // see: `if (breadcrumb !== NO_BREADCRUMB)` below.
+    if (match && userProvidedBreadcrumb === null) {
+      breadcrumb = NO_BREADCRUMB;
+      return true;
+    }
+
+    if (match) {
+      // This covers the case where a user may be extending their react-router route
+      // config with breadcrumbs, but also does not want default breadcrumbs to be
+      // automatically generated (opt-in).
+      if (!userProvidedBreadcrumb && disableDefaults) {
+        breadcrumb = NO_BREADCRUMB;
+        return true;
+      }
+
+      if (!userProvidedBreadcrumb) {
+        const idx = routesMeta[1]?.relativePath ? 1 : 0;
+        userProvidedBreadcrumb = routesMeta[idx]?.route?.breadcrumb ||
+            routesMeta[idx]?.route?.children[0]?.breadcrumb;
+      }
+
+      breadcrumb = render({
+        // Although we have a match, the user may be passing their react-router config object
+        // which we support. The route config object may not have a `breadcrumb` param specified.
+        // If this is the case, we should provide a default via `humanize`.
+        Breadcrumb: userProvidedBreadcrumb
+            || (defaultFormatter ? defaultFormatter(currentSection) : currentSection),
+        match: { ...match, route },
+        location,
+        props
       });
 
-  return { matches, _isRouted };
+      return true;
+    }
+
+    return false;
+  });
+
+  // User provided a breadcrumb prop, or we generated one above.
+  if (breadcrumb) {
+    return breadcrumb;
+  }
+
+  // If there was no breadcrumb provided and user has disableDefaults turned on.
+  if (disableDefaults) {
+    return NO_BREADCRUMB;
+  }
+
+  // If the above conditionals don't fire, generate a default breadcrumb based on the path.
+  return getDefaultBreadcrumb({
+    pathSection,
+    // include a "Home" breadcrumb by default (can be overrode or disabled in config).
+    currentSection: pathSection === '/' ? 'Home' : currentSection,
+    location,
+    defaultFormatter
+  });
 };
 
 /**
- * @export
- * @param routes
- * @return {function(*): *}
+ * Splits the pathname into sections, then search for matches in the routes
+ * a user-provided breadcrumb OR a sensible default.
  */
-export const withBreadcrumbs = routes => Component => withRouter(props => {
+export const getBreadcrumbs = (props) => {
+  const { routes, location, options = {} } = props;
+  const { pathname } = location;
 
-  /**
-   * @constant
-   * @type {{_isRouted: boolean, matches: *[]}}
-   */
-  const breadcrumbs = getBreadcrumbs({
-    pathname: props.location.pathname,
-    routes
-  });
+  const branches = rankRouteBranches(flattenRoutes(routes));
+  const breadcrumbs = [];
+  pathname.split('?')[0].split('/').reduce(
+      (previousSection, currentSection, index) => {
+        // Combine the last route section with the currentSection.
+        // For example, `pathname = /1/2/3` results in match checks for
+        // `/1`, `/1/2`, `/1/2/3`.
+        const pathSection = currentSection ? `${previousSection}/${currentSection}` : '/';
 
-  return (<Component{...props}
-                    is404={!breadcrumbs?._isRouted}
-                    breadcrumbs={breadcrumbs?.matches}/>);
+        // Ignore trailing slash or double slashes in the URL
+        if (pathSection === '/' && index !== 0) {
+          return '';
+        }
+
+        const breadcrumb = getBreadcrumbMatch({
+          currentSection,
+          location,
+          pathSection,
+          branches,
+          ...options
+        });
+
+        // Add the breadcrumb to the matches array
+        // unless the user has explicitly passed.
+        // { path: x, breadcrumb: null } to disable.
+        if (breadcrumb !== NO_BREADCRUMB) {
+          breadcrumbs.push(breadcrumb);
+        }
+
+        return pathSection === '/' ? '' : pathSection;
+      },
+      ''
+  );
+
+  return breadcrumbs;
+};
+
+/**
+ * Default hook function export.
+ */
+const useReactRouterBreadcrumbs = (routes = [], options) => getBreadcrumbs({
+  routes,
+  options,
+  location: useLocation()
 });
+
+export default useReactRouterBreadcrumbs;

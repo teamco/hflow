@@ -1,27 +1,39 @@
 import React from 'react';
-import { Avatar, Dropdown, Tooltip } from 'antd';
-import { ContactsTwoTone, EllipsisOutlined, PauseCircleTwoTone, PlayCircleTwoTone } from '@ant-design/icons';
-import { NavLink, useIntl } from 'umi';
+import { Avatar, Tooltip } from 'antd';
+import { ContactsTwoTone, PauseCircleTwoTone, PlayCircleTwoTone } from '@ant-design/icons';
+import { NavLink } from '@umijs/max';
 
 import { COLORS } from '@/utils/colors';
+import { t } from '@/utils/i18n';
 
-import { showProfileModal } from './profile.modal';
-import UserMenu from './users.menu';
+import DropdownButton from '@/components/Buttons/dropdown.button';
 
-import menuStyles from '@/components/menu.less';
-import styles from '../users.module.less';
+import { showProfileModal } from '@/pages/users/metadata/profile.modal';
+import { userMenu } from '@/pages/users/metadata/users.menu';
 
-export const userCardMetadata = (t, props) => {
-  const intl = useIntl();
+import styles from '@/pages/users/users.module.less';
+
+const { API } = require('@/services/config/api.config');
+
+/**
+ * @constant
+ * @param props
+ * @return {{cover: JSX.Element, description: JSX.Element, className, avatar: JSX.Element, actions: JSX.Element[]}}
+ */
+export const userCardMetadata = (props) => {
   const {
+    intl,
     className,
     currentUser,
+    disabled,
+    loading,
+    modal,
     ...rest
   } = props;
 
   const { metadata, displayName } = props.user;
 
-  const menuProps = { currentUser, ...rest };
+  const menuProps = { currentUser, intl, ...rest };
 
   const cover = metadata.photoURL ? (
       <img src={metadata.photoURL}
@@ -29,7 +41,7 @@ export const userCardMetadata = (t, props) => {
            alt={displayName}
            className={styles.cardImg}/>
   ) : (
-      <Avatar src={'https://joeschmoe.io/api/v1/random'}
+      <Avatar src={API.avatar}
               className={styles.cardImg}/>
   );
 
@@ -37,7 +49,7 @@ export const userCardMetadata = (t, props) => {
   const isSignedIn = metadata.signedIn;
   const color = isSignedIn ? COLORS.success : COLORS.disabled;
   const signed = {
-    status: intl.formatMessage({id: isSignedIn ? 'auth:signedIn' : 'auth:signedOut', defaultMessage:  isSignedIn ? 'Signed in' : 'Sign out'}),
+    status: t(intl, isSignedIn ? 'auth.signedIn' : 'auth.signedOut'),
     icon: isSignedIn ?
         (<PlayCircleTwoTone twoToneColor={color}/>) :
         (<PauseCircleTwoTone twoToneColor={color}/>)
@@ -52,24 +64,23 @@ export const userCardMetadata = (t, props) => {
         </Tooltip>
     ),
     description: (
-        <NavLink to={`/admin/users/${props.user.id}`}>
+        <NavLink to={`/admin/users/${props?.user?.id}`}>
           <span className={isCurrentStyle}>
             {displayName}
           </span>
         </NavLink>
     ),
     actions: [
-      <Tooltip title={intl.formatMessage({id: 'auth.showProfile', defaultMessage: 'Show Profile'})}
+      <Tooltip title={t(intl, 'auth.showProfile')}
                key={'profile'}>
-        <ContactsTwoTone onClick={() => showProfileModal(t, props.user)}
+        <ContactsTwoTone onClick={() => showProfileModal({ ...props.user }, modal, intl)}
                          twoToneColor={COLORS.tags.blue}/>
       </Tooltip>,
-      <Dropdown overlay={<UserMenu record={props.user} {...menuProps} />}
-                overlayClassName={menuStyles.customActionMenu}
-                trigger={['click']}
-                key={'custom'}>
-        <EllipsisOutlined key={'more'}/>
-      </Dropdown>
+      <DropdownButton key={'manage'}
+                      overlay={userMenu({ record: props.user, ...menuProps })}
+                      data-testid={'user-mng'}
+                      disabled={disabled}
+                      loading={loading}/>
     ]
   };
 };

@@ -1,40 +1,42 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
-import { NavLink, useIntl } from 'umi';
-import { Menu, Popconfirm } from 'antd';
+import { NavLink } from '@umijs/max';
+import { Popconfirm } from 'antd';
 import { DeleteTwoTone, ShoppingCartOutlined } from '@ant-design/icons';
 
 import { abilityMenuItem } from '@/utils/abilityComponent/abilityMenuItem';
 import { COLORS } from '@/utils/colors';
+import { t } from '@/utils/i18n';
 
 import tableStyles from '@/components/Main/Table/table.module.less';
 
 /**
  * @export
  * @param props
- * @return {JSX.Element}
+ * @return {*[]}
  */
-export const CampaignMenu = props => {
-  const intl = useIntl();
+export const campaignMenu = props => {
   const {
     ability,
     isEdit,
     component,
     record,
+    intl,
+    canUpdate,
+    canDelete,
     onDeleteCampaign
   } = props;
 
-  const canEdit = ability.can('edit', component);
-  const canDelete = ability.can('delete', component);
+  const menuCampaignField = t(intl, 'menu.campaign');
 
   const editProps = {
     key: 'edit',
-    canI: canEdit,
+    canI: canUpdate,
+    divider: true,
     icon: <ShoppingCartOutlined className={tableStyles.action}
-                                twoToneColor={COLORS.success} />,
+                                twoToneColor={COLORS.success}/>,
     children: (
-        <NavLink to={`/admin/campaigns/${record.id}`}>
-          {intl.formatMessage({id: 'campaigns.actions.edit', defaultMessage: "Edit Campaign"})}
+        <NavLink to={`/admin/campaigns/${record?.id}`}>
+          {t(intl, 'campaigns.actions.edit')}
         </NavLink>
     )
   };
@@ -43,27 +45,21 @@ export const CampaignMenu = props => {
     key: 'delete',
     canI: canDelete,
     icon: <DeleteTwoTone className={tableStyles.action}
-                         twoToneColor={COLORS.danger} />,
+                         twoToneColor={COLORS.danger}/>,
     children: (
-        <Popconfirm title={t('msg:deleteConfirm', { instance: t('menu:campaign') })}
+        <Popconfirm title={t(intl, 'msg.deleteConfirm', { instance: menuCampaignField })}
                     placement={'topRight'}
+                    disabled={!canDelete}
                     onConfirm={() => onDeleteCampaign(record)}>
-          {intl.formatMessage({id: 'actions.delete', defaultMessage: 'Delete'})}
+          {t(intl, 'actions.delete')}
         </Popconfirm>
     )
   };
 
-  return (
-      <Menu>
-        {!isEdit && (
-            <>
-              {abilityMenuItem(editProps)}
-              <Menu.Divider key={'divider'} />
-            </>
-        )}
-        {abilityMenuItem(deleteProps)}
-      </Menu>
-  );
-};
+  const editItems = isEdit ? [] : [...abilityMenuItem(editProps)];
 
-export default CampaignMenu;
+  return [
+    ...editItems,
+    ...abilityMenuItem(deleteProps)
+  ];
+};

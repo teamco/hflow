@@ -1,19 +1,22 @@
 import React, { Suspense } from 'react';
-import { Helmet } from 'umi';
-import { Form, Layout } from 'antd';
+import * as umi from '@umijs/max';
+import { FloatButton, Form, Layout, message } from 'antd';
 import ReactInterval from 'react-interval';
-import ReactGA from 'react-ga4';
+import { useScrollIndicator } from 'react-use-scroll-indicator';
 
 import Loader from '@/components/Loader';
 
 import { AbilityContext } from '@/utils/auth/can';
-
 import { effectHook } from '@/utils/hooks';
-import '@/utils/i18n';
+import { logger } from '@/utils/console';
+
+import { locales } from '@/locales';
 
 import styles from './landing.layout.module.less';
 
 const { Content } = Layout;
+
+const { Outlet, Helmet, IntlProvider, useIntl } = umi;
 
 /**
  * @export
@@ -22,31 +25,35 @@ const { Content } = Layout;
  * @constructor
  */
 export const LandingLayout = (props) => {
+  const intl = useIntl();
+
   const {
-    children,
     appModel,
     authModel,
     loading,
     onNotification,
-    onOnline
+    onRefreshSignIn,
+    onHandleMessageApi,
+    onUpdateLocales,
+    onOnline,
+    onDefineAbilities
   } = props;
 
   const {
     language = 'en-US',
     meta,
-    interval: { timeout, enabled },
-    layoutOpts: {}
+    location,
+    interval: { timeout, enabled }
   } = appModel;
 
-  const { user, ability } = authModel;
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const { user, ability, userSignOut } = authModel;
+
+  const messages = locales[`${language}`] || {};
 
   effectHook(() => {
-    ReactGA.initialize('G-N3Y3KDBNCV');
-    ReactGA.send('pageview');
-  });
-
-  effectHook(() => {
-    props.onDefineAbilities();
+    onDefineAbilities();
   }, [user]);
 
   let title = meta?.name;
@@ -54,33 +61,69 @@ export const LandingLayout = (props) => {
     title = `${title} ${meta?.title}`;
   }
 
+  effectHook(() => {
+    onRefreshSignIn();
+    onUpdateLocales(messages);
+    onHandleMessageApi(messageApi, intl);
+  });
+
+  userSignOut?.error && logger({
+    type: userSignOut?.error ? 'error' : 'info',
+    error: userSignOut?.error,
+    isSignedOut: userSignOut?.fbSignOut
+  });
+
+  const [state] = useScrollIndicator();
+
+  const progress = state?.value;
+
+  const content = (
+      <Layout style={{ minHeight: '100vh' }} key={language}>
+        <Layout className={styles.siteLayout}>
+          <Content>
+            <Form.Provider>
+              <div className={styles.siteLayoutContent}>
+                <Suspense fallback={(
+                    <Loader loading={loading} spinOn={['appModel/query']}/>
+                )}>
+                  <Outlet/>
+                </Suspense>
+                <FloatButton.BackTop/>
+              </div>
+            </Form.Provider>
+          </Content>
+        </Layout>
+      </Layout>
+  );
+
   return ability ? (
       <AbilityContext.Provider value={ability}>
-        <div className={styles.landing}>
-          <Helmet>
-            <meta charSet={meta.charSet}/>
-            <title>{title}</title>
-          </Helmet>
-          <ReactInterval timeout={timeout}
-                         enabled={enabled}
-                         callback={onNotification}/>
-          <ReactInterval timeout={10000}
-                         enabled={enabled}
-                         callback={onOnline}/>
-          <Suspense fallback={<Loader fullScreen spinning={loading.effects['appModel/query']}/>}>
-            <Layout style={{ minHeight: '100vh' }} key={language}>
-              <Layout className={styles.siteLayout}>
-                <Content>
-                  <Form.Provider>
-                    <div className={styles.siteLayoutContent}>{children}</div>
-                  </Form.Provider>
-                </Content>
-              </Layout>
-            </Layout>
-          </Suspense>
-        </div>
+        <IntlProvider locale={language}
+                      messages={messages}>
+          <div className={styles.landing}>
+            <Helmet>
+              <meta charSet={meta.charSet}/>
+              <link rel={'manifest'} href={'/worker/manifest.json'}/>
+              <title>{title}</title>
+            </Helmet>
+            <ReactInterval timeout={timeout}
+                           enabled={enabled}
+                           callback={onNotification}/>
+            {contextHolder}
+            <div className={styles.progress}
+                 style={{ width: `${progress}%` }}/>
+            <Loader loading={loading} spinOn={[
+              'authModel/updateToken',
+              'appModel/handleMessageApi'
+            ]}>
+              {content}
+            </Loader>
+          </div>
+        </IntlProvider>
       </AbilityContext.Provider>
   ) : (
-      <Loader fullScreen spinning={true}/>
+      <Loader loading={loading}
+              className={styles.loaderInit}
+              spinning={true}/>
   );
 };

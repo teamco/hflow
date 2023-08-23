@@ -1,7 +1,6 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
-import { message } from 'antd';
-import { useIntl } from 'umi';
+
 import { commonModel } from '@/models/common.model';
 import { fbFindById, fbUpdate } from '@/services/firebase.service';
 import {
@@ -10,7 +9,7 @@ import {
   getUsers,
   sendVerificationEmail
 } from '@/services/user.service';
-import { defineAbilityFor } from '@/utils/auth/ability';
+
 import { monitorHistory } from '@/utils/history';
 
 const MODEL_NAME = 'userModel';
@@ -30,7 +29,7 @@ export default dvaModelExtend(commonModel, {
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, MODEL_NAME);
+      monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
       // TODO (teamco): Do something.
@@ -56,10 +55,13 @@ export default dvaModelExtend(commonModel, {
     * updateQuery({ payload }, { call, put, select }) {
       const { user } = yield select(state => state.authModel);
       const { _userExist } = payload;
+
       if (_userExist.docId) {
         yield call(fbUpdate, {
-          collection: 'users',
-          doc: _userExist.docId,
+          notice: true,
+          caller: 'updateQuery',
+          collectionPath: 'users',
+          docName: _userExist.docId,
           data: _userExist.data
         });
       }
@@ -87,7 +89,12 @@ export default dvaModelExtend(commonModel, {
       const { user } = payload;
 
       if (user.metadata.isLocked) {
-        return message.warning(useIntl().formatMessage({id: 'auth.errorLockedDelete', defaultMessage: 'Unable to delete {instance}, user is locked'}, { instance: user.email })).then();
+        // return message.warning(useIntl().formatMessage(
+        //     {
+        //       id: 'auth.errorLockedDelete',
+        //       defaultMessage: `Unable to delete ${user.email}, user is locked`
+        //     }, { instance: user.email }
+        // )).then();
       } else {
       }
     },
@@ -103,10 +110,7 @@ export default dvaModelExtend(commonModel, {
         }
       });
 
-      yield put({
-        type: 'updateQuery',
-        payload: { _userExist }
-      });
+      yield put({ type: 'updateQuery', payload: { _userExist } });
     },
 
     * unlock({ payload }, { put, call }) {
@@ -123,11 +127,6 @@ export default dvaModelExtend(commonModel, {
       yield put({ type: 'updateQuery', payload: { _userExist } });
     },
 
-    * changeGridLayout({ payload }, { put, select }) {
-      const { gridLayout } = yield select(state => state[MODEL_NAME]);
-      yield put({ type: 'updateState', payload: { gridLayout: !gridLayout } });
-    },
-
     * validateUser({ payload }, { put }) {
       const { selectedUser, userId } = payload;
 
@@ -138,23 +137,29 @@ export default dvaModelExtend(commonModel, {
       }
     },
 
-    * getUser({ payload }, { put, call, select }) {
-      const { user } = yield select(state => state.authModel);
+    * getUser({ payload = {} }, { put, call, select }) {
+      const { user, ability } = yield select(state => state.authModel);
       const { userId = user?.id } = payload;
 
-      if (user?.id) {
-        const ability = yield call(defineAbilityFor, { user, userId });
-        yield put({ type: 'authModel/updateState', payload: { ability } });
-
+      if (userId) {
         if (ability.can('read', 'profile')) {
-          const _user = yield call(fbFindById, { collection: 'users', doc: userId });
+          const _user = yield call(fbFindById, {
+            collectionPath: 'users',
+            docName: userId
+          });
 
-          if (_user.exists) {
+          if (_user?.exists()) {
             const selectedUser = { ..._user.data(), ...{ id: _user.id } };
-            return yield put({ type: 'updateState', payload: { selectedUser } });
+            return yield put({
+              type: 'updateState',
+              payload: { selectedUser }
+            });
           }
 
-          yield put({ type: 'notFound', payload: { entity: 'User', key: 'selectedUser' } });
+          yield put({
+            type: 'notFound',
+            payload: { entity: 'User', key: 'selectedUser' }
+          });
         }
       }
     },
@@ -169,8 +174,10 @@ export default dvaModelExtend(commonModel, {
 
         // Update user roles
         yield call(fbUpdate, {
-          collection: 'users',
-          doc: selectedUser.id,
+          notice: true,
+          caller: 'updateRoles',
+          collectionPath: 'users',
+          docName: selectedUser.id,
           data: { ...selectedUser, roles }
         });
 
@@ -188,23 +195,28 @@ export default dvaModelExtend(commonModel, {
       }
     },
 
-    * sendVerification({ payload }, { put, call, select }) {
+    * sendVerification({ payload = {} }, { put, call, select }) {
       const { ability } = yield select(state => state.authModel);
+      const { user } = payload;
 
-      const canSend = ability.can('sendVerificationEmail', 'users');
+      const canSend = ability.can('email.verification', 'users');
 
-      let _userExist = yield call(fbFindById, {
-        collection: 'users',
-        doc: payload.user.id
-      });
+      if (canSend) {
+        let _userExist = yield call(fbFindById, {
+          collectionPath: 'users',
+          docName: user?.id
+        });
 
-      const _sent = _userExist && canSend && (yield call(sendVerificationEmail, { user: _userExist }));
+        const _sent = _userExist &&
+            (yield call(sendVerificationEmail, { user: _userExist.data() }));
 
-      yield put({
-        type: 'updateState',
-        payload: { verificationSent: _sent }
-      });
+        yield put({
+          type: 'updateState',
+          payload: { verificationSent: _sent }
+        });
+      }
     }
   },
+
   reducers: {}
 });

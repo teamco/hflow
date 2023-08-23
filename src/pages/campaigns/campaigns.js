@@ -1,18 +1,23 @@
-import React  from 'react';
-import { Button, PageHeader } from 'antd';
-import { AppstoreAddOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { useIntl } from 'umi';
-import Page from '@/components/Page';
+import React, { useRef } from 'react';
+import { FundOutlined } from '@ant-design/icons';
+import { useIntl } from '@umijs/max';
+
+import Page from '@/components/Page/page.connect';
 import Main from '@/components/Main';
-import { Can } from '@/utils/auth/can';
+import { SubHeader } from '@/components/Page/page.subheader';
+
+import { t } from '@/utils/i18n';
+import { effectHook } from '@/utils/hooks';
+import { componentAbilities } from '@/utils/auth/component.setting';
+
+import { metadata } from '@/pages/campaigns/campaigns.metadata';
 
 import styles from '@/pages/campaigns/campaigns.module.less';
 import userStyles from '@/pages/users/users.module.less';
-import { metadata } from '@/pages/campaigns/campaigns.metadata';
-import ExportButton from '@/components/Buttons/export.button';
-import { effectHook } from '@/utils/hooks';
 
 const { Table } = Main;
+
+const MODEL_NAME = 'campaignModel';
 
 /**
  * @export
@@ -21,74 +26,87 @@ const { Table } = Main;
  */
 export const campaigns = (props) => {
   const intl = useIntl();
+
   const {
-    t,
     authModel,
     campaignModel,
     onQuery,
     onNew,
+    onDeleteCampaign,
     style,
     loading
   } = props;
 
   const {
-    data,
+    campaigns: data
   } = campaignModel;
 
   effectHook(() => {
-    onQuery();
+    authModel.user && onQuery();
   }, [authModel.user]);
 
-  const { ability } = authModel;
   const component = 'campaigns';
-  const disabled = ability.cannot('create', component);
+  const {
+    ability,
+    disabled,
+    canUpdate,
+    canDelete,
+    canExport
+  } = componentAbilities(authModel, component, true);
+
+  const refTarget = useRef(null);
 
   const subTitle = (
       <>
-        <ShoppingCartOutlined style={{ marginRight: 10 }}/>
-        {intl.formatMessage({id: 'menu.campaigns', defaultMessage: 'Campaigns'})}
+        <FundOutlined style={{ marginRight: 10 }}/>
+        {t(intl, 'menu.campaigns')}
       </>
   );
+
   const campaignProps = {
     loading,
-    ability
+    ability,
+    disabled,
+    canUpdate,
+    canDelete,
+    onDeleteCampaign
   };
 
   const tableProps = {
     pagination: false
   };
 
+  const pageHeaderProps = {
+    subTitle,
+    loading,
+    disabled,
+    MODEL_NAME,
+    component,
+    actions: {
+      exportBtn: { refTarget, data, disabled: !canExport },
+      newBtn: { onClick: onNew, spinOn: [`${MODEL_NAME}/newCampaign`] },
+      closeBtn: false,
+      saveBtn: false,
+      menuBtn: false
+    }
+  };
+
   return (
       <Page className={userStyles.users}
             component={component}
             spinEffects={[
-              'campaignModel/query',
-              'campaignModel/prepareToSave'
+              `${MODEL_NAME}/query`,
+              `${MODEL_NAME}/newCampaign`,
+              `${MODEL_NAME}/validateCampaign`
             ]}>
         <div className={styles.campaignWrapper}
              style={style}>
-          <PageHeader ghost={false}
-                      subTitle={subTitle}
-                      extra={[
-                        <ExportButton key={'export'}
-                                      disabled={disabled}
-                                      component={component}
-                                      json={data}/>,
-                        <Can I={'create'} a={component} key={'add'}>
-                          <Button size={'small'}
-                                  loading={loading.effects['campaignModel/newCampaign']}
-                                  disabled={disabled}
-                                  icon={<AppstoreAddOutlined/>}
-                                  onClick={() => onNew()}
-                                  type={'primary'}>
-                            {intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
-                          </Button>
-                        </Can>
-                      ]}>
-          </PageHeader>
-          <Table data={data}
-                 {...tableProps}
-                 {...metadata({...campaignProps })} />
+          <SubHeader {...pageHeaderProps}/>
+          <div ref={refTarget}>
+            <Table data={data}
+                   {...tableProps}
+                   {...metadata({ ...campaignProps })} />
+          </div>
         </div>
       </Page>
   );

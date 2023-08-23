@@ -1,31 +1,25 @@
 import React from 'react';
-import { connect, useIntl } from 'umi';
-import { Result } from 'antd';
-import Page from '@/components/Page';
+import { useIntl } from '@umijs/max';
 
-import styles from 'layouts/app/app.layout.less';
+import { t } from '@/utils/i18n';
+
+import ErrorPage from '@/components/Page/Error';
 
 /**
  * @function
- * @param t
- * @param errorModel
+ * @param props
  * @return {JSX.Element}
  */
-function page404({ t, errorModel }) {
+function page404(props) {
   const intl = useIntl();
+
+  const { component = 'page404' } = props;
+
   return (
-      <Page component={'page404'}>
-        <Result status={'404'}
-                title={'404'}
-                className={styles.page404}
-                subTitle={intl.formatMessage({id: 'error.page404', defaultMessage: 'Sorry, the page you visited does not exist'})}/>
-      </Page>
+      <ErrorPage title={t(intl, 'error.page404')}
+                 component={component}
+                 status={404}/>
   );
 }
 
-export default connect(({ errorModel, loading }) => ({
-      errorModel,
-      loading
-    }),
-    dispatch => ({})
-)(page404);
+export default page404;

@@ -1,8 +1,6 @@
-import { connect } from 'umi';
-import { useIntl } from 'umi';
-import { notifications } from './notifications';
+import { connect } from '@umijs/max';
 
-import { STATUS } from '@/utils/message';
+import { notifications } from './notifications';
 
 export default connect(
     ({ authModel, notificationModel, loading }) => ({
@@ -12,19 +10,18 @@ export default connect(
     }),
     (dispatch) => ({
       dispatch,
-      onQuery(userId) {
-        dispatch({ type: `notificationModel/query`, payload: { userId } });
+      onQuery(userId, type) {
+        dispatch({ type: `notificationModel/query`, payload: { userId, type } });
       },
-      onRead(doc) {
-        dispatch({ type: `notificationModel/setAsRead`, payload: { doc } });
+      onRead(docName) {
+        dispatch({ type: `notificationModel/setAsRead`, payload: { docName } });
       },
       onSendMessage({ props }, fields) {
-        const intl = useIntl();
         dispatch({
           type: 'notificationModel/createAndUpdate',
           payload: {
-            type: intl.formatMessage({id: 'notifications.message', defaultMessage: 'Message' }),
-            status: STATUS.sent,
+            type: 'notifications.message',
+            status: 'status.sent',
             replyTo: fields.replyTo,
             title: fields.title,
             description: fields.description,

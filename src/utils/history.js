@@ -8,7 +8,7 @@
 export const monitorHistory = (setup, namespace, eventType = 'Navigation', duration = 0) => {
   const { history, dispatch } = setup;
 
-  return history.listen(data => {
+  history.listen(data => {
     // In case of route replace
     const location = data.pathname ? { ...data } : { ...data.location };
     Object.keys(location).forEach(key => {

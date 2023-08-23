@@ -1,19 +1,22 @@
 import React, { Suspense, useState } from 'react';
-import { Helmet, useIntl } from 'umi';
+import { Outlet, useIntl, Helmet } from '@umijs/max';
+import ReactInterval from 'react-interval';
 import { Form, Layout } from 'antd';
-import * as queryString from 'querystring';
+import queryString from 'query-string';
 
-import Login from '@/pages/login';
 import Page404 from '@/pages/404';
+import Page403 from '@/pages/403';
+import LandingPage from '@/layouts/landing/page/landing.page.connect';
+import LandingLogin from '@/pages/landing/authentication/login/login.connect';
 
 import Loader from '@/components/Loader';
 import Main from '@/components/Main';
 
-import { delayedFn } from '@/utils/timestamp';
+import { effectHook } from '@/utils/hooks';
+import { t } from '@/utils/i18n';
+import { Can } from '@/utils/auth/can';
 
-import '@/utils/i18n';
-
-import './app.layout.less';
+import './app.layout.module.less';
 
 const { Content } = Layout;
 
@@ -25,12 +28,10 @@ const { Content } = Layout;
  */
 export const AppLayout = (props) => {
   const intl = useIntl();
+
   const { mode } = queryString.parse(window.location.search);
 
-  const [isSignInVisible, setIsSignInVisible] = useState(false);
-
   const {
-    children,
     appModel,
     authModel,
     notificationModel,
@@ -39,12 +40,11 @@ export const AppLayout = (props) => {
     onUpdate404,
     onUpdateDocumentMeta,
     onRoute,
-    onOnline
+    onCloseSiderPanel
   } = props;
 
   const {
     is404,
-    isOnline,
     language,
     menus,
     collapsedMenu,
@@ -55,60 +55,110 @@ export const AppLayout = (props) => {
       mainFooter,
       pageBreadcrumbs
     },
-    waitBeforeLogin
+    waitBeforeLogin,
+    siderPanels
   } = appModel;
 
-  delayedFn({
-    callback: () => setIsSignInVisible(!isAuth),
-    ts: waitBeforeLogin
-  });
-
   const { user, ability } = authModel;
-  const { badge } = notificationModel;
 
-  const headerProps = { t, user, badge, isOnline };
+  const outlet = is404 ? <Page404/> : <Outlet/>;
 
-  // TODO (teamco): Find better solution.
-  const isAuth = user || mode === 'signIn';
+  const [authLoader, setAuthLoader] = useState(true);
 
-  return isAuth ? (
+  effectHook(() => {
+    setAuthLoader(ability.cannot('read', 'admin'));
+  }, [user, ability]);
+
+  const siderProps = {
+    onClose: onCloseSiderPanel,
+    ...siderPanels[siderPanels?.currentPanel]
+  };
+
+  const handleUserAuth = () => {
+    // TODO (teamco): Find better solution.
+    const isAuthenticated = user || mode === 'signIn';
+
+    setAuthLoader(!isAuthenticated);
+  };
+
+  const menuProps = {
+    loading,
+    authModel,
+    notificationModel,
+    isSider: true,
+    defaultDims: {
+      min: 80,
+      max: 250
+    }
+  };
+
+  const component = 'admin';
+  const ableFor = 'manage';
+
+  return (
+      <LandingPage spinEffects={[
+        'appModel/query',
+        'authModel/signIn',
+        'firebaseModel/refreshSignIn'
+      ]}>
+        <Can I={ableFor} a={component}>
           <div className={'admin'}>
             <Helmet>
               <meta charSet={meta.charSet}/>
               <title>{`${meta.name} ${meta.title}`}</title>
             </Helmet>
-            <Suspense fallback={<Loader fullScreen spinning={loading.effects['appModel/query']}/>}>
-              {/* Have to refresh for production environment */}
-              <Layout style={{ minHeight: '100vh' }} key={language}>
-                {mainMenu && (
-                    <Main.Menu data={menus}
-                               ability={ability}
-                               onRoute={onRoute}
-                               model={appModel}
-                               collapsed={collapsedMenu}
-                               onCollapse={onToggleMenu}/>
-                )}
-                <Layout className={'site-layout'}>
-                  {mainHeader && <Main.Header {...headerProps}/>}
-                  <Content>
-                    <Form.Provider>
-                      {pageBreadcrumbs && mode !== 'signIn' && (
-                          <Main.Breadcrumbs meta={meta}
-                                            onUpdate404={onUpdate404}
-                                            onUpdateDocumentMeta={onUpdateDocumentMeta}/>
+            <ReactInterval timeout={waitBeforeLogin}
+                           enabled={true}
+                           callback={handleUserAuth}/>
+            {authLoader ? (
+                <div className={'adminLoading'}>
+                  <LandingLogin currentUser={user}/>
+                </div>
+            ) : (
+                <Suspense fallback={(
+                    <Loader loading={loading} spinOn={['appModel/query']}/>
+                )}>
+                  {/* Have to refresh for production environment */}
+                  <Layout style={{ minHeight: '100vh' }} key={language}>
+                    {mainMenu && (
+                        <Main.Menu data={menus}
+                                   spinOn={[
+                                     'appModel/query',
+                                     'authModel/signIn',
+                                     'firebaseModel/refreshSignIn'
+                                   ]}
+                                   {...menuProps}
+                                   onRoute={onRoute}
+                                   model={appModel}
+                                   collapsed={collapsedMenu}
+                                   onCollapse={onToggleMenu}/>
+                    )}
+                    <Layout className={'site-layout'}>
+                      <Layout>
+                        <Content>
+                          <Form.Provider>
+                            {pageBreadcrumbs && mode !== 'signIn' && (
+                                <Main.Breadcrumbs meta={meta}
+                                                  onUpdate404={onUpdate404}
+                                                  onUpdateDocumentMeta={onUpdateDocumentMeta}/>
+                            )}
+                            <div className={'site-layout-content'}>
+                              {outlet}
+                            </div>
+                          </Form.Provider>
+                        </Content>
+                        <Main.Sider {...siderProps}/>
+                      </Layout>
+                      {mainFooter && (
+                          <Main.Footer author={t(intl, 'common.author', { year: 2021 })}/>
                       )}
-                      <div className={'site-layout-content'}>
-                        {is404 ? (<Page404/>) : children}
-                      </div>
-                    </Form.Provider>
-                  </Content>
-                  {mainFooter && <Main.Footer author={intl.formatMessage({id: 'author', defaultMessage: 'Author'}, { year: 2020 })}/>}
-                </Layout>
-              </Layout>
-            </Suspense>
+                    </Layout>
+                  </Layout>
+                </Suspense>
+            )}
           </div>
-      ) :
-      isSignInVisible ?
-          (<Login/>) :
-          (<Loader fullScreen spinning={true}/>);
+        </Can>
+        <Page403 component={component} ableFor={ableFor}/>
+      </LandingPage>
+  );
 };

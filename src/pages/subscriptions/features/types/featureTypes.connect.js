@@ -1,4 +1,4 @@
-import { connect } from 'umi';
+import { connect } from '@umijs/max';
 
 import { featureTypes } from './featureTypes';
 
@@ -14,8 +14,8 @@ export default connect(
         dispatch({
           type: `simpleModel/query`,
           payload: {
-            component: 'featureTypes',
-            doc: 'featureTypes'
+            component: 'feature.types',
+            docName: 'featureTypes'
           }
         });
       },
@@ -26,8 +26,8 @@ export default connect(
         dispatch({
           type: 'simpleModel/prepareToSave',
           payload: {
-            component: 'featureTypes',
-            doc: 'featureTypes'
+            component: 'feature.types',
+            docName: 'featureTypes'
           }
         });
       }

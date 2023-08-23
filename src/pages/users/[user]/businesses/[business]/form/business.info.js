@@ -1,10 +1,11 @@
 import React from 'react';
 import { Input, Select } from 'antd';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
 import { emailProps } from '@/components/partials/email.partial';
 import FormComponents from '@/components/Form';
 import UploadFile from '@/components/Upload';
 import { sortBy } from '@/utils/array';
+import { t } from '@/utils/i18n';
 
 const { GenericPanel } = FormComponents;
 const { TextArea } = Input;
@@ -12,10 +13,10 @@ const { Option } = Select;
 
 /**
  * @export
- * @param t
  * @param formRef
- * @param upload
+ * @param businessTypes
  * @param {boolean} disabled
+ * @param uploadLogo
  * @return {JSX.Element}
  * @constructor
  */
@@ -26,14 +27,15 @@ export const BusinessInfo = ({
   uploadLogo
 }) => {
   const intl = useIntl();
+
   return (
-      <GenericPanel header={intl.formatMessage({id: 'business.info', defaultMessage: 'Business Information'})}
+      <GenericPanel header={t(intl, 'business.info')}
                     name={'info'}
                     defaultActiveKey={['info']}>
         <div>
           <Select name={'businessType'}
                   form={formRef}
-                  label={intl.formatMessage({id: 'business.type', defaultMessage: 'Business Type'})}
+                  label={t(intl, 'business.type')}
                   disabled={disabled}
                   config={{ rules: [{ required: true }] }}>
             {sortBy(businessTypes, 'name').map((type, idx) => (
@@ -47,28 +49,28 @@ export const BusinessInfo = ({
         </div>
         <div>
           <Input type={'text'}
-                 label={intl.formatMessage({id: 'business.name', defaultMessage: 'Legal Business Name'})}
+                 label={t(intl, 'business.name')}
                  name={'name'}
                  form={formRef}
                  disabled={disabled}
                  config={{ rules: [{ required: true }] }}/>
           <Input type={'text'}
-                 label={intl.formatMessage({id: 'business.email', defaultMessage: 'Business Email'})}
+                 label={t(intl, 'business.email')}
                  name={'email'}
                  form={formRef}
                  disabled={disabled}
-                 config={{ ...emailProps(t) }}/>
+                 config={{ ...emailProps() }}/>
         </div>
         <div>
           <TextArea type={'text'}
-                    label={intl.formatMessage({id: 'form.description', defaultMessage: 'Description'})}
+                    label={t(intl, 'form.description')}
                     name={'description'}
                     rows={4}
                     showCount
                     maxLength={300}
                     disabled={disabled}
                     form={formRef}/>
-          <UploadFile label={intl.formatMessage({id: 'business.logo', defaultMessage: 'Business Logo'})}
+          <UploadFile label={t(intl, 'business.logo')}
                       name={'logo'}
                       disabled={disabled}
                       {...uploadLogo}

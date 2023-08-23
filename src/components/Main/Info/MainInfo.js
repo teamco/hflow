@@ -1,41 +1,41 @@
 import React from 'react';
-import { Link, useIntl } from 'umi';
-import FormComponents from '@/components/Form';
+import { Link, useIntl } from '@umijs/max';
 
-const { GenericPanel } = FormComponents;
+import { t } from '@/utils/i18n';
 
-export default class MainInfo extends React.Component {
+import GenericPanel from '@/components/Form/GenericPanel';
 
-  render() {
-    const {
-      touched,
-      isEdit = false,
-      info: {
-        createdBy = {},
-        updatedBy = {},
-        createdAt,
-        updatedAt
-      }
-    } = this.props;
-    const intl = useIntl();
+export const MainInfo = props => {
+  const {
+    touched,
+    isEdit = false,
+    info: {
+      createdBy = {},
+      updatedBy = {},
+      createdAt,
+      updatedAt
+    }
+  } = props;
 
-    return isEdit && (
-        <GenericPanel header={intl.formatMessage({id: 'form.entityInfo', defaultMessage: '{entity} Information'}, { entity: intl.formatMessage({id: 'panel.details', defaultMessage: 'Details'}) })}
-                      collapsible={touched ? 'disabled' : 'header'}
-                      name={'entityInfo'}>
-          <div>
-            <div label={intl.formatMessage({id: 'form.createdBy', defaultMessage: 'Created by'})}>
-              <Link to={`/admin/users/${createdBy.id}`}>{createdBy.displayName}</Link>
-            </div>
-            <div label={intl.formatMessage({id: 'form.updatedBy', defaultMessage: 'Updated by'})}>
-              <Link to={`/admin/users/${updatedBy.id}`}>{updatedBy.displayName}</Link>
-            </div>
+  const intl = useIntl();
+  const detailsEntity = t(intl, 'panel.details');
+
+  return isEdit && (
+      <GenericPanel header={t(intl, 'form.entityInfo', { entity: detailsEntity })}
+                    collapsible={touched ? 'disabled' : 'header'}
+                    name={'entityInfo'}>
+        <div>
+          <div label={t(intl, 'form.createdBy')}>
+            <Link to={`/admin/users/${createdBy.id}`}>{createdBy.displayName}</Link>
           </div>
-          <div>
-            <div label={intl.formatMessage({id: 'form.createdAt', defaultMessage: 'Create at'})}>{createdAt}</div>
-            <div label={intl.formatMessage({id: 'form.updatedAt', defaultMessage: 'Updated At'})}>{updatedAt}</div>
+          <div label={t(intl, 'form.updatedBy')}>
+            <Link to={`/admin/users/${updatedBy.id}`}>{updatedBy.displayName}</Link>
           </div>
-        </GenericPanel>
-    );
-  }
-}
+        </div>
+        <div>
+          <div label={t(intl, 'form.createdAt')}>{createdAt}</div>
+          <div label={t(intl, 'form.updatedAt')}>{updatedAt}</div>
+        </div>
+      </GenericPanel>
+  );
+};

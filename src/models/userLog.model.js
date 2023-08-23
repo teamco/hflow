@@ -2,8 +2,8 @@
 import dvaModelExtend from 'dva-model-extend';
 import _ from 'lodash';
 
-import { commonModel } from 'models/common.model';
-import { fbReadAll, getRef } from 'services/firebase.service';
+import { commonModel } from '@/models/common.model';
+import { fbReadAll, getRef } from '@/services/firebase.service';
 import { isLocalHost } from '@/utils/window';
 
 /**
@@ -28,7 +28,7 @@ export default dvaModelExtend(commonModel, {
        * @constant
        * @type {{forEach}}
        */
-      const users = yield call(fbReadAll, { collection: 'userLogs' });
+      const users = yield call(fbReadAll, { collectionPath: 'userLogs' });
       users.forEach(doc => {
         const _data = doc.data();
         data.push(_.merge(_data, { id: doc.id }));
@@ -49,9 +49,9 @@ export default dvaModelExtend(commonModel, {
       const { user } = yield select(state => state.authModel);
       const { namespace, eventType, duration } = payload;
 
-      const userRef = getRef({
-        collection: 'users',
-        doc: user?.uid
+      const userRef = user?.uid && getRef({
+        collectionPath: 'users',
+        document: user?.uid
       });
 
       const data = {
@@ -69,7 +69,7 @@ export default dvaModelExtend(commonModel, {
       const logExist = isLocalHost() ? null : null;
 
       // TODO (teamco): Provide user log abilities.
-      // yield call(fbAdd, { collection: 'userLogs', data, notice: false });
+      // yield call(fbAdd, { collectionPath: 'userLogs', data, notice: false });
 
       if (logExist?.docId) {
         // TODO (teamco): Do something

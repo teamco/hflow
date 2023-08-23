@@ -1,11 +1,24 @@
-import { message } from 'antd';
 import _ from 'lodash';
 import gravatar from 'gravatar';
+import { sendEmailVerification } from 'firebase/auth';
 
-import i18n from '@/utils/i18n';
-import { fbReadAll, fbReadBy, fbUpdate, firebaseAppAuth } from 'services/firebase.service';
-import { errorSaveMsg } from '@/utils/message';
-import { isAdmin } from 'services/userRoles.service';
+import {
+  analyticsLogEvent,
+  fbReadAll,
+  fbReadBy,
+  fbUpdate,
+  firebaseAppAuth
+} from '@/services/firebase.service';
+
+import {
+  errorSaveMsg,
+  errorSentVerificationEmail,
+  pendingEmailVerification,
+  successSentVerificationEmail
+} from '@/utils/message';
+import { defineInstance } from '@/utils/instance';
+
+import { isAdmin } from '@/services/userRoles.service';
 
 /**
  * @export
@@ -46,17 +59,19 @@ export const getUsers = async ({ user }) => {
    * @type {{forEach}}
    */
   const users = isAdmin(user.roles) ?
-      await fbReadAll({ collection: 'users' }) :
+      await fbReadAll({ collectionPath: 'users' }) :
       await fbReadBy({
-        collection: 'users',
+        collectionPath: 'users',
         field: 'uid',
         value: user.uid
       });
 
-  users.forEach(doc => {
+  users?.forEach?.(doc => {
     const _data = doc.data();
     data.push(_.merge(_data, { id: doc.id }));
   });
+
+  analyticsLogEvent('getUsers');
 
   return { data };
 };
@@ -77,11 +92,13 @@ export const findUser = async ({ uid, email, emailVerified, metadata }) => {
    * @constant
    * @type {{error}|firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>}
    */
-  const users = await fbReadBy({ collection: 'users', field: 'uid', value: uid });
+  const users = await fbReadBy(
+      { collectionPath: 'users', field: 'uid', value: uid });
 
   if (users?.error) {
     return { docId, data, error: users?.error };
   } else {
+    // const _data = users?.docChanges().map(item => item.doc.data());
     users?.forEach(doc => {
       const _data = doc.data();
       if (_data.uid === uid) {
@@ -106,7 +123,7 @@ export const getAllUserRoles = async () => {
    * @constant
    * @type {{forEach}}
    */
-  const roles = await fbReadAll({ collection: 'roleTypes' });
+  const roles = await fbReadAll({ collectionPath: 'roleTypes' });
   roles.forEach(doc => {
     const _data = doc.data();
     data.push({
@@ -145,7 +162,8 @@ export const forceSignOutUser = async ({ uid, email }) => {
     }
   };
 
-  await fbUpdate({ collection: 'users', doc: user.docId, data: { metadata } });
+  await fbUpdate(
+      { collectionPath: 'users', docName: user.docId, data: { metadata } });
 
   return user;
 };
@@ -164,7 +182,8 @@ export const handleUserSessionTimeout = () => {
       user && user.getIdTokenResult().then((idTokenResult) => {
         const authTime = idTokenResult.claims.auth_time * 1000;
         const sessionDurationInMilliseconds = 60 * 60 * 1000; // 60 min
-        const expirationInMilliseconds = sessionDurationInMilliseconds - (Date.now() - authTime);
+        const expirationInMilliseconds = sessionDurationInMilliseconds -
+            (Date.now() - authTime);
         // console.info(`Session will be expired in: ${expirationInMilliseconds}ms`);
         userSessionTimeout = setTimeout(async () => {
           // await firebaseAppAuth.signOut();
@@ -181,18 +200,27 @@ export const handleUserSessionTimeout = () => {
  */
 export const sendVerificationEmail = async ({ user }) => {
   const currentUser = firebaseAppAuth.currentUser;
+  const { uid, metadata } = user;
 
-  if (currentUser.uid === user.data().uid) {
-    return await currentUser.sendEmailVerification().then(async () => {
-      await message.success(i18n.t('msg:successSentVerificationEmail'));
-      return message.warning(i18n.t('msg:pendingEmailVerification'));
-    }).catch(async error => {
-      // An error happened.
-      await message.error(error.message);
-      return message.error(i18n.t('msg:errorSentVerificationEmail'));
-    });
+  if (currentUser.uid === uid) {
+
+    // Will work only through the <createUserWithEmailAndPassword>
+    if (['password', 'firebase'].includes(metadata?.providerId)) {
+      return await sendEmailVerification(currentUser).then(async () => {
+        await successSentVerificationEmail();
+        await pendingEmailVerification();
+
+      }).catch(async error => {
+        // An error happened.
+        console.error(error.message);
+        return errorSentVerificationEmail();
+      });
+    } else {
+      console.info(`Already verified by provider: ${metadata?.providerId}`);
+    }
   } else {
-    return message.warning(i18n.t('msg:errorSentVerificationEmail'));
+
+    return errorSentVerificationEmail();
   }
 };
 
@@ -205,11 +233,13 @@ export const sendVerificationEmail = async ({ user }) => {
 export const resetUserPassword = ({ user }) => {
   return firebaseAppAuth.sendPasswordResetEmail(user.email).then(async () => {
     // Email sent.
-    return message.success(i18n.t('msg:successPasswordResetEmail'));
+    // return message.success(useIntl().formatMessage(
+    //     { id: 'msg.successPasswordResetEmail', defaultMessage: 'Password Reset has been sent to provided Email' }));
   }).catch(async error => {
     // An error happened.
-    await message.error(error.message);
-    return message.error(i18n.t('msg:errorSentPasswordResetEmail'));
+    console.error(error.message);
+    // return message.error(useIntl().formatMessage(
+    //     { id: 'msg.errorSentPasswordResetEmail', defaultMessage: 'Failed to send Password Reset' }));
   });
 };
 
@@ -222,7 +252,7 @@ export const deleteFbUser = () => {
     // Update successful.
   }).catch(async error => {
     // An error happened.
-    await message.error(error.message);
+    console.error(error.message);
   });
 };
 
@@ -236,7 +266,7 @@ export const updateFbUserEmail = ({ email }) => {
     // Update successful.
   }).catch(async error => {
     // An error happened.
-    await message.error(error.message);
+    console.error(error.message);
   });
 };
 
@@ -250,27 +280,7 @@ export const updateFbUserPassword = ({ password }) => {
     // Update successful.
   }).catch(async error => {
     // An error happened.
-    await message.error(error.message);
-  });
-};
-
-/**
- * @export
- * @param profile
- */
-export const updateFbUserProfile = ({ profile = {} }) => {
-
-  /**
-   * Get current FB user.
-   * @type {{updateProfile}}
-   */
-  const currentUser = firebaseAppAuth.currentUser;
-
-  currentUser.updateProfile(...profile).then(() => {
-    // Update successful.
-  }).catch(async error => {
-    // An error happened.
-    await message.error(error.message);
+    console.error(error.message);
   });
 };
 
@@ -289,11 +299,11 @@ export const sendAuthLink = async ({ setting, email }) => {
    * <url>: The deep link to embed and any additional state to be passed along.
    * The link's domain has to be added in the Firebase Console list of authorized domains,
    * which can be found by going to the Sign-in method tab (Authentication -> Sign-in method).
-   * <android> and <ios>: The apps to use when the sign-in link is opened on an Android or iOS device. Learn more on how
-   * to configure Firebase Dynamic Links to open email action links via mobile apps.
-   * <handleCodeInApp>: Set to true. The sign-in operation has to always be completed in the app unlike other out of
-   * band email actions (password reset and email verifications). This is because, at the end of the flow, the user
-   * is expected to be signed in and their Auth state persisted within the app.
+   * <android> and <ios>: The apps to use when the sign-in link is opened on an Android or iOS device.
+   * Learn more on how to configure Firebase Dynamic Links to open email action links via mobile apps.
+   * <handleCodeInApp>: Set to true. The sign-in operation has to always be completed in the app unlike other
+   * out-of-band email actions (password reset and email verifications).
+   * This is because, at the end of the flow, the user is expected to be signed in and their Auth state persisted within the app.
    * <dynamicLinkDomain>: When multiple custom dynamic link domains are defined for a project, specify which one to
    * use when the link is to be opened via a specified mobile app (for example, example.page.link).
    * Otherwise the first domain is automatically selected.
@@ -316,13 +326,60 @@ export const sendAuthLink = async ({ setting, email }) => {
     // dynamicLinkDomain: 'example.page.link'
   };
 
-  return await firebaseAppAuth.sendSignInLinkToEmail(email, actionCodeSettings).then(async () => {
-    // The link was successfully sent. Inform the user.
-    // Save the email locally so you don't need to ask the user for it again
-    return message.success(i18n.t('msg:linkSent'));
-  }).catch(async error => {
-    await message.error(i18n.t('msg:errorLinkSend'));
-    return message.error(error.message);
-  });
+  return await firebaseAppAuth.sendSignInLinkToEmail(email, actionCodeSettings).
+      then(async () => {
+        // The link was successfully sent. Inform the user.
+        // Save the email locally so you don't need to ask the user for it again
+        // return message.success(
+        //     useIntl().formatMessage({ id: 'msg.linkSent', defaultMessage: 'The link was successfully sent' }));
+      }).
+      catch(async error => {
+        // await message.error(useIntl().formatMessage({ id: 'msg.errorLinkSend', defaultMessage: 'Failed to send link' }));
+        return console.error(error.message);
+      });
 
+};
+
+/**
+ * @export
+ * @param user
+ * @return {{uid: null, emailVerified, isAnonymous, metadata: {lastSignInTime, photoURL, creationTime, providerId, signedIn: boolean, isLocked: boolean, refreshRoles: boolean, updatedAt: number}, displayName, email}}
+ */
+export const getUserProps = ({ user = {} }) => {
+  let {
+    uid = null,
+    displayName,
+    photoURL,
+    email,
+    emailVerified,
+    isAnonymous,
+    metadata = {},
+    providerData = []
+  } = user;
+
+  let {
+    creationTime,
+    lastSignInTime,
+    providerId
+  } = metadata;
+
+  providerId = defineInstance(providerId, providerData[0]?.providerId);
+
+  return {
+    uid,
+    displayName,
+    email,
+    emailVerified,
+    isAnonymous,
+    metadata: {
+      creationTime,
+      lastSignInTime,
+      photoURL,
+      providerId,
+      signedIn: true,
+      isLocked: true,
+      refreshRoles: false,
+      updatedAt: +(new Date)
+    }
+  };
 };

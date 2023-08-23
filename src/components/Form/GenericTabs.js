@@ -1,30 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Tabs } from 'antd';
 
-const { TabPane } = Tabs;
+const GenericTabs = props => {
+  const {
+    children,
+    tabs,
+    defaultActiveKey
+  } = props;
 
-class GenericTabs extends Component {
-  render() {
-    const {
-      children,
-      tabs,
-      defaultActiveKey
-    } = this.props;
+  const _children = Array.isArray(children) ?
+      [...children] : [children];
 
-    const _children = Array.isArray(children) ?
-        [...children] : [children];
+  const items = _children.map((child, idx) => ({
+    label: tabs[idx],
+    key: idx,
+    children: child
+  }));
 
-    return (
-        <Tabs defaultActiveKey={defaultActiveKey}>
-          {_children.map((child, idx) => (
-              <TabPane tab={tabs[idx]}
-                       key={idx}>
-                {child}
-              </TabPane>
-          ))}
-        </Tabs>
-    );
-  }
-}
+  return (
+      <Tabs defaultActiveKey={defaultActiveKey} items={items}/>
+  );
+};
 
 export default GenericTabs;

@@ -1,3 +1,7 @@
+import { t } from '@/utils/i18n';
+
+import styles from '@/components/Landing/landing.module.less';
+
 /**
  * @export
  * @param roles
@@ -66,3 +70,33 @@ export const isContributor = (role) => role === 'Contributor';
  * @return {boolean}
  */
 export const isReader = (role) => role === 'Reader';
+
+/**
+ * @export
+ * @param props
+ */
+export const handleRefresh = (props) => {
+  const {
+    api,
+    intl,
+    className,
+    refreshPageIn
+  } = props;
+
+  let minutes = Math.ceil(refreshPageIn / 60);
+  let seconds = Math.ceil(refreshPageIn % 60);
+
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  seconds = seconds < 10 ? '0' + seconds : seconds;
+
+  api.warning({
+    className,
+    duration: refreshPageIn,
+    message: t(intl, 'msg.changedRoles.title'),
+    description: t(intl, 'msg.pageRefresh', { sec: minutes + ':' + seconds })
+  });
+
+  setTimeout(() => {
+    window.location.reload();
+  }, refreshPageIn * 1000);
+};

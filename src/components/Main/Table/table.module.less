@@ -1,5 +1,6 @@
 .grid {
   width: 100%;
+  padding: 20px 20px 0 20px;
 
   .action {
     margin-right: 10px;
@@ -7,18 +8,46 @@
 
   th {
     padding: 12px 20px !important;
+    font-weight: 500 !important;
 
     &:last-child {
       text-align: center !important;
     }
   }
 
+  .tags {
+    display: flex;
+    column-gap: 8px;
+    row-gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+
+    :global {
+      .ant-tag {
+        margin: 0;
+        text-align: center;
+      }
+    }
+  }
+
   :global {
+    .ant-select.ant-select-in-form-item {
+      width: auto;
+    }
+
     .ant-table-footer {
       padding: 5px 10px !important;
       text-align: right;
     }
   }
+}
+
+.name {
+  margin-left: 10px;
+}
+
+.tdCenter {
+  text-align: center;
 }
 
 .tdName {
@@ -45,9 +74,36 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  & > span {
+    margin-left: 10px;
+  }
 }
 
+.resizableHandler {
+  position: absolute;
+  right: -5px;
+  bottom: 0;
+  z-index: 1;
+  width: 5px;
+  height: 100%;
+  cursor: col-resize;
+  border-left: 2px solid #1677ff;
+  opacity: .5;
+  transition: opacity .5s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+
 :global {
+  .react-resizable {
+    position: relative;
+    background-clip: padding-box;
+  }
+
   .react-json-view {
     background-color: rgba(39, 40, 34, 0.8) !important;
     padding: 10px;

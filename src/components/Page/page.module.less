@@ -1,14 +1,26 @@
 .layout {
   width: 100%;
-  overflow: hidden;
 }
 
 .page {
   width: 100%;
+  min-height: 80vh;
+  padding: 0;
+
+  .pageContent {
+
+  }
+
+  .grid {
+  }
+
+  .card {
+  }
 
   :global {
     .ant-page-header {
       padding: 10px 10px 10px 20px;
+      background-color: #fff;
     }
 
     .ant-page-header-heading-extra {
@@ -18,5 +30,28 @@
     .ant-spin-nested-loading {
       width: 100%;
     }
+
+    .ant-spin-text {
+      display: flex !important;
+      justify-content: center;
+    }
+  }
+}
+
+.subTitle {
+  display: flex;
+  box-shadow: 1px 1px 4px -2px lightslategray;
+  background-color: #fff;
+  align-items: center;
+  padding: 12px 20px;
+  justify-content: space-between;
+
+  .title {
+    font-size: 14px;
+  }
+
+  .extra {
+    display: flex;
+    column-gap: 8px;
   }
 }

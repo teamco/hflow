@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { DatePicker, Divider, Input, InputNumber, Select, Switch } from 'antd';
-import { useIntl } from 'umi';
-import moment from 'moment';
+import { Input, InputNumber, Select } from 'antd';
+import { useIntl } from '@umijs/max';
 
-import FormComponents from '@/components/Form';
-import Duration from '@/components/Price/Range/Duration';
+import FormComponents, { getFieldValue, requiredField } from '@/components/Form';
+import SwitchButton from '@/components/Buttons/switch.button';
 
 import { complexFormKey, updateComplexForm } from '@/utils/form';
-import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 import { layout } from '@/utils/layout';
 import { effectHook } from '@/utils/hooks';
+import { t } from '@/utils/i18n';
+import { stub } from '@/utils/function';
+import { prettifyCamelCase } from '@/utils/string';
+
+import Duration from '@/components/Price/Range/Duration';
+
+import styles from './rebate.less';
 
 const { Option } = Select;
 const { GenericPanel, HiddenField } = FormComponents;
@@ -24,62 +29,94 @@ const DISCOUNT_TYPES = ['%', 'currency'];
  */
 const Discount = props => {
   const intl = useIntl();
+
   const {
     formRef,
     disabled,
+    discountHeader,
     collapsed = false,
+    trialed = false,
+    setIsTrialed = stub,
     priceMin = 1,
     prefix = [],
+    expectedOriginalPrice,
     namespace = 'discount',
+    modelName,
     discountTypes = DISCOUNT_TYPES,
-    durationTypes = [],
     currencies = [],
-    children
+    durationTypes = [],
+    children,
+    readOnlyFields = null,
+    loading,
+    header = t(intl, 'panel.priceInfo', { type: '' }),
+    childrenColProps = layout.fullColumn,
+    renderScheduler = stub
   } = props;
-
-  const { header = intl.formatMessage({id: 'panel.priceInfo', defaultMessage: 'Trial Period'}) } = props;
 
   const wrapper = formRef.getFieldValue(prefix[0]);
 
-  const discounted = !!complexFormKey(wrapper, 'discounted', false);
-  const discount = complexFormKey(wrapper, namespace, false);
-  const currency = complexFormKey(wrapper, 'currency', false) || currencies[0];
+  if (!wrapper) {
+    throw new Error(`Add initial values for: ${prefix[0]}`);
+  }
+
+  const discounted = !!complexFormKey('discounted', wrapper, false);
+  const discount = complexFormKey(namespace, wrapper, false);
+  const currency = complexFormKey('currency', wrapper, false) || currencies[0];
+  const isTrialedChecked = getFieldValue(formRef, 'trialed');
 
   /**
    * @constant
    * @param {string} value
-   * @return {string}
+   * @return {string|null}
    * @private
    */
   const _handleDiscountType = value => ['Percent', '%'].includes(value) ? '%' : currency;
 
-  /**
-   * @constant
-   * @type {string}
-   * @private
-   */
-  const discountType = _handleDiscountType(discount?.type);
-
   const [isDiscounted, setIsDiscounted] = useState(discounted);
+  const [isCollapsed, setIsCollapsed] = useState(collapsed);
+  const [discountType, setDiscountType] = useState(_handleDiscountType(discount?.type));
 
   /**
    * @constant
    * @param {string} value
    */
   const handleDiscountTypeUpdate = (value) => {
-    value = _handleDiscountType(value);
-    updateComplexForm(formRef, prefix, namespace, { type: value });
+    const _value = _handleDiscountType(value);
+    setDiscountType(_value);
+
+    updateComplexForm(formRef, prefix, namespace, { type: _value });
   };
 
   effectHook(() => {
-    handleDisabled(discounted);
+    handleDiscountTypeUpdate(discount?.type);
+    setIsCollapsed(collapsed);
+  });
+
+  effectHook(() => {
+    handleDiscountDisabled(discounted);
   }, [discounted]);
+
+  effectHook(() => {
+    updateComplexForm(formRef, prefix, 'originalPrice', expectedOriginalPrice);
+  }, [expectedOriginalPrice]);
+
+  effectHook(() => {
+    handleTrialToggling(isTrialedChecked);
+  }, [isTrialedChecked]);
 
   /**
    * @constant
    * @param {boolean} checked
    */
-  const handleDisabled = checked => {
+  const handleTrialToggling = checked => {
+    setIsTrialed(checked);
+  };
+
+  /**
+   * @constant
+   * @param {boolean} checked
+   */
+  const handleDiscountDisabled = checked => {
     setIsDiscounted(checked);
   };
 
@@ -93,15 +130,18 @@ const Discount = props => {
 
   /**
    * @constant
-   * @type {JSX.Element}
+   * @param {ValueType|null|string} value
+   * @type {function(*)}
    */
-  const selectDiscountBefore = (
+  const selectDiscountBefore = (value) => (
       <Select style={{ width: 90 }}
-              value={discountType}
+              value={value}
               disabled={disabled || !isDiscounted}
               onChange={handleDiscountTypeUpdate}>
         {discountTypes.map((type, idx) => (
-            <Option key={idx} value={type}>{_handleDiscountType(type)}</Option>
+            <Option key={idx} value={type}>
+              {_handleDiscountType(type)}
+            </Option>
         ))}
       </Select>
   );
@@ -121,75 +161,105 @@ const Discount = props => {
       </Select>
   );
 
+  /**
+   * @constant
+   * @param field
+   * @returns {boolean}
+   */
+  const isReadOnlyField = (field) => {
+    let isField = false;
+    if (readOnlyFields && readOnlyFields.length) {
+      isField = readOnlyFields.includes(field);
+    }
+    return isField;
+  };
+
+  const _discountPanelHeader = `${prettifyCamelCase(discountHeader)}.price.discount`.toLowerCase();
+
   return (
       <GenericPanel header={header}
+                    className={styles.discount}
                     name={namespace}
-                    defaultActiveKey={collapsed ? null : [namespace]}>
-        <div colProps={{ xs: 24, sm: 12, md: 12, lg: 8, xl: 6, xxl: 4 }}>
+                    defaultActiveKey={isCollapsed ? null : [namespace]}
+                    extra={trialed && (
+                        <SwitchButton name={'trialed'}
+                                      label={t(intl, 'price.trialed')}
+                                      disabled={disabled}
+                                      form={formRef}
+                                      loading={loading}
+                                      modelName={modelName}
+                                      onChange={handleTrialToggling}/>
+                    )}>
+        <div colProps={layout.halfColumn}>
           <InputNumber addonBefore={selectCurrencyBefore}
-                       label={intl.formatMessage({id: 'price.originalPrice', defaultMessage: 'Original Price'})}
+                       label={t(intl, 'price.originalPrice')}
                        name={[...prefix, 'originalPrice']}
                        form={formRef}
                        min={priceMin}
+                       readOnly={isReadOnlyField('originalPrice')}
                        disabled={disabled}
-                       config={{ rules: [{ required: true }] }}/>
-          <Input label={intl.formatMessage({id: 'price.discountedPrice', defaultMessage: 'Discounted Price'})}
+                       config={{
+                         rules: [
+                           requiredField(intl, t(intl, 'price.originalPrice'))
+                         ]
+                       }}/>
+          <Input label={t(intl, 'price.discountedPrice')}
                  name={[...prefix, 'discountedPrice']}
                  form={formRef}
                  min={priceMin}
                  readOnly={true}
                  bordered={false}
-                 placeholder={intl.formatMessage({id: 'price.discountedCalc', defaultMessage: 'Will be Calculated'})}
+                 placeholder={t(intl, 'price.discountedCalc')}
                  disabled={disabled}/>
         </div>
+        <div colProps={layout.halfColumn}>
+          <Duration form={formRef}
+                    label={t(intl, 'price.duration')}
+                    disabled={disabled}
+                    prefix={[...prefix]}
+                    namespace={'paymentDuration'}
+                    required={true}
+                    durationTypes={durationTypes}/>
+        </div>
+        {children && (<div colProps={childrenColProps}>{children}</div>)}
         <div colProps={layout.fullColumn}>
-          <Divider orientation={'left'}>{intl.formatMessage({id: 'subscription.discount', defaultMessage: 'Discount'})}</Divider>
-        </div>
-        <div>
-          <Switch label={intl.formatMessage({id: 'price.discounted', defaultMessage: 'Is Discounted?'})}
-                  disabled={disabled}
-                  form={formRef}
-                  onChange={handleDisabled}
-                  config={{ valuePropName: 'checked' }}
-                  checkedChildren={intl.formatMessage({id: 'actions.yes', defaultMessage: 'Yes'})}
-                  unCheckedChildren={intl.formatMessage({id: 'actions.no', defaultMessage: 'No'})}
-                  name={[...prefix, 'discounted']}/>
-        </div>
-        <div colProps={{ xs: 24, sm: 12, md: 12, lg: 8, xl: 8, xxl: 8 }}>
-          <InputNumber addonBefore={selectDiscountBefore}
-                       label={intl.formatMessage({id: 'price.discount', defaultMessage: 'Is Discounted?'})}
-                       name={[...prefix, namespace, 'value']}
-                       form={formRef}
-                       min={1}
-                       disabled={disabled || !isDiscounted}
-                       config={{ rules: [{ required: isDiscounted }] }}/>
-          <DatePicker name={[...prefix, namespace, 'startedAt']}
-                      form={formRef}
-                      format={DEFAULT_DATE_FORMAT}
-                      disabledDate={current => current && current < moment().endOf('day')}
-                      disabled={disabled || !isDiscounted}
-                      config={{ rules: [{ required: isDiscounted }] }}
-                      label={intl.formatMessage({id: 'price.discountStartedAt', defaultMessage: 'Started at'})}/>
+          <GenericPanel header={t(intl, 'price.discountInfo', { header: discountHeader })}
+                        name={_discountPanelHeader}
+                        collapsible={isDiscounted ? 'header' : 'disabled'}
+                        defaultActiveKey={isDiscounted ? [_discountPanelHeader] : null}
+                        extra={(
+                            <SwitchButton name={[...prefix, 'discounted']}
+                                          label={t(intl, 'price.discounted')}
+                                          disabled={disabled}
+                                          form={formRef}
+                                          style={{ color: '#000' }}
+                                          loading={loading}
+                                          onChange={handleDiscountDisabled}/>
+                        )}>
+            <div colProps={layout.halfColumn}>
+              <InputNumber addonBefore={selectDiscountBefore(discountType)}
+                           label={t(intl, 'price.discount')}
+                           name={[...prefix, namespace, 'value']}
+                           form={formRef}
+                           min={1}
+                           disabled={disabled || !isDiscounted}
+                           config={{ rules: [{ required: isDiscounted }] }}/>
+            </div>
+            <div colProps={layout.fullColumn}>
+              {renderScheduler()}
+            </div>
+          </GenericPanel>
         </div>
         <div>
           <HiddenField form={formRef}
                        name={[...prefix, namespace, 'type']}
-                       value={discountType}
+                       data={discountType}
                        disabled={disabled || !isDiscounted}/>
           <HiddenField name={[...prefix, 'currency']}
                        form={formRef}
-                       value={currency}
+                       data={currency}
                        disabled={disabled}/>
         </div>
-        <div>
-          <Duration form={formRef}
-                    label={intl.formatMessage({id: 'price.discountDuration', defaultMessage: 'Discount Duration'})}
-                    disabled={disabled || !isDiscounted}
-                    prefix={[...prefix, namespace]}
-                    required={isDiscounted}
-                    durationTypes={durationTypes}/>
-        </div>
-        {children && (<div colProps={layout.fullColumn}>{children}</div>)}
       </GenericPanel>
   );
 };

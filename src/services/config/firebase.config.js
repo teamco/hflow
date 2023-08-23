@@ -11,5 +11,5 @@ export const firebaseConfig = {
   storageBucket: 'welcome-home-24302.appspot.com',
   messagingSenderId: '900622764469',
   appId: '1:900622764469:web:b00624f504c0acef5db1fc',
-  measurementId: 'G-0584C1CZWF'
+  measurementId: "G-EY3MFW1ZM4"
 };

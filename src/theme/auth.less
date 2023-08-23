@@ -1,0 +1,150 @@
+.auth_bg() {
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url('/assets/login_bg.jpg');
+    background-size: cover;
+    opacity: 0.3;
+  }
+}
+
+.auth_gradient() {
+  background: linear-gradient(-45deg,
+  rgba(238, 119, 82, 0.5),
+  rgba(231, 60, 126, 0.6),
+  rgba(35, 166, 213, 0.7),
+  rgba(35, 213, 171, 0.8));
+  background-size: 400% 400%;
+  animation: animate-bg 15s ease infinite;
+}
+
+.auth_animation() {
+  @keyframes animate-bg {
+    0% {
+      background-position: 0 50%
+    }
+
+    50% {
+      background-position: 100% 50%
+    }
+
+    100% {
+      background-position: 0 50%
+    }
+  }
+}
+
+.auth_logo() {
+  .logo {
+    display: flex;
+    justify-content: center;
+    padding: 24px 0;
+
+    img {
+      width: 64px;
+    }
+  }
+}
+
+.auth_buttons() {
+  .loginBtns {
+    button {
+      width: 100%;
+    }
+  }
+}
+
+.auth_error() {
+  .error {
+    :global {
+      .ant-modal-content {
+        .ant-modal-title {
+          font-weight: 500;
+
+          svg {
+            width: 16px;
+            height: 16px;
+            color: red;
+            margin-right: 10px;
+            position: relative;
+            top: 1px;
+          }
+        }
+
+        .ant-modal-body {
+          padding: 16px 24px;
+
+          span {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.auth_header() {
+  .modalHeader {
+    margin-bottom: -15px;
+
+    div, h4, h6 {
+      text-align: center;
+    }
+
+    .icon {
+      margin-top: 10px;
+      margin-bottom: 10px;
+
+      svg {
+        height: 40px;
+        width: 40px;
+        color: lightslategray;
+      }
+    }
+  }
+}
+
+.auth_pws_strength() {
+  .passwordStrength {
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.08, 0.82, 0.17, 1) 0s;
+    top: -15px;
+    width: 80%;
+
+    span {
+      position: absolute;
+      top: 3px;
+      right: -50px;
+      text-transform: lowercase;
+      font-variant: small-caps;
+    }
+
+    :global {
+      .ant-progress-inner {
+        margin-bottom: 0;
+        background-image: linear-gradient(135deg, transparent, transparent 33%, rgba(0, 0, 0, 0.1) 33%, rgba(0, 0, 0, 0.1) 66%, transparent 66%);
+        background-size: 50px 25px;
+        box-shadow: 0 5px 5px -5px #333 inset;
+      }
+    }
+  }
+}
+
+.auth_overwrites() {
+  :global {
+    .ant-modal-content {
+      box-shadow: none;
+    }
+
+    input.ant-input {
+      margin-bottom: 4px;
+    }
+
+    .ant-input-prefix {
+      margin-inline-end: 8px;
+    }
+  }
+}

@@ -1,0 +1,148 @@
+@import "@/theme/variables.less";
+
+.profileEmailsForm {
+  margin: @main-margin 0;
+
+  .formPanel();
+
+  &.empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .emailsWrapper {
+    padding: 0;
+  }
+
+  .group {
+    display: flex;
+    align-items: center;
+
+    span[aria-label="question-circle"] {
+      border-top: 1px solid @main-border-color;
+      border-bottom: 1px solid @main-border-color;
+      border-left: 1px solid @main-border-color;
+      display: flex;
+      height: 32px;
+      padding: 0 8px;
+      cursor: help;
+    }
+
+    button[role="switch"] {
+      position: relative;
+      border-radius: 12px;
+      margin-right: 8px;
+      min-width: 75px;
+
+      &::before {
+        content: "";
+        border-top: 1px solid @main-border-color;
+        width: calc(100% + 8px);
+        display: block;
+        position: absolute;
+        top: -5px;
+      }
+
+      &::after {
+        content: "";
+        border-bottom: 1px solid @main-border-color;
+        width: calc(100% + 8px);
+        display: block;
+        position: absolute;
+        bottom: -5px;
+      }
+    }
+  }
+
+  .helper {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    cursor: help;
+  }
+
+  .emails {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid @main-border-color;
+    border-radius: 8px;
+
+    li {
+
+      .listPanel();
+
+      flex-direction: column;
+
+      h2 {
+        column-gap: 24px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-direction: column-reverse;
+        row-gap: 8px;
+        padding-bottom: 12px;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 24px;
+
+        div {
+          display: flex;
+          flex-direction: row;
+
+          @media (max-width: 900px) {
+            flex-direction: column;
+            row-gap: 8px;
+          }
+        }
+      }
+
+      svg {
+        margin-left: 8px;
+        cursor: help;
+      }
+    }
+  }
+}
+
+.itemLabel {
+  margin: 0;
+  padding: 0 0 8px;
+  white-space: initial;
+  text-align: start;
+  display: inline-block;
+  flex-grow: 0;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
+
+  label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    height: 32px;
+    color: rgba(0, 0, 0, 0.88);
+    font-size: 14px;
+  }
+
+  p {
+    display: flex;
+    flex-direction: column;
+    
+    strong {
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      margin-right: 8px;
+      color: @link-primary;
+    }
+  }
+}
+
+.tooltipType {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}

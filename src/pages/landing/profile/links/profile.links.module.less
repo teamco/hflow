@@ -1,0 +1,76 @@
+@import "@/theme/variables.less";
+
+.profileLinksForm {
+  margin: @main-margin;
+
+  .formPanel();
+
+  &.empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .helper {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    cursor: help;
+  }
+
+  .linkSection {
+    padding: 0 !important;
+
+    .linkSectionWrapper {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border: 1px solid @main-border-color;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+
+      li {
+        .listPanel();
+
+        justify-content: flex-start;
+        flex-direction: column;
+        row-gap: 12px;
+
+        > div {
+          &:first-child {
+            padding-right: 40px;
+            overflow: hidden;
+            word-break: break-all;
+          }
+
+          &:last-child {
+            align-items: flex-start;
+            justify-content: center;
+          }
+        }
+
+        a, p {
+          margin-top: 12px;
+        }
+      }
+    }
+  }
+
+  :global {
+    .ant-spin-nested-loading {
+      width: 100%;
+    }
+
+    .ant-form-item {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.profileLinkFormSection {
+  .form {
+    padding: 24px 0;
+  }
+}

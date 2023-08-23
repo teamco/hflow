@@ -1,16 +1,18 @@
 import React from 'react';
-import { history } from 'umi';
+import { history } from '@umijs/max';
+import classnames from 'classnames';
 
 import styles from '@/components/Logo/logo.module.less';
 
 const logo = props => {
-  const { imgSrc, title, description, url } = props;
+  const { imgSrc, title, description, url, className } = props;
+
   return (
-      <div className={styles.logo}
-           onClick={() => history.replace(url)}>
-        <img src={imgSrc} alt={title}/>
-        <h3>{title}</h3>
-        <h6>{description}</h6>
+      <div className={classnames(styles.logo, className)}
+           onClick={() => url ? history.replace(url) : false}>
+        {imgSrc && (<img src={imgSrc} alt={title}/>)}
+        {title && (<h3>{title}</h3>)}
+        {description && (<h6>{description}</h6>)}
       </div>
   );
 };

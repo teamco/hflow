@@ -13,11 +13,14 @@ const defaultSettings = {
 
 /**
  * @export
- * @param watch
- * @param settings
+ * @param {boolean} [isActive]
+ * @param {boolean} [watch]
+ * @param [settings]
  * @return {{error: unknown}}
  */
-export const useGeolocation = (watch = false, settings = defaultSettings) => {
+export const useGeolocation = (isActive = false, watch = false, settings = defaultSettings) => {
+  if (!isActive) return {};
+
   const { geolocation } = window.navigator;
 
   const [location, setLocation] = useState({});

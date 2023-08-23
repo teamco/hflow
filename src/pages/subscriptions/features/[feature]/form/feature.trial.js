@@ -1,8 +1,12 @@
 import React from 'react';
-import { Divider } from 'antd';
+import { useIntl } from '@umijs/max';
 
 import Rebate from '@/components/Price/Rebate';
 import Duration from '@/components/Price/Range/Duration';
+
+import { stub } from '@/utils/function';
+import { t } from '@/utils/i18n';
+import { layout } from '@/utils/layout';
 
 /**
  * @export
@@ -11,30 +15,44 @@ import Duration from '@/components/Price/Range/Duration';
  * @constructor
  */
 const FeatureTrial = (props) => {
+  const intl = useIntl();
+
   const {
     formRef,
     disabled,
+    loading,
     durationTypes = [],
     currencies = [],
-    discountTypes
+    discountTypes,
+    expectedOriginalPrice = 0,
+    readOnlyFields,
+    onOpenSiderPanel = stub
   } = props;
+
+  const headerTitle = t(intl, 'panel.trialPriceInfo');
 
   return (
       <Rebate.Discount formRef={formRef}
                        disabled={disabled}
-                       header={intl.formatMessage({id: 'panel.trialPriceInfo', defaultMessage: 'Trial Period'})}
                        prefix={['trialPeriod', 'price']}
+                       header={t(intl, 'panel.priceInfo', { type: t(intl, 'price.trial') })}
+                       discountHeader={headerTitle}
+                       onOpenSiderPanel={onOpenSiderPanel}
+                       loading={loading}
                        namespace={'discount'}
-                       priceMin={0}
                        currencies={currencies}
+                       readOnlyFields={readOnlyFields}
+                       priceMin={0}
+                       childrenColProps={layout.halfColumn}
+                       expectedOriginalPrice={expectedOriginalPrice}
                        durationTypes={durationTypes}
                        discountTypes={discountTypes}>
-        <Divider orientation={'left'}>{intl.formatMessage({id: 'price.trial', defaultMessage: 'Is Trialed?'})}</Divider>
         <Duration form={formRef}
-                  label={intl.formatMessage({id: 'price.trialDuration', defaultMessage: 'Trial Period Duration'})}
+                  label={t(intl, 'price.trialDuration')}
                   disabled={disabled}
                   prefix={['trialPeriod']}
                   required={true}
+                  loading={loading}
                   durationTypes={durationTypes}/>
       </Rebate.Discount>
   );

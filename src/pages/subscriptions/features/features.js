@@ -1,19 +1,22 @@
-import React from 'react';
-import { Button, PageHeader } from 'antd';
-import { AppstoreAddOutlined, ControlOutlined } from '@ant-design/icons';
-import { useIntl } from 'umi';
-import Page from '@/components/Page';
+import React, { useRef } from 'react';
+import { ControlOutlined } from '@ant-design/icons';
+import { useIntl } from '@umijs/max';
+
+import Page from '@/components/Page/page.connect';
 import Main from '@/components/Main';
-import ExportButton from '@/components/Buttons/export.button';
+import { SubHeader } from '@/components/Page/page.subheader';
 
-import { Can } from '@/utils/auth/can';
+import { t } from '@/utils/i18n';
 import { effectHook } from '@/utils/hooks';
+import { componentAbilities } from '@/utils/auth/component.setting';
 
-import { expandableFeature, metadata } from '@/pages/subscriptions/features/feature.metadata';
+import { expandableFeature, metadata } from '@/pages/subscriptions/features/features.metadata';
 
-import styles from 'pages/subscriptions/features/features.module.less';
+import styles from './features.module.less';
 
 const { Table } = Main;
+
+const MODEL_NAME = 'featureModel';
 
 /**
  * @export
@@ -22,12 +25,14 @@ const { Table } = Main;
  */
 export const features = props => {
   const intl = useIntl();
+
   const {
     authModel,
     featureModel,
     loading,
     onQuery,
-    onNew
+    onNew,
+    onDeleteFeature
   } = props;
 
   const {
@@ -37,59 +42,66 @@ export const features = props => {
 
   const tableProps = {
     pagination: false,
-    expandable: expandableFeature({ t })
+    expandable: expandableFeature({ intl })
   };
 
   effectHook(() => {
-    onQuery();
+    authModel.user && onQuery();
   }, [authModel.user]);
 
   const subTitle = (
       <>
         <ControlOutlined style={{ marginRight: 10 }}/>
-        {intl.formatMessage({id: 'panel.featureConfig', defaultMessage: 'Feature Configuration'})}
+        {t(intl, 'panel.featureConfig')}
       </>
   );
 
-  const { ability } = authModel;
   const component = 'features';
-  const disabled = ability.cannot('update', component);
+  const {
+    ability,
+    disabled,
+    canUpdate,
+    canDelete,
+    canExport
+  } = componentAbilities(authModel, component, true);
 
-  const userProps = {
+  const featuresProps = {
     loading,
-    ability
+    ability,
+    disabled,
+    canUpdate,
+    canDelete,
+    onDeleteFeature
+  };
+
+  const refTarget = useRef(null);
+
+  const pageHeaderProps = {
+    subTitle,
+    loading,
+    disabled,
+    MODEL_NAME,
+    component,
+    actions: {
+      exportBtn: { refTarget, data, disabled: !canExport },
+      newBtn: { onClick: onNew, spinOn: [`${MODEL_NAME}/newFeature`] },
+      closeBtn: false,
+      saveBtn: false,
+      menuBtn: false
+    }
   };
 
   return (
       <Page touched={touched}
             component={component}
-            spinEffects={[
-              'featureModel/query',
-              'featureModel/prepareToSave'
-            ]}>
+            spinEffects={[`${MODEL_NAME}/query`]}>
         <div className={styles.featureWrapper}>
-          <PageHeader ghost={false}
-                      subTitle={subTitle}
-                      extra={[
-                        <ExportButton key={'export'}
-                                      disabled={disabled}
-                                      component={component}
-                                      json={data}/>,
-                        <Can I={'create'} a={component} key={'add'}>
-                          <Button size={'small'}
-                                  loading={loading.effects['featureModel/newFeature']}
-                                  disabled={disabled}
-                                  icon={<AppstoreAddOutlined/>}
-                                  onClick={onNew}
-                                  type={'primary'}>
-                            {intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
-                          </Button>
-                        </Can>
-                      ]}>
-          </PageHeader>
-          <Table data={data}
-                 {...tableProps}
-                 {...metadata({ ...userProps })} />
+          <SubHeader {...pageHeaderProps}/>
+          <div ref={refTarget}>
+            <Table data={data}
+                   {...tableProps}
+                   {...metadata({ ...featuresProps })} />
+          </div>
         </div>
       </Page>
   );

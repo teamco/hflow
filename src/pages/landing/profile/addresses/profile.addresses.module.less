@@ -1,0 +1,74 @@
+@import "@/theme/variables.less";
+
+@preview-width: 150px;
+
+.profileAddressesForm {
+  margin: @main-margin;
+
+  .formPanel();
+
+  &.empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .helper {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    cursor: help;
+  }
+
+  .addressSection {
+    padding: 0 !important;
+
+    .addressSectionWrapper {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border: 1px solid @main-border-color;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+
+      li {
+
+        .listPanel();
+
+        .tagType {
+        }
+
+        .address {
+          margin: 12px 4px;
+          display: flex;
+          flex-direction: column;
+          row-gap: 8px;
+
+          span {
+            margin: 0 !important;
+          }
+        }
+      }
+    }
+  }
+
+  :global {
+    .ant-spin-nested-loading {
+      width: 100%;
+    }
+
+    .ant-form-item {
+      margin-bottom: 0;
+    }
+
+    .ant-divider-horizontal {
+      margin: 0;
+    }
+  }
+}
+
+.profileAddressFormSection {
+  transition: @main-transition;
+}

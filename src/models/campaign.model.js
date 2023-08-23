@@ -1,43 +1,57 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
+import { commonModel } from '@/models/common.model';
+import { isNew } from '@/services/common.service';
+import { detailsInfo } from '@/services/cross.model.service';
+import {
+  addCampaign,
+  getAllCampaigns,
+  getCampaign,
+  updateCampaign,
+  deleteCampaign
+} from '@/services/campaigns.service';
+import { history } from '@umijs/max';
+import dayjs from 'dayjs';
 
-import { commonModel } from 'models/common.model';
-import { isNew } from 'services/common.service';
-import { detailsInfo } from 'services/cross.model.service';
-import { getRef } from 'services/firebase.service';
-import { addCampaign, getAllCampaigns, getCampaign, updateCampaign } from 'services/campaigns.service';
-import { history } from 'umi';
-import i18n from '@/utils/i18n';
+import { getAllSubscriptions, getSubscription } from '@/services/subscriptions.service';
+import { addFeature, getFeatures, updateFeature } from '@/services/features.service';
+import { definePrice, defineTrialed } from '@/services/price.service';
+
 import { monitorHistory } from '@/utils/history';
 import { errorSaveMsg } from '@/utils/message';
-import { getAllSubscriptions } from 'services/subscriptions.service';
-import { getFeatures } from 'services/features.service';
 import { setAs } from '@/utils/object';
-import moment from 'moment';
-import { dateFormat } from '@/utils/timestamp';
+import { dateFormat, DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
 
 const DEFAULT_STATE = {
   campaigns: [],
+  schedulers: {},
   subscriptions: [],
+  typeSubscriptionsMap: {},
   data: [],
   currencies: [],
   durationTypes: [],
-  featureTypes: []
+  featureTypes: [],
+  schedulerTypes: {
+    sale: 'saleScheduler',
+    discount: 'discountScheduler'
+  }
 };
 
 const BASE_URL = '/admin/campaigns';
+const COMPONENT_NAME = 'campaigns';
+const MODEL_NAME = 'campaignModel';
 
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
-  namespace: 'campaignModel',
+  namespace: MODEL_NAME,
   state: {
     ...DEFAULT_STATE
   },
   subscriptions: {
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, 'campaignModel');
+      monitorHistory({ history, dispatch }, MODEL_NAME);
     },
     setup({ dispatch }) {
       // TODO (teamco): Do something.
@@ -49,49 +63,73 @@ export default dvaModelExtend(commonModel, {
       const { token } = yield select(state => state.authModel);
       const { data = [] } = yield call(getAllCampaigns, { token });
 
-      yield put({ type: 'updateState', payload: { data } });
+      if (data?.error) return false;
+
+      yield put({ type: 'updateState', payload: { campaigns: data } });
     },
 
-    * campaignSubscriptions({ payload }, { put, call, select }) {
+    * campaignSubscriptions({ payload = {} }, { put, call, select }) {
       const { token } = yield select(state => state.authModel);
 
-      const { type = 'Business' } = payload || {};
-      const { data: subscriptions = [] } = yield call(getAllSubscriptions, { token });
-      const { data: features = [] } = yield call(getFeatures, { type, token });
+      const { data: subscriptions } = yield call(getAllSubscriptions, { token });
+      const { data: features } = yield call(getFeatures, { token });
 
-      const subscriptionFeatures = subscriptions.map((item) => {
-        const prefsNotIncluded = features.filter(filterPref => {
-          return !item.featuresByRef.includes(filterPref.id);
+      let subscriptionTypes = [];
+      let subscriptionFeatures = [];
+      let typeSubscriptionsMap = new Map();
+
+      if (!subscriptions || !features) {
+
+        // TODO (teamco): Handle error.
+
+      } else {
+
+        subscriptions?.forEach?.((item) => {
+          if (!subscriptionTypes?.includes(item.type)) {
+            subscriptionTypes.push(item.type);
+          }
         });
 
-        return {
-          type: item.type,
-          features: prefsNotIncluded,
-          id: item.id,
-          featureType: item.featureType
-        };
-      });
+        subscriptionTypes?.forEach?.((type) => {
+          typeSubscriptionsMap.set(type, subscriptions.filter(item => item.type === type));
+        });
 
-      yield put({
-        type: 'updateState',
-        payload: { subscriptions: subscriptionFeatures }
-      });
+        subscriptionFeatures = subscriptions.map((item) => {
+          const prefsNotIncluded = features.filter(feature => {
+            return !item?.featuresByRef?.includes(feature.id) && item?.featureType === feature?.type;
+          });
 
-    },
-
-    * newCampaign({ payload }, { put }) {
-      yield put({ type: 'cleanForm' });
-
-      history.push(`/admin/campaigns/new`);
+          return {
+            type: item.type,
+            name: item.name,
+            features: prefsNotIncluded,
+            id: item.id,
+            featureType: item.featureType,
+            translateKeys: item.translateKeys
+          };
+        });
+      }
 
       yield put({
         type: 'updateState',
         payload: {
-          ...DEFAULT_STATE,
-          ...{
-            isEdit: false,
-            touched: false
-          }
+          subscriptions: subscriptionFeatures,
+          typeSubscriptionsMap
+        }
+      });
+    },
+
+    * newCampaign({ payload }, { put }) {
+      yield put({ type: 'schedulerModel/updateState', payload: { assignedSchedulers: [] } });
+      yield put({ type: 'updateState', payload: { schedulers: {} } });
+
+      yield put({
+        type: 'handleNew',
+        payload: {
+          component: COMPONENT_NAME,
+          BASE_URL,
+          state: DEFAULT_STATE,
+          selected: 'selectedCampaign'
         }
       });
     },
@@ -102,17 +140,25 @@ export default dvaModelExtend(commonModel, {
 
       if (isNew(campaignId)) {
         // TODO (teamco): Do something.
+        yield put({ type: 'newCampaign' });
+
       } else if (ability.can('read', 'campaigns')) {
 
         const campaign = yield call(getCampaign, { id: campaignId, token });
-        yield put({ type: 'campaignSubscriptions', payload: { type: 'Business' } });
 
         if (campaign.exists) {
-          const { data: { saleInfo } } = campaign;
+
+          history.push(`${BASE_URL}/${campaignId}`);
+
+          yield put({ type: 'campaignSubscriptions' });
+
+          const { data: { saleInfo, price, trialPeriod, trialed } } = campaign;
 
           const selectedCampaign = {
             ...campaign.data,
-            saleInfo: [moment(saleInfo.startedAt), moment(saleInfo.expiredAt)]
+            saleInfo: [dayjs(saleInfo.startedAt), dayjs(saleInfo.expiredAt)],
+            trialPeriod: { ...defineTrialed(trialed, trialPeriod, false) },
+            price: { ...definePrice(price, false) }
           };
 
           yield put({ type: 'updateState', payload: { selectedCampaign } });
@@ -126,33 +172,31 @@ export default dvaModelExtend(commonModel, {
             _features[pref] = true;
           });
 
+          const subscription = yield call(getSubscription, { id: _campaign.subscriptionRef, token });
+          let subscriptionType = '';
+          let subscriptionTitle = '';
+          if (subscription.exists) {
+            subscriptionType = subscription.data.type;
+            subscriptionTitle = subscription.data.translateKeys?.title;
+          }
+
           const formData = {
             featuresByRef: _campaign.featuresByRef,
             metadata: _campaign.metadata,
             subscriptionRef: _campaign.subscriptionRef,
-            type: _campaign.subscriptionRef,
-            price: {
-              currency: 'USD',
-              discount: {
-                type: '%',
-                value: 1,
-                startedAt: moment(saleInfo.startedAt),
-                discounted: true,
-                originalPrice: 1,
-                duration: {
-                  period: 1,
-                  type: 'Month'
-                }
-              }
-            },
+            subscriptionType,
+            subscription: subscriptionTitle,
+            price: _campaign.price,
+            trialPeriod: { ...defineTrialed(_campaign.trialed, _campaign.trialPeriod, false) },
             saleInfo: _campaign.saleInfo,
-            translateKeys: _campaign.translateKeys
+            translateKeys: _campaign.translateKeys,
+            trialed: _campaign.trialed
           };
 
           return yield put({
             type: 'toForm',
             payload: {
-              model: 'campaignModel',
+              model: MODEL_NAME,
               form: { ...formData, features: { ..._features } }
             }
           });
@@ -167,61 +211,72 @@ export default dvaModelExtend(commonModel, {
       const { campaign } = params;
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(campaign) } });
-      yield put({ type: 'getSimpleEntity', payload: { doc: 'currencies' } });
-      yield put({ type: 'getSimpleEntity', payload: { doc: 'durationTypes' } });
-      yield put({ type: 'getSimpleEntity', payload: { doc: 'featureTypes' } });
+      yield put({ type: 'getSimpleEntity', payload: { docName: 'currencies' } });
+      yield put({ type: 'getSimpleEntity', payload: { docName: 'durationTypes' } });
+      yield put({ type: 'getSimpleEntity', payload: { docName: 'featureTypes' } });
       yield put({ type: 'validateCampaign', payload: { campaignId: campaign } });
+      yield put({ type: 'updateLocales', payload: { MODEL_NAME } });
     },
 
-    * prepareToSave({ payload, params }, { call, select, put }) {
-      const { user, ability, token } = yield select(state => state.authModel);
+    * prepareToSave({ payload, params }, { select, put }) {
+      const { user } = yield select(state => state.authModel);
       const { selectedCampaign, isEdit } = yield select(state => state.campaignModel);
       const {
         price,
-        subscriptionType,
         featuresByRef,
-        picUrl,
-        type,
+        subscriptionRef,
         translateKeys: {
           title,
           description = setAs(description, null)
         },
         tags = setAs(tags, []),
-        saleInfo
+        saleInfo,
+        trialPeriod,
+        trialed
       } = payload;
 
-      if (user && ability.can('update', 'campaign')) {
+      const metadata = {
+        ...selectedCampaign?.metadata,
+        updatedAt: dateFormat(new Date()),
+        updatedByRef: user.id
+      };
 
-        const metadata = {
-          ...selectedCampaign?.metadata,
-          updatedAt: +(new Date).toISOString(),
-          updatedByRef: user.id
-        };
+      const { discounted } = price;
 
-        const { discounted } = price;
+      let data = {
+        id: selectedCampaign?.id,
+        name: title,
+        featuresByRef: setAs(featuresByRef, []),
+        saleInfo: {
+          startedAt: dateFormat(saleInfo[0]),
+          expiredAt: dateFormat(saleInfo[1])
+        },
+        subscriptionRef: setAs(subscriptionRef, ''),
+        translateKeys: { title, description },
+        activated: discounted,
+        private: false,
+        metadata,
+        price: { ...definePrice(price) },
+        trialed
+      };
 
-        let data = {
-          id: selectedCampaign?.id,
-          name: i18n.t(title),
-          featuresByRef: setAs(featuresByRef, []),
-          saleInfo: {
-            startedAt: dateFormat(saleInfo[0]),
-            expiredAt: dateFormat(saleInfo[1])
-          },
-          subscriptionRef: setAs(type, ''),
-          translateKeys: { title, description },
-          activated: discounted, private: false,
-          metadata: {
-            ...metadata,
-            createdAt: metadata.updatedAt,
-            createdByRef: user.id
-          }
-        };
+      data.trialPeriod = trialed ? { ...defineTrialed(trialed, trialPeriod) } : null;
 
+      yield put({ type: 'handleUpdate', payload: { data, isEdit, selectedCampaign, id: params.campaign } });
+      yield put({ type: 'handleSave', payload: { data, isEdit, metadata } });
+    },
+
+    * handleUpdate({ payload }, { put, call, select }) {
+      const { user, ability, token } = yield select(state => state.authModel);
+      const { isEdit, selectedCampaign, id, data } = payload;
+
+      if (user && ability.can('update', COMPONENT_NAME)) {
         if (isEdit) {
-          if (selectedCampaign && params.campaign === selectedCampaign.id) {
+          if (selectedCampaign && id === selectedCampaign.id) {
             const _data = { ...data, version: selectedCampaign.version };
-            const entity = yield call(updateCampaign, { id: selectedCampaign.id, data: _data, token });
+            const entity = yield call(updateCampaign, { id, data: _data, token });
+
+            if (entity?.data?.error) return false;
 
             yield put({
               type: 'updateVersion',
@@ -234,24 +289,53 @@ export default dvaModelExtend(commonModel, {
             });
 
           } else {
-            errorSaveMsg(true, 'Subscription');
+            errorSaveMsg(true, 'selectedCampaign').then();
           }
         } else {
-          data = {
-            ...data
+          // TODO (teamco): Going to save.
+        }
+      } else {
+
+        yield put({ type: 'noPermissions', payload: { key: 'handleUpdate' } });
+      }
+    },
+
+    * handleSave({ payload }, { put, call, select }) {
+      const { user, ability, token } = yield select(state => state.authModel);
+      const { isEdit, metadata, data } = payload;
+
+      if (user && ability.can('update', COMPONENT_NAME)) {
+        if (isEdit) {
+          // TODO (teamco): Going to update.
+        } else {
+
+          data.metadata = {
+            ...metadata,
+            createdAt: metadata.updatedAt,
+            createdByRef: user.id
           };
 
           const entity = yield call(addCampaign, { data, token });
 
-          if (entity.exists) {
+          if (entity?.data?.error) return false;
+
+          if (entity?.exists && entity?.data?.id) {
             yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });
-            history.push(`${BASE_URL}/${entity?.data?.id}`);
+            yield put({ type: 'editCampaign', payload: { params: { campaign: entity?.data?.id } } });
           }
         }
       } else {
 
-        yield put({ type: 'noPermissions', payload: { key: 'selectedCampaign' } });
+        yield put({ type: 'noPermissions', payload: { key: 'handleSave' } });
       }
+    },
+
+    * deleteCampaign({ payload }, { call, select, put }) {
+      const { token } = yield select(state => state.authModel);
+      const { id } = payload;
+      yield call(deleteCampaign, { id, token });
+      const { data = [] } = yield call(getAllCampaigns, { token });
+      yield put({ type: 'updateState', payload: { campaigns: data } });
     }
   },
   reducers: {}

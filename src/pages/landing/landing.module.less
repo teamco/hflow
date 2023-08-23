@@ -1,7 +1,5 @@
 @import 'variables';
-
-@search_height: 50px;
-@search_width: 60%;
+@import "@/theme/variables.less";
 
 .landing {
   background-color: #fff;
@@ -14,11 +12,61 @@
 
   .headerSection {
     position: relative;
+
+    &.header {
+      padding: 10px 20px;
+      background: cornsilk;
+      box-shadow: 1px 1px 4px -2px @main-shadow-color;
+      border-top: 1px solid #ededed;
+      position: relative;
+      z-index: 1;
+      display: flex;
+    }
+
+    .headerLabel {
+      font-size: 18px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+    }
+
+    .headerActions {
+      display: flex;
+      column-gap: 24px;
+      align-self: center;
+      justify-self: end;
+
+      .moreBtn,
+      .hideBtn,
+      .likeBtn,
+      .reloadBtn,
+      .shareBtn {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        color: @link-primary;
+        column-gap: 8px;
+        cursor: pointer;
+
+        svg {
+          width: @svg-dims;
+          height: @svg-dims;
+          color: @link-primary;
+          transition: @main-transition;
+        }
+      }
+
+      .shareBtn div {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        column-gap: 8px;
+      }
+    }
   }
 
   .contentFixed {
-    position: relative;
-    top: 48px;
+    margin-top: @header-height;
   }
 
   .landingTabs {
@@ -30,6 +78,15 @@
     }
 
     :global {
+      .ant-tabs-nav {
+        margin: 0;
+
+        .ant-tabs-nav-list {
+          justify-content: center;
+          width: 100%;
+        }
+      }
+
       .ant-tabs {
         background-color: #fff;
       }
@@ -58,7 +115,6 @@
   }
 
   .realEstate {
-    margin: -16px 20% 50px 20%;
   }
 
   .trends {
@@ -92,6 +148,7 @@
 
   .workFlowWrapper {
     margin-top: 50px;
+    overflow: hidden;
 
     .workFlow {
       background-color: rgb(241, 241, 241);
@@ -143,6 +200,7 @@
 
   .dealsWrapper {
     margin-top: 50px;
+    overflow: hidden;
 
     .deals {
       background-color: rgb(241, 241, 241);
@@ -166,10 +224,6 @@
     background-size: cover;
     background-image: url("/assets/main_bg.png");
     background-color: transparent;
-    //clip-path: polygon(0% 0%, 100% 0, 100% 70%, 15vh 45vw, 0 70%);
-
-    clip-path: polygon(0% 0%, 100% 0, 100% 70%, 75% 90%, 0 70%);
-    //width: 60vw;
 
     .search {
       height: 60%;
@@ -179,4 +233,10 @@
       position: relative;
     }
   }
+}
+
+.groupButtons {
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
 }

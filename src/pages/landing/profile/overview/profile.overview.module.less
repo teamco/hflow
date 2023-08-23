@@ -1,0 +1,53 @@
+@import "@/theme/variables.less";
+
+.profileOverview {
+  margin: @main-margin 0;
+  padding: 10px;
+
+  :global {
+    .ant-card {
+      border-radius: 13px;
+    }
+
+    .ant-card-body {
+      padding: 0;
+    }
+
+    .ant-card-grid {
+      box-shadow: none;
+    }
+
+    .ant-card-head {
+      padding: 0;
+    }
+  }
+
+  h3 {
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1.25;
+    color: rgba(0,0,0,1)
+  }
+
+  .profileInfo {
+    .infoBackground {
+      border-radius: 13px 13px 0 0;
+      padding: 10px 0;
+      background: rgb(2,0,36);
+      background: linear-gradient(183deg, rgba(2,0,36,100%) 0%, rgba(68,230,207,60%) 0%, rgba(0,255,244,100%) 69%);
+    }
+
+    .infoDetails {
+      padding: 10px;
+    }
+  }
+
+  .profileCard {
+    border-radius: 13px;
+    padding: 10px;
+
+    .profileAnalytics {
+
+    }
+  }
+}

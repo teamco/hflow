@@ -1,6 +1,8 @@
-import { connect } from 'umi';
+import { connect } from '@umijs/max';
 
 import { campaigns } from './campaigns';
+
+const MODEL_NAME = 'campaignModel';
 
 export default connect(
     ({ authModel, campaignModel, loading }) => ({
@@ -11,10 +13,13 @@ export default connect(
     (dispatch) => ({
       dispatch,
       onNew() {
-        dispatch({ type: `campaignModel/newCampaign` });
+        dispatch({ type: `${MODEL_NAME}/newCampaign` });
       },
       onQuery() {
-        dispatch({ type: 'campaignModel/query' });
+        dispatch({ type: `${MODEL_NAME}/query` });
+      },
+      onDeleteCampaign(payload) {
+        dispatch({type: `${MODEL_NAME}/deleteCampaign`, payload })
       }
     })
 )(campaigns);

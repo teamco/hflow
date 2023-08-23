@@ -1,30 +1,25 @@
 import React from 'react';
-import { connect } from 'umi';
-import { Result } from 'antd';
-import Page from '@/components/Page';
+import { useIntl } from '@umijs/max';
 
-import styles from 'layouts/app/app.layout.less';
+import ErrorPage from '@/components/Page/Error';
+
+import { t } from '@/utils/i18n';
 
 /**
- * @function
- * @param t
+ *
  * @param component
  * @param errorModel
- * @return {JSX.Element}
+ * @returns {JSX.Element}
  */
-function pageWarning({ component, errorModel }) {
-  return (
-      <Page component={'pageWarning'}>
-        <Result status={'warning'}
-                title={('error:pageWarning')}
-                className={styles.pageWarning}/>
-      </Page>
-  );
-}
+const pageWarning = ({ component = 'pageWarning' }) => {
+  const intl = useIntl();
 
-export default connect(({ errorModel, loading }) => ({
-      errorModel,
-      loading
-    }),
-    dispatch => ({})
-)(pageWarning);
+  return (
+      <ErrorPage title={t(intl, 'error.pageWarning')}
+                 plainOn={component === 'pageWarning'}
+                 component={component}
+                 status={'warning'}/>
+  );
+};
+
+export default pageWarning;

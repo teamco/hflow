@@ -1,14 +1,10 @@
 import React from 'react';
-import { EllipsisOutlined } from '@ant-design/icons';
-import { Dropdown } from 'antd';
 
-import SubscriptionMenu from './metadata/subscriptions.menu';
-
-import menuStyles from '@/components/menu.less';
+import { subscriptionMenu } from './metadata/subscriptions.menu';
+import DropdownButton from '@/components/Buttons/dropdown.button';
 
 /**
  * @export
- * @param t
  * @param props
  * @return {{rest: Pick<*, Exclude<keyof *, "className"|"style"|"component"|"menuProps"|"data">>, data, style,
  *     className, actions: JSX.Element}}
@@ -19,6 +15,9 @@ export const subscriptionCardMetadata = (props) => {
     data,
     style,
     menuProps,
+    disabled,
+    loading,
+    testId,
     ...rest
   } = props;
 
@@ -27,13 +26,12 @@ export const subscriptionCardMetadata = (props) => {
     style,
     className,
     actions: (
-        <Dropdown overlay={<SubscriptionMenu record={data} {...menuProps} />}
-                  overlayClassName={menuStyles.customActionMenu}
-                  trigger={['click']}
-                  key={'custom'}
-                  {...rest}>
-          <EllipsisOutlined key={'more'}/>
-        </Dropdown>
+        <DropdownButton key={'manage'}
+                        overlay={subscriptionMenu({ record: data, ...menuProps })}
+                        data-testid={testId}
+                        placement={'bottomRight'}
+                        disabled={!menuProps?.canUpdate && !menuProps?.canDelete}
+                        loading={loading}/>
     ),
     rest
   };

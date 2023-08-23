@@ -1,0 +1,33 @@
+name: Playwright E2E
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+jobs:
+  e2e:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.16.0
+    - name: Install dependencies
+      run: yarn install
+    - name: Install wait-for
+      run: npm install -g wait-port
+    - name: Install Playwright Browsers
+      run: yarn playwright install --with-deps
+    - name: Run Environment & test
+      run: |
+        yarn run start:linux &
+        wait-port 8003
+        sleep 60
+        CICD=1 REPORT_FOLDER=current UI_SERVER=http://localhost:8003 yarn run e2e:chrome
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: playwright-report
+        path: __report__/e2e/current
+        retention-days: 30

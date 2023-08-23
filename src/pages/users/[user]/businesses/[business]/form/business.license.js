@@ -1,8 +1,9 @@
 import React from 'react';
 import { DatePicker } from 'antd';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
 import FormComponents from '@/components/Form';
 import UploadFile from '@/components/Upload';
+import { t } from '@/utils/i18n';
 
 const { GenericPanel } = FormComponents;
 
@@ -10,7 +11,6 @@ const { GenericPanel } = FormComponents;
  * @export
  * @param t
  * @param formRef
- * @param upload
  * @return {JSX.Element}
  * @constructor
  */
@@ -20,16 +20,17 @@ export const BusinessLicense = ({
   uploadLicense
 }) => {
   const intl = useIntl();
+
   return (
-      <GenericPanel header={intl.formatMessage({id: 'business.license', defaultMessage: 'Proof of License'})}
+      <GenericPanel header={t(intl, 'business.license')}
                     name={'license'}>
         <div>
-          <UploadFile label={intl.formatMessage({id: 'business.subLicense', defaultMessage: 'License'})}
+          <UploadFile label={t(intl, 'business.subLicense')}
                       name={'license'}
                       disabled={disabled}
                       {...uploadLicense}
                       form={formRef}/>
-          <DatePicker label={intl.formatMessage({id: 'business.licenseExpiration', defaultMessage: 'License expiration date'})}
+          <DatePicker label={t(intl, 'business.licenseExpiration')}
                       name={'licenseExpiration'}
                       disabled={disabled}
                       form={formRef}/>

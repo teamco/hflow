@@ -6,6 +6,5 @@
  * @return {*}
  */
 export const defineInstance = (instance, defaultValue, fallbackValue = null) => {
-  instance = instance || defaultValue || fallbackValue;
-  return instance;
+  return instance || defaultValue || fallbackValue;
 };

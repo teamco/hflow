@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'antd';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
 import { CalendarTwoTone, MailTwoTone } from '@ant-design/icons';
 import { tsToLocaleDateTime } from '@/utils/timestamp';
 import EmailVerified from '@/components/Profile/email.verified';
 
-import styles from 'pages/users/users.module.less';
+import styles from '@/pages/users/users.module.less';
+import { t } from '@/utils/i18n';
 
 /**
  * @export
@@ -22,6 +23,8 @@ export const expandable = (props) => {
     onResendRegisterLink
   } = props;
 
+  const intl = useIntl();
+
   const [showSendInvitation, setShowSendInvitation] = useState(true);
 
   return {
@@ -36,15 +39,15 @@ export const expandable = (props) => {
               <Col span={8}>
                 <div>
                   <MailTwoTone/>
-                  <strong>{intl.formatMessage({id: 'auth.email', defaultMessage: 'Email'})}</strong>
+                  <strong>{t(intl, 'auth.email')}</strong>
                 </div>
-                <div>{record.email || intl.formatMessage({id: 'error:na', defaultMessage: 'None'})}</div>
+                <div>{record.email || t(intl, 'error.na')}</div>
               </Col>
               {pending ? null : (
                   <Col span={8}>
                     <div>
                       <CalendarTwoTone/>
-                      <strong>{intl.formatMessage({id: 'form.createdAt', defaultMessage: 'Created at'})}</strong>
+                      <strong>{t(intl, 'form.createdAt')}</strong>
                     </div>
                     <div>{tsToLocaleDateTime(+(new Date(creationTime)))}</div>
                   </Col>
@@ -53,17 +56,17 @@ export const expandable = (props) => {
                   <Col span={8}>
                     <div>
                       <CalendarTwoTone/>
-                      <strong>{intl.formatMessage({id: 'form.invitedAt', defaultMessage: 'Invited at'})}</strong>
+                      <strong>{t(intl, 'form.invitedAt')}</strong>
                     </div>
                     <div>
                       {tsToLocaleDateTime(invitedAt)}
                       {showSendInvitation && (
                           <div className={styles.verification}
                                onClick={() => {
-                                 onResendRegisterLink(record);
+                                 onResendRegisterLink(record, intl);
                                  setShowSendInvitation(false);
                                }}>
-                            {intl.formatMessage({id: 'auth.reSendRegisterLink', defaultMessage: 'Re-Send Invitation'})}
+                            {t(intl, 'auth.reSendRegisterLink')}
                           </div>
                       )}
                     </div>

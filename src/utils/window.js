@@ -29,3 +29,12 @@ export function isLocalHost() {
       hostname.match(/^192\./) ||
       hostname.match(/^10\./);
 }
+
+/**
+ * @export
+ * @param path
+ * @return {RegExpMatchArray}
+ */
+export function isHost(path) {
+  return window.location.href.match(new RegExp(path));
+}

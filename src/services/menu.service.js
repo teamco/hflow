@@ -11,8 +11,10 @@ import {
   ShoppingCartOutlined,
   SolutionOutlined,
   TeamOutlined,
+  ScheduleOutlined,
   TrademarkOutlined,
-  UserOutlined
+  UserOutlined,
+  HomeOutlined
 } from '@ant-design/icons';
 
 /**
@@ -21,105 +23,145 @@ import {
  */
 export const menus = [
   {
-    key: 'menu:manageUsers',
+    key: 'menu.manageUsers',
     icon: <UserOutlined/>,
     items: [
       {
-        key: 'menu:users',
+        key: 'menu.users',
         url: '/admin/users',
         component: 'users',
         icon: <TeamOutlined/>
       },
       {
-        key: 'menu:userProfile',
+        key: 'menu.userProfile',
         url: '/admin/profile',
         component: 'profile',
-        icon: <UserOutlined/>
+        icon: <UserOutlined/>,
+        divider: true
       },
       {
-        key: 'menu:manageRoles',
-        url: '/admin/manageRoles',
-        component: 'roles',
+        key: 'menu.businessRoles',
+        url: '/admin/roles/business',
+        component: 'business.roles',
+        icon: <SolutionOutlined/>
+      },
+      {
+        key: 'menu.userRoles',
+        url: '/admin/roles/user',
+        component: 'user.roles',
+        icon: <SolutionOutlined/>,
+        divider: true
+      },
+      {
+        key: 'menu.abilityRoles',
+        url: '/admin/roles/ability',
+        component: 'ability.roles',
+        icon: <SolutionOutlined/>
+      },
+      {
+        key: 'menu.componentRoles',
+        url: '/admin/roles/component',
+        component: 'component.roles',
+        icon: <SolutionOutlined/>,
+        divider: true
+      },
+      {
+        key: 'menu.rolesManager',
+        url: '/admin/roles/manager',
+        component: 'role.manager',
         icon: <SolutionOutlined/>
       }
     ]
   },
   {
-    key: 'menu:business',
+    key: 'menu.business',
     icon: <TrademarkOutlined/>,
     items: [
       {
-        key: 'menu:businesses',
+        key: 'menu.businesses',
         url: '/admin/businesses',
         component: 'businesses',
         icon: <TrademarkOutlined/>
       },
       {
-        key: 'menu:businessTypes',
+        key: 'menu.businessTypes',
         url: '/admin/businessTypes',
-        component: 'businessTypes',
+        component: 'business.types',
         icon: <FontSizeOutlined/>
       }
     ]
   },
   {
-    key: 'menu:subscription',
+    key: 'menu.subscription',
     icon: <ApiOutlined/>,
     items: [
       {
-        key: 'menu:subscriptions',
+        key: 'menu.subscriptions',
         url: '/admin/subscriptions',
         component: 'subscriptions',
         icon: <ShoppingCartOutlined/>
       },
       {
-        key: 'menu:subscriptionTypes',
+        key: 'menu.subscriptionTypes',
         url: '/admin/subscriptionTypes',
-        component: 'subscriptionTypes',
-        icon: <FontSizeOutlined/>
+        component: 'subscription.types',
+        icon: <FontSizeOutlined/>,
+        divider: true
       },
-      { divider: true },
       {
-        key: 'menu:features',
+        key: 'menu.schedulers',
+        url: '/admin/schedulers',
+        component: 'schedulers',
+        icon: <ScheduleOutlined/>,
+        divider: true
+      },
+      {
+        key: 'menu.features',
         url: '/admin/features',
         component: 'features',
         icon: <ControlOutlined/>
       },
       {
-        key: 'menu:featureTypes',
+        key: 'menu.featureTypes',
         url: '/admin/featureTypes',
-        component: 'featureTypes',
-        icon: <FontSizeOutlined/>
+        component: 'feature.types',
+        icon: <FontSizeOutlined/>,
+        divider: true
       },
-      { divider: true },
       {
-        key: 'menu:campaigns',
+        key: 'menu.campaigns',
         url: '/admin/campaigns',
         component: 'campaigns',
-        icon: <FundOutlined/>
+        icon: <FundOutlined/>,
+        divider: true
       },
-      { divider: true },
       {
-        key: 'menu:currencies',
+        key: 'menu.currencies',
         url: '/admin/currencies',
         component: 'currencies',
-        icon: <DollarOutlined/>
+        icon: <DollarOutlined/>,
+        divider: true
       },
-      { divider: true },
       {
-        key: 'menu:durationTypes',
+        key: 'menu.durationTypes',
         url: '/admin/durationTypes',
-        component: 'durationTypes',
+        component: 'duration.types',
         icon: <FieldTimeOutlined/>
       }
     ]
   },
   {
-    key: 'menu:systemLogs',
+    key: 'menu.properties',
+    url: '/admin/properties',
+    component: 'properties',
+    icon: <HomeOutlined/>
+  },
+  {
+    key: 'menu.systemLogs',
     icon: <InfoCircleOutlined/>,
     items: [
       {
-        key: 'menu:notifications',
+        key: 'menu.notifications',
         url: '/admin/notifications',
         component: 'notifications',
         icon: <NotificationOutlined/>
@@ -139,3 +181,34 @@ export const menus = [
     ]
   }
 ];
+
+/**
+ * @export
+ * @param [menuItems]
+ * @param {boolean} [disabled]
+ * @return {*}
+ */
+export const handleDisabledMenus = (menuItems = [], disabled = false) => {
+
+  /**
+   * @function
+   * @param data
+   * @return {*}
+   * @private
+   */
+  function _handleDisabled(data) {
+    return data.map(item => {
+      if (item.disabled) {
+        item.disabled = disabled;
+      }
+
+      if (item.items?.length) {
+        item.items = _handleDisabled(item.items);
+      }
+
+      return item;
+    });
+  }
+
+  return _handleDisabled([...menuItems]);
+};

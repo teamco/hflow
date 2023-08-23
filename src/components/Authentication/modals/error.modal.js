@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal } from 'antd';
+import { WarningOutlined } from '@ant-design/icons';
 
 /**
  * @export
@@ -8,13 +9,19 @@ import { Modal } from 'antd';
  * @constructor
  */
 const ErrorModal = props => {
-  const { errorProps, isErrorVisible, handleErrorCancel } = props;
+  const { errorProps, isErrorVisible, handleErrorCancel, className } = props;
   return (
-      <Modal title={errorProps.title}
-             visible={isErrorVisible}
+      <Modal title={(
+          <>
+            <WarningOutlined/>
+            {errorProps?.title}
+          </>
+      )}
+             open={isErrorVisible}
              footer={null}
+             wrapClassName={className}
              onCancel={handleErrorCancel}>
-        <span>{errorProps.error}</span>
+        <span>{errorProps?.error}</span>
       </Modal>
   );
 };

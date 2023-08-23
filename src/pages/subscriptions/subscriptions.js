@@ -1,19 +1,22 @@
-import React  from 'react';
-import { Button, PageHeader } from 'antd';
-import { AppstoreAddOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { useIntl } from 'umi';
-import Page from '@/components/Page';
-import EmptyData from '@/components/EmptyData';
+import React, { useRef } from 'react';
+import { ShoppingCartOutlined } from '@ant-design/icons';
+import { useIntl } from '@umijs/max';
 
-import { Can } from '@/utils/auth/can';
-
-import SubscriptionCard from 'pages/subscriptions/subscriptionCard';
-import { subscriptionCardMetadata } from 'pages/subscriptions/subscriptions.metadata';
-
-import styles from 'pages/subscriptions/subscriptions.module.less';
-import userStyles from 'pages/users/users.module.less';
-import ExportButton from '@/components/Buttons/export.button';
 import { effectHook } from '@/utils/hooks';
+import { t } from '@/utils/i18n';
+import { componentAbilities } from '@/utils/auth/component.setting';
+
+import SubscriptionCard from '@/pages/subscriptions/subscriptionCard';
+import { subscriptionCardMetadata } from '@/pages/subscriptions/subscriptions.metadata';
+
+import Page from '@/components/Page/page.connect';
+import EmptyData from '@/components/EmptyData';
+import { SubHeader } from '@/components/Page/page.subheader';
+
+import styles from '@/pages/subscriptions/subscriptions.module.less';
+import userStyles from '@/pages/users/users.module.less';
+
+const MODEL_NAME = 'subscriptionModel';
 
 /**
  * @export
@@ -22,6 +25,7 @@ import { effectHook } from '@/utils/hooks';
  */
 export const subscriptions = (props) => {
   const intl = useIntl();
+
   const {
     authModel,
     subscriptionModel,
@@ -38,18 +42,25 @@ export const subscriptions = (props) => {
     features
   } = subscriptionModel;
 
+  const refTarget = useRef(null);
+
   effectHook(() => {
-    onQuery();
+    authModel.user && onQuery();
   }, [authModel.user]);
 
-  const { ability } = authModel;
   const component = 'subscriptions';
-  const disabled = ability.cannot('create', component);
+  const {
+    ability,
+    disabled,
+    canUpdate,
+    canDelete,
+    canExport
+  } = componentAbilities(authModel, component, true);
 
   const subTitle = (
       <>
         <ShoppingCartOutlined style={{ marginRight: 10 }}/>
-        {intl.formatMessage({id: 'menu.subscriptions', defaultMessage: 'Subscriptions'})}
+        {t(intl, 'menu.subscriptions')}
       </>
   );
 
@@ -60,60 +71,65 @@ export const subscriptions = (props) => {
 
   const menuProps = {
     isEdit: false,
+    intl,
     ability,
     loading,
     component,
+    canUpdate,
+    canDelete,
     onDeleteSubscription
+  };
+
+  const pageHeaderProps = {
+    subTitle,
+    loading,
+    disabled,
+    MODEL_NAME,
+    component,
+    actions: {
+      exportBtn: { refTarget, data: subscriptions, disabled: !canExport },
+      newBtn: { onClick: onNew, spinOn: [`${MODEL_NAME}/newSubscription`] },
+      closeBtn: false,
+      saveBtn: false,
+      menuBtn: false
+    }
   };
 
   return (
       <Page className={userStyles.users}
             component={component}
             spinEffects={[
-              'subscriptionModel/query',
-              'subscriptionModel/prepareToSave'
+              `${MODEL_NAME}/query`,
+              `${MODEL_NAME}/features`,
+              `${MODEL_NAME}/newSubscription`,
+              `${MODEL_NAME}/validateSubscription`
             ]}>
         <div className={styles.subscriptionWrapper}
              style={style}>
-          <PageHeader ghost={false}
-                      subTitle={subTitle}
-                      extra={[
-                        <ExportButton key={'export'}
-                                      disabled={disabled}
-                                      component={component}
-                                      json={subscriptions}/>,
-                        <Can I={'create'} a={component} key={'add'}>
-                          <Button size={'small'}
-                                  loading={loading.effects['subscriptionModel/newSubscription']}
-                                  disabled={disabled}
-                                  icon={<AppstoreAddOutlined/>}
-                                  onClick={() => onNew()}
-                                  type={'primary'}>
-                            {intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
-                          </Button>
-                        </Can>
-                      ]}>
-          </PageHeader>
-          <div className={styles.subscriptionCards}>
+          <SubHeader {...pageHeaderProps}/>
+          <div className={styles.subscriptionCards}
+               ref={refTarget}>
             {subscriptions?.length ? subscriptions?.map((data, idx) => {
               const props = {
                 isEdit: true,
                 colorsToType,
                 features: {
                   all: features,
-                  selected: data.featuresByRef
+                  selected: data.features
                 },
                 ...subscriptionCardMetadata({
                   data,
+                  disabled,
+                  loading,
                   className: styles.subscriptionCard,
                   menuProps,
                   ...subscriptionProps
                 })
               };
 
-              return (<SubscriptionCard key={idx} {...props} />);
+              return (<SubscriptionCard key={idx} {...props}  />);
             }) : (
-                <EmptyData />
+                <EmptyData/>
             )}
           </div>
         </div>

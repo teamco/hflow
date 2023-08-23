@@ -1,23 +1,25 @@
-import React  from 'react';
-import { useParams, useIntl } from 'umi';
+import React, { useRef } from 'react';
+import { useParams, useIntl } from '@umijs/max';
+import { TrademarkOutlined } from '@ant-design/icons';
 
-import Page from '@/components/Page';
-import { Button, PageHeader } from 'antd';
-import { AppstoreAddOutlined, TrademarkOutlined } from '@ant-design/icons';
 import Main from '@/components/Main';
+import Page from '@/components/Page/page.connect';
+import { SubHeader } from '@/components/Page/page.subheader';
 
-import { Can } from '@/utils/auth/can';
-import ExportButton from '@/components/Buttons/export.button';
-
-import { metadata } from 'pages/users/[user]/businesses/businesses.metadata';
-import userStyles from 'pages/users/users.module.less';
-import styles from 'pages/users/[user]/businesses/businesses.module.less';
 import { effectHook } from '@/utils/hooks';
+import { t } from '@/utils/i18n';
+import { componentAbilities } from '@/utils/auth/component.setting';
+
+import { metadata } from '@/pages/users/[user]/businesses/businesses.metadata';
+
+import userStyles from '@/pages/users/users.module.less';
+import styles from '@/pages/users/[user]/businesses/businesses.module.less';
 
 const { Table } = Main;
 
 export const businesses = (props) => {
   const intl = useIntl();
+
   const {
     businessModel,
     authModel,
@@ -41,60 +43,72 @@ export const businesses = (props) => {
   const { user = authModel.user?.id } = useParams();
 
   effectHook(() => {
-    onGetBusinesses(selectedUser, user);
+    authModel.user && onGetBusinesses(selectedUser, user);
   }, [authModel.user, user]);
 
   const subTitle = (
       <>
         <TrademarkOutlined style={{ marginRight: 10 }}/>
-        {intl.formatMessage({id: 'business.meta', defaultMessage: 'Business'})}
+        {t(intl, 'business.meta')}
       </>
   );
 
-  const { ability } = authModel;
   const component = 'businesses';
-  const disabled = ability.cannot('create', component);
+  const {
+    ability,
+    disabled,
+    canUpdate,
+    canDelete,
+    canCreate,
+    canExport
+  } = componentAbilities(authModel, component, true);
+
+  const MODEL_NAME = 'businessModel';
+  const refTarget = useRef(null);
+
+  const pageHeaderProps = {
+    subTitle,
+    loading,
+    disabled,
+    MODEL_NAME,
+    component,
+    actions: {
+      exportBtn: { refTarget, data, disabled: !canExport },
+      newBtn: {
+        onClick: () => onNew(user),
+        spinOn: [`${MODEL_NAME}/newBusiness`]
+      },
+      closeBtn: false,
+      saveBtn: false,
+      menuBtn: false
+    }
+  };
 
   return (
       <Page className={userStyles.users}
             component={component}
             spinEffects={[
-              'businessModel/query',
-              'businessModel/validateBusiness'
+              `${MODEL_NAME}/query`,
+              `${MODEL_NAME}/validateBusiness`
             ]}>
         <div className={styles.businessWrapper}
              style={style}>
-          <PageHeader ghost={false}
-                      subTitle={subTitle}
-                      extra={[
-                        <ExportButton key={'export'}
-                                      disabled={disabled}
-                                      component={component}
-                                      json={data}/>,
-                        <Can I={'create'} a={component} key={'add'}>
-                          <Button size={'small'}
-                                  loading={loading.effects['businessModel/newBusiness']}
-                                  disabled={disabled}
-                                  icon={<AppstoreAddOutlined/>}
-                                  onClick={() => onNew(user)}
-                                  type={'primary'}>
-                            {intl.formatMessage({id: 'actions:new', defaultMessage: 'New'})}
-                          </Button>
-                        </Can>
-                      ]}>
-          </PageHeader>
-          <Table data={data}
-                 {...metadata({
-                   data,
-                   user,
-                   isEdit: false,
-                   multiple: true,
-                   ability,
-                   loading,
-                   onDeleteBusiness,
-                   onHoldBusiness,
-                   onActivateBusiness
-                 })} />
+          <SubHeader {...pageHeaderProps}/>
+          <div ref={refTarget}>
+            <Table data={data}
+                   {...metadata({
+                     data,
+                     user,
+                     disabled,
+                     isEdit: false,
+                     multiple: true,
+                     ability,
+                     loading,
+                     onDeleteBusiness,
+                     onHoldBusiness,
+                     onActivateBusiness
+                   })} />
+          </div>
         </div>
       </Page>
   );

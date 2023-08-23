@@ -1,18 +1,25 @@
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local('Roboto'), local('Roboto-Regular'), url(https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu7GxKKTU1Kvnz.woff2) format('woff2');
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
+@import "@/theme/variables.less";
 
-* {
-  font-family: 'Roboto', 'Montserrat', sans-serif;
-  font-size: 12px;
+.loaderInit {
+  height: 100vh !important;
+
+  :global {
+    .ant-spin {
+      width: 100%;
+      height: auto !important;
+    }
+  }
 }
 
 .landing {
+  .progress {
+    height: 2px;
+    background-color: lightcoral;
+    position: fixed;
+    z-index: 31;
+    top: 0;
+  }
+
   .siteLayout {
     background-color: #fff;
 
@@ -21,6 +28,12 @@
       min-height: 100vh;
       overflow: hidden;
       background-color: #fff;
+
+      :global {
+        .ant-back-top {
+          right: 50px;
+        }
+      }
     }
   }
 }
@@ -29,4 +42,84 @@
 .page403,
 .page500 {
   width: 100%;
+}
+
+:global {
+  .gm-fullscreen-control {
+    display: none !important;
+  }
+
+  .ant-message-custom-content {
+    display: flex;
+    max-width: 250px;
+    align-items: center;
+
+    span {
+      text-align: left;
+    }
+  }
+
+  .ant-image-preview-root {
+    .ant-image-preview-mask {
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .ant-image-preview-img {
+      border-radius: @thumb-border-radius;
+      border: 10px solid #fff;
+      box-shadow: 4px 4px 10px #000;
+    }
+  }
+}
+
+.prettified {
+  svg {
+    width: 32px;
+    height: 32px;
+    filter: drop-shadow(0 0 2px @unliked-bg);
+    transition: @main-transition;
+
+    path:first-child {
+      fill: #fff;
+    }
+
+    path:last-child {
+      fill: @unliked-bg;
+      opacity: 0.6;
+    }
+
+    &:hover {
+      transform: scale(1.1);
+
+      path:last-child {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  &.liked {
+    svg {
+      filter: drop-shadow(0 0 2px @liked-bg);
+
+      path:last-child {
+        fill: @liked-bg !important;
+      }
+    }
+  }
+
+  &.regular {
+    svg {
+      path:last-child {
+        fill: @regular-btn-bg !important;
+      }
+    }
+  }
+
+  &.white {
+    svg {
+      path:last-child {
+        fill: #fff !important;
+      }
+    }
+  }
 }

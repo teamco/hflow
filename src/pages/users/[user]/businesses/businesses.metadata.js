@@ -1,37 +1,48 @@
 import React from 'react';
-import { NavLink, useParams, useIntl } from 'umi';
+import { NavLink, useIntl, useParams } from '@umijs/max';
 import classnames from 'classnames';
 import { Can } from '@/utils/auth/can';
-import { Button, Dropdown, Tooltip } from 'antd';
-import { DownOutlined, EyeTwoTone, ProfileTwoTone, SettingOutlined, ShopTwoTone } from '@ant-design/icons';
+import { Tooltip } from 'antd';
+import { EyeTwoTone, ProfileTwoTone, ShopTwoTone } from '@ant-design/icons';
 
 import { tsToLocaleDateTime } from '@/utils/timestamp';
 import { COLORS } from '@/utils/colors';
 
-import BusinessMenu from './metadata/business.menu';
+import { businessMenu } from '@/pages/users/[user]/businesses/metadata/business.menu';
 
-import styles from 'pages/users/users.module.less';
+import styles from '@/pages/users/users.module.less';
 import tableStyles from '@/components/Main/Table/table.module.less';
-import menuStyles from '@/components/menu.less';
 
-export const metadata = ({
-  data,
-  user,
-  isEdit = true,
-  ability,
-  loading,
-  multiple,
-  onDeleteBusiness,
-  onHoldBusiness,
-  onActivateBusiness
-}) => {
+import { t } from '@/utils/i18n';
+import DropdownButton from '@/components/Buttons/dropdown.button';
+
+/**
+ * @constant
+ * @param props
+ * @return {JSX.Element|{size: string, columns: [{filterable, dataIndex: string, sortable, title: string, render(*, *): *, key: string},{filterable, dataIndex: string, width: number, sortable, title: string, key: string},{filterable, dataIndex: string, width: number, sortable, title: string, key: string},{dataIndex: string, width: number, title: string, render: (function(*): string), key: string},{width: number, fixed: string, title: string, render(*): null}], width: string, scroll: {x: number}}|null}
+ */
+export const metadata = (props) => {
+  const {
+    data,
+    user,
+    isEdit = true,
+    ability,
+    loading,
+    disabled,
+    multiple,
+    onDeleteBusiness,
+    onHoldBusiness,
+    onActivateBusiness
+  } = props;
 
   /**
    * @type {{user, business}}
    */
   const params = useParams();
   const intl = useIntl();
+
   const menuProps = {
+    intl,
     isEdit,
     loading,
     ability,
@@ -50,7 +61,7 @@ export const metadata = ({
     scroll: { x: 900 },
     columns: [
       {
-        title: intl.formatMessage({id: 'table.name', defaultMessage: 'Name'}),
+        title: t(intl, 'table.name'),
         dataIndex: 'name',
         key: 'name',
         filterable: multiple,
@@ -64,7 +75,7 @@ export const metadata = ({
                       <ShopTwoTone/>
                   }
                 </span>
-                <NavLink to={`/admin/users/${user}/businesses/${data.id}`}>
+                <NavLink to={`/admin/users/${user}/businesses/${data?.id}`}>
                   <Tooltip title={name}>{name}</Tooltip>
                 </NavLink>
               </div>
@@ -72,7 +83,7 @@ export const metadata = ({
         }
       },
       {
-        title: intl.formatMessage({id: 'auth.email', defaultMessage: 'Email'}),
+        title: t(intl, 'auth.email'),
         dataIndex: 'email',
         key: 'email',
         width: 200,
@@ -80,7 +91,7 @@ export const metadata = ({
         sortable: multiple
       },
       {
-        title: intl.formatMessage({id: 'business.type', defaultMessage: 'Business'}),
+        title: t(intl, 'business.type'),
         dataIndex: 'businessType',
         width: 200,
         key: 'businessType',
@@ -88,16 +99,16 @@ export const metadata = ({
         sortable: multiple
       },
       {
-        title: intl.formatMessage({id: 'form.updatedAt', defaultMessage: 'Updated at'}),
+        title: t(intl, 'form.updatedAt'),
         dataIndex: 'metadata',
         width: 150,
         key: 'metadata.updatedAt',
         render: metadata => tsToLocaleDateTime(metadata.updatedAt)
       },
       {
-        title: intl.formatMessage({id: 'table.action', defaultMessage: 'Action'}),
+        title: t(intl, 'table.action'),
         fixed: 'right',
-        width: 210,
+        width: 250,
         render(record) {
           const businessUrl = params?.user ?
               `/admin/users/${params?.user}/businesses/${record.id}` :
@@ -105,7 +116,7 @@ export const metadata = ({
           return data.length ? (
               <div className={styles.nowrap}>
                 <Can I={'read'} a={'businesses'}>
-                  <Tooltip title={intl.formatMessage({id: 'business.actions.show', defaultMessage: 'Show Business'})}>
+                  <Tooltip title={t(intl, 'business.actions.show')}>
                     <NavLink to={`${businessUrl}`}>
                       <EyeTwoTone className={tableStyles.action}
                                   twoToneColor={COLORS.success}/>
@@ -113,23 +124,19 @@ export const metadata = ({
                   </Tooltip>
                 </Can>
                 <Can I={'update'} a={'businesses'}>
-                  <Tooltip title={intl.formatMessage({id: 'business.actions.edit', defaultMessage: 'Edit Business'})}>
+                  <Tooltip title={t(intl, 'business.actions.edit')}>
                     <NavLink to={`${businessUrl}`}>
                       <ProfileTwoTone className={tableStyles.action}
                                       twoToneColor={COLORS.success}/>
                     </NavLink>
                   </Tooltip>
                 </Can>
-                <Dropdown overlay={<BusinessMenu record={record} {...menuProps} />}
-                          trigger={['click']}
-                          overlayClassName={menuStyles.customActionMenu}
-                          key={'custom'}>
-                  <Button size={'small'}
-                          icon={<SettingOutlined/>}
-                          className={menuStyles.customAction}>
-                    {intl.formatMessage({id: 'business.actions.manage', defaultMessage: 'Manage Business'})} <DownOutlined/>
-                  </Button>
-                </Dropdown>
+                <DropdownButton key={'manage'}
+                                overlay={businessMenu({ record, ...menuProps })}
+                                data-testid={'business-mng'}
+                                disabled={disabled}
+                                loading={loading}
+                                label={t(intl, 'business.actions.manage')}/>
               </div>
           ) : null;
         }

@@ -1,38 +1,37 @@
 import React from 'react';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
+
+import { t } from '@/utils/i18n';
 
 /**
  * @export
- * @param t
  * @param data
  * @param loading
  * @return {*}
  */
-export const userLogsMetadata = ({
-  data,
-  loading
-}) => {
+export const userLogsMetadata = ({ data, loading }) => {
   const intl = useIntl();
+  
   return {
     width: '100%',
     size: 'middle',
     columns: [
       {
-        title: intl.formatMessage({id: 'logs.eventType', defaultMessage: 'Event'}),
+        title: t(intl, 'logs.eventType'),
         dataIndex: 'eventType',
         key: 'eventType',
         filterable: true,
         sortable: true
       },
       {
-        title: intl.formatMessage({id: 'logs.namespace', defaultMessage: 'Model'}),
+        title: t(intl, 'logs.namespace'),
         dataIndex: 'namespace',
         key: 'namespace',
         filterable: true,
         sortable: true
       },
       {
-        title: intl.formatMessage({id: 'form.createdAt', defaultMessage: 'Created at'}),
+        title: t(intl, 'form.createdAt'),
         dataIndex: 'createdAt',
         key: 'createdAt',
         render: createdAt => {
@@ -42,5 +41,5 @@ export const userLogsMetadata = ({
       }
     ],
     loading: loading.effects['userLogModel/query']
-  }
+  };
 };

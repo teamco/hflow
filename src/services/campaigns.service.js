@@ -1,11 +1,13 @@
-import { xhrRequest } from './authentication.service';
-import { API } from './config/api.config';
 import request from '@/utils/request';
+
+import { xhrRequest } from './authentication.service';
+
+const { API } = require('@/services/config/api.config');
 
 /**
  * @export
  * @param {string} token
- * @return {Promise<{data: *[]}>}
+ * @return {Promise<T|{data: {error: *}, exists: boolean}>}
  */
 export const getAllCampaigns = async ({ token }) => {
   return await xhrRequest({
@@ -57,8 +59,30 @@ export const updateCampaign = async ({ id, data, token }) => {
  * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  */
 export const addCampaign = async ({ data, token }) => {
-  return xhrRequest({ url: API.campaigns.store, data, token });
+  return xhrRequest({
+    url: API.campaigns.store,
+    data,
+    token
+  });
 };
+
+/**
+ * @async
+ * @export
+ * @param {string} id
+ * @param {string} token
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ */
+export const deleteCampaign = async ({ id, token }) => {
+  return xhrRequest({
+    url: API.campaigns.delete,
+    method: request.METHOD.delete,
+    campaignKey: id,
+    token
+  });
+};
+
+
 
 
 

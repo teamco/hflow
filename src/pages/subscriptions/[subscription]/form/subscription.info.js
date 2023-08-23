@@ -1,14 +1,14 @@
 import React from 'react';
-import { useIntl } from 'umi';
-import { DatePicker, Divider, Select, Slider } from 'antd';
+import { useIntl } from '@umijs/max';
+import { Select } from 'antd';
+
 import FormComponents from '@/components/Form';
-import Duration from '@/components/Price/Range/Duration';
-import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
-import moment from 'moment';
+
+import { t } from '@/utils/i18n';
+import { layout } from '@/utils/layout';
 
 const { GenericPanel } = FormComponents;
 const { Option } = Select;
-const { RangePicker } = DatePicker;
 
 /**
  * @export
@@ -18,27 +18,21 @@ const { RangePicker } = DatePicker;
  */
 export const SubscriptionInfo = (props) => {
   const intl = useIntl();
+
   const {
     formRef,
     disabled,
-    businessUsers: { dims },
-    subscriptionTypes = [],
-    durationTypes = []
+    subscriptionTypes = []
   } = props;
 
-  let marks = {};
-  for (let i = dims.min; i <= dims.max; i++) {
-    marks[i] = i;
-  }
-
   return (
-      <GenericPanel header={intl.formatMessage({id: 'subscription.info', defaultMessage: 'Subscription Info'})}
+      <GenericPanel header={t(intl, 'subscription.info')}
                     name={'info'}
                     defaultActiveKey={['info']}>
-        <div>
+        <div colProps={layout.halfColumn}>
           <Select name={'type'}
                   form={formRef}
-                  label={intl.formatMessage({id: 'subscription.type', defaultMessage: 'Subscription Type'})}
+                  label={t(intl, 'subscription.type')}
                   disabled={disabled}
                   config={{ rules: [{ required: true }] }}>
             {[...subscriptionTypes].sort().map((type, idx) => (
@@ -48,33 +42,6 @@ export const SubscriptionInfo = (props) => {
                 </Option>
             ))}
           </Select>
-          <Duration form={formRef}
-                    label={intl.formatMessage({id: 'subscription.duration', defaultMessage: 'Payment Duration'})}
-                    disabled={disabled}
-                    prefix={[]}
-                    namespace={'paymentDuration'}
-                    required={true}
-                    durationTypes={durationTypes}/>
-        </div>
-        <div colProps={{ xs: 24, sm: 12, md: 12, lg: 8, xl: 8, xxl: 8 }}>
-          <Slider marks={marks}
-                  label={intl.formatMessage({id: 'subscription.users', defaultMessage: 'Maximum of Business users'})}
-                  name={'numberOfUsers'}
-                  form={formRef}
-                  min={dims.min}
-                  max={dims.max}
-                  disabled={disabled}
-                  config={{ rules: [{ required: true }] }}/>
-        </div>
-        <div>
-          <RangePicker name={'saleInfo'}
-                       form={formRef}
-                       format={DEFAULT_DATE_FORMAT}
-                       disabledDate={current => current && current < moment().endOf('day')}
-                       disabled={disabled}
-                       placeholder={[intl.formatMessage({id: 'subscription.saleStart', defaultMessage: 'Started at'}), intl.formatMessage({id: 'subscription.saleEnd', defaultMessage: 'Expired at'})]}
-                       config={{ rules: [{ type: 'array', required: true }] }}
-                       label={intl.formatMessage({id: 'subscription.saleAt', defaultMessage: 'Sale Started / Expired (at)'})}/>
         </div>
       </GenericPanel>
   );

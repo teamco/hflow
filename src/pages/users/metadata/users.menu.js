@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Popconfirm } from 'antd';
+import { Popconfirm } from 'antd';
 import {
   ApiTwoTone,
   DeleteTwoTone,
@@ -11,22 +11,23 @@ import {
   UnlockTwoTone
 } from '@ant-design/icons';
 
-import { NavLink, useIntl } from 'umi';
+import { NavLink } from '@umijs/max';
 
 import { COLORS } from '@/utils/colors';
+import { t } from '@/utils/i18n';
 
 import tableStyles from '@/components/Main/Table/table.module.less';
 
 /**
  * @export
  * @param props
- * @return {JSX.Element}
+ * @return {*[]}
  */
-export const UserMenu = props => {
-  const intl = useIntl();
+export const userMenu = props => {
   const {
     ability,
     loading,
+    intl,
     record,
     currentUser,
     multiple,
@@ -42,89 +43,124 @@ export const UserMenu = props => {
     signedIn
   } = record.metadata;
 
-  return (
-      <Menu>
-        {multiple && (
-            <Menu.Item key={'profile'}
-                       icon={<ProfileTwoTone className={tableStyles.action}
-                                             twoToneColor={COLORS.success}/>}>
-              <NavLink to={`/admin/users/${record.id}`}>
-                {intl.formatMessage({id: 'menu.userProfile', defaultMessage: 'User Profile'})}
-              </NavLink>
-            </Menu.Item>
-        )}
-        <Menu.Item key={'businesses'}
-                   icon={<TrademarkCircleTwoTone className={tableStyles.action}
-                                                 twoToneColor={COLORS.success}/>}>
-          <NavLink to={`/admin/users/${record.id}/businesses`}>
-            {intl.formatMessage({id: 'route.businesses', defaultMessage: 'Business'})}
-          </NavLink>
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item key={'notifications'}
-                   icon={<NotificationTwoTone className={tableStyles.action}
-                                              twoToneColor={COLORS.warning}/>}>
-          <NavLink to={`/admin/users/${record.id}/notifications`}>
-            {intl.formatMessage({id: 'route.notifications', defaultMessage: 'Notifications'})}
-          </NavLink>
-        </Menu.Item>
-        {(currentUser?.uid !== record.uid) && (
-            <Menu.Item key={'message'}
-                       onClick={() => {
-                         setVisibleMessage({ visible: true, props: { from: currentUser, to: record } });
-                       }}
-                       icon={<MessageTwoTone className={tableStyles.action}
-                                             twoToneColor={COLORS.warning}/>}>
-              {intl.formatMessage({id: 'auth.sendMessage', defaultMessage: 'Send Message'})}
-            </Menu.Item>
-        )}
-        <Menu.Divider/>
-        <Menu.Item key={'lock'}
-                   icon={isLocked ?
-                       (<LockTwoTone className={tableStyles.action}/>) :
-                       (<UnlockTwoTone twoToneColor={COLORS.danger}
-                                       className={tableStyles.action}/>)
-                   }>
-          {isLocked ? (
-              <Popconfirm title={intl.formatMessage({id: 'auth.unlockConfirm', defaultMessage: 'Are you sure to unlock user {instance}?'}, { instance: record.email })}
-                          placement={'topRight'}
-                          onConfirm={() => onUnlockUser(record)}>
-                {intl.formatMessage({id: 'auth.unlock', defaultMessage: 'Unlock'})}
-              </Popconfirm>
-          ) : (
-              <div onClick={() => onLockUser(record)}>
-                {intl.formatMessage({id: 'auth.lock', defaultMessage: 'Lock'})}
-              </div>
-          )}
-        </Menu.Item>
-        <Menu.Item key={'forceSignOut'}
-                   icon={signedIn ? (
-                       <ApiTwoTone className={tableStyles.action}/>
-                   ) : (
-                       <ApiTwoTone twoToneColor={COLORS.disabled}
-                                   className={tableStyles.action}/>
-                   )}>
-          {signedIn ? (
-              <Popconfirm title={intl.formatMessage({id: 'auth.signOutConfirm', defaultMessage: 'Are you sure to sign out user {instance}?'}, { instance: record.email })}
-                          placement={'topRight'}
-                          onConfirm={() => onSignOutUser(record)}>
-                {intl.formatMessage({id: 'auth.forceSignOut', defaultMessage: 'Force SignOut'})}
-              </Popconfirm>
-          ) : intl.formatMessage({id: 'auth.forceSignOut', defaultMessage: 'Force SignOut'})
-          }
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item key={'delete'}
-                   icon={<DeleteTwoTone className={tableStyles.action}
-                                        twoToneColor={COLORS.danger}/>}>
-          <Popconfirm title={intl.formatMessage({id: 'msg:deleteConfirm', defaultMessage: 'Are you sure to delete this {instance}?'}, { instance: record.email })}
-                      placement={'topRight'}
-                      onConfirm={() => onDeleteUser(record)}>
-            {intl.formatMessage({id: 'actions.delete', defaultMessage: 'Delete'})}
-          </Popconfirm>
-        </Menu.Item>
-      </Menu>
-  );
-};
+  const dividerItem = { type: 'divider' };
 
-export default UserMenu;
+  const multipleItems = multiple ? [
+    {
+      label: (
+          <NavLink to={`/admin/users/${record?.id}`}>
+            {t(intl, 'menu.userProfile')}
+          </NavLink>
+      ),
+      key: 'profile',
+      icon: <ProfileTwoTone className={tableStyles.action}
+                            twoToneColor={COLORS.success}/>
+    }
+  ] : [];
+
+  const basicItems = [
+    {
+      label: (
+          <NavLink to={`/admin/users/${record?.id}/businesses`}>
+            {t(intl, 'route.businesses')}
+          </NavLink>
+      ),
+      key: 'businesses',
+      icon: <TrademarkCircleTwoTone className={tableStyles.action}
+                                    twoToneColor={COLORS.success}/>
+    },
+    dividerItem,
+    {
+      label: (
+          <NavLink to={`/admin/users/${record?.id}/notifications`}>
+            {t(intl, 'route.notifications')}
+          </NavLink>
+      ),
+      key: 'notifications',
+      icon: <NotificationTwoTone className={tableStyles.action}
+                                 twoToneColor={COLORS.warning}/>
+    }
+  ];
+
+  const currentItems = currentUser?.uid !== record.uid ? [
+    {
+      label: (
+          <div onClick={() => {
+            setVisibleMessage({ visible: true, props: { from: currentUser, to: record } });
+          }}>
+            {t(intl, 'auth.sendMessage')}
+          </div>
+      ),
+      key: 'message',
+      icon: <MessageTwoTone className={tableStyles.action}
+                            twoToneColor={COLORS.warning}/>
+    }
+  ] : [];
+
+  const lockedItems = [
+    {
+      label: isLocked ? (
+          <Popconfirm title={t(intl, 'auth.unlockConfirm', { instance: record.email })}
+                      placement={'topRight'}
+                      disabled={true}
+                      onConfirm={() => onUnlockUser(record)}>
+            {t(intl, 'auth.unlock')}
+          </Popconfirm>
+      ) : (
+          <div onClick={() => onLockUser(record)}>
+            {t(intl, 'auth.lock')}
+          </div>
+      ),
+      key: 'lock',
+      icon: isLocked ?
+          (<LockTwoTone className={tableStyles.action}/>) :
+          (<UnlockTwoTone twoToneColor={COLORS.danger}
+                          className={tableStyles.action}/>)
+    }
+  ];
+
+  const forceSignOut = [
+    {
+      label: signedIn ? (
+          <Popconfirm title={t(intl, 'auth.signOutConfirm', { instance: record.email })}
+                      placement={'topRight'}
+                      disabled={true}
+                      onConfirm={() => onSignOutUser(record)}>
+            {t(intl, 'auth.forceSignOut')}
+          </Popconfirm>
+      ) : t(intl, 'auth.forceSignOut'),
+      key: 'forceSignOut',
+      icon: signedIn ?
+          (<ApiTwoTone className={tableStyles.action}/>) :
+          (<ApiTwoTone twoToneColor={COLORS.disabled}
+                       className={tableStyles.action}/>)
+    },
+    dividerItem
+  ];
+
+  const deleteItems = [
+    {
+      label: (
+          <Popconfirm placement={'topRight'}
+                      disabled={true}
+                      onConfirm={() => onDeleteUser(record)}
+                      title={t(intl, 'msg.deleteConfirm', { instance: record.email })}>
+            {t(intl, 'actions.delete')}
+          </Popconfirm>
+      ),
+      key: 'delete',
+      icon: <DeleteTwoTone className={tableStyles.action}
+                           twoToneColor={COLORS.danger}/>
+    }
+  ];
+
+  return [
+    ...multipleItems,
+    ...basicItems,
+    ...currentItems,
+    dividerItem,
+    ...lockedItems,
+    ...forceSignOut,
+    ...deleteItems
+  ];
+};

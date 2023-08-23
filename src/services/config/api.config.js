@@ -1,72 +1,65 @@
-/**
- * @export
- * @return {{
- *  SERVER_URL,
- *  ADMIN_URL,
- *  UI_URL,
- *  SERVER_PORT,
- *  ADMIN_PORT,
- *  UI_PORT,
- *  METHODS,
- *  API_NS
- * }}
- * @constant
- */
-export const API_CONFIG = () => {
-
-  /**
-   * API definition
-   * @type {{
-   *  SERVER_URL,
-   *  ADMIN_URL,
-   *  UI_URL,
-   *  SERVER_PORT,
-   *  ADMIN_PORT,
-   *  UI_PORT,
-   *  API_NS
-   * }}
-   */
-  const {
-    SERVER_URL = 'https://get-me-home-searcher.herokuapp.com',
-    ADMIN_URL = 'http://localhost',
-    UI_URL = 'http://localhost',
-    SERVER_PORT = 80,
-    ADMIN_PORT = 8001,
-    UI_PORT = 8003,
-    API_NS = '/api/v1'
-  } = process.env;
-
-  return {
-    SERVER_URL,
-    ADMIN_URL,
-    UI_URL,
-    SERVER_PORT,
-    ADMIN_PORT,
-    UI_PORT,
-    API_NS
-  };
-};
-
-export const API = {
+const API = {
+  avatar: 'https://avatars.dicebear.com/api/male/john.svg',
   auth: {
-    token: 'authenticate',
-    refresh: 'token'
+    token: 'auth/token',
+    refresh: 'auth/refresh'
   },
   users: {
     get: 'users/:userKey',
-    store: 'users'
+    store: 'users',
+    subscription: 'users/:userKey/subscription/:subscriptionKey'
+  },
+  profile: {
+    get: 'users/:userKey/profile/:profileKey',
+    store: 'users/:userKey/profile',
+    emails: 'users/:userKey/profile/:profileKey/emails',
+    logos: 'users/:userKey/profile/:profileKey/logos',
+    links: 'users/:userKey/profile/:profileKey/links',
+    addresses: 'users/:userKey/profile/:profileKey/addresses',
+    list: 'users/profiles',
+    overview: 'users/profiles/:profileKey'
   },
   features: {
     get: 'features/:featureKey',
-    store: 'features'
+    store: 'features',
+    delete: 'features/:featureKey'
   },
   campaigns: {
     get: 'campaigns/:campaignKey',
-    store: 'campaigns'
+    store: 'campaigns',
+    delete: 'campaigns/:campaignKey'
   },
   subscriptions: {
     get: 'subscriptions/:subscriptionKey',
-    store: 'subscriptions'
+    store: 'subscriptions',
+    delete: 'subscriptions/:subscriptionKey'
+  },
+  schedulers: {
+    get: 'schedulers/:schedulerKey',
+    store: 'schedulers',
+    delete: 'schedulers/:schedulerKey'
+  },
+  apartments: {
+    get: 'apartments/:apartmentKey',
+    preview: 'apartments/preview',
+    userLikes: 'apartments/preview/:userKey/liked',
+    userViews: 'apartments/preview/:userKey/viewed',
+    userRank: 'apartments/preview/:userKey/rated',
+    store: 'apartments'
+  },
+  addresses: {
+    get: 'addresses/:addressKey',
+    rules: 'addresses/rules',
+    store: 'addresses'
+  },
+  views: {
+    store: 'views'
+  },
+  likes: {
+    store: 'likes',
+    delete: 'likes/:likeKey',
   }
 };
+
+module.exports = { API };
 

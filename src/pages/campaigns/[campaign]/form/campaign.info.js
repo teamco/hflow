@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { useIntl } from 'umi';
-import { DatePicker, Select } from 'antd';
-import FormComponents from '@/components/Form';
-import { DEFAULT_DATE_FORMAT } from '@/utils/timestamp';
-import moment from 'moment';
-import { effectHook } from '@/utils/hooks';
+import React from 'react';
+import { useIntl } from '@umijs/max';
+import { Select } from 'antd';
 
-const { GenericPanel, HiddenField } = FormComponents;
+import FormComponents, { getFieldValue } from '@/components/Form';
+
+import { t } from '@/utils/i18n';
+import { isSpinning } from '@/utils/state';
+import { sortBy } from '@/utils/array';
+
+const { GenericPanel } = FormComponents;
 const { Option } = Select;
-const { RangePicker } = DatePicker;
+
+const MODEL_NAME = 'campaignModel';
 
 /**
  * @export
@@ -18,91 +21,139 @@ const { RangePicker } = DatePicker;
  */
 export const CampaignInfo = (props) => {
   const intl = useIntl();
+
   const {
     formRef,
     disabled,
-    subscriptions
+    loading,
+    isEdit,
+    subscriptions = [],
+    typeSubscriptionsMap,
+    setPriceAccumulation,
+    onUpdateEntityForm
   } = props;
 
-  const getValue = key => formRef?.getFieldValue(key);
-
-  const [subscriptionId, setSubscriptionId] = useState(false);
-  const [featuresList, setFeaturesList] = useState([]);
-  const subscriptionRefId = getValue('type');
-
-  effectHook(() => {
-    if (subscriptionRefId && subscriptions.length > 0) {
-      handleSubscriptionType(subscriptionRefId);
-    }
-  }, [subscriptionRefId, subscriptions]);
-
-  const handleSubscriptionType = (id) => {
-    setSubscriptionId(id);
-    const subscription = [...subscriptions]?.find(el => el.id === id);
-    formRef.setFieldsValue({ subscriptionType: subscription.featureType });
-  };
-
-  const handleFeatureList = (list) => {
-    setFeaturesList(list);
-  };
-
+  /**
+   * @constant
+   * @return {*|null}
+   */
   const getOptions = () => {
-    return [...subscriptions].find(el => el.id === subscriptionId)?.
-        features?.map((item, idx) => (
+    const subscriptionRef = getFieldValue(formRef, 'subscriptionRef');
+
+    return subscriptionRef ?
+        sortBy(
+            [...subscriptions].find(el => el.id === subscriptionRef)?.features,
+            'translateKeys.title',
+            intl
+        ).map((item, idx) => {
+          return (
+              <Option key={idx}
+                      value={item.id}>
+                {t(intl, item.translateKeys.title)}
+              </Option>
+          );
+        }) : null;
+  };
+
+  /**
+   * @constant
+   * @param ids
+   */
+  const handlePriceAcquiring = (ids) => {
+    const subscriptionRef = getFieldValue(formRef, 'subscriptionRef');
+    const selectedSubscription = [...subscriptions].find(el => el.id === subscriptionRef);
+    const features = selectedSubscription.features;
+    let sum = 0;
+    ids.forEach(item => {
+      const feature = features.find(feature => feature.id === item);
+      const price = feature.price.originalPrice;
+      sum += price;
+    });
+    setPriceAccumulation(sum);
+  };
+
+  /**
+   * @constant
+   * @return {*[]}
+   */
+  const getSubscriptionTypes = () => {
+    return (typeSubscriptionsMap instanceof Map) &&
+        [...typeSubscriptionsMap?.entries()].sort().map((type, idx) => (
             <Option key={idx}
-                    value={item.id}>
-              {intl.formatMessage({id: item.translateKeys.title})}
+                    value={type[0]}>
+              {type[0]}
             </Option>
         ));
   };
 
   /**
    * @constant
-   * @param {Event} e
-   * @param {function} handler
+   * @return {unknown}
    */
+  const getSubscriptionsByType = () => {
+    const subscriptionType = getFieldValue(formRef, 'subscriptionType');
+    const listOfSubscriptions = (typeSubscriptionsMap instanceof Map) &&
+        typeSubscriptionsMap.get(subscriptionType);
+
+    return listOfSubscriptions && sortBy(
+        listOfSubscriptions,
+        'translateKeys.title',
+        intl
+    ).map((item, idx) => (
+        <Option key={idx}
+                value={item.id}>
+          {t(intl, item.translateKeys.title)}
+        </Option>
+    ));
+  };
+
+  const onChangeCleanSelection = (fields = []) => {
+    onUpdateEntityForm(Object.fromEntries(fields.map(field => [field])));
+  };
+
+  const isSubscriptionTypeSelected = formRef.getFieldValue('subscriptionType');
+  const isSubscriptionSelected = formRef.getFieldValue('subscriptionRef');
+
+  const col24Props = { xs: 24, sm: 24, md: 24, lg: 24, xl: 24, xxl: 24 };
 
   return (
-      <GenericPanel header={intl.formatMessage({id: 'campaign.info', defaultMessage: 'Campaign Info'})}
+      <GenericPanel header={t(intl, 'campaigns.info')}
                     name={'info'}
                     defaultActiveKey={['info']}>
         <div>
-          <Select name={'type'}
+          <Select name={'subscriptionType'}
                   form={formRef}
-                  label={intl.formatMessage({id: 'subscription.type', defaultMessage: 'Subscription Type'})}
-                  disabled={disabled}
-                  onChange={(id) => handleSubscriptionType(id)}
+                  label={t(intl, 'campaigns.subscription.type')}
+                  disabled={disabled || isEdit}
+                  onChange={() => onChangeCleanSelection(['subscriptionRef', 'featuresByRef'])}
                   config={{ rules: [{ required: true }] }}>
-            {[...subscriptions].map((item, idx) => (
-                <Option key={idx}
-                        value={item.id}>
-                  {item.type}
-                </Option>
-            ))}
+            {getSubscriptionTypes()}
           </Select>
+          <Select name={'subscriptionRef'}
+                  form={formRef}
+                  label={t(intl, 'campaigns.subscription.title')}
+                  disabled={disabled || isEdit || !isSubscriptionTypeSelected}
+                  onChange={() => onChangeCleanSelection(['featuresByRef'])}
+                  config={{ rules: [{ required: true }] }}>
+            {getSubscriptionsByType()}
+          </Select>
+        </div>
+        <div colProps={col24Props}
+             spinOn={() => isSpinning(loading, [
+               `${MODEL_NAME}/campaignSubscriptions`
+             ])}>
           <Select name={'featuresByRef'}
                   mode={'multiple'}
-                  label={intl.formatMessage({id: 'subscription.features', defaultMessage: 'Features'})}
+                  label={t(intl, 'subscription.features')}
+                  onChange={handlePriceAcquiring}
+                  disabled={disabled || !isSubscriptionSelected}
                   allowClear
+                  form={formRef}
+                  config={{ rules: [{ required: true }] }}
                   style={{ width: '100%' }}>
-            {subscriptionId && getOptions()}
+            {getOptions()}
           </Select>
         </div>
-        <div>
-          <RangePicker name={'saleInfo'}
-                       form={formRef}
-                       format={DEFAULT_DATE_FORMAT}
-                       disabledDate={current => current && current < moment().endOf('day')}
-                       disabled={disabled}
-                       placeholder={[intl.formatMessage({id: 'subscription.saleStart', defaultMessage: 'Started at'}), intl.formatMessage({id: 'subscription.saleEnd', defaultMessage: 'Expired at'})]}
-                       config={{ rules: [{ type: 'array', required: true }] }}
-                       label={intl.formatMessage({id: 'subscription.saleAt', defaultMessage: 'Sale Started / Expired (at)'})}/>
-        </div>
-        <>
-          <HiddenField name={['subscriptionType']}
-                       form={formRef}
-                       disabled={disabled}/>
-        </>
       </GenericPanel>
   );
 };

@@ -1,6 +1,6 @@
-import { connect } from 'umi';
+import { connect } from '@umijs/max';
 
-import { durationTypes } from './durationTypes';
+import { durationTypes } from '@/pages/durationTypes/durationTypes';
 
 export default connect(
     ({ authModel, simpleModel, loading }) => ({
@@ -14,8 +14,8 @@ export default connect(
         dispatch({
           type: `simpleModel/query`,
           payload: {
-            component: 'durationTypes',
-            doc: 'durationTypes'
+            component: 'duration.types',
+            docName: 'durationTypes'
           }
         });
       },
@@ -26,8 +26,8 @@ export default connect(
         dispatch({
           type: 'simpleModel/prepareToSave',
           payload: {
-            component: 'durationTypes',
-            doc: 'durationTypes'
+            component: 'duration.types',
+            docName: 'durationTypes'
           }
         });
       }

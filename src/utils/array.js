@@ -1,11 +1,13 @@
+import { t } from '@/utils/i18n';
+
 /**
  * @export
  * @param list
  * @param {string} value
- * @param [t]
+ * @param [intl]
  * @return {*}
  */
-export const sortBy = (list = [], value, t = false) => {
+export const sortBy = (list, value, intl = false) => {
 
   /**
    * @private
@@ -22,7 +24,7 @@ export const sortBy = (list = [], value, t = false) => {
       });
     }
 
-    return t ? t(_value) : _value;
+    return intl ? t(intl, _value) : _value;
   };
 
   return [...list].sort((a, b) => {
@@ -38,7 +40,7 @@ export const sortBy = (list = [], value, t = false) => {
  * @param value
  * @return {*}
  */
-export const sortByDate = (list = [], value) => {
+export const sortByDate = (list, value) => {
   return [...list].sort((a, b) => {
     const keyA = new Date(a[value]),
         keyB = new Date(b[value]);

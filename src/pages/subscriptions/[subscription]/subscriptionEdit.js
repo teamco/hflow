@@ -1,29 +1,40 @@
-import React  from 'react';
-import { DownOutlined, SettingOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Form, PageHeader } from 'antd';
-import { useParams, useIntl } from 'umi';
-
-import SaveButton from '@/components/Buttons/save.button';
+import React, { useState } from 'react';
+import { ShoppingCartOutlined } from '@ant-design/icons';
+import { Form } from 'antd';
+import { useIntl, useParams } from '@umijs/max';
 
 import Main from '@/components/Main';
-import Page from '@/components/Page';
+import Page from '@/components/Page/page.connect';
 import Common from '@/components/Common';
 import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
+import { SchedulersList } from '@/components/Scheduler/SchedulersList';
+import { formProps } from '@/components/Form/formProps';
+import { SubHeader } from '@/components/Page/page.subheader';
+import { validateFieldsOnLoad } from '@/components/Form';
 
 import { SubscriptionInfo } from '@/pages/subscriptions/[subscription]/form/subscription.info';
 import { SubscriptionFeatures } from '@/pages/subscriptions/[subscription]/form/subscription.features';
 import { SubscriptionDiscount } from '@/pages/subscriptions/[subscription]/form/subscription.discount';
-import SubscriptionMenu from '@/pages/subscriptions/metadata/subscriptions.menu';
+import { subscriptionMenu } from '@/pages/subscriptions/metadata/subscriptions.menu';
 
 import { fromForm } from '@/utils/object';
-import { isLoading } from '@/utils/state';
 import { effectHook } from '@/utils/hooks';
+import { t } from '@/utils/i18n';
+import { componentAbilities } from '@/utils/auth/component.setting';
 
-import menuStyles from '@/components/menu.less';
-import styles from '@/pages/subscriptions/subscriptions.module.less';
+import { isNew } from '@/services/common.service';
+
+import {
+  updateFeaturesPanel,
+  updateSchedulerPanel
+} from '@/pages/subscriptions/[subscription]/panels';
+
 import userStyles from '@/pages/users/users.module.less';
+import styles from '@/pages/subscriptions/subscriptions.module.less';
 
 const { Info } = Main;
+
+const MODEL_NAME = 'subscriptionModel';
 
 /**
  * @export
@@ -33,17 +44,22 @@ const { Info } = Main;
 export const subscriptionEdit = (props) => {
   const [formRef] = Form.useForm();
   const intl = useIntl();
+
   const {
     authModel,
     subscriptionModel,
     loading,
+    testId,
     onEditSubscription,
     onFieldsChange,
     onUpdateTags,
     onSave,
     onClose,
     onDeleteSubscription,
-    onChangeFeatureType
+    onChangeFeatureType,
+    onHandleScheduler,
+    onDeleteScheduler,
+    onUpdateSider
   } = props;
 
   /**
@@ -54,7 +70,7 @@ export const subscriptionEdit = (props) => {
   const {
     entityForm,
     features,
-    selectedSubscription,
+    selectedSubscription = {},
     subscriptionTypes,
     discountTypes,
     businessUsers,
@@ -62,64 +78,111 @@ export const subscriptionEdit = (props) => {
     durationTypes,
     featureTypes,
     tags,
+    schedulers,
+    schedulerTypes,
     isEdit,
-    touched
+    touched,
+    translateMessages
   } = subscriptionModel;
 
-  const { ability } = authModel;
   const component = 'subscriptions';
-  const disabled = ability.cannot('update', component);
-  const canUpdate = ability.can('update', component);
+
+  const {
+    ability,
+    ableFor,
+    disabled,
+    canUpdate
+  } = componentAbilities(authModel, component, !isNew(params.subscription));
+
+  const [expectedOriginalPrice, setExpectedOriginalPrice] = useState(0);
 
   effectHook(() => {
-    canUpdate && onEditSubscription(params);
-  }, [authModel.user, canUpdate]);
+    if (canUpdate) {
+      onEditSubscription(params);
+    }
+  }, [canUpdate]);
 
-  /**
-   * @constant
-   * @param formValues
-   */
-  const onFinish = formValues => {
-    onSave(formValues, params);
+  validateFieldsOnLoad(formRef, entityForm);
+
+  const {
+    featuresByRef = []
+  } = selectedSubscription || {};
+
+  const metaProps = {
+    intl,
+    loading,
+    ability,
+    disabled,
+    formRef,
+    component,
+    MODEL_NAME
+  };
+
+  const panelProps = {
+    ...metaProps,
+    onUpdateSider
   };
 
   const subscriptionInfoProps = {
-    formRef,
-    disabled,
+    ...metaProps,
     subscriptionTypes,
     durationTypes,
-    discountTypes,
-    businessUsers
+    discountTypes
   };
 
   const featuresProps = {
+    ...metaProps,
     isEdit,
-    formRef,
-    disabled,
     features,
+    featuresByRef,
+    businessUsers,
     selectedSubscription,
     featureTypes,
-    onChangeFeatureType
+    onChangeFeatureType,
+    setExpectedOriginalPrice,
+    onOpenSiderPanel(visible) {
+      updateFeaturesPanel({
+        ...panelProps,
+        onChangeFeatureType
+      }, visible);
+    }
   };
 
   const discountProps = {
-    formRef,
-    disabled,
+    ...metaProps,
     currencies,
-    durationTypes
+    durationTypes,
+    expectedOriginalPrice,
+    readOnlyFields: ['originalPrice'],
+    renderScheduler: () => (
+        <SchedulersList data={schedulers['discountScheduler']} {...metaProps}
+                        prefix={schedulerTypes.discount}
+                        formRef={formRef}
+                        entityType={t(intl, 'price.discount')}
+                        onDeleteScheduler={onDeleteScheduler}
+                        onOpenSiderPanel={(visible, entityForm = {}) => {
+                          updateSchedulerPanel({
+                            ...panelProps,
+                            ...entityForm,
+                            prefix: schedulerTypes.discount,
+                            entityType: t(intl, 'price.discount'),
+                            onHandleScheduler,
+                            durationTypes
+                          }, visible);
+                        }}/>
+    )
   };
 
-  const translateProps = {
-    formRef,
-    disabled
-  };
+  const translateProps = { ...metaProps, translateMessages };
 
   const tagsProps = {
-    formRef,
-    onUpdateTags,
-    disabled,
+    ...metaProps,
     tags,
-    header: intl.formatMessage({id: 'subscription.tags', defaultMessage: 'Tags'})
+    onUpdateTags,
+    canDelete: canUpdate,
+    canCreate: canUpdate,
+    canUpdate,
+    header: t(intl, 'subscription.tags')
   };
 
   const {
@@ -130,7 +193,7 @@ export const subscriptionEdit = (props) => {
   } = fromForm(entityForm, 'metadata') || {};
 
   const infoProps = {
-    t,
+    ...metaProps,
     isEdit,
     touched,
     info: {
@@ -141,84 +204,112 @@ export const subscriptionEdit = (props) => {
     }
   };
 
-  const menuProps = {
-    ability,
-    isEdit,
-    loading,
-    params,
-    component,
-    onDeleteSubscription
-  };
-
   const subTitle = (
       <>
         <ShoppingCartOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
-            intl.formatMessage({id: 'subscription.actions.edit', defaultMessage: 'Edit Subscriptions'}) :
-            intl.formatMessage({id: 'subscription.actions.addNew', defaultMessage: 'Add new Subscriptions' })
-        }
+            t(intl, 'subscription.actions.edit') :
+            t(intl, 'subscription.actions.addNew')}
       </>
   );
+
+  const onChangeFormProps = {
+    touched,
+    entityForm,
+    onFinish(formValues) {
+      canUpdate && onSave(formValues, params);
+    },
+    onFieldsChange,
+    loading,
+    spinOn: [
+      `${MODEL_NAME}/validateSubscription`,
+      `${MODEL_NAME}/editSubscription`,
+      `${MODEL_NAME}/getSimpleEntity`,
+      `${MODEL_NAME}/features`,
+      `${MODEL_NAME}/cleanForm`
+    ]
+  };
+
+  const pageHeaderProps = {
+    subTitle,
+    loading,
+    disabled,
+    MODEL_NAME,
+    isEdit,
+    component,
+    actions: {
+      exportBtn: false,
+      newBtn: false,
+      closeBtn: { onClose },
+      saveBtn: { ableFor, touched, formRef },
+      menuBtn: {
+        label: t(intl, 'subscription.actions.manage'),
+        selectedEntity: selectedSubscription,
+        menuProps: {
+          ...metaProps,
+          isEdit,
+          params,
+          intl,
+          onDeleteSubscription
+        },
+        dropDownMenu: subscriptionMenu,
+        testId: `${testId}.menuBtn`
+      }
+    }
+  };
 
   return (
       <Page className={userStyles.users}
             component={component}
             touched={!disabled && touched}
+            ableFor={ableFor}
             spinEffects={[
-              'subscriptionModel/editSubscription',
-              'subscriptionModel/subscriptionTypes',
-              'subscriptionModel/changeFeatureType',
-              'subscriptionModel/features',
-              'subscriptionModel/getSimpleEntity',
-              'subscriptionModel/prepareToSave'
+              `${MODEL_NAME}/validateSubscription`,
+              `${MODEL_NAME}/editSubscription`,
+              `${MODEL_NAME}/getSimpleEntity`,
+              `${MODEL_NAME}/features`,
+              `${MODEL_NAME}/cleanForm`,
+              `${MODEL_NAME}/handleUpdate`,
+              `${MODEL_NAME}/handleSave`,
+              `${MODEL_NAME}/prepareToSave`
             ]}>
         <div className={styles.subscriptionWrapper}>
-          <PageHeader ghost={false}
-                      subTitle={subTitle}
-                      extra={[
-                        <Button key={'close'}
-                                size={'small'}
-                                loading={isLoading(loading.effects['subscriptionModel/prepareToSave'])}
-                                onClick={() => onClose()}>
-                          {intl.formatMessage({id: 'actions.close', defaultMessage: 'Close'})}
-                        </Button>,
-                        <SaveButton key={'save'}
-                                    isEdit={isEdit}
-                                    disabled={!touched || disabled}
-                                    formRef={formRef}
-                                    loading={loading.effects['subscriptionModel/prepareToSave']}/>,
-                        <Dropdown overlay={<SubscriptionMenu record={selectedSubscription} {...menuProps} />}
-                                  disabled={!isEdit || disabled}
-                                  trigger={['click']}
-                                  overlayClassName={menuStyles.customActionMenu}
-                                  key={'custom'}>
-                          <Button size={'small'}
-                                  icon={<SettingOutlined/>}
-                                  className={menuStyles.customAction}>
-                            {intl.formatMessage({id: 'subscription.actions:manage', defaultMessage: 'Manage Subscriptions'})} <DownOutlined/>
-                          </Button>
-                        </Dropdown>
-                      ]}/>
-          <Form layout={'vertical'}
-                className={styles.form}
+          <SubHeader {...pageHeaderProps}/>
+          <Form {...formProps(onChangeFormProps)}
                 form={formRef}
-                fields={entityForm}
-                scrollToFirstError={true}
-                onFinish={onFinish}
-                onFieldsChange={onFieldsChange}
                 initialValues={{
+                  type: 'Basic',
                   numberOfUsers: 1,
                   featureType: 'Business',
                   paymentDuration: {
                     type: 'Month',
                     period: 1
                   },
+                  translateKeys: {
+                    title: '',
+                    description: ''
+                  },
                   ...DEFAULT_PRICE_VALUES(currencies[0])
                 }}>
             <SubscriptionInfo {...subscriptionInfoProps} />
-            <Common.Translate {...translateProps}/>
-            <SubscriptionDiscount {...discountProps}/>
+            <SchedulersList data={schedulers[schedulerTypes.sale]} {...metaProps}
+                            prefix={schedulerTypes.sale}
+                            formRef={formRef}
+                            entityType={t(intl, 'subscription.saleAt')}
+                            onDeleteScheduler={onDeleteScheduler}
+                            onOpenSiderPanel={(visible, entityForm = {}) => {
+                              updateSchedulerPanel({
+                                ...panelProps,
+                                ...entityForm,
+                                prefix: schedulerTypes.sale,
+                                entityType: t(intl, 'subscription.saleAt'),
+                                onHandleScheduler,
+                                durationTypes
+                              }, visible);
+                            }}/>
             <SubscriptionFeatures {...featuresProps} />
+            <SubscriptionDiscount {...discountProps} />
+            <Common.Translate {...translateProps} />
             <Common.Tags {...tagsProps} />
             <Info {...infoProps} />
           </Form>

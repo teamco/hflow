@@ -1,4 +1,10 @@
 .users {
+  :global {
+    .ant-space {
+      display: flex;
+    }
+  }
+
   .avatarWrapper {
     width: 20px;
     overflow: hidden;
@@ -23,7 +29,9 @@
   }
 
   .userCards {
-    display: block;
+    display: flex;
+    margin: 20px;
+    flex-wrap: wrap;
 
     .userCard {
       float: left;
@@ -66,6 +74,8 @@
     }
 
     margin: 0 10px 0 5px;
+    display: flex;
+    align-items: center;
   }
 
   .nowrap {
@@ -74,15 +84,7 @@
 
   .flex {
     display: flex;
-  }
-}
-
-.profileProvider {
-  display: flex;
-  margin-top: 18px;
-
-  > div {
-    margin-left: 5px;
+    align-items: center;
   }
 }
 
@@ -111,29 +113,6 @@
       top: 1px;
       position: relative;
     }
-  }
-}
-
-.profile {
-  margin-left: -30px;
-  display: flex;
-  margin-top: 20px;
-
-  .currentUser {
-    background-color: rgba(255, 191, 0, 0.3);
-    padding: 3px 5px;
-    border-radius: 2px;
-  }
-
-  img {
-    border-radius: 5px;
-    margin-right: 20px;
-    flex: 20%;
-    height: 80px;
-  }
-
-  & > div {
-
   }
 }
 
@@ -176,5 +155,56 @@
   span[role='img'] {
     position: relative;
     top: 1px;
+  }
+}
+
+.profileInfo {
+  display: flex;
+
+  span[aria-label="info-circle"] {
+    display: none;
+  }
+
+  .profile {
+    .currentUser {
+      background-color: rgba(255, 191, 0, 0.3);
+      padding: 3px 5px;
+      border-radius: 2px;
+    }
+
+    img {
+      border-radius: 5px;
+      width: 100%;
+    }
+
+    & > div:nth-child(2) {
+      font-size: 14px;
+    }
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+      row-gap: 6px;
+    }
+  }
+
+  .profileProvider {
+    display: flex;
+    align-items: center;
+
+    > div {
+      margin-left: 5px;
+    }
+  }
+
+  :global {
+    .ant-modal-content {
+      width: 100%;
+    }
+
+    .ant-modal-confirm-content {
+      max-width: 100% !important;
+      margin-inline-start: 0 !important;
+    }
   }
 }

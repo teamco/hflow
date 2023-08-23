@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row, Select, Tag } from 'antd';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
 import {
   AndroidOutlined,
   BoldOutlined,
@@ -11,12 +11,15 @@ import {
   ToolOutlined,
   UserOutlined
 } from '@ant-design/icons';
+
 import { tsToLocaleDateTime } from '@/utils/timestamp';
+import { t } from '@/utils/i18n';
+
 import EmailVerified from '@/components/Profile/email.verified';
 
-import { isAdmin, isBusiness, isDeveloper, isTest } from 'services/userRoles.service';
+import { isAdmin, isBusiness, isDeveloper, isTest } from '@/services/userRoles.service';
 
-import styles from 'pages/users/users.module.less';
+import styles from '@/pages/users/users.module.less';
 
 const { Option, OptGroup } = Select;
 
@@ -35,7 +38,6 @@ export const getRoleIcon = role => {
 
 /**
  * @export
- * @param t
  * @param currentUserRoles
  * @param component
  * @param verificationSent
@@ -82,6 +84,16 @@ export const expendableProfile = (
     return [...roles].sort().filter(role => !current.includes(role));
   };
 
+  const handleOptions = (label, roles) => {
+    return {
+      label,
+      options: filterRoles(currentRoles, roles).map((role) => ({
+        label: role,
+        value: role
+      }))
+    };
+  };
+
   /**
    * @constant
    * @param e
@@ -107,23 +119,17 @@ export const expendableProfile = (
           <>
             <div>
               <ControlTwoTone/>
-              <strong>{`${intl.formatMessage({id: 'actions.assign', defaultMessage: 'Assign'})} ${t('auth:roles')}`}</strong>
+              <strong>{`${t(intl, 'actions.assign')} ${t(intl, 'auth.roles')}`}</strong>
             </div>
-            <Select value={intl.formatMessage({id: 'actions.select', defaultMessage: 'Select'})}
+            <Select value={t(intl, 'actions.select')}
                     onSelect={handleRoleTags}
+                    style={{ width: 200 }}
                     size={'small'}
-                    style={{ width: 200 }}>
-              <OptGroup label={intl.formatMessage({id: 'panel.userRoles', defaultMessage: 'User Roles'})}>
-                {filterRoles(currentRoles, userRoles?.roles).map((role, idx) => (
-                    <Option key={`ur.${idx}`} value={role}>{role}</Option>
-                ))}
-              </OptGroup>
-              <OptGroup label={intl.formatMessage({id: 'panel.businessRoles', defaultMessage: 'Business Roles'})}>
-                {filterRoles(currentRoles, businessRoles?.roles).map((role, idx) => (
-                    <Option key={`br.${idx}`} value={role}>{role}</Option>
-                ))}
-              </OptGroup>
-            </Select>
+                    optionFilterProp="children"
+                    options={[
+                      handleOptions(t(intl, 'panel.userRoles'), userRoles?.roles),
+                      handleOptions(t(intl, 'panel.businessRoles'), businessRoles?.roles)
+                    ]}/>
           </>
       );
     }
@@ -141,14 +147,14 @@ export const expendableProfile = (
               <Col {...colProps}>
                 <div>
                   <MailTwoTone/>
-                  <strong>{intl.formatMessage({id: 'auth.email', defaultMessage: 'Email'})}</strong>
+                  <strong>{t(intl, 'auth.email')}</strong>
                 </div>
-                <div>{record.email || intl.formatMessage({id: 'error.na', defaultMessage: 'None'})}</div>
+                <div>{record.email || t(intl, 'error.na')}</div>
               </Col>
               <Col {...colProps}>
                 <div>
                   <CalendarTwoTone/>
-                  <strong>{intl.formatMessage({id: 'form.createdAt', defaultMessage: 'Created at'})}</strong>
+                  <strong>{t(intl, 'form.createdAt')}</strong>
                 </div>
                 <div>{tsToLocaleDateTime(+(new Date(record.metadata.creationTime)))}</div>
               </Col>
@@ -165,7 +171,7 @@ export const expendableProfile = (
               <Col {...colProps}>
                 <div>
                   <ControlTwoTone/>
-                  <strong>{intl.formatMessage({id: 'auth.roles', defaultMessage: 'Roles'})}</strong>
+                  <strong>{t(intl, 'auth.roles')}</strong>
                 </div>
                 <div>
                   {currentRoles.map((role, idx) => (

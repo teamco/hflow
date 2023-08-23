@@ -1,29 +1,30 @@
 import React from 'react';
-import { useParams, useIntl } from 'umi';
-import { Button, Dropdown, Form, PageHeader } from 'antd';
-import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
+import { useParams, useIntl } from '@umijs/max';
+import { Form } from 'antd';
+import { TrademarkOutlined } from '@ant-design/icons';
 
-import Main from '@/components/Main';
-import Page from '@/components/Page';
-import BusinessMenu from '@/pages/users/[user]/businesses/metadata/business.menu';
+import Page from '@/components/Page/page.connect';
+import { SubHeader } from '@/components/Page/page.subheader';
 
 import { fromForm } from '@/utils/object';
-import { isNew } from '@/services/common.service';
+import { effectHook } from '@/utils/hooks';
+import { componentAbilities } from '@/utils/auth/component.setting';
+import { t } from '@/utils/i18n';
+
+import { businessMenu } from '@/pages/users/[user]/businesses/metadata/business.menu';
 
 import styles from '@/pages/users/[user]/businesses/businesses.module.less';
-import menuStyles from '@/components/menu.less';
 import userStyles from '@/pages/users/users.module.less';
-import { effectHook } from '@/utils/hooks';
-
-const { Info } = Main;
 
 export const businessShow = (props) => {
   const [formRef] = Form.useForm();
   const intl = useIntl();
+
   const {
     authModel,
     businessModel,
     loading,
+    testId,
     onEditBusiness,
     onActivateBusiness,
     onHoldBusiness,
@@ -50,17 +51,21 @@ export const businessShow = (props) => {
 
   const { ability } = authModel;
   const component = 'businesses';
-  const disabled = ability.cannot('update', component);
-  const read = ability.can('read', component);
+  const MODEL_NAME = 'businessModel';
+  const {
+    ableFor,
+    disabled,
+    canRead
+  } = componentAbilities(authModel, component, isEdit);
 
   effectHook(() => {
-    if (read) {
+    if (canRead) {
       onEditBusiness(params, false);
     }
   }, [
     authModel.user,
     params.user,
-    read
+    canRead
   ]);
 
   const businessInfoProps = {
@@ -147,9 +152,37 @@ export const businessShow = (props) => {
   const subTitle = (
       <>
         <TrademarkOutlined style={{ marginRight: 10 }}/>
-        {intl.formatMessage({id: 'business.actions.show', defaultMessage: 'Show Business'})}
+        {t(intl, 'business.actions.show')}
       </>
   );
+
+  const pageHeaderProps = {
+    subTitle,
+    loading,
+    disabled,
+    MODEL_NAME,
+    isEdit,
+    component,
+    actions: {
+      exportBtn: false,
+      newBtn: false,
+      saveBtn: false,
+      closeBtn: { onClose: () => onClose(params.user) },
+      menuBtn: {
+        selectedEntity: { id: params?.business },
+        label: t(intl, 'business.actions.manage'),
+        menuProps: {
+          ...menuProps,
+          isEdit,
+          params,
+          intl,
+          onDeleteBusiness
+        },
+        dropDownMenu: businessMenu,
+        testId: `${testId}.menuBtn`
+      }
+    }
+  };
 
   return (
       <Page className={userStyles.users}
@@ -159,25 +192,7 @@ export const businessShow = (props) => {
               'businessModel/editBusiness'
             ]}>
         <div className={styles.businessWrapper}>
-          <PageHeader ghost={false}
-                      subTitle={subTitle}
-                      extra={[
-                        <Button key={'close'}
-                                size={'small'}
-                                onClick={() => onClose(params.user)}>
-                          {intl.formatMessage({id: 'actions.close', defaultMessage: 'Close'})}
-                        </Button>,
-                        <Dropdown overlay={<BusinessMenu record={{ id: params?.business }} {...menuProps} />}
-                                  trigger={['click']}
-                                  overlayClassName={menuStyles.customActionMenu}
-                                  key={'custom'}>
-                          <Button size={'small'}
-                                  icon={<SettingOutlined/>}
-                                  className={menuStyles.customAction}>
-                            {intl.formatMessage({id: 'business.actions.manage', defaultMessage: 'Manage Business'})} <DownOutlined/>
-                          </Button>
-                        </Dropdown>
-                      ]}/>
+          <SubHeader {...pageHeaderProps}/>
         </div>
       </Page>
   );

@@ -8,7 +8,7 @@ export default {
   "business.email": "Business Email",
   "business.type": "Business Type",
   "business.website": "Website",
-  "business.max_entities": "Maximum {{entities}} that can be assigned",
+  "business.max_entities": "Maximum {entities} that can be assigned",
   "business.logo": "Business Logo",
   "business.license": "Proof of License",
   "business.subLicense": "License",

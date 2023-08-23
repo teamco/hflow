@@ -1,44 +1,50 @@
 import React from 'react';
-import { useIntl } from 'umi';
-import FormComponents from '@/components/Form';
-import { stub } from '@/utils/function';
+import { useIntl } from '@umijs/max';
 
-const { GenericPanel, EditableTags } = FormComponents;
+import { stub } from '@/utils/function';
+import { t } from '@/utils/i18n';
+
+import GenericPanel from '@/components/Form/GenericPanel';
+import EditableTags from '@/components/Form/EditableTags';
 
 /**
  * @export
- * @param t
- * @param formRef
- * @param [tags]
- * @param {string} header
- * @param {boolean} disabled
- * @param {function} [onUpdateTags]
+ * @param props
  * @return {JSX.Element}
  * @constructor
  */
-const CommonTags = ({
-  formRef,
-  tags = [],
-  disabled,
-  onUpdateTags = stub(),
-  name = 'tags',
-  defaultActiveKey = null,
-  ...rest
-}) => {
+const CommonTags = (props) => {
   const intl = useIntl();
-  const { header = intl.formatMessage({id: 'form.tags', defaultMessage: 'Tags'}) } = rest;
+
+  const {
+    testId,
+    formRef,
+    tags = [],
+    disabled,
+    onUpdateTags = stub,
+    canUpdate = false,
+    canDelete = false,
+    canCreate = false,
+    name = 'tags',
+    defaultActiveKey = null,
+    ...rest
+  } = props;
+
+  const { header = t(intl, 'form.tags') } = rest;
 
   return (
       <GenericPanel header={header}
-                    data-testid={'common-tags'}
+                    data-testid={testId}
                     name={name}
                     defaultActiveKey={defaultActiveKey}>
         <div>
-          <EditableTags label={intl.formatMessage({id: 'form.tags', defaultMessage: 'Tags'})}
+          <EditableTags label={t(intl, 'form.tags')}
                         name={'tags'}
                         form={formRef}
+                        canDelete={canDelete}
+                        canUpdate={canUpdate}
+                        canCreate={canCreate}
                         disabled={disabled}
-                        newTag={intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
                         onChange={onUpdateTags}
                         tags={tags}/>
         </div>

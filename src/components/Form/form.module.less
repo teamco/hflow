@@ -1,3 +1,7 @@
+.form {
+  padding: 20px;
+}
+
 .siteTagPlus {
   background: #1890ff !important;
   color: #fff !important;
@@ -31,27 +35,45 @@
   vertical-align: top;
 }
 
-.collapsePanel {
-  margin-bottom: 20px !important;
+.collapsePanelWrapper {
+  height: auto;
+  transition: all 1s ease-out;
 
-  :global {
-    .ant-form-item-required {
-      &::before {
-        display: none !important;
-      }
-    }
+  .collapsePanel {
+    margin-bottom: 20px !important;
 
-    .ant-collapse-header {
-      > div {
-        position: relative;
-        top: 3px;
+    :global {
+      .ant-form-item-required {
+        &::before {
+          display: none !important;
+        }
       }
 
-      .ant-collapse-header-text {
-        font-size: 14px;
+      .ant-collapse-header {
+        align-items: center;
+
+        > div {
+          position: relative;
+
+          button[type="button"] {
+            position: relative;
+
+            &[role="switch"] {
+              top: 0
+            }
+          }
+        }
+
+        .ant-collapse-header-text {
+          font-size: 14px;
+        }
       }
     }
   }
+}
+
+.flex {
+  display: flex;
 }
 
 .disabledPanel {
@@ -74,15 +96,19 @@
       font-size: 15px;
       color: #FFBF00;
       position: absolute;
-      right: 8px;
-      top: 3px;
+      right: 13px;
+      top: 7px;
       transform: scale(.9, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
   :global {
     .ant-input-clear-icon {
-      right: 25px;
+      right: 33px;
+      top: 12px;
     }
   }
 }
@@ -92,14 +118,12 @@
     &::after {
       content: "\2713";
       color: #52c41a;
-      top: 8px;
       border: 1px solid #69cb3f;
-      border-radius: 6px;
-      font-size: 8px;
+      border-radius: 50%;
+      font-size: 6px;
       width: 12px;
       height: 12px;
-      line-height: 12px;
-      text-align: center;
+      top: 12px;
       transform: none;
     }
   }
@@ -109,3 +133,15 @@
   display: none;
 }
 
+.headerFormItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 10px;
+
+  :global {
+    .ant-form-item {
+      margin-bottom: 0;
+    }
+  }
+}

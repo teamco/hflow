@@ -1,10 +1,12 @@
-import React  from 'react';
+import React from 'react';
 
-import LandingPage from 'layouts/landing/page';
-import LandingContent from 'pages/landing/sections/landing.content';
+import LandingPage from '@/layouts/landing/page';
 
-import styles from 'pages/landing/landing.module.less';
+import LandingContent from '@/pages/landing/sections/landing.content';
+
 import { effectHook } from '@/utils/hooks';
+
+import styles from '@/pages/landing/landing.module.less';
 
 export const landing = (props) => {
   const {
@@ -12,11 +14,13 @@ export const landing = (props) => {
     landingModel,
     watch = true,
     loading,
-    onGetLandingData
+    onLike,
+    onGetLandingData,
+    onFetchCarousel
   } = props;
 
-  const { user } = authModel;
-  
+  const { user, ability } = authModel;
+
   const {
     header: { position },
     data
@@ -24,12 +28,17 @@ export const landing = (props) => {
 
   effectHook(() => {
     onGetLandingData();
-  }, [user]);
+  }, [ability]);
 
   const contentProps = {
+    data,
+    loading,
     className: position === 'fixed' ? styles.contentFixed : null,
-    data
+    onLike,
+    onFetchCarousel
   };
+
+  const component = 'landing';
 
   return (
       <LandingPage spinEffects={['landingModel/query']}>

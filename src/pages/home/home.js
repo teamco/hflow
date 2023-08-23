@@ -1,8 +1,8 @@
-import React  from 'react';
+import React from 'react';
 
-import Page from '@/components/Page';
+import Page from '@/components/Page/page.connect';
 
-import styles from 'pages/home/home.module.less';
+import styles from '@/pages/home/home.module.less';
 import { effectHook } from '@/utils/hooks';
 
 export const home = (props) => {

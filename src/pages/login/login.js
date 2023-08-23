@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
 import { FacebookOutlined, GoogleOutlined, TwitterOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 import ErrorModal from '@/components/Authentication/modals/error.modal';
 import SignInModal from '@/components/Authentication/modals/signin.modal';
-import SignUp from '@/components/Authentication/signUp.connect';
-import Page from '@/components/Page';
+import Page from '@/components/Page/page.connect';
 import Logo from '@/components/Logo';
 
-import { isLoading } from '@/utils/state';
 import { effectHook } from '@/utils/hooks';
+import { t } from '@/utils/i18n';
+
+import { firebaseAppAuth, providers } from '@/services/firebase.service';
 
 /**
  * @constant
@@ -19,22 +21,23 @@ import { effectHook } from '@/utils/hooks';
  */
 export const Login = (props) => {
   const intl = useIntl();
+
   /* These props are provided by withFirebaseAuth HOC */
   const {
-    signInWithEmailAndPassword,
-    signInWithGoogle,
-    signInWithFacebook,
-    signInWithTwitter,
     setError,
     user,
-    error,
-    loading
+    error
   } = props;
 
   const {
     authModel,
-    isVisible = true
+    isVisible = true,
+    mask = true,
+    maskStyle,
+    wrapClassName
   } = props;
+
+  const component = 'login';
 
   const [isSignInVisible, setIsSignInVisible] = useState(isVisible);
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
@@ -50,7 +53,7 @@ export const Login = (props) => {
 
   if (error) {
     errorProps = {
-      title: intl.formatMessage({id: 'error.errorNum', defaultMessage: 'Error: {number}'}, { number: 400 }),
+      title: t(intl, 'error.errorNum', { number: 400 }),
       error
     };
 
@@ -84,7 +87,14 @@ export const Login = (props) => {
    * @param values
    */
   const onFinish = values => {
-    signInWithEmailAndPassword(values.email, values.password);
+    signInWithEmailAndPassword(firebaseAppAuth, values.email, values.password).then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      // ...
+    }).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
   };
 
   /**
@@ -95,9 +105,8 @@ export const Login = (props) => {
    * @return {JSX.Element}
    */
   const authBtn = (provider, icon, signInFn) => (
-      <Tooltip title={intl.formatMessage({id: 'auth.signInWith', defaultMessage: 'Sign in with {provider}'},{ provider })}>
-        <Button loading={isLoading(loading)}
-                onClick={() => handleCancel(signInFn)}
+      <Tooltip title={t(intl, 'auth.signInWith', { provider: provider })}>
+        <Button onClick={() => handleCancel(signInFn)}
                 icon={icon}
                 size={'small'}>
           {provider}
@@ -113,7 +122,7 @@ export const Login = (props) => {
   const _googleBtn = authBtn(
       'Google',
       <GoogleOutlined/>,
-      signInWithGoogle
+      providers.googleProvider
   );
 
   /**
@@ -124,7 +133,7 @@ export const Login = (props) => {
   const _facebookBtn = authBtn(
       'Facebook',
       <FacebookOutlined/>,
-      signInWithFacebook
+      providers.facebookProvider
   );
 
   /**
@@ -135,7 +144,7 @@ export const Login = (props) => {
   const _twitterBtn = authBtn(
       'Twitter',
       <TwitterOutlined/>,
-      signInWithTwitter
+      providers.twitterProvider
   );
 
   const signUpProps = {
@@ -153,24 +162,27 @@ export const Login = (props) => {
     handleCancel,
     authModel,
     onFinish,
-    loading,
     setIsSignInVisible,
     setIsRegisterVisible,
-    buttons: {
+    mask,
+    maskStyle,
+    wrapClassName,
+    buttons: [
       _googleBtn,
+      _facebookBtn,
       _twitterBtn
-    }
+    ]
   };
 
   const logoProps = {
     url: '/',
-    title: '__TITLE_'
+    title: '__TITLE__'
   };
 
   return (
       <Page component={'login'}>
         <Logo {...logoProps} />
-        <SignUp {...signUpProps} />
+        {/*<SignUp {...signUpProps} />*/}
         <ErrorModal errorProps={errorProps}
                     isErrorVisible={isErrorVisible}
                     handleErrorCancel={handleErrorCancel}/>

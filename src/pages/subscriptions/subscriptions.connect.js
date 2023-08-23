@@ -1,6 +1,8 @@
-import { connect } from 'umi';
+import { connect } from '@umijs/max';
 
 import { subscriptions } from './subscriptions';
+
+const MODEL_NAME = 'subscriptionModel'
 
 export default connect(
     ({ authModel, subscriptionModel, loading }) => ({
@@ -11,10 +13,13 @@ export default connect(
     (dispatch) => ({
       dispatch,
       onNew() {
-        dispatch({ type: `subscriptionModel/newSubscription` });
+        dispatch({ type: `${MODEL_NAME}/newSubscription` });
       },
       onQuery() {
-        dispatch({ type: 'subscriptionModel/query' });
+        dispatch({ type: `${MODEL_NAME}/query` });
+      },
+      onDeleteSubscription(payload) {
+        dispatch({type: `${MODEL_NAME}/deleteSubscription`, payload })
       }
     })
 )(subscriptions);

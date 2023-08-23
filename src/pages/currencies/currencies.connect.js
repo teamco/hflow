@@ -1,6 +1,6 @@
-import { connect } from 'umi';
+import { connect } from '@umijs/max';
 
-import { currencies } from './currencies';
+import { currencies } from '@/pages/currencies/currencies';
 
 export default connect(
     ({ authModel, simpleModel, loading }) => ({
@@ -15,7 +15,7 @@ export default connect(
           type: `simpleModel/query`,
           payload: {
             component: 'currencies',
-            doc: 'currencies'
+            docName: 'currencies'
           }
         });
       },
@@ -27,7 +27,7 @@ export default connect(
           type: 'simpleModel/prepareToSave',
           payload: {
             component: 'currencies',
-            doc: 'currencies'
+            docName: 'currencies'
           }
         });
       }

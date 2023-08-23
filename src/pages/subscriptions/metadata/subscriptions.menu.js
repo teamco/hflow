@@ -1,40 +1,42 @@
 import React from 'react';
 import { DeleteTwoTone, ShoppingCartOutlined } from '@ant-design/icons';
-import { NavLink, useIntl } from 'umi';
-import { Menu, Popconfirm } from 'antd';
-import { withTranslation } from 'react-i18next';
+import { NavLink } from '@umijs/max';
+import { Popconfirm } from 'antd';
 
 import { abilityMenuItem } from '@/utils/abilityComponent/abilityMenuItem';
 import { COLORS } from '@/utils/colors';
+import { t } from '@/utils/i18n';
 
 import tableStyles from '@/components/Main/Table/table.module.less';
 
 /**
  * @export
  * @param props
- * @return {JSX.Element}
+ * @return {*[]}
  */
-export const SubscriptionMenu = props => {
-  const intl = useIntl();
+export const subscriptionMenu = props => {
   const {
     ability,
     isEdit,
     component,
     record,
+    intl,
+    canUpdate,
+    canDelete,
     onDeleteSubscription
   } = props;
 
-  const canEdit = ability.can('edit', component);
-  const canDelete = ability.can('delete', component);
+  const subType = 'Subscriptions';
 
   const editProps = {
     key: 'edit',
-    canI: canEdit,
+    canI: canUpdate,
+    divider: true,
     icon: <ShoppingCartOutlined className={tableStyles.action}
-                                twoToneColor={COLORS.success} />,
+                                twoToneColor={COLORS.success}/>,
     children: (
-        <NavLink to={`/admin/subscriptions/${record.id}`}>
-          {intl.formatMessage({id: 'actions.edit', defaultMessage: 'Edit Subscriptions'})}
+        <NavLink to={`/admin/subscriptions/${record?.id}`}>
+          {t(intl, 'actions.edit', { type: subType })}
         </NavLink>
     )
   };
@@ -43,29 +45,21 @@ export const SubscriptionMenu = props => {
     key: 'delete',
     canI: canDelete,
     icon: <DeleteTwoTone className={tableStyles.action}
-                         twoToneColor={COLORS.danger} />,
+                         twoToneColor={COLORS.danger}/>,
     children: (
-        <Popconfirm title={intl.formatMessage({id: 'subscription.msg.deleteConfirm', defaultMessage: '"Are you sure' +
-              ' to' +
-              ' delete this subscription'})}
+        <Popconfirm title={t(intl, 'subscription.msg.deleteConfirm')}
                     placement={'topRight'}
+                    disabled={!canDelete}
                     onConfirm={() => onDeleteSubscription(record)}>
-          {intl.formatMessage({id: 'actions.delete', defaultMessage: "Delete"})}
+          {t(intl, 'actions.delete')}
         </Popconfirm>
     )
   };
 
-  return (
-      <Menu>
-        {!isEdit && (
-            <>
-              {abilityMenuItem(editProps)}
-              <Menu.Divider key={'divider'} />
-            </>
-        )}
-        {abilityMenuItem(deleteProps)}
-      </Menu>
-  );
-};
+  const editItems = isEdit ? [] : [...abilityMenuItem(editProps)];
 
-export default withTranslation()(SubscriptionMenu);
+  return [
+    ...editItems,
+    ...abilityMenuItem(deleteProps)
+  ];
+};

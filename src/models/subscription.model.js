@@ -1,100 +1,120 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
+import dayjs from 'dayjs';
+import { history } from '@umijs/max';
 
-import { commonModel } from 'models/common.model';
-import { custDiscountType, isNew } from 'services/common.service';
-import { detailsInfo } from 'services/cross.model.service';
-import { history, useIntl } from 'umi';
+import { commonModel } from '@/models/common.model';
+import { custDiscountType, isNew } from '@/services/common.service';
+import { detailsInfo } from '@/services/cross.model.service';
+
 import {
   addSubscription,
   getAllSubscriptions,
   getSubscription,
-  updateSubscription
+  updateSubscription,
+  deleteSubscription
 } from '@/services/subscriptions.service';
+import { getFeatures } from '@/services/features.service';
+
 import { COLORS } from '@/utils/colors';
 import { monitorHistory } from '@/utils/history';
 import { errorSaveMsg } from '@/utils/message';
 import { setAs } from '@/utils/object';
-import { getFeatures } from '@/services/features.service';
-import moment from 'moment';
-import { dateFormat } from '@/utils/timestamp';
+import { mapSchedulerByRefs } from '@/services/schedulers.service';
+
+const { API } = require('@/services/config/api.config');
 
 const DEFAULT_STATE = {
   subscriptions: [],
+  schedulers: {},
   features: [],
   durationTypes: [],
   currencies: [],
+  selectedSubscription: null,
   colorsToType: {
     basic: COLORS.tags.orange,
     standard: COLORS.tags.cyan,
     premium: COLORS.tags.green
   },
   businessUsers: {
-    dims: { min: 1, max: 5 }
+    dims: { min: 0, max: 5 }
+  },
+  schedulerTypes: {
+    sale: 'saleScheduler',
+    discount: 'discountScheduler'
   }
 };
 
 const MODEL_NAME = 'subscriptionModel';
 const BASE_URL = '/admin/subscriptions';
-const ABILITY_FOR = 'subscriptions';
+const COMPONENT_NAME = 'subscriptions';
 
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
   namespace: MODEL_NAME,
+
   state: {
     ...DEFAULT_STATE
   },
+
   subscriptions: {
+
     setupHistory({ history, dispatch }) {
-      return monitorHistory({ history, dispatch }, MODEL_NAME);
+      monitorHistory({ history, dispatch }, MODEL_NAME);
     },
+
     setup({ dispatch }) {
       // TODO (teamco): Do something.
     }
   },
+
   effects: {
 
     * query({ payload }, { put, call, select }) {
       const { token } = yield select(state => state.authModel);
       const { data } = yield call(getAllSubscriptions, { token });
 
+      if (data?.error) return false;
+
       yield put({ type: 'features' });
       yield put({ type: 'updateState', payload: { subscriptions: data } });
     },
 
     * newSubscription({ payload }, { put }) {
-      yield put({ type: 'cleanForm' });
-
-      history.push(`${BASE_URL}/new`);
+      yield put({ type: 'schedulerModel/updateState', payload: { assignedSchedulers: [] } });
+      yield put({ type: 'updateState', payload: { schedulers: {} } });
 
       yield put({
-        type: 'updateState',
+        type: 'handleNew',
         payload: {
-          ...DEFAULT_STATE,
-          ...{
-            isEdit: false,
-            touched: false
-          }
+          BASE_URL,
+          component: COMPONENT_NAME,
+          state: DEFAULT_STATE,
+          selected: 'selectedSubscription'
         }
       });
     },
 
     * validateSubscription({ payload }, { call, put, select }) {
       const { user, ability, token } = yield select(state => state.authModel);
-      const { subscriptionId } = payload;
+      const { subscriptionId, redirect = true } = payload;
 
       if (isNew(subscriptionId)) {
+        yield put({ type: 'newSubscription' });
         // TODO (teamco): Do something.
-        yield put({ type: 'features' });
 
-      } else if (ability.can('read', ABILITY_FOR)) {
+      } else if (ability.can('read', COMPONENT_NAME)) {
 
         const subscription = yield call(getSubscription, { id: subscriptionId, token });
 
+        if (subscription?.data?.error) return false;
+
         if (subscription.exists) {
-          const { price: { discount }, saleInfo } = subscription.data;
+          const { price: { discount } } = subscription.data;
+
+          redirect && history.push(`${BASE_URL}/${subscriptionId}`);
 
           const selectedSubscription = {
             ...subscription.data,
@@ -102,12 +122,13 @@ export default dvaModelExtend(commonModel, {
               ...subscription.data.price,
               discount: {
                 ...discount,
-                startedAt: moment(discount?.startedAt),
+                startedAt: dayjs(discount?.startedAt),
                 duration: { ...discount?.duration }
               }
-            },
-            saleInfo: [moment(saleInfo.startedAt), moment(saleInfo.expiredAt)]
+            }
           };
+
+          yield put({ type: 'subscriptionSchedulers', payload: { subscription } });
 
           yield put({ type: 'updateState', payload: { selectedSubscription } });
           yield put({ type: 'updateTags', payload: { tags: selectedSubscription.tags, touched: false } });
@@ -143,11 +164,104 @@ export default dvaModelExtend(commonModel, {
       const { subscription } = params;
 
       yield put({ type: 'cleanForm', payload: { isEdit: !isNew(subscription) } });
-      yield put({ type: 'getSimpleEntity', payload: { doc: 'currencies' } });
-      yield put({ type: 'getSimpleEntity', payload: { doc: 'durationTypes' } });
-      yield put({ type: 'getSimpleEntity', payload: { doc: 'featureTypes' } });
-      yield put({ type: 'getSimpleEntity', payload: { doc: 'subscriptionTypes' } });
+      yield put({ type: 'getSimpleEntity', payload: { docName: 'currencies' } });
+      yield put({ type: 'getSimpleEntity', payload: { docName: 'durationTypes' } });
+      yield put({ type: 'getSimpleEntity', payload: { docName: 'featureTypes' } });
+      yield put({ type: 'getSimpleEntity', payload: { docName: 'subscriptionTypes' } });
       yield put({ type: 'validateSubscription', payload: { subscriptionId: subscription } });
+      yield put({ type: 'updateLocales', payload: { MODEL_NAME } });
+    },
+
+    * subscriptionSchedulers({ payload }, { put, select, take }) {
+      const { subscription: { data } } = payload;
+
+      yield put({
+        type: 'schedulerModel/getSchedulersOf',
+        payload: {
+          apiOf: API.subscriptions.get,
+          keyOf: 'subscriptionKey',
+          id: data?.id
+        }
+      });
+
+      yield take('schedulerModel/getSchedulersOf/@@end');
+
+      const { schedulerTypes } = yield select(state => state[MODEL_NAME]);
+
+      yield put({
+        type: 'schedulerModel/distributeSchedulers',
+        payload: {
+          schedulers: data?.schedulersByRef,
+          schedulerType: schedulerTypes.sale,
+          model: MODEL_NAME
+        }
+      });
+
+      if (data?.price?.discounted) {
+
+        yield put({
+          type: 'schedulerModel/distributeSchedulers',
+          payload: {
+            schedulers: data?.price?.schedulersByRef,
+            schedulerType: schedulerTypes.discount,
+            model: MODEL_NAME
+          }
+        });
+      }
+    },
+
+    * assignAllFeatures({ payload = {} }, { put, select }) {
+      const {
+        selectedSubscription = { featuresByRef: [] },
+        features = []
+      } = yield select(state => state[MODEL_NAME]);
+
+      const { isAssigned } = payload;
+
+      let featuresByRef = [];
+
+      if (isAssigned) {
+        // TODO (teamco): Do something.
+      } else if (features.error) {
+        // TODO (teamco): Do something.
+      } else {
+        featuresByRef = features?.map((item) => item.id);
+      }
+
+      yield put({
+        type: 'updateState',
+        payload: {
+          touched: true,
+          selectedSubscription: {
+            ...selectedSubscription,
+            featuresByRef
+          }
+        }
+      });
+    },
+
+    * assignFeature({ payload = {} }, { put, select }) {
+      const { selectedSubscription } = yield select(state => state[MODEL_NAME]);
+      const { feature, isAssigned = false } = payload;
+
+      let featuresByRef = [...(selectedSubscription?.featuresByRef || [])];
+
+      if (isAssigned) {
+        featuresByRef = featuresByRef.filter(ref => ref !== feature.id);
+      } else {
+        featuresByRef.push(feature.id);
+      }
+
+      yield put({
+        type: 'updateState',
+        payload: {
+          touched: true,
+          selectedSubscription: {
+            ...selectedSubscription,
+            featuresByRef
+          }
+        }
+      });
     },
 
     * changeFeatureType({ payload = {} }, { put }) {
@@ -157,61 +271,105 @@ export default dvaModelExtend(commonModel, {
 
     * features({ payload = {} }, { call, put, select }) {
       const { token } = yield select(state => state.authModel);
-      const { type = 'Business' } = payload;
-      const { data = [] } = yield call(getFeatures, { type, token });
-      yield put({ type: 'updateState', payload: { features: data } });
+      const { data = [], error } = yield call(getFeatures, { token, type: payload?.type });
+
+      if (data?.error) return false;
+
+      yield put({ type: 'updateState', payload: { features: error ? [] : data } });
     },
 
-    * prepareToSave({ payload, params }, { call, select, put }) {
-      const { user, ability, token } = yield select(state => state.authModel);
-      const { selectedSubscription, isEdit } = yield select(state => state[MODEL_NAME]);
+    * prepareToSave({ payload, params }, { select, call, put, take }) {
+      const { user } = yield select(state => state.authModel);
+      const { selectedSubscription, schedulers, schedulerTypes, isEdit } = yield select(state => state[MODEL_NAME]);
       const {
         price,
         type,
         featureType,
         paymentDuration,
-        featuresByRef,
         numberOfUsers,
         translateKeys: {
           title,
           description = setAs(description, null)
         },
-        tags = setAs(tags, []),
-        saleInfo
+        tags = setAs(tags, [])
       } = payload;
 
-      if (user && ability.can('update', ABILITY_FOR)) {
+      const metadata = {
+        ...selectedSubscription?.metadata,
+        updatedAt: (new Date).toISOString(),
+        updatedByRef: user.id
+      };
 
-        const metadata = {
-          ...selectedSubscription?.metadata,
-          updatedAt: +(new Date).toISOString(),
-          updatedByRef: user.id
+      yield put({
+        type: 'schedulerModel/saveScheduler',
+        payload: {
+          assignedSchedulers: [...(schedulers[schedulerTypes.sale] || [])],
+          schedulerType: schedulerTypes.sale,
+          model: MODEL_NAME,
+          COMPONENT_NAME
+        }
+      });
+
+      let _discount = null;
+
+      if (price.discounted) {
+
+        yield put({
+          type: 'schedulerModel/saveScheduler',
+          payload: {
+            assignedSchedulers: [...(schedulers[schedulerTypes.discount] || [])],
+            schedulerType: schedulerTypes.discount,
+            model: MODEL_NAME,
+            COMPONENT_NAME
+          }
+        });
+
+        _discount = {
+          ...price.discount,
+          type: custDiscountType(price.discount.type)
         };
+      }
 
-        let data = {
-          id: selectedSubscription?.id,
-          name: useIntl().formatMessage({id: title, defaultMessage: ''}),
-          price: {
-            ...price,
-            discount: {
-              ...price.discount,
-              startedAt: dateFormat(price.discount.startedAt),
-              type: custDiscountType(price.discount.type)
-            }
-          },
-          saleInfo: {
-            startedAt: dateFormat(saleInfo[0]),
-            expiredAt: dateFormat(saleInfo[1])
-          },
-          translateKeys: { title, description },
-          featuresByRef: Object.keys(featuresByRef).filter(key => featuresByRef[key]),
-          type, featureType, tags, paymentDuration,
-          numberOfUsers, metadata
-        };
+      yield take('schedulerModel/saveScheduler/@@end');
 
+      const modelState = yield select(state => state[MODEL_NAME]);
+
+      let data = {
+        id: selectedSubscription?.id,
+        name: title,
+        price: {
+          ...price,
+          discount: price.discounted ? {
+            ..._discount,
+            schedulersByRef: yield call(mapSchedulerByRefs, {
+              schedulers: modelState.schedulers[schedulerTypes.discount]
+            })
+          } : null
+        },
+        translateKeys: { title, description },
+        featuresByRef: selectedSubscription?.featuresByRef,
+        type, featureType, tags, paymentDuration,
+        numberOfUsers, metadata,
+        schedulersByRef: yield call(mapSchedulerByRefs, {
+          schedulers: modelState.schedulers[schedulerTypes.sale]
+        })
+      };
+
+      yield put({ type: 'handleUpdate', payload: { data, isEdit, selectedSubscription, id: params.subscription } });
+      yield put({ type: 'handleSave', payload: { data, isEdit, metadata } });
+    },
+
+    * handleUpdate({ payload }, { put, call, select }) {
+      const { user, ability, token } = yield select(state => state.authModel);
+      const { isEdit, selectedSubscription, id, data } = payload;
+
+      if (user && ability.can('update', COMPONENT_NAME)) {
         if (isEdit) {
-          if (selectedSubscription && params.subscription === selectedSubscription.id) {
-            const entity = yield call(updateSubscription, { id: selectedSubscription.id, data, token });
+          if (selectedSubscription && id === selectedSubscription.id) {
+            const _data = { ...data, version: selectedSubscription.version };
+            const entity = yield call(updateSubscription, { id: selectedSubscription.id, data: _data, token });
+
+            if (entity?.data?.error) return false;
 
             yield put({
               type: 'updateVersion',
@@ -223,9 +381,24 @@ export default dvaModelExtend(commonModel, {
             });
 
           } else {
-            errorSaveMsg(true, 'Subscription');
+            errorSaveMsg(true, 'selectedSubscription').then();
           }
+        } else {
+          // TODO (teamco): Going to save.
+        }
+      } else {
 
+        yield put({ type: 'noPermissions', payload: { key: 'handleUpdate' } });
+      }
+    },
+
+    * handleSave({ payload }, { put, call, select }) {
+      const { user, ability, token } = yield select(state => state.authModel);
+      let { isEdit, metadata, data } = payload;
+
+      if (user && ability.can('create', COMPONENT_NAME)) {
+        if (isEdit) {
+          // TODO (teamco): Going to update.
         } else {
 
           data = {
@@ -239,16 +412,28 @@ export default dvaModelExtend(commonModel, {
 
           const entity = yield call(addSubscription, { data, token });
 
-          if (entity.exists) {
+          if (entity?.data?.error) return false;
+
+          if (entity?.exists && entity?.data?.id) {
             yield put({ type: 'updateState', payload: { touched: false, isEdit: true } });
-            history.push(`${BASE_URL}/${entity?.data?.id}`);
+            yield put({ type: 'editSubscription', payload: { params: { subscription: entity?.data?.id } } });
           }
         }
       } else {
 
-        yield put({ type: 'noPermissions', payload: { key: 'selectedSubscription' } });
+        yield put({ type: 'noPermissions', payload: { key: 'handleSave' } });
       }
+    },
+
+    * deleteSubscription({ payload }, { call, select, put }) {
+      const { token } = yield select(state => state.authModel);
+      const { id } = payload;
+      yield call(deleteSubscription, { id, token });
+      const { data } = yield call(getAllSubscriptions, { token });
+      yield put({ type: 'features' });
+      yield put({ type: 'updateState', payload: { subscriptions: data } });
     }
   },
+
   reducers: {}
 });

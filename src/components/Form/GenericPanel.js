@@ -1,15 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Collapse, Form, Spin } from 'antd';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
 import classnames from 'classnames';
 
-import { getSuffix } from '@/components/Form';
+import { getSuffix, requiredField } from '@/components/Form';
 import Grid from '@/components/Grid';
+import Loader from '@/components/Loader';
+
+import { logger } from '@/utils/console';
+import { t } from '@/utils/i18n';
+import { stub } from '@/utils/function';
+
+import { generateKey } from '@/services/common.service';
 
 import styles from '@/components/Form/form.module.less';
 
 const { AntHillRow } = Grid;
-const { Panel } = Collapse;
 
 /**
  * @constant
@@ -26,170 +32,321 @@ const _cleanProps = (_child, props = []) => {
   return _props;
 };
 
-class GenericPanel extends Component {
-  state = {};
+/**
+ * @export
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const GenericPanel = props => {
+  const {
+    children,
+    defaultActiveKey,
+    header,
+    name,
+    extra,
+    collapsible = 'header',
+    forceRender = false,
+    className = '',
+    style,
+    onPanelChange = stub
+  } = props;
 
-  render() {
-    const {
-      children,
-      defaultActiveKey,
-      header,
-      name,
-      collapsible = 'header',
-      className = ''
-    } = this.props;
+  const intl = useIntl();
 
-    /**
-     * @constant
-     * @param children
-     * @return {*[]}
-     * @private
-     */
-    const _getChildren = children => {
-      let _children;
-      if (Array.isArray(children)) {
-        _children = children.filter(child => child);
-      } else {
-        _children = [children];
+  /**
+   * @constant
+   * @param children
+   * @return {*[]}
+   * @private
+   */
+  const _getChildren = children => {
+    let _children;
+    if (Array.isArray(children)) {
+      _children = children.filter(child => child);
+    } else {
+      _children = [children];
+    }
+
+    return _children;
+  };
+
+  /**
+   * @constant
+   * @param prop
+   * @param defaultValue
+   * @private
+   * @return {*|null}
+   */
+  const _handleProps = (prop, defaultValue) => {
+    if (typeof prop === 'undefined') {
+      return defaultValue;
+    }
+
+    return prop ? prop : null;
+  };
+
+  /**
+   * @function
+   * @param {JSX.Element} Component
+   * @param extraProps
+   * @return {JSX.Element}
+   */
+  const proppedComponent = (Component, extraProps) => {
+    return <Component.type {...extraProps} key={generateKey()}/>;
+  };
+
+  /**
+   * @constant
+   * @param Component
+   * @param extraProps,
+   * @param [formProps]
+   * @return {JSX.Element}
+   */
+  const clonedComponent = (Component, extraProps, formProps) => {
+    if (React.isValidElement(Component)) {
+      const _cloned = proppedComponent(Component, { ...extraProps });
+
+      if (Component.type.name === 'GenericPanel') {
+        // TODO (teamco): Handle clone only.
+      } else if (formProps) {
+        return (
+            <Form.Item shouldUpdate {...formProps}>{_cloned}</Form.Item>
+        );
       }
 
-      return _children;
-    };
+      return _cloned;
+    }
 
-    /**
-     * @constant
-     * @param prop
-     * @param defaultValue
-     * @private
-     * @return {*|null}
-     */
-    const _handleProps = (prop, defaultValue) => {
-      if (typeof prop === 'undefined') {
-        return defaultValue;
+    return null;
+  };
+
+  /**
+   * @param rules
+   * @param {string} label
+   * @param intl
+   * @param form
+   * @param {JSX.Element} Component
+   * @param {string} key
+   * @param configProps
+   * @param suffix
+   * @param suffixIcon
+   * @return {JSX.Element|*}
+   */
+  const handleRequiredProps = (
+      rules, label, {
+        intl,
+        form,
+        Component,
+        key,
+        configProps,
+        suffix,
+        suffixIcon
+      }) => {
+    const _isRequired = rules.find(rule => rule.required);
+
+    if (_isRequired) {
+      if (!_isRequired.message) {
+        _isRequired.message = requiredField(intl, label).message;
       }
 
-      return prop ? prop : null;
-    };
+      const _suffix = getSuffix(form, label, Component.props.name);
 
-    /**
-     * @constant
-     * @param _rowChild
-     * @param idx
-     * @return {unknown[]}
-     * @private
-     */
-    const _formItem = (_rowChild, idx) => {
-      const intl = useIntl();
-      return _getChildren(_rowChild.props.children || []).map((_child, _key) => {
-        const {
-          form,
-          label,
-          name,
-          placeholder,
-          suffix,
-          suffixIcon,
-          disabled,
-          dependencies,
-          tooltip,
-          config = {}
-        } = _child.props;
+      if (Component.type.name === 'MandatoryTextarea') {
+        configProps.key = key;
 
-        let { rules = [], valuePropName } = config;
+        return clonedComponent(Component, configProps, false);
+      }
 
-        const _isRequired = rules.find(rule => rule.required);
-        if (_isRequired && !_isRequired.message) {
-          _isRequired.message = intl.formatMessage({id: 'form.required', defaultMessage: '{field} is required'}, { field: label });
+      /**
+       * Handle Select component
+       * @link https://ant.design/components/select/
+       */
+      if (Component.type.Option) {
+        if (!suffixIcon) {
+          configProps.suffixIcon = _handleProps(suffix, _suffix);
         }
-        const _placeholder = label ?
-            _handleProps(placeholder, intl.formatMessage({id: 'form.placeholder', defaultMessage: 'Enter {field}'}, { field: label })) :
-            null;
+      } else if (!suffix) {
+        configProps.suffix = _handleProps(suffix, _suffix);
+      }
+    }
 
-        const _props = _cleanProps(_child, ['config', 'hasFeedback', 'form']);
-        let rest = {};
-        valuePropName && (rest.valuePropName = valuePropName);
+    return configProps;
+  };
 
-        let configProps = {
-          placeholder: disabled ? null : _placeholder,
-          ..._props
-        };
+  /**
+   * @constant
+   * @param {string} placeholder
+   * @param {string} label
+   * @param intl
+   * @return {*|null}
+   */
+  const handlePlaceholder = (placeholder, label, { intl }) => {
+    return label ?
+        _handleProps(placeholder,
+            t(intl, 'form.placeholder', { field: label })) :
+        null;
+  };
 
-        if (_isRequired) {
-          const _suffix = getSuffix(t, form, name, label);
+  /**
+   * @constant
+   * @param {JSX.Element} Component
+   * @return {boolean}
+   */
+  const isMissingComponentProps = (Component) => {
+    if (!Component.props) {
+      logger({ type: 'warn', msg: 'Missing Form.Item Component' });
+      return true;
+    }
+  };
 
-          if (_child.type.name === 'MandatoryTextarea') {
-            // TODO (teamco): Do something
-            configProps.key = `${idx}-${_key}`;
+  /**
+   * @constant
+   * @param _rowChild
+   * @param idx
+   * @param spinOn
+   * @return {unknown[]}
+   * @private
+   */
+  const _formItem = (_rowChild, idx, spinOn) => {
+    return _getChildren(_rowChild.props.children || []).map((_child, _key) => {
+      if (isMissingComponentProps(_child)) return null;
 
-            return React.isValidElement(_child) ?
-                React.cloneElement(_child, { ...configProps }) : null;
-          }
+      const {
+        form,
+        label,
+        name,
+        placeholder,
+        suffix,
+        suffixIcon,
+        disabled,
+        dependencies,
+        tooltip,
+        config = {}
+      } = _child?.props;
 
-          /**
-           * Handle Select component
-           * @link https://ant.design/components/select/
-           */
-          if (_child.type.Option) {
-            if (!suffixIcon) {
-              configProps.suffixIcon = _handleProps(suffix, _suffix);
-            }
-          } else if (!suffix) {
-            configProps.suffix = _handleProps(suffix, _suffix);
-          }
-        }
+      let { rules = [], valuePropName } = config;
 
-        const isHidden = _child?.type?.name === 'HiddenField';
+      const _placeholder = handlePlaceholder(placeholder, label, { intl });
+      const _props = _cleanProps(_child,
+          ['config', 'hasFeedback', 'suffix', 'placeholder']);
 
-        return React.isValidElement(_child) ? (
-            <Form.Item label={label}
-                       name={name}
-                       tooltip={tooltip}
-                       shouldUpdate
-                       dependencies={dependencies}
-                       key={`${idx}-${_key}`}
-                       rules={rules}
-                       className={isHidden ? styles.hidden : null}
-                       {...rest}>
-              {React.cloneElement(_child, { ...configProps })}
-            </Form.Item>
-        ) : null;
+      /**
+       * @description Additional props for Form.Item
+       * @type {{valuePropName}}
+       */
+      let rest = {};
+      valuePropName && (rest.valuePropName = valuePropName);
+
+      let configProps = {
+        placeholder: disabled ? null : _placeholder,
+        ..._props
+      };
+
+      // Warning: Invalid prop `placeholder` supplied to `React.Fragment`.
+      if (_child?.type?.toString() === 'Symbol(react.fragment)') {
+        delete configProps.placeholder;
+      }
+
+      const key = `${idx}-${_key}`;
+
+      configProps = handleRequiredProps(rules, label, {
+        intl, form, key,
+        Component: _child,
+        configProps,
+        suffix,
+        suffixIcon
       });
-    };
 
-    return (
-        <div data-testid={this.props['data-testid']}>
-          <Collapse collapsible={collapsible}
-                    className={classnames(styles.collapsePanel, className)}
-                    defaultActiveKey={defaultActiveKey}>
-            <Panel header={header}
-                   key={name}>
-              {collapsible === 'disabled' ? (
-                      <div className={styles.disabledPanel}>
-                        <Spin spinning={true}/>
-                      </div>
-                  ) :
-                  _getChildren(children).map((_rowChild, idx) => {
-                    const { inRow = true, gutter, colProps, style, className } = _rowChild?.props;
-                    return inRow ? (
-                        <AntHillRow key={idx}
-                                    style={style}
-                                    className={className}
-                                    gutter={gutter}
-                                    colProps={colProps}>
-                          {_formItem(_rowChild, idx)}
-                        </AntHillRow>
-                    ) : (
-                        <div key={idx}
-                             style={style}
-                             className={className}>
-                          {_formItem(_rowChild, idx)}
-                        </div>
-                    );
-                  })}
-            </Panel>
-          </Collapse>
-        </div>
-    );
-  }
-}
+      const isHidden = _child?.type?.name === 'HiddenField';
+
+      const formItem = clonedComponent(_child, configProps, {
+        label,
+        name,
+        tooltip,
+        dependencies,
+        key,
+        rules,
+        style,
+        className: isHidden && styles.hidden,
+        ...rest
+      });
+
+      if (typeof spinOn === 'function' && formItem) {
+        return (
+            <Loader spinning={spinOn()}
+                    key={`${idx}-${_key}-spinning`}>
+              {formItem}
+            </Loader>
+        );
+      }
+
+      return formItem;
+    });
+  };
+
+  /**
+   * @constant
+   * @return {JSX.Element[]}
+   */
+  const renderPanelContent = () => (
+      _getChildren(children).map((_rowChild, idx) => {
+        if (!_rowChild?.props) {
+          throw new Error(`Add Panel content`);
+        }
+
+        const {
+          inRow = true,
+          gutter,
+          colProps,
+          spinOn,
+          style,
+          className
+        } = _rowChild?.props;
+
+        return inRow ? (
+            <AntHillRow key={idx}
+                        style={style}
+                        className={className}
+                        gutter={gutter}
+                        colProps={colProps}>
+              {_formItem(_rowChild, idx, spinOn)}
+            </AntHillRow>
+        ) : (
+            <div key={idx}
+                 style={style}
+                 className={className}>
+              {_formItem(_rowChild, idx, spinOn)}
+            </div>
+        );
+      })
+  );
+
+  const panelContent = collapsible === 'disabled' ? (
+      <div className={styles.disabledPanel}>
+        <Spin spinning={true}/>
+      </div>
+  ) : renderPanelContent();
+
+  return (
+      <div data-testid={props['data-testid']}
+           className={styles.collapsePanelWrapper}>
+        <Collapse collapsible={collapsible}
+                  onChange={onPanelChange}
+                  className={classnames(styles.collapsePanel, className)}
+                  defaultActiveKey={defaultActiveKey}
+                  items={[
+                    {
+                      key: name,
+                      label: header,
+                      collapsible,
+                      forceRender,
+                      extra,
+                      children: (<div>{panelContent}</div>)
+                    }
+                  ]}/>
+      </div>
+  );
+};
 
 export default GenericPanel;

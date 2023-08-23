@@ -1,30 +1,36 @@
-import { getEntityFormIdx } from 'services/common.service';
+import { toEntityForm } from '@/services/common.service';
 import { message } from 'antd';
-import { history, useIntl } from 'umi';
+import { history } from '@umijs/max';
 import { merge } from 'lodash';
 
 import { fbFindById } from '@/services/firebase.service';
 
-const DEFAULT_FORM = [
-  {
-    name: 'entityType',
-    value: 'form'
-  },
-  {
-    name: 'entityKey',
-    value: ''
-  }
-];
+import { intl, t } from '@/utils/i18n';
+import { logger } from '@/utils/console';
+import { getSiderPanel } from '@/utils/panel';
+
+const DEFAULT_FORM = [];
 
 const DEFAULT_STATE = {
   referrer: document.referrer,
   resetForm: false,
-  entityForm: DEFAULT_FORM,
+  translateMessages: {},
+  entityForm: [...DEFAULT_FORM],
   language: 'en-US',
   isEdit: false,
   touched: false,
   tags: [],
-  uploadedFiles: {}
+  schedulers: {},
+  uploadedFiles: {},
+  siderPanelConfig: {
+    minWidth: 600,
+    className: 'siderPanel',
+    collapsedWidth: 0,
+    collapsed: false,
+    collapsible: false,
+    resizeable: true,
+    layoutable: true
+  }
 };
 
 /**
@@ -43,50 +49,91 @@ const commonModel = {
       yield put({ type: 'updateState', payload: { tags, touched } });
     },
 
-    * cleanForm({ payload }, { put, take }) {
-      yield put({ type: 'updateState', payload: { ...DEFAULT_STATE, ...payload } });
-      yield take('updateState');
-    },
-
-    * toForm({ payload }, { call, put, select }) {
-      const { entityForm } = yield select(state => state[payload.model]);
-      const _entityForm = [...entityForm];
-      const toDelete = [];
-
-      const keys = Object.keys(payload.form);
-      for (let i = 0; i < keys.length; i++) {
-        const key = keys[i];
-        const idx = yield call(getEntityFormIdx, { entityForm, key });
-
-        const formItem = {
-          name: key,
-          value: payload.form[key]
-        };
-
-        // Overwrite existing values
-        if (idx > -1) {
-          toDelete.push(idx);
-        }
-
-        _entityForm.push(formItem);
-      }
-
+    * cleanForm({ payload }, { put }) {
       yield put({
         type: 'updateState',
         payload: {
-          entityForm: [..._entityForm.filter((form, idx) => toDelete.indexOf(idx) === -1)]
+          entityForm: [...DEFAULT_FORM],
+          uploadedFiles: {},
+          ...payload
         }
       });
     },
 
-    * updateFields({ payload }, { put }) {
-      const { allFields } = payload;
+    * updateLocales({ payload }, { put, select }) {
+      const { MODEL_NAME, translateMessages } = payload;
+
+      if (MODEL_NAME === 'appModel') {
+
+        yield put({ type: 'updateState', payload: { translateMessages } });
+
+      } else {
+
+        const appState = yield select(state => state.appModel);
+        yield put({
+          type: 'updateState',
+          payload: { translateMessages: appState.translateMessages }
+        });
+      }
+    },
+
+    * toForm({ payload }, { call, put, select }) {
+      const { entityForm } = yield select(state => state[payload.model]);
+      const { form, dateFields = [] } = payload;
+
+      yield put({
+        type: 'updateState',
+        payload: {
+          entityForm: yield call(toEntityForm, {
+            entityForm,
+            formObj: form,
+            dateFields
+          })
+        }
+      });
+    },
+
+    * updateFields({ payload }, { put, select, take }) {
+      const { model, changedFields, allFields } = payload;
+
+      yield put({ type: `updateTouched`, payload: { touched: true } });
+      yield take('updateTouched/@@end');
+    },
+
+    * updateTouched({ payload }, { put, select }) {
+      const { touched = true } = payload;
+
+      yield put({ type: `updateState`, payload: { touched } });
+    },
+
+    * updateEntityForm({ payload }, { put, select }) {
+      const { fields, model } = payload;
+      const { entityForm } = yield select(state => state[model]);
+      let _entityForm = [...entityForm];
+
+      Object.keys(fields).forEach((fieldForChange) => {
+        const index = _entityForm.findIndex(
+            field => field.name.includes(fieldForChange));
+        if (index > -1) {
+          _entityForm = _entityForm.map((entity, idx) => {
+            if (idx === index) {
+              return {
+                ...entity,
+                value: fields[fieldForChange]
+              };
+            }
+            return entity;
+          });
+        } else {
+          logger({ type: 'warn', log: 'Invalid field name' });
+        }
+      });
 
       yield put({
         type: 'updateState',
         payload: {
           touched: true,
-          entityForm: [...allFields].map(field => ({ name: field.name, value: field.value }))
+          entityForm: _entityForm
         }
       });
     },
@@ -108,6 +155,38 @@ const commonModel = {
       }
     },
 
+    * handleNew({ payload }, { put, select }) {
+      const { ability } = yield select(state => state.authModel);
+
+      const {
+        component,
+        BASE_URL,
+        state,
+        selected
+      } = payload;
+
+      if (ability.can('create', component)) {
+        yield put({ type: 'cleanForm' });
+
+        history.push(`${BASE_URL}/new`);
+
+        yield put({
+          type: 'updateState',
+          payload: {
+            ...state,
+            ...{
+              [selected]: {},
+              isEdit: false,
+              touched: false
+            }
+          }
+        });
+
+      } else {
+        yield put({ type: 'noPermissions', payload: { key: 'handleNew' } });
+      }
+    },
+
     * handleAddFile({ payload }, { put, select }) {
       const { file, field, model } = payload;
       const { uploadedFiles } = yield select(state => state[model]);
@@ -123,12 +202,18 @@ const commonModel = {
         }
       };
 
-      yield put({ type: 'updateState', payload: { uploadedFiles: { ..._files } } });
+      yield put({
+        type: 'updateState',
+        payload: {
+          uploadedFiles: { ..._files },
+          touched: true
+        }
+      });
 
       yield put({
         type: 'toForm',
         payload: {
-          form: { license: previewUrl },
+          form: { [payload.type]: previewUrl },
           model: payload.model
         }
       });
@@ -142,15 +227,29 @@ const commonModel = {
       delete _uploadedFiles[field];
 
       // TODO (teamco): Handle multiple files.
-      yield put({ type: 'updateState', payload: { uploadedFiles: { ..._uploadedFiles } } });
-      yield put({ type: 'toForm', payload: { form: { license: null }, model } });
+      yield put({
+        type: 'updateState',
+        payload: {
+          uploadedFiles: { ..._uploadedFiles },
+          touched: true
+        }
+      });
+
+      yield put({
+        type: 'toForm',
+        payload: {
+          form: { [field]: null },
+          model
+        }
+      });
     },
 
     * getSimpleEntity({ payload }, { call, put }) {
-      const { doc } = payload;
-      const type = payload.type || doc;
+      const { docName } = payload;
+      const type = payload.type || docName;
 
-      const fbTypes = yield call(fbFindById, { collection: 'simpleEntities', doc });
+      const fbTypes = yield call(fbFindById,
+          { collectionPath: 'simpleEntities', docName });
 
       let entities = { tags: [] };
 
@@ -164,19 +263,33 @@ const commonModel = {
       });
     },
 
-    * raiseCondition({ payload }, { put, take }) {
-      const { redirect = true, type = 404, key } = payload;
+    * raiseCondition({ payload }, { put, call }) {
+      const {
+        key,
+        message,
+        redirect = true,
+        type = 404
+      } = payload;
 
       if (!key) {
         throw new Error('Key must be defined');
       }
 
-      message.warning(payload.message).then();
+      const msg = yield call(intl, message);
+      const { pathname } = window.location;
 
-      yield put({ type: 'updateState', payload: { [key]: null, touched: false } });
-      yield take('updateState');
+      console.warn(msg);
 
-      redirect && history.push(`/admin/errors/${type}`);
+      yield put({
+        type: 'updateState',
+        payload: {
+          [key]: null,
+          touched: false
+        }
+      });
+
+      redirect && history.push(
+          `/errors/${type}?referrer=${encodeURIComponent(pathname)}`);
     },
 
     * notFound({ payload }, { put }) {
@@ -188,32 +301,53 @@ const commonModel = {
           key,
           redirect,
           type: 404,
-          message: useIntl().formatMessage({id: 'error:notFound', defaultMessage: '{entity} not found'}, { entity })
+          message: {
+            id: 'error.notFound',
+            defaultMessage: `${entity} not found`, instance: { entity }
+          }
         }
       });
     },
 
     * noPermissions({ payload }, { put }) {
       const { key, redirect } = payload;
+
       yield put({
         type: 'raiseCondition',
         payload: {
           key,
           redirect,
           type: 403,
-          message: useIntl.formatMessage({id: 'error:noPermissions', defaultMessage: 'Has no relevant permissions'})
+          message: {
+            id: 'error.noPermissions',
+            defaultMessage: 'Has no relevant permissions'
+          }
         }
       });
+    },
+
+    * closeSiderPanel({ payload = {} }, { put, select }) {
+      const { siderPanels } = yield select(state => state.appModel);
+      const { currentPanel, panel } = getSiderPanel(siderPanels, payload);
+
+      if (currentPanel) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            siderPanels: {
+              ...siderPanels,
+              [currentPanel]: { ...panel, visible: false }
+            }
+          }
+        });
+      }
     }
   },
 
   reducers: {
 
     updateState(state, { payload }) {
-      return {
-        ...state,
-        ...payload
-      };
+      return { ...state, ...payload };
     },
 
     mergeState(state, { payload }) {

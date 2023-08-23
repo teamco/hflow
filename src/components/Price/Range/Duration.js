@@ -1,8 +1,11 @@
 import React from 'react';
 import { Form, InputNumber, Select } from 'antd';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
 import HiddenField from '@/components/Form/HiddenField';
 import { complexFormKey, updateComplexForm } from '@/utils/form';
+import { stub } from '@/utils/function';
+import { t } from '@/utils/i18n';
+import { requiredField } from '@/components/Form';
 
 const { Option } = Select;
 
@@ -14,6 +17,7 @@ const { Option } = Select;
  */
 const Duration = props => {
   const intl = useIntl();
+
   const {
     form,
     min = 1,
@@ -22,11 +26,13 @@ const Duration = props => {
     durationTypes = [],
     required,
     prefix = [],
-    namespace = 'duration'
+    namespace = 'duration',
+    onTypeChange = stub,
+    onValueChange = stub,
   } = props;
 
   const wrapper = form.getFieldValue(prefix[0] || namespace);
-  const duration = complexFormKey(wrapper, namespace, wrapper.type && wrapper.period);
+  const duration = complexFormKey(namespace, wrapper, wrapper?.type && wrapper?.period);
 
   /**
    * @constant
@@ -34,11 +40,12 @@ const Duration = props => {
    */
   const handleFormUpdate = value => {
     updateComplexForm(form, prefix, namespace, { type: value });
+    onTypeChange(value);
   };
 
   /**
    * @constant
-   * @type {string}
+   * @type {ValueType|null}
    * @private
    */
   const durationType = duration?.type || durationTypes[0];
@@ -49,7 +56,7 @@ const Duration = props => {
    */
   const selectDurationBefore = (
       <Select style={{ width: 90 }}
-              value={durationType}
+              defaultValue={durationType}
               disabled={disabled}
               onChange={handleFormUpdate}>
         {durationTypes.map((duration, idx) => (
@@ -61,21 +68,21 @@ const Duration = props => {
   return (
       <>
         <Form.Item noStyle
+                   label={label}
                    name={[...prefix, namespace, 'period']}
                    rules={[
-                     {
-                       required,
-                       message: intl.formatMessage({id: 'form.required', defaultMessage: '{field} is required'}, { field: label })
-                     }
+                       requiredField(intl, label, required)
                    ]}>
           <InputNumber addonBefore={selectDurationBefore}
                        min={min}
+                       onBlur={onValueChange}
+                       style={{width: '100%'}}
                        disabled={disabled}
-                       placeholder={intl.formatMessage({id: 'form.placeholder', defaultMessage: 'Enter {field}'}, { field: label })}/>
+                       placeholder={t(intl, 'form.placeholder', { field: label })}/>
         </Form.Item>
         <HiddenField name={[...prefix, namespace, 'type']}
                      form={form}
-                     value={durationType}
+                     data={durationType}
                      disabled={disabled}/>
       </>
   );

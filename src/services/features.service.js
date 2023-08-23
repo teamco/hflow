@@ -1,6 +1,7 @@
 import request from '@/utils/request';
-import { xhrRequest } from 'services/authentication.service';
-import { API } from 'services/config/api.config';
+import { xhrRequest } from '@/services/authentication.service';
+
+const { API } = require('@/services/config/api.config');
 
 /**
  * @async
@@ -62,3 +63,15 @@ export const updateFeature = async ({ id, data, token }) => {
 export const addFeature = async ({ data, token }) => {
   return xhrRequest({ url: API.features.store, data, token });
 };
+
+/**
+ * @async
+ * @export
+ * @param {string} id
+ * @param {string} token
+ * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ */
+export const deleteFeature = async ({ id, token }) => {
+  return xhrRequest({ url: API.features.delete, method: request.METHOD.delete, featureKey: id, token });
+};
+

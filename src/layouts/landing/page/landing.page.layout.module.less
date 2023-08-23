@@ -1,4 +1,14 @@
 .pageContent {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
 
+  :global {
+    .ant-layout-has-sider {
+      div[aria-hidden="true"][style] {
+        transition: all .5s ease-in-out;
+      }
+    }
+  }
 }
 

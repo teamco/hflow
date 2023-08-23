@@ -1,5 +1,5 @@
-import { getUsers } from 'services/user.service';
-import { getRef } from 'services/firebase.service';
+import { getUsers } from '@/services/user.service';
+import { getRef, fbFindById } from '@/services/firebase.service';
 
 import { tsToLocaleDateTime } from '@/utils/timestamp';
 
@@ -10,12 +10,13 @@ import { tsToLocaleDateTime } from '@/utils/timestamp';
  * @private
  */
 const _getUserRef = async (byRef) => {
+  let _byRef = byRef;
   if (typeof byRef === 'string') {
     // Handle server stored Id.
-    byRef = getRef({ collection: 'users', doc: byRef });
+    _byRef = await fbFindById({ collectionPath: 'users', docName: byRef });
   }
 
-  return (await byRef?.get())?.data();
+  return _byRef;
 };
 
 /**
@@ -27,10 +28,6 @@ const _getUserRef = async (byRef) => {
 export async function detailsInfo(props = {}) {
   const { entity, user } = props;
 
-  /**
-   * @constant
-   * @type {{data}}
-   */
   const users = await getUsers({ user });
 
   const _metadata = { ...entity?.metadata };
@@ -39,11 +36,11 @@ export async function detailsInfo(props = {}) {
   const updatedBy = await _getUserRef(updatedByRef);
 
   // Reduce round trip to firebase.
-  const createdBy = createdByRef?.id === updatedByRef?.id ?
+  const createdBy = createdByRef === updatedByRef ?
       updatedBy : await _getUserRef(createdByRef);
 
-  _metadata.updatedBy = users?.data?.find(user => user.uid === updatedBy?.uid);
-  _metadata.createdBy = users?.data?.find(user => user.uid === createdBy?.uid);
+  _metadata.updatedBy = users?.data?.find(user => user.id === updatedBy?.id);
+  _metadata.createdBy = users?.data?.find(user => user.id === createdBy?.id);
   _metadata.createdAt = tsToLocaleDateTime(_metadata?.createdAt);
   _metadata.updatedAt = tsToLocaleDateTime(_metadata?.updatedAt);
 

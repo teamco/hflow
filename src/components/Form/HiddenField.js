@@ -1,7 +1,11 @@
 import React from 'react';
 import { Form, Input } from 'antd';
+import { useIntl } from '@umijs/max';
+
 import { effectHook } from '@/utils/hooks';
 import { updateComplexForm } from '@/utils/form';
+
+import { requiredField } from '@/components/Form/index';
 
 /**
  * @export
@@ -10,21 +14,27 @@ import { updateComplexForm } from '@/utils/form';
  * @constructor
  */
 const HiddenField = props => {
-  const { form, label, disabled = false, name = [], value } = props;
+  const intl = useIntl();
+
+  const { form, label, disabled = false, name = [], data, required = false } = props;
   const isString = typeof name === 'string';
   const _name = isString ? name : [...name].filter(n => n);
 
   effectHook(() => {
-    if (isString) {
-      form?.setFieldsValue({ [_name]: value });
-    } else {
-      let namespace = _name.pop();
-      updateComplexForm(form, _name, namespace, value);
+    if (typeof data !== 'undefined') {
+      if (isString) {
+        form?.setFieldsValue({ [_name]: data });
+      } else {
+        let namespace = _name.pop();
+        updateComplexForm(form, _name, namespace, data);
+      }
     }
-  });
+  }, [data]);
 
   return (
-      <Form.Item label={label} name={_name} noStyle>
+      <Form.Item label={label} name={_name} noStyle rules={[
+        requiredField(intl, label, required)
+      ]}>
         <Input type={'hidden'} disabled={disabled}/>
       </Form.Item>
   );

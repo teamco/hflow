@@ -81,10 +81,10 @@ export function defineCss(type, domElement, value) {
  * @param css
  */
 export function toggle(target, css) {
-  css = typeof css === 'string' ? css.split(' ') : css;
-  for (let i in css) {
-    if (css.hasOwnProperty(i)) {
-      target.classList.toggle(css[i]);
+  const _css = typeof css === 'string' ? css.split(' ') : css;
+  for (let i in _css) {
+    if (_css.hasOwnProperty(i)) {
+      target.classList.toggle(_css[i]);
     }
   }
 }

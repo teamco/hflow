@@ -1,5 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
+import { Col, Row } from 'antd';
+
+import { stub } from '@/utils/function';
 
 import Trends from './trends';
 import WorkFlow from './workFlow';
@@ -7,7 +10,7 @@ import Areas from './areas';
 import Deals from './deals';
 import Search from './search';
 
-import styles from 'pages/landing/landing.module.less';
+import styles from '@/pages/landing/landing.module.less';
 
 /**
  * @export
@@ -18,22 +21,34 @@ import styles from 'pages/landing/landing.module.less';
 const RealEstate = props => {
   const {
     className,
-    realEstate = {
+    loading,
+    data = {
       areas: [],
       deals: [],
-      trends: []
-    }
+      trends: [],
+      carousel: {}
+    },
+    onLike = stub,
+    onFetchCarousel = stub
   } = props;
 
   return (
-      <div className={classnames(className, styles.realEstate)}>
-        <Search/>
-        <Trends {...realEstate.trends}/>
-        <WorkFlow/>
-        <Areas {...realEstate.areas}/>
-        <Deals {...realEstate.deals}/>
-      </div>
+      <Row>
+        <Col span={22} offset={1}>
+          <div className={classnames(className, styles.realEstate)}>
+            <Search/>
+            <Trends data={data.trends}
+                    loading={loading}
+                    carousel={data.carousel}
+                    onLike={onLike}
+                    onFetchCarousel={onFetchCarousel}/>
+            <WorkFlow/>
+            <Areas data={data.areas}/>
+            <Deals data={data.deals}/>
+          </div>
+        </Col>
+      </Row>
   );
 };
 
-export default withTranslation()(RealEstate);
+export default RealEstate;

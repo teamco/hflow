@@ -1,30 +1,14 @@
 import React, { useState } from 'react';
 import LandingHeader from '@/components/Landing/landing.header';
 
-import styles from 'pages/landing/landing.module.less';
+import styles from '@/pages/landing/landing.module.less';
 
 /**
  * @constant
  * @param props
  * @return {JSX.Element}
  */
-const headerSection = props => {
-  const {
-    icon,
-    user,
-    topUnder,
-    position,
-    onSignOut
-  } = props;
-
-  const headerProps = {
-    icon,
-    user,
-    topUnder,
-    onSignOut,
-    position
-  };
-
+const HeaderSection = props => {
   const [geolocation, setGeolocation] = useState(false);
 
   const handleGeolocation = e => {
@@ -39,10 +23,10 @@ const headerSection = props => {
   return (
       <>
         <section className={styles.headerSection}>
-          <LandingHeader {...headerProps} />
+          <LandingHeader {...props} />
         </section>
       </>
   );
 };
 
-export default headerSection;
+export default HeaderSection;

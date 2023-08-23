@@ -1,30 +1,24 @@
-import { connect, useIntl } from 'umi';
+import { connect, useIntl } from '@umijs/max';
 import { message } from 'antd';
-import i18n from '@/utils/i18n';
 
 import { users } from './users';
-import { STATUS } from '@/utils/message';
+import { t } from '@/utils/i18n';
 
 export default connect(
-    ({ authModel, userModel, userRoleModel, loading }) => ({
+    ({ authModel, userModel, roleModel, pageModel, loading }) => ({
       authModel,
       userModel,
-      userRoleModel,
+      pageModel,
+      roleModel,
       loading
     }),
     (dispatch) => ({
       dispatch,
-      onRolesQuery() {
-        dispatch({ type: `userRoleModel/query` });
-      },
-      onUpdateRoles(selectedUser, roles) {
-        dispatch({ type: `userModel/updateRoles`, payload: { selectedUser, roles } });
-      },
       onQuery() {
         dispatch({ type: `userModel/query` });
       },
       onChangeGridLayout() {
-        dispatch({ type: `userModel/changeGridLayout` });
+        dispatch({ type: `pageModel/changeGridLayout` });
       },
       onDeleteUser(user) {
         dispatch({ type: `userModel/delete`, payload: { user } });
@@ -39,27 +33,26 @@ export default connect(
         dispatch({ type: `userModel/unlock`, payload: { user } });
       },
       onSendMessage({ props }, fields) {
-        const intl = useIntl();
         dispatch({
           type: 'notificationModel/createAndUpdate',
           payload: {
-            type: intl.formatMessage({id: 'notifications.message', defaultMessage: 'Message'}),
+            type: 'notifications.message',
             title: fields.title,
             description: fields.description,
-            status: STATUS.sent,
+            status: 'status.sent',
             isPrivate: fields.isPrivate,
             sentTo: props.to.email
           }
         });
       },
-      onSendVerification(user) {
-        const intl = useIntl();
+      onSendVerification(user, intl) {
         if (user.email) {
           dispatch({ type: `userModel/sendVerification`, payload: { user } });
         } else {
-          message.warning(intl.formatMessage({id: 'msg.errorSentEmail', defaultMessage: ''})).then(() => {
-            message.warning(i18n.formatMessage({id: 'error.noEmail', defaultMessage: 'Email address is required'})).then();
-          });
+          // message.warning(t(intl, 'msg.errorSentEmail')).then(async () => {
+          //   await message.warning(t(intl, 'error.noEmail'));
+          // });
+          return console.warn(t(intl, 'error.noEmail'));
         }
       }
     })

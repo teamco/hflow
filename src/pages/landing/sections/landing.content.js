@@ -1,43 +1,48 @@
 import React from 'react';
 import { Tabs } from 'antd';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
 import classnames from 'classnames';
 
-import RealEstate from './content/real.estate';
+import { t } from '@/utils/i18n';
 
-import styles from 'pages/landing/landing.module.less';
+import RealEstate from '@/pages/landing/sections/content/real.estate';
 
-const { TabPane } = Tabs;
+import styles from '@/pages/landing/landing.module.less';
 
 const LandingContent = props => {
   const intl = useIntl();
-  const { className, data: { realEstate = {} } } = props;
+
+  const {
+    className,
+    loading,
+    apartmentModel,
+    data: { realEstate = {} },
+    onFetchCarousel,
+    onLike
+  } = props;
+
+  const items = [
+    {
+      label: t(intl, 'landing.realEstate'),
+      key: 'realEstate',
+      children: (
+          <RealEstate data={realEstate}
+                      loading={loading}
+                      model={apartmentModel}
+                      onLike={onLike}
+                      onFetchCarousel={onFetchCarousel}/>
+      )
+    },
+    { label: t(intl, 'landing.lawyers'), key: 'lawyers', children: (<p>lawyers</p>) },
+    { label: t(intl, 'landing.consultants'), key: 'consultants', children: (<p>consultants</p>) },
+    { label: t(intl, 'landing.agents'), key: 'agents', children: (<p>agents</p>) },
+    { label: t(intl, 'landing.banks'), key: 'banks', children: (<p>banks</p>) }
+  ];
 
   return (
       <div className={classnames(className, styles.landingTabs)}>
         <div className={styles.hr}/>
-        <Tabs type={'card'} centered>
-          <TabPane tab={intl.formatMessage({id: 'landing.realEstate', defaultMessage: 'Real Estate'})}
-                   key={'realEstate'}>
-            <RealEstate {...realEstate}/>
-          </TabPane>
-          <TabPane tab={intl.formatMessage({id: 'landing.lawyers', defaultMessage: 'Lawyers'})}
-                   key={'lawyers'}>
-            <p>lawyers</p>
-          </TabPane>
-          <TabPane tab={intl.formatMessage({id: 'landing.consultants', defaultMessage: 'Consultants'})}
-                   key={'consultants'}>
-            <p>consultants</p>
-          </TabPane>
-          <TabPane tab={intl.formatMessage({id: 'landing.agents', defaultMessage: 'Agents'})}
-                   key={'agents'}>
-            <p>agents</p>
-          </TabPane>
-          <TabPane tab={intl.formatMessage({id: 'landing.banks', defaultMessage: 'Banks'})}
-                   key={'banks'}>
-            <p>banks</p>
-          </TabPane>
-        </Tabs>
+        <Tabs type={'card'} centered items={items}/>
       </div>
   );
 };

@@ -1,8 +1,11 @@
 import React from 'react';
 import { cleanup } from '@testing-library/react';
 
-import { expectations } from '__tests__/helper';
+import { expectations, mocksWorkaround } from '__tests__/helper';
+
 import Border from '../border';
+
+const testId = 'border';
 
 describe('@/components/Border', () => {
 
@@ -10,8 +13,11 @@ describe('@/components/Border', () => {
   // unmount and cleanup DOM after the test is finished.
   afterEach(cleanup);
 
-  it('Top', () => {
+  mocksWorkaround();
+
+  it('Top', async () => {
     const topProps = {
+      testId,
       direction: 'top',
       dims: {
         left: { width: '15vw' },
@@ -20,15 +26,16 @@ describe('@/components/Border', () => {
       }
     };
 
-    const { component } = expectations(Border, 'border', topProps);
+    const { component } = await expectations(Border, testId, topProps);
 
     expect(component).toHaveClass('border top');
     expect(component).toHaveStyle(
         'border-left-width: 15vw; border-right-width: 45vw; border-bottom-width: 15vh; border-bottom-color: rgb(241, 241, 241); border-bottom-style: solid;');
   });
 
-  it('Bottom', () => {
+  it('Bottom', async () => {
     const bottomProps = {
+      testId,
       direction: 'bottom',
       dims: {
         left: { width: '45vw' },
@@ -37,7 +44,7 @@ describe('@/components/Border', () => {
       }
     };
 
-    const { component } = expectations(Border, 'border', bottomProps);
+    const { component } = await expectations(Border, testId, bottomProps);
 
     expect(component).toHaveClass('border bottom');
     expect(component).toHaveStyle(

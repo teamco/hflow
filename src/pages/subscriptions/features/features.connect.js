@@ -1,4 +1,4 @@
-import { connect } from 'umi';
+import { connect } from '@umijs/max';
 
 import { features } from './features';
 
@@ -26,9 +26,12 @@ export default connect(
           type: `${MODEL_NAME}/prepareToSave`,
           payload: {
             component: 'features',
-            doc: 'features'
+            docName: 'features'
           }
         });
+      },
+      onDeleteFeature(payload) {
+        dispatch({type: 'featureModel/deleteFeature', payload })
       }
     })
 )(features);

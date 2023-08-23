@@ -1,20 +1,20 @@
-import { connect } from 'umi';
+import { connect } from '@umijs/max';
 
 import { registerUser } from './register.user';
 
 export default connect(
-    ({ authModel, userRoleModel, loading }) => ({
+    ({ authModel, roleModel, loading }) => ({
       authModel,
-      userRoleModel,
+      roleModel,
       loading
     }),
     (dispatch) => ({
       dispatch,
       onQuery() {
-        dispatch({ type: `userRoleModel/query` });
+        dispatch({ type: `roleModel/query`, payload: { component: 'business.users', docName: 'userRoles' } });
       },
-      onRegisterBusinessUser(data) {
-        dispatch({ type: 'businessModel/sendRegisterLinkBusinessUser', payload: { data } });
+      onRegisterBusinessUser(data, intl) {
+        dispatch({ type: 'businessModel/sendRegisterLinkBusinessUser', payload: { data, intl } });
       }
     })
 )(registerUser);

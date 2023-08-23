@@ -1,29 +1,36 @@
-import React  from 'react';
-import { DownOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Form, PageHeader } from 'antd';
+import React, { useState } from 'react';
+import { FundOutlined } from '@ant-design/icons';
+import { Col, Form, Row } from 'antd';
+import { useIntl, useParams } from '@umijs/max';
 
-import SaveButton from '@/components/Buttons/save.button';
 import Main from '@/components/Main';
-import Page from '@/components/Page';
+import Page from '@/components/Page/page.connect';
+import Common from '@/components/Common';
 import { DEFAULT_PRICE_VALUES } from '@/components/Price/form.price';
-import  Common  from '@/components/Common';
+import { SchedulersList } from '@/components/Scheduler/SchedulersList';
+import { formProps } from '@/components/Form/formProps';
+import { SubHeader } from '@/components/Page/page.subheader';
+import { validateFieldsOnLoad } from '@/components/Form';
 
+import { updateSchedulerPanel } from '@/pages/subscriptions/[subscription]/panels';
 import { CampaignInfo } from '@/pages/campaigns/[campaign]/form/campaign.info';
 import { CampaignDiscount } from '@/pages/campaigns/[campaign]/form/campaign.discount';
-
-import CampaignMenu from '@/pages/campaigns/metadata/campaigns.menu';
-
-import { useParams, useIntl } from 'umi';
+import { campaignMenu } from '@/pages/campaigns/metadata/campaigns.menu';
+import CampaignTrial from '@/pages/campaigns/[campaign]/form/campaign.trial';
 
 import { fromForm } from '@/utils/object';
-import { isLoading } from '@/utils/state';
 import { effectHook } from '@/utils/hooks';
+import { t } from '@/utils/i18n';
+import { layout } from '@/utils/layout';
+import { componentAbilities } from '@/utils/auth/component.setting';
+import { isNew } from '@/services/common.service';
 
-import menuStyles from '@/components/menu.less';
 import styles from '@/pages/campaigns/campaigns.module.less';
 import userStyles from '@/pages/users/users.module.less';
 
 const { Info } = Main;
+
+const MODEL_NAME = 'campaignModel';
 
 /**
  * @export
@@ -35,17 +42,21 @@ export const campaignEdit = (props) => {
   const [formRef] = Form.useForm();
 
   const {
-    t,
     authModel,
     campaignModel,
     loading,
+    testId,
     onEditCampaign,
     onFieldsChange,
     onSave,
     onClose,
     onDeleteCampaign,
     onSubscriptions,
-    onUpdateTags
+    onUpdateTags,
+    onUpdateEntityForm,
+    onHandleScheduler,
+    onDeleteScheduler,
+    onUpdateSider
   } = props;
 
   /**
@@ -57,50 +68,89 @@ export const campaignEdit = (props) => {
     entityForm,
     selectedCampaign,
     subscriptions,
+    typeSubscriptionsMap,
     campaignTypes,
     campaignPeriod,
     durationTypes,
     businessUsers,
     currencies,
     featureTypes,
+    schedulers,
+    schedulerTypes,
     isEdit,
     touched,
-    tags
+    tags,
+    translateMessages
   } = campaignModel;
 
-  const { ability } = authModel;
   const component = 'campaigns';
-  const disabled = ability.cannot('update', component);
-  const canUpdate = ability.can('update', component);
 
+  const {
+    ability,
+    ableFor,
+    disabled,
+    canUpdate
+  } = componentAbilities(authModel, component, !isNew(params.campaign));
+
+  const [featuresPriceAccumulation, setFeaturesPriceAccumulations] = useState(0);
+  const [isTrialed, setIsTrialed] = useState(false);
 
   effectHook(() => {
-    canUpdate && onEditCampaign(params);
-    onSubscriptions();
-  }, [authModel.user, canUpdate]);
+    if (canUpdate) {
+      onEditCampaign(params);
+      onSubscriptions();
+    }
+  }, [canUpdate]);
+
+  validateFieldsOnLoad(formRef, entityForm);
+
+  const metaProps = {
+    intl,
+    loading,
+    ability,
+    disabled,
+    formRef,
+    component,
+    MODEL_NAME
+  };
+
+  const panelProps = {
+    ...metaProps,
+    onUpdateSider
+  };
 
   /**
    * @constant
-   * @param formValues
+   * @param price
    */
-  const onFinish = formValues => {
-    onSave(formValues, params);
+  const setPriceAccumulation = price => {
+    setFeaturesPriceAccumulations(price);
   };
 
   const campaignInfoProps = {
     formRef,
     disabled,
+    isEdit,
     campaignTypes,
     campaignPeriod,
     businessUsers,
     subscriptions,
+    typeSubscriptionsMap,
+    setPriceAccumulation,
+    onUpdateEntityForm,
+    loading
   };
 
   const discountProps = {
     formRef,
     disabled,
+    loading,
+    isTrialed,
+    setIsTrialed,
     currencies,
-    durationTypes
+    durationTypes,
+    originalPrice: featuresPriceAccumulation,
+    readOnlyFields: ['originalPrice']
   };
 
   const {
@@ -113,6 +163,7 @@ export const campaignEdit = (props) => {
   const infoProps = {
     isEdit,
     touched,
+    loading,
     info: {
       createdBy,
       updatedBy,
@@ -121,93 +172,148 @@ export const campaignEdit = (props) => {
     }
   };
 
-  const menuProps = {
-    ability,
-    isEdit,
-    loading,
-    params,
-    component,
-    onDeleteCampaign
-  };
-
   const tagsProps = {
     formRef,
     onUpdateTags,
     disabled,
     tags,
-    header: intl.formatMessage({id: 'campaigns.tags', defaultMessage: 'Tags'})
+    loading,
+    canDelete: canUpdate,
+    canCreate: canUpdate,
+    canUpdate,
+    header: t(intl, 'campaigns.tags')
   };
 
   const translateProps = {
     formRef,
-    disabled
+    loading,
+    disabled,
+    translateMessages
   };
 
   const subTitle = (
       <>
-        <TrademarkOutlined style={{ marginRight: 10 }}/>
+        <FundOutlined style={{ marginRight: 10 }}/>
         {isEdit ?
-            intl.formatMessage({id: 'campaigns.actions.edit', defaultMessage: 'Edit Campaign'}) :
-            intl.formatMessage({id: 'campaigns.actions.addNew', defaultMessage: 'Add new campaign' })
+            t(intl, 'campaigns.actions.edit') :
+            t(intl, 'campaigns.actions.addNew')
         }
       </>
   );
 
+  const gutter = { xs: 8, sm: 16, md: 18, lg: 24 };
+
+  const onChangeFormProps = {
+    touched,
+    loading,
+    spinOn: [
+      `${MODEL_NAME}/validateCampaign`,
+      `${MODEL_NAME}/campaignSubscriptions`,
+      `${MODEL_NAME}/editCampaign`,
+      `${MODEL_NAME}/getSimpleEntity`,
+      `${MODEL_NAME}/cleanForm`
+    ],
+    entityForm,
+    onFinish(formValues) {
+      canUpdate && onSave(formValues, params);
+    },
+    onFieldsChange
+  };
+
+  const pageHeaderProps = {
+    subTitle,
+    loading,
+    disabled,
+    MODEL_NAME,
+    isEdit,
+    component,
+    actions: {
+      exportBtn: false,
+      newBtn: false,
+      closeBtn: { onClose },
+      saveBtn: { ableFor, touched, formRef },
+      menuBtn: {
+        selectedEntity: selectedCampaign,
+        label: t(intl, 'campaigns.actions.manage'),
+        menuProps: {
+          ...metaProps,
+          isEdit,
+          params,
+          intl,
+          onDeleteCampaign
+        },
+        dropDownMenu: campaignMenu,
+        testId: `${testId}.menuBtn`
+      }
+    }
+  };
+
   return (
       <Page className={userStyles.users}
             component={component}
+            ableFor={ableFor}
             touched={!disabled && touched}
             spinEffects={[
-              'campaignModel/editCampaign',
-              'campaignModel/campaignTypes',
-              'campaignModel/prepareToSave'
+              `${MODEL_NAME}/validateCampaign`,
+              `${MODEL_NAME}/campaignSubscriptions`,
+              `${MODEL_NAME}/editCampaign`,
+              `${MODEL_NAME}/getSimpleEntity`,
+              `${MODEL_NAME}/cleanForm`,
+              `${MODEL_NAME}/handleUpdate`,
+              `${MODEL_NAME}/handleSave`,
+              `${MODEL_NAME}/prepareToSave`
             ]}>
         <div className={styles.campaignWrapper}>
-          <PageHeader ghost={false}
-                      subTitle={subTitle}
-                      extra={[
-                        <Button key={'close'}
-                                size={'small'}
-                                loading={isLoading(loading.effects['campaignModel/prepareToSave'])}
-                                onClick={() => onClose()}>
-                          {intl.formatMessage({id: 'actions.close', defaultMessage: 'Close'})}
-                        </Button>,
-                        <SaveButton key={'save'}
-                                    isEdit={isEdit}
-                                    disabled={!touched || disabled}
-                                    formRef={formRef}
-                                    loading={loading.effects['campaignModel/prepareToSave']}/>,
-                        <Dropdown overlay={<CampaignMenu record={selectedCampaign} {...menuProps} />}
-                                  disabled={!isEdit || disabled}
-                                  trigger={['click']}
-                                  overlayClassName={menuStyles.customActionMenu}
-                                  key={'custom'}>
-                          <Button size={'small'}
-                                  icon={<SettingOutlined/>}
-                                  className={menuStyles.customAction}>
-                            {intl.formatMessage({id: 'campaigns.actions:manage', defaultMessage: 'Manage Campaign' })} <DownOutlined/>
-                          </Button>
-                        </Dropdown>
-                      ]}/>
-          <Form layout={'vertical'}
-                className={styles.form}
+          <SubHeader {...pageHeaderProps}/>
+          <Form {...formProps(onChangeFormProps)}
                 form={formRef}
-                fields={entityForm}
-                scrollToFirstError={true}
-                onFinish={onFinish}
                 initialValues={{
                   helper: true,
+                  trialed: false,
+                  selectedByDefault: true,
                   defaultState: true,
-                  ...DEFAULT_PRICE_VALUES(currencies[0]),
+                  ...DEFAULT_PRICE_VALUES(currencies[0], false, {
+                    originalPrice: featuresPriceAccumulation
+                  }),
+                  trialPeriod: {
+                    ...DEFAULT_PRICE_VALUES(currencies[0], false),
+                    duration: {
+                      type: 'Week',
+                      period: 1
+                    }
+                  },
                   featureType: featureTypes[0],
                   translateKeys: {
-                    on: 'actions:yes',
-                    off: 'actions:no'
-                  },
-                }}
-                onFieldsChange={onFieldsChange}>
+                    title: '',
+                    description: ''
+                  }
+                }}>
             <CampaignInfo {...campaignInfoProps} />
-            <CampaignDiscount {...discountProps} />
+            <SchedulersList data={schedulers[schedulerTypes.sale]} {...metaProps}
+                            prefix={schedulerTypes.sale}
+                            formRef={formRef}
+                            entityType={t(intl, 'subscription.saleAt')}
+                            onDeleteScheduler={onDeleteScheduler}
+                            onOpenSiderPanel={(visible, entityForm = {}) => {
+                              updateSchedulerPanel({
+                                ...panelProps,
+                                ...entityForm,
+                                prefix: schedulerTypes.sale,
+                                entityType: t(intl, 'subscription.saleAt'),
+                                onHandleScheduler,
+                                durationTypes
+                              }, visible);
+                            }}/>
+            <Row gutter={gutter} className={styles.stretched}>
+              <Col {...layout.halfColumn}>
+                <CampaignDiscount {...discountProps} />
+              </Col>
+              {isTrialed && (
+                  <Col {...layout.halfColumn}>
+                    <CampaignTrial {...discountProps} />
+                  </Col>
+              )}
+            </Row>
             <Common.Translate {...translateProps} />
             <Common.Tags {...tagsProps} />
             <Info {...infoProps} />

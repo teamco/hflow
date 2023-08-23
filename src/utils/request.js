@@ -1,14 +1,19 @@
-import request from 'umi-request';
-import { API_CONFIG } from 'services/config/api.config';
-import { stub } from './function';
-import { successSaveMsg } from '@/utils/message';
-import { history } from 'umi';
+import { request, history } from '@umijs/max';
+
+import { stub } from '@/utils/function';
+import { isHost } from '@/utils/window';
+import { logger } from '@/utils/console';
+import { successDeleteMsg, successSaveMsg } from '@/utils/message';
+
+import { API } from '@/services/config/api.config';
+
+const { RUNTIME_CONFIG } = require('@/services/config/runtime.config');
 
 /**
  * @constant
- * @type {{API_NS}}
+ * @type {{API_NS, ADMIN_NS}}
  */
-const { API_NS } = API_CONFIG();
+const { API_NS, ADMIN_NS } = RUNTIME_CONFIG();
 
 /**
  * @function
@@ -32,7 +37,7 @@ function _csrfToken() {
 
 const METHOD = {
   get: 'get',
-  delete: 'post',
+  delete: 'delete',
   options: 'options',
   post: 'post',
   patch: 'patch',
@@ -71,6 +76,11 @@ const DEFAULT_HEADERS = {
   accept: ACCEPT_TYPE.json
 };
 
+let skipNotificationOn = [];
+
+skipNotificationOn.push(`${API_NS}/${API.auth.refresh}`);
+skipNotificationOn.push(`${API_NS}/${API.auth.token}`);
+
 /**
  * @constant
  * @return {{'Access-Control-Allow-Origin': string, accept: string}}
@@ -86,14 +96,15 @@ const mergeHeaders = () => {
  * @param args
  * @return {string}
  */
-function adaptUrlToParams(url = '', args) {
-  const matchers = url.match(/:\w+/g);
+function adaptUrlToParams(url, args) {
+  let _url = url;
+  const matchers = _url.match(/:\w+/g);
   matchers?.forEach((matcher) => {
     const instance = matcher.replace(':', '');
-    url = url.replace(new RegExp(matcher), args[instance]);
+    _url = _url.replace(new RegExp(matcher), args[instance]);
   });
 
-  return url;
+  return _url;
 }
 
 /**
@@ -108,22 +119,18 @@ function adoptUrlToAPI(url, direct = false) {
 
 /**
  * @function
- * @param {string} url
- * @param {string} [method]
- * @param [headers]
- * @param {boolean} [direct]
- * @param {string} [responseType]
- * @param [args]
+ * @param props
  * @return {{headers, method: string, url: *}}
  */
-function config({
-  url = '',
-  method = METHOD.get,
-  headers = {},
-  direct = false,
-  responseType = 'json',
-  ...args
-}) {
+function config(props) {
+  let {
+    url = '',
+    method = METHOD.get,
+    headers = {},
+    direct = false,
+    responseType = 'json',
+    ...args
+  } = props;
 
   if (url.match(/:(\w+)Key/)) {
     url = adaptUrlToParams(url, args);
@@ -158,19 +165,39 @@ function toBase64(file) {
  * @function
  * @param {boolean} notice
  * @param opts
- * @param [errorHandler]
+ * @param {function(any): Promise<{data}>} [errorHandler]
  * @param [fallbackUrl]
- * @return {Q.Promise<any> | undefined}
+ * @return {Promise<T | {data: {error: *}, exists: boolean}>}
  */
 function xhr(opts, notice, errorHandler = stub, fallbackUrl = true) {
   const { pathname } = window.location;
   const { url, method } = opts;
-  delete opts.url;
-  delete opts.method;
 
-  return request[method](url, opts).then((res) => {
-    const isEdit = method === METHOD.put;
-    notice && [METHOD.post, METHOD.put].includes(method) && successSaveMsg(isEdit);
+  delete opts.url;
+
+  return request(url, opts).then((res) => {
+    const isEdit = method === METHOD.put ||
+        (opts?.data || [])[0]?.operation === 'Update';
+
+    const isDelete = [METHOD.delete].includes(method) ||
+        (opts?.data || [])[0]?.operation === 'Delete';
+
+    if (notice) {
+      let showMsg = stub;
+      if ([METHOD.post, METHOD.put].includes(method)) {
+        if (isDelete) {
+          showMsg = async () => successDeleteMsg();
+        } else {
+          showMsg = async () => successSaveMsg(isEdit);
+        }
+      } else if (isDelete) {
+        showMsg = async () => successDeleteMsg();
+      }
+
+      if (skipNotificationOn.indexOf(url) === -1) {
+        showMsg();
+      }
+    }
 
     return {
       data: res,
@@ -178,41 +205,68 @@ function xhr(opts, notice, errorHandler = stub, fallbackUrl = true) {
     };
 
   }).catch((error) => {
-    const _st = setTimeout(() => {
+
+    const _st = setTimeout(async () => {
       if (fallbackUrl) {
-        handleResponseError(error.response.status, pathname);
+        await handleResponseError(error.code, error.message,
+            error?.response?.status, pathname);
       }
       clearTimeout(_st);
-    }, 500);
+    }, 1000);
 
     errorHandler(error);
     console.error(error.response);
 
     return {
-      data: undefined,
+      data: { error },
       exists: false
     };
   });
 }
 
 /**
+ * @memberOf xhr
+ * @param messageApi
+ * @param intl
+ */
+xhr.addMessageApi = (messageApi, intl) => {
+  xhr.notification = {
+    ...(xhr.notification || {}),
+    messageApi,
+    intl
+  };
+};
+
+/**
  * @function
+ * @async
+ * @param {string} code
+ * @param {string} error
  * @param {string} status
  * @param {string} [referrer]
  */
-function handleResponseError(status, referrer) {
-  const baseUrl = '/admin/errors';
+async function handleResponseError(code, error, status, referrer) {
+  const baseUrl = isHost(ADMIN_NS) ? `${ADMIN_NS}/errors` : '/errors';
   const qs = referrer ? `?referrer=${encodeURIComponent(referrer)}` : '';
+  logger({ type: 'warn', code });
+
+  let errorUrl;
 
   switch (status) {
     case 403:
     case 404:
     case 500:
-      history.replace(`${baseUrl}/${status}${qs}`);
+      errorUrl = `${baseUrl}/${status}${qs}`;
       break;
     default:
-      history.replace(`${baseUrl}/warning${qs}`);
+      errorUrl = `${baseUrl}/warning${qs}`;
       break;
+  }
+
+  if (CORPORATE_PROXY) {
+    logger({ type: 'info', CORPORATE_PROXY });
+  } else {
+    history.replace(errorUrl);
   }
 }
 

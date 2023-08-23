@@ -1,45 +1,47 @@
-import i18n from 'i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import { initReactI18next } from 'react-i18next';
-import I18NextXhrBackend from 'i18next-xhr-backend';
+import React from 'react';
+import { FormattedMessage, IntlProvider } from '@umijs/max';
 
-import enUS from 'locales/en-US/translation.json';
+import { locales } from '@/locales';
+import { logger } from '@/utils/console';
 
-const resources = { 'en-US': enUS };
+/**
+ * @export
+ * @async
+ * @param {string} id
+ * @param {string} defaultMessage
+ * @param {string} [className]
+ * @param {object} [instance]
+ * @returns {Promise<JSX.Element>}
+ */
+export const intl = async ({ id, defaultMessage, instance = '', className }) => {
+  const umi = await import('@umijs/max');
+  const { getLocale } = umi;
 
-i18n
-    // load translation using http -> see /public/locales
-    .use(I18NextXhrBackend)
-    // detect user language
-    .use(LanguageDetector)
-    // pass the i18n instance to the react-i18next components.
-    .use(initReactI18next)
-    // init i18next
-    .init({
-      fallbackLng: 'en-US',
+  const language = getLocale();
+  const messages = locales[`${language}`] || {};
 
-      debug: false,
-      keySeparator: false,
-      // saveMissing: true, // send not translated keys to endpoint
-      resources,
-      interpolation: {
-        escapeValue: false // not needed for react as it escapes by default
-      },
+  return (
+      <IntlProvider locale={language}
+                    messages={messages}>
+        <div className={className}>
+          <FormattedMessage id={id} defaultMessage={defaultMessage} values={{ instance }}/>
+        </div>
+      </IntlProvider>
+  );
+};
 
-      // defaultNS: ['common'],
-      //
-      // ns: ['common'],
-      // nsSeparator: '.',
+/**
+ * @export
+ * @param {{formatMessage, messages}} intl
+ * @param {string} id
+ * @param [params]
+ * @return {string}
+ */
+export const t = (intl, id, params = {}) => {
+  if (intl?.messages[id]) {
+    return intl?.formatMessage({ id, defaultMessage: id }, { ...params });
+  }
 
-      backend: {
-        // for all available options read the backend's repository readme file
-        // loadPath: '/assets/locales/{{lng}}/{{ns}}.json'
-      },
-
-      // special options for react-i18next
-      react: {
-        useSuspense: false
-      }
-    }).then();
-
-export default i18n;
+  logger({ type: 'error', msg: `Unable to find translation for [${id}], used default message.` });
+  return id;
+};

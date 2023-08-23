@@ -1,11 +1,15 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
-import { useIntl } from 'umi';
-import { NavLink } from 'umi';
-import { withBreadcrumbs } from '@/utils/breadcrumbs';
+import { NavLink, withRouter, useSelectedRoutes, useIntl } from '@umijs/max';
+import classnames from 'classnames';
 
-import { routes } from '/routes';
+import useReactRouterBreadcrumbs from '@/utils/breadcrumbs';
 import { effectHook } from '@/utils/hooks';
+import { t } from '@/utils/i18n';
+
+import { isNew } from '@/services/common.service';
+
+import styles from './MainBreadcrumbs.module.less';
 
 /**
  * This component is wrapped in withBreadcrumbs which automatically
@@ -22,31 +26,59 @@ import { effectHook } from '@/utils/hooks';
  * @return {JSX.Element}
  * @constructor
  */
-const Breadcrumbs = ({ breadcrumbs, meta, onUpdateDocumentMeta, onUpdate404, ...props }) => {
+const Breadcrumbs = ({ meta, onUpdateDocumentMeta, onUpdate404, ...props }) => {
   const intl = useIntl();
-  const { t, is404 } = props;
-  const title = breadcrumbs?.map(({ breadcrumb }) => t(breadcrumb))?.join(' / ');
+
+  const selectedRoutes = useSelectedRoutes();
+  const breadcrumbs = useReactRouterBreadcrumbs(selectedRoutes) || [];
+
+  const { is404 } = props;
+
+  const filtered = breadcrumbs.filter(
+      data => data?.breadcrumb?.props?.children !== 'route.page404');
+
+  const title = filtered?.map(
+      ({ breadcrumb }) => t(intl, breadcrumb?.props?.children))?.join(' / ');
 
   effectHook(() => {
-    onUpdateDocumentMeta({ title });
-  }, [title && (title !== meta.title)]);
+    if (title === meta.title) {
+      // TODO (teamco): Do something.
+    } else {
+      onUpdateDocumentMeta({ title });
+    }
+  }, [title]);
 
   effectHook(() => {
     onUpdate404(is404);
   }, [is404]);
 
+  const items = filtered.map((data, idx) => {
+    const { match, breadcrumb } = data || {};
+    const title = t(intl, breadcrumb?.props?.children);
+    return {
+      title: (
+          <NavLink to={match.pathname}>
+            {idx === breadcrumbs.length - 1 ?
+                isNew(match.pathname, true) ? (
+                        <>
+                          {t(intl, 'actions.new')}
+                          <span> </span>
+                          {t(intl, breadcrumb?.props?.children)}
+                        </>
+                    ) :
+                    match.pathname.match(/[\da-fA-F]{24}$/) ?
+                        t(intl, 'actions.edit', { type: title }) : title :
+                title
+            }
+          </NavLink>
+      )
+    };
+  });
+
   return (
-      <Breadcrumb className={'site-breadcrumbs'}>
-        {breadcrumbs?.map((data = {}) => {
-          const { match, breadcrumb } = data;
-          return (
-              <Breadcrumb.Item key={match.url}>
-                <NavLink to={match.url}>{intl.formatMessage({id: breadcrumb, defaultMessage: ''})}</NavLink>
-              </Breadcrumb.Item>
-          );
-        })}
-      </Breadcrumb>
+      <Breadcrumb className={classnames(styles.breadcrumbs)}
+                  items={items}/>
   );
 };
 
-export default withBreadcrumbs(routes)(Breadcrumbs);
+export default withRouter(Breadcrumbs);

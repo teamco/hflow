@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import styles from './border.module.less';
 
 const Border = props => {
-  const { className, direction, dims } = props;
+  const { className, direction, dims, testId } = props;
 
   const types = {
     top: 'Bottom',
@@ -37,7 +37,7 @@ const Border = props => {
 
   return (
       <div className={classnames(styles.border, styles[direction], className)}
-           data-testid={'border'}
+           data-testid={testId}
            style={style}/>
   );
 };

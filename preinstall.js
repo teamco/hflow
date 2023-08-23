@@ -1,6 +1,6 @@
-const rimraf = require('rimraf');
+const { rimraf } = require('rimraf');
 const dir = './src/.umi';
 
-rimraf(dir, () => {
+rimraf(dir).then(() => {
   console.log(`Directory: ${dir} deleted successfully`);
 });

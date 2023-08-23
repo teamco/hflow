@@ -1,5 +1,3 @@
-import { Loader } from 'resource-loader';
-
 /**
  * @export
  * @param {string} base64
@@ -16,8 +14,8 @@ export const getExtension = base64 => {
 /**
  * @export
  * @param file
- * @param entity
- * @param {string} type
+ * @param [entity]
+ * @param {string} [type]
  * @param {boolean} [isEdit]
  * @return {*|Promise<*>}
  */
@@ -34,18 +32,22 @@ export const toFile = ({ file, entity, type, isEdit = false }) => {
 };
 
 /**
+ * @async
  * @export
- * @param src
- * @param cb
- * @return {Promise<string>}
+ * @description Returns image dimensions for specified URL.
+ * @param {string} url
  */
-export const srcToBlob = async ({ src, cb }) => {
-  const loader = new Loader();
-  loader.add(src).use((resource, next) => {
-    next();
-  }).load((loader, resources) => {
-    const blob = new Blob([resources[src].data], { type: 'image/png' });
-    cb(URL.createObjectURL(blob));
+export const getImageDimensions = async ({ url }) => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve({
+      width: img.width,
+      height: img.height
+    });
+    img.onerror = (error) => reject(error);
+    img.src = url;
+  }).catch(error => {
+    console.error(error);
   });
 };
 
@@ -69,7 +71,7 @@ export async function getFileFromUrl(url) {
 export function getImageFromUrl(url, callback) {
   const img = new Image();
   img.setAttribute('crossOrigin', 'Anonymous');
-  img.onload = function (a) {
+  img.onload = function(a) {
     const canvas = document.createElement('canvas');
     canvas.width = this.width;
     canvas.height = this.height;
@@ -159,9 +161,9 @@ export const downloadFromUrl = (url, fileName) => {
  * @param href
  * @param {string} fileName
  */
-export const handleDownload = ({ href, fileName }) =>{
+export const handleDownload = ({ href, fileName }) => {
   const link = document.createElement('a');
   link.href = href;
   link.download = fileName;
   link.click();
-}
+};

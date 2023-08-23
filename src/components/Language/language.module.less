@@ -1,0 +1,29 @@
+@svg-width: 24px;
+@svg-offset-right: 10px;
+
+.language {
+  width: 120px;
+  color: rgba(0, 0, 0, 0.6);
+
+  svg {
+    width: @svg-width;
+    margin-right: @svg-offset-right;
+  }
+}
+
+.opt {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: normal;
+  color: rgba(0, 0, 0, 0.6);
+
+  & > div {
+    display: flex;
+  }
+
+  img {
+    width: @svg-width;
+    margin-right: @svg-offset-right;
+  }
+}

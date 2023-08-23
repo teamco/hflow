@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
-import { Button, PageHeader } from 'antd';
-import { SaveOutlined, UserSwitchOutlined } from '@ant-design/icons';
-import { useIntl } from 'umi';
-import { Can } from '@/utils/auth/can';
-import { isLoading } from '@/utils/state';
+import React, { useRef, useState } from 'react';
+import {Modal} from "antd";
+import { UserSwitchOutlined } from '@ant-design/icons';
+import { useIntl } from '@umijs/max';
+
+import { t } from '@/utils/i18n';
 import { effectHook } from '@/utils/hooks';
+import { componentAbilities } from '@/utils/auth/component.setting';
 
-import Page from '@/components/Page';
+import Page from '@/components/Page/page.connect';
 import Main from '@/components/Main';
+import LayoutButton from '@/components/Buttons/layout.button';
+import { SubHeader } from '@/components/Page/page.subheader';
 
-import { metadata } from '@/pages/users/users.metadata';
-import { expendableProfile } from '@/pages/users/[user]/profile/profile.metadata';
 import SendMessage from '@/pages/users/metadata/send.message';
+import { metadata } from '@/pages/users/users.metadata';
+import { userCardMetadata } from '@/pages/users/metadata/user.card';
 
 import styles from '@/pages/users/users.module.less';
-import { userCardMetadata } from './metadata/user.card';
-import ExportButton from '@/components/Buttons/export.button';
 
 const { Table, Card } = Main;
 
@@ -26,81 +27,47 @@ const { Table, Card } = Main;
  */
 export const users = (props) => {
   const intl = useIntl();
+
   const {
     authModel,
     userModel,
-    userRoleModel,
+    pageModel,
     loading,
-    selectedUser,
-    onUpdateRoles,
-    onRolesQuery,
     onQuery,
-    onChangeGridLayout,
-    onSendVerification,
     onDeleteUser,
     onSignOutUser,
     onUnlockUser,
     onLockUser,
-    onSendMessage
+    onSendMessage,
+    onChangeGridLayout
   } = props;
 
-  let {
-    data = [],
-    gridLayout,
-    verificationSent
-  } = userModel;
+  const [modal, contextHolder] = Modal.useModal();
 
-  const { userRoles, businessRoles } = userRoleModel;
-
-  data = selectedUser ? [selectedUser] : data;
+  let { data = [] } = userModel;
+  let { gridLayout } = pageModel;
 
   effectHook(() => {
-    !selectedUser && onQuery();
-    onRolesQuery();
+    authModel.user && onQuery();
   }, [authModel.user]);
 
-  effectHook(() => {
-    if (selectedUser?.roles) {
-      const _current = [...currentRoles].sort();
-      const _selected = [...selectedUser?.roles || []].sort();
-      const _diff = JSON.stringify(_current) !== JSON.stringify(_selected);
-
-      if (_diff) {
-        setCurrentRoles(selectedUser?.roles);
-      }
-    }
-  }, [selectedUser]);
-
-  const [touched, setTouched] = useState(userModel.touched);
-  const [currentRoles, setCurrentRoles] = useState(selectedUser?.roles || []);
   const [visibleMessage, setVisibleMessage] = useState({ visible: false, props: {} });
 
   const subTitle = (
       <>
         <UserSwitchOutlined style={{ marginRight: 10 }}/>
-        {intl.formatMessage({id: 'user.actions.manage', defaultMessage: 'Manage User'})}
+        {t(intl, 'user.actions.manage')}
       </>
   );
 
-  const { ability } = authModel;
   const component = 'users';
-  const disabled = ability.cannot('update', component);
-
-  const tableProps = selectedUser ? {
-    pagination: false,
-    expandable: expendableProfile(
-        authModel?.user?.roles,
-        component,
-        verificationSent,
-        onSendVerification,
-        selectedUser,
-        userRoles,
-        businessRoles,
-        currentRoles,
-        setCurrentRoles,
-        setTouched
-    )
-  } : {};
+  const {
+    ability,
+    disabled,
+    canUpdate,
+    canDelete,
+    canExport
+  } = componentAbilities(authModel, component, true);
 
   const sendProps = {
     onSendMessage,
@@ -108,31 +75,13 @@ export const users = (props) => {
     setVisibleMessage
   };
 
-  const updateProfile = () => {
-    onUpdateRoles(selectedUser, currentRoles);
-    setTouched(false);
-  };
-
-  /**
-   * @constant
-   * @return {boolean}
-   */
-  const isDisabled = () => {
-    if (selectedUser) {
-      const _current = [...currentRoles].sort();
-      const _selected = [...selectedUser?.roles || []].sort();
-      const _equal = JSON.stringify(_current) === JSON.stringify(_selected);
-      return disabled || _equal;
-    }
-
-    return disabled;
-  };
-
   const userProps = {
     loading,
     ability,
+    disabled,
     currentUser: authModel.user,
-    multiple: !selectedUser,
+    multiple: true,
+    modal,
     onSignOutUser,
     onSendMessage,
     onLockUser,
@@ -141,62 +90,63 @@ export const users = (props) => {
     setVisibleMessage
   };
 
+  const refTarget = useRef(null);
+  const MODEL_NAME = 'userModel';
+
+  const pageHeaderProps = {
+    subTitle,
+    loading,
+    disabled,
+    MODEL_NAME,
+    component,
+    actions: {
+      closeBtn: false,
+      saveBtn: false,
+      menuBtn: false,
+      newBtn: false,
+      exportBtn: { refTarget, data, disabled: !canExport },
+      extra: [
+        <LayoutButton key={'layout'}
+                      onClick={onChangeGridLayout}/>
+      ]
+    }
+  };
+
   return (
       <Page className={styles.users}
             component={component}
-            touched={!isDisabled() && touched}
-            spinEffects={['authModel/defineAbilities']}>
-        <PageHeader ghost={false}
-                    subTitle={subTitle}
-                    extra={[
-                      // <Button key={'layout'}
-                      //         size={'small'}
-                      //         icon={<LayoutOutlined/>}
-                      //         onClick={onChangeGridLayout}
-                      //         type={'primary'}/>,
-                      <ExportButton key={'export'}
-                                    disabled={disabled}
-                                    component={component}
-                                    json={data}/>,
-                      selectedUser && (
-                          <Can I={'update'} a={component} key={'save'}>
-                            <Button key={'update'}
-                                    size={'small'}
-                                    disabled={isDisabled()}
-                                    loading={isLoading(loading.effects['userModel/updateRoles'])}
-                                    icon={<SaveOutlined/>}
-                                    onClick={updateProfile}
-                                    type={'primary'}>
-                              {intl.formatMessage({id: 'actions.update', defaultMessage: 'Update'})}
-                            </Button>
-                          </Can>
-                      )
-                    ]}/>
-        {gridLayout ? (
-            <Table data={data}
-                   {...tableProps}
-                   {...metadata({
-                     t,
-                     data,
-                     visibleMessage,
-                     ...userProps
-                   })} />
-        ) : (
-            <div className={styles.userCards}>
-              {data.map((user, idx) => {
-                const props = {
-                  ...userCardMetadata(t, {
-                    user,
-                    className: styles.userCard,
-                    ...userProps
-                  })
-                };
+            spinEffects={[
+              'authModel/defineAbilities',
+              `${MODEL_NAME}/query`
+            ]}>
+        <SubHeader {...pageHeaderProps}/>
+        <div ref={refTarget}>
+          {contextHolder}
+          {gridLayout ? (
+              <Table data={data}
+                     {...metadata({
+                       data,
+                       intl,
+                       ...userProps
+                     })} />
+          ) : (
+              <div className={styles.userCards}>
+                {data.map((user, idx) => {
+                  const props = {
+                    ...userCardMetadata({
+                      intl,
+                      user,
+                      className: styles.userCard,
+                      ...userProps
+                    })
+                  };
 
-                return (<Card key={idx} {...props} />);
-              })}
-            </div>
-        )}
-        <SendMessage {...sendProps}/>
+                  return (<Card key={idx} {...props} />);
+                })}
+              </div>
+          )}
+          <SendMessage {...sendProps}/>
+        </div>
       </Page>
   );
 };

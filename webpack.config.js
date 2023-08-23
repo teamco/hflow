@@ -1,9 +1,21 @@
+/**
+ * @function
+ * @param {string} path
+ * @returns {string}
+ * @private
+ */
+function _resolve(path) {
+  return require('path').resolve(__dirname, path);
+}
+
 module.exports = {
   resolve: {
     alias: {
-      '@': require('path').resolve(__dirname, 'src'),
-      '@@': require('path').resolve(__dirname, 'src/.umi'),
-      '__tests__': require('path').resolve(__dirname, '__tests__')
+      '@': _resolve('src'),
+      '@@': _resolve('src/.umi'),
+      'worker': _resolve('public/worker'),
+      'assets': _resolve('public/assets'),
+      '__tests__': _resolve('__tests__')
     }
   }
 };

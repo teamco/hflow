@@ -1,3 +1,3 @@
-import currencies from './currencies.connect';
+import currencies from '@/pages/currencies/currencies.connect';
 
 export default currencies;

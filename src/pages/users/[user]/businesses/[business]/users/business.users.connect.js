@@ -1,11 +1,13 @@
-import { connect, useIntl} from 'umi';
+import { connect } from '@umijs/max';
 import { businessUsers } from './business.users';
 import { message } from 'antd';
+import { t } from '@/utils/i18n';
 
 export default connect(
-    ({ businessModel, userRoleModel, userModel, loading }) => ({
+    ({ businessModel, authModel, roleModel, userModel, loading }) => ({
       businessModel,
-      userRoleModel,
+      roleModel,
+      authModel,
       userModel,
       loading
     }),
@@ -13,7 +15,7 @@ export default connect(
       dispatch,
       onQuery(params) {
         dispatch({ type: `businessModel/usersQuery`, payload: { ...params } });
-        dispatch({ type: `userRoleModel/query` });
+        dispatch({ type: `roleModel/query`, payload: { component: 'business.roles', docName: 'businessRoles' } });
       },
       onUpdateRole(params, user, role) {
         dispatch({ type: `businessModel/updateUserRole`, payload: { params, user, role } });
@@ -24,18 +26,18 @@ export default connect(
       onUnassignUser(user) {
         dispatch({ type: `businessModel/unassignUser`, payload: { user } });
       },
-      onSendVerification(user) {
-        const intl = useIntl();
+      onSendVerification(user, intl) {
         if (user.email) {
           dispatch({ type: `userModel/sendVerification`, payload: { user } });
         } else {
-          message.warning(intl.formatMessage({id: 'msg:errorSentEmail', defaultMessage: 'Error Message Been Send'})).then(() => {
-            message.warning(intl.formatMessage({id: 'error.noEmail', defaultMessage: 'Email address is required'})).then();
-          });
+          return console.warn(t(intl, 'error.noEmail'));
+          // message.warning(t(intl, 'msg.errorSentEmail')).then(async () => {
+          //   await message.warning(t(intl, 'error.noEmail'));
+          // });
         }
       },
-      onResendRegisterLink(data) {
-        dispatch({ type: 'businessModel/sendRegisterLink', payload: { data, isResend: true } });
+      onResendRegisterLink(data, intl) {
+        dispatch({ type: 'businessModel/sendRegisterLink', payload: { data, intl, isResend: true } });
       }
     })
-)(withTranslation()(businessUsers));
+)(businessUsers);

@@ -1,0 +1,195 @@
+@import "@/theme/variables.less";
+
+.site-layout-background {
+  background-color: #fff;
+  box-shadow: 1px 1px 4px -2px lightslategray;
+}
+
+.site-layout-header-info {
+  display: flex;
+  font-size: 14px;
+  margin: auto 20px;
+
+  a {
+    font-size: 14px;
+    margin-left: 5px;
+  }
+}
+
+.menuLogo {
+}
+
+.site-connection {
+  margin-right: 10px;
+  cursor: help;
+
+  span[role="img"] svg {
+    height: 20px;
+    width: 20px;
+    position: relative;
+    top: 3px;
+  }
+}
+
+.site-layout-header-actions {
+  display: flex;
+  flex-direction: row-reverse;
+  position: absolute;
+  right: 0;
+
+  a {
+    margin-right: 20px;
+
+    span[role="img"] {
+      font-size: 36px;
+
+      svg {
+        height: 20px;
+        width: 20px;
+      }
+    }
+  }
+}
+
+.ant-modal-confirm-body > .anticon {
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.site-layout {
+  .site-actions {
+    button {
+      padding: 0 10px;
+    }
+  }
+
+  .site-layout-content {
+    position: relative;
+    padding: 20px;
+    min-height: 360px;
+  }
+}
+
+.ant-modal-confirm-content {
+  margin-left: 30px !important;
+}
+
+.site-card,
+.widget-card {
+  width: 150px;
+  margin-bottom: 20px !important;
+  margin-right: 20px !important;
+  float: left;
+
+  img {
+    height: 150px;
+    width: 148px;
+    margin-left: 1px;
+  }
+
+  .ant-card-body {
+    padding: 10px;
+
+    .site-card-title {
+      font-size: 12px;
+
+      .ant-card-meta-description,
+      .ant-card-meta-title {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
+
+.site-card-empty {
+  span[role='img'] {
+    svg {
+      width: 100px;
+      height: 100px;
+      opacity: 0.2;
+      margin: 20px 0;
+    }
+  }
+
+  .ant-card-body {
+    .site-card-title {
+      .ant-card-meta-description,
+      .ant-card-meta-title {
+        text-overflow: unset;
+        white-space: normal;
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+.ant-popover {
+  z-index: 1050 !important;
+}
+
+.exportModal {
+  .ant-modal-body {
+    padding: 24px;
+
+    .ant-modal-confirm-content {
+      overflow: auto;
+      max-height: calc(100vh - 200px);
+      margin: 20px 0 0 !important;
+      border-radius: 5px;
+
+      .react-json-view {
+        margin: 0;
+      }
+    }
+  }
+}
+
+.siderPanel {
+  height: 100%;
+  min-height: 100vh;
+  background-color: transparent !important;
+
+  aside {
+    height: inherit;
+    width: inherit;
+    background: inherit;
+  }
+}
+
+.siderMenu {
+  box-sizing: content-box;
+  padding-top: @header-height;
+  background: linear-gradient(180.3deg, rgb(221, 221, 221) 5.5%, rgb(110, 136, 161) 90.2%) !important;
+
+  .selected {
+    color: blueviolet;
+  }
+}
+
+.admin {
+  cursor: default;
+}
+
+.adminLoading {
+  height: 100vh;
+}
+
+:global {
+  .ant-affix {
+    transition: all 0.5s ease-in-out;
+
+    &[style*="position: fixed"] {
+      box-shadow: 1px 2px 4px -2px lightslategrey;
+      opacity: .9;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}

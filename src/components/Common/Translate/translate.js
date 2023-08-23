@@ -1,9 +1,15 @@
 import React from 'react';
+import { Select, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { useIntl } from '@umijs/max';
 
-import { Input } from 'antd';
-import FormComponents from '@/components/Form';
-import { useIntl } from 'umi';
-const { GenericPanel } = FormComponents;
+import { t } from '@/utils/i18n';
+
+import GenericPanel from '@/components/Form/GenericPanel';
+
+import styles from './translate.module.less';
+
+const { Option } = Select;
 
 /**
  * @export
@@ -13,16 +19,18 @@ const { GenericPanel } = FormComponents;
  */
 const CommonTranslate = (props) => {
   const intl = useIntl();
+
   const {
     formRef,
     disabled,
-    prefix = ['translateKeys']
+    prefix = ['translateKeys'],
+    translateMessages = {}
   } = props;
 
   const {
-    header = intl.formatMessage({id: 'form.translate', defaultMessage: 'Translate Keys'}),
-    title = intl.formatMessage({id: 'form.title', defaultMessage: 'Title'}),
-    description = intl.formatMessage({id: 'form.description', defaultMessage: 'Description'})
+    header = t(intl, 'form.translate'),
+    title = t(intl, 'form.title'),
+    description = t(intl, 'form.description')
   } = props;
 
   return (
@@ -30,17 +38,36 @@ const CommonTranslate = (props) => {
                     name={'translate'}
                     defaultActiveKey={['translate']}>
         <div>
-          <Input type={'text'}
-                 label={title}
-                 name={[...prefix, 'title']}
-                 form={formRef}
-                 disabled={disabled}
-                 config={{ rules: [{ required: true }] }}/>
-          <Input type={'text'}
-                 label={description}
-                 name={[...prefix, 'description']}
-                 form={formRef}
-                 disabled={disabled}/>
+          <Select name={[...prefix, 'title']}
+                  label={title}
+                  placeholder={t(intl, 'form.placeholder', { field: title })}
+                  form={formRef}
+                  disabled={disabled}
+                  allowClear={true}
+                  config={{ rules: [{ required: true }] }}>
+            {Object.keys(translateMessages).map(msg => (
+                <Option key={msg} value={msg}>
+                  <div className={styles.translate}>
+                    <Tooltip title={translateMessages[msg]}>
+                      <QuestionCircleOutlined/>
+                    </Tooltip>
+                    <span>{msg}</span>
+                  </div>
+                </Option>
+            ))}
+          </Select>
+          <Select name={[...prefix, 'description']}
+                  label={description}
+                  placeholder={t(intl, 'form.placeholder', { field: description })}
+                  form={formRef}
+                  allowClear={true}
+                  disabled={disabled}>
+            {Object.keys(translateMessages).map(msg => (
+                <Option key={msg} value={msg}>
+                  {msg}
+                </Option>
+            ))}
+          </Select>
         </div>
       </GenericPanel>
   );

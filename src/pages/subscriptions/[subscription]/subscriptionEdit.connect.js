@@ -1,6 +1,7 @@
-import { connect, history } from 'umi';
+import { connect, history } from '@umijs/max';
 
 import { subscriptionEdit } from './subscriptionEdit';
+import { onFieldsChangeHandler } from '@/services/common.service';
 
 const MODEL_NAME = 'subscriptionModel';
 
@@ -10,14 +11,7 @@ export default connect(
     (dispatch) => ({
       dispatch,
       onFieldsChange(changedFields, allFields) {
-        dispatch({
-          type: `${MODEL_NAME}/updateFields`,
-          payload: {
-            changedFields,
-            allFields,
-            model: MODEL_NAME
-          }
-        });
+        onFieldsChangeHandler({ changedFields, allFields, MODEL_NAME, dispatch });
       },
       onSave(payload, params) {
         dispatch({ type: `${MODEL_NAME}/prepareToSave`, payload, params });
@@ -33,6 +27,15 @@ export default connect(
       },
       onChangeFeatureType(type) {
         dispatch({ type: `${MODEL_NAME}/changeFeatureType`, payload: { type } });
+      },
+      onUpdateSider(payload) {
+        dispatch({ type: `appModel/updateSiderPanel`, payload: { ...payload, model: MODEL_NAME } });
+      },
+      onHandleScheduler(entityName, prefix, payload, isEdit) {
+        dispatch({ type: `schedulerModel/handleScheduler`, payload: { ...payload, isEdit, entityName, prefix, model: MODEL_NAME } });
+      },
+      onDeleteScheduler(idx, prefix) {
+        dispatch({ type: `schedulerModel/deleteScheduler`, payload: { idx, prefix, model: MODEL_NAME } });
       },
       onDeleteSubscription() {
       }

@@ -1,0 +1,29 @@
+@import "@/pages/landing/variables.less";
+
+.profileMenu {
+  position: relative;
+  top: -@header-height;
+
+  .selected {
+    color: @link-primary !important;
+    font-weight: 500;
+  }
+
+  :global {
+    .ant-menu-submenu-selected > .ant-menu-submenu-title {
+      color: @link-primary;
+      font-weight: 500;
+    }
+  }
+}
+
+.featureCardWrapper {
+  .featureCard {
+    .featureIcon {
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}

@@ -2,12 +2,12 @@ import { findObjectByKey } from '@/utils/object';
 
 /**
  * @export
- * @param {Object} wrapper
  * @param {string} namespace
+ * @param {Object} wrapper
  * @param {boolean} [condition]
  * @return {*|null}
  */
-export function complexFormKey(wrapper, namespace, condition = false) {
+export function complexFormKey(namespace, wrapper = {}, condition = false) {
   let entity;
   if (condition) {
     // Handle namespaced case.
@@ -17,12 +17,36 @@ export function complexFormKey(wrapper, namespace, condition = false) {
     entity = wrapper[namespace];
   } else {
     // Handle complex case.
-    entity = findObjectByKey(wrapper, namespace);
+    entity = findObjectByKey(namespace, wrapper);
   }
   return entity;
 }
 
-export function updateComplexForm(formRef, prefix = [], namespace, value) {
+/**
+ * @export
+ * @param fields
+ * @param {string} namespace
+ * @param {Array} prefix
+ * @param {boolean} [condition]
+ * @return {*|{}}
+ */
+export const scanByPrefix = (fields, namespace, prefix = [], condition = false) => {
+  let _fields = {...fields};
+  prefix.forEach(n => {
+    _fields = fields[n] || {};
+  });
+
+  return complexFormKey(namespace, _fields, condition) || {};
+};
+
+/**
+ * @export
+ * @param formRef
+ * @param {array} prefix
+ * @param {string} namespace
+ * @param value
+ */
+export function updateComplexForm(formRef, prefix, namespace, value) {
   const field = {};
   let result = null;
 
@@ -40,7 +64,7 @@ export function updateComplexForm(formRef, prefix = [], namespace, value) {
    * value = {type:'%', value: 10};
    * => {a: {b: {c: {discount: {type:'%', value: 10}}}}}
    */
-  const _recursive = function (prefix = [], field, value, idx = 0) {
+  const _recursive = function(prefix, field, value, idx = 0) {
     if (idx >= prefix.length) {
       // Set value
       field[namespace] = value;

@@ -2,12 +2,16 @@ import React from 'react';
 
 import Footer from '@/components/Footer';
 
-export default class MainFooter extends React.Component {
-  render() {
-    return (
-        <Footer style={{ textAlign: 'center' }}>
-          {this.props.author}
-        </Footer>
-    );
-  }
-}
+/**
+ * @export
+ * @param props
+ * @return {JSX.Element}
+ * @constructor
+ */
+export const MainFooter = props => {
+  return (
+      <Footer style={{ textAlign: 'center' }}>
+        {props.author}
+      </Footer>
+  );
+};

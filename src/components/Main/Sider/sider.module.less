@@ -1,0 +1,114 @@
+@import "@/theme/variables.less";
+
+@sider-bg: #f0f2f5;
+
+.resizeable {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  margin-left: -14px;
+  background: @sider-bg;
+  box-shadow: -5px 0 10px -5px #aaa;
+  padding: 0 3px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  top: calc(50vh - 40px);
+  height: 40px;
+  justify-content: center;
+  cursor: ew-resize;
+  border: 1px solid #ccc;
+  border-right: none;
+}
+
+.relative {
+  position: relative !important;
+}
+
+.absolute {
+  position: absolute !important;
+}
+
+.fixed {
+  position: fixed !important;
+}
+
+.top {
+  top: 0;
+}
+
+.bottom {
+  bottom: 0;
+}
+
+.left {
+  left: 0;
+}
+
+.right {
+  padding-top: @header-height;
+  right: 0;
+  height: 100% !important;
+  box-shadow: -5px 0 10px -5px #aaa;
+  border-left: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+}
+
+.spinner {
+  :global {
+    .ant-spin-container {
+      height: 100%;
+    }
+  }
+}
+
+.siderWrapper {
+  display: flex;
+}
+
+.siderPanel {
+  color: red;
+  background: @sider-bg;
+  z-index: 10;
+
+  & > div > div {
+    height: auto !important;
+  }
+}
+
+.siderLayout {
+  background: @sider-bg;
+  padding: 0;
+
+  .actions {
+    display: flex;
+    column-gap: 8px;
+
+    button {
+    }
+
+    .close {
+    }
+
+    .reload {
+    }
+  }
+
+  :global {
+    .ant-layout-header {
+      background: inherit;
+      padding: 30px 20px;
+      height: 40px;
+      position: relative;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      h1 {
+        font-size: 24px;
+        margin: 0;
+        line-height: 40px;
+      }
+    }
+  }
+}

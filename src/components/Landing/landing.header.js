@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { history, NavLink, useIntl } from 'umi';
-import { Col, Dropdown, Menu, Row } from 'antd';
+import React, { useState } from 'react';
+import { history, useIntl } from '@umijs/max';
+import { Col, notification, Row } from 'antd';
 import classnames from 'classnames';
 
-import { BellTwoTone, CommentOutlined, HeartTwoTone, PlusOutlined } from '@ant-design/icons';
+import { CommentOutlined } from '@ant-design/icons';
 
-import SignIn from '@/components/Authentication/signIn.connect';
+import { effectHook, useScrollPosition } from '@/utils/hooks';
+import { t } from '@/utils/i18n';
+
+import Language from '@/components/Language';
+import { LandingActions } from '@/components/Landing/landing.actions';
 
 import styles from '@/components/Landing/landing.module.less';
+import { handleRefresh } from '@/services/userRoles.service';
 
 /**
  * @export
@@ -15,41 +20,40 @@ import styles from '@/components/Landing/landing.module.less';
  * @param props
  * @return {JSX.Element}
  */
-const landingHeader = props => {
+const LandingHeader = props => {
   const intl = useIntl();
+
   const {
     icon,
     title,
     topUnder,
-    user,
-    onSignOut,
     position = 'absolute',
-    country = 'CA'
+    landingModel,
+    notificationModel,
+    authModel,
+    userModel,
+    onChangeLang,
+    loading
   } = props;
 
   const [transform, setTransform] = useState(false);
-  const [forceSignInVisible, setForceSignInVisible] = useState(false);
+  const { refreshPageIn, siderPanelConfig: { collapsed } } = landingModel;
+  const { selectedUser } = userModel;
 
-  /**
-   * @constant
-   * @param event
-   */
-  const handleScroll = event => {
-    event.preventDefault();
-    let scrollTop = window.scrollY;
-    setTransform(scrollTop > topUnder);
-  };
+  const [api, contextHolder] = notification.useNotification();
 
-  useEffect(() => {
-    if (position === 'fixed') {
-      window.addEventListener('scroll', handleScroll);
+  useScrollPosition(position, topUnder, setTransform);
 
-      // Returned function will be called on component unmount
-      return () => {
-        window.removeEventListener('scroll', handleScroll);
-      };
+  effectHook(() => {
+    if (selectedUser?.metadata?.refreshRoles) {
+      handleRefresh({
+        api,
+        intl,
+        className: styles.notification,
+        refreshPageIn
+      });
     }
-  }, []);
+  }, [selectedUser]);
 
   /**
    * @constant
@@ -60,88 +64,44 @@ const landingHeader = props => {
     history.push('/');
   };
 
-  /**
-   * @constant
-   * @param {Event} e
-   */
-  const handleSignIn = e => {
-    e.preventDefault();
-    setForceSignInVisible(true);
+  const actionProps = {
+    loading,
+    authModel,
+    collapsed,
+    notificationModel
   };
-
-  /**
-   * @constant
-   * @param {Event} e
-   */
-  const handleSignOut = e => {
-    e.preventDefault();
-    onSignOut();
-  };
-
-  const menu = (
-      <Menu>
-        <Menu.Item key={'signOut'}>
-          <div onClick={handleSignOut}>
-            {t('auth:signOut')}
-          </div>
-        </Menu.Item>
-      </Menu>
-  );
 
   return (
-      <header className={classnames(styles.header, transform ? styles.transform : '')}
+      <header className={classnames(styles.header,
+          transform ? styles.transform : '')}
               style={{ position }}>
         <Row>
           <Col span={6}>
             <img src={icon}
+                 onClick={handleHomeNavigation}
                  className={styles.icon}
-                 alt={intl.formatMessage({id: title, defaultMessage: ''})}/>
+                 alt={title ? t(intl, `${title}`) : null}/>
           </Col>
           <Col span={18}>
             <Row justify={'end'}
                  gutter={[16, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
-              <Col className={styles.headerText}>
+              <Col className={classnames(styles.headerText, styles.col)}>
                 <CommentOutlined/>
-                <span>{intl.formatMessage({id: 'landing.help', defaultMessage: 'Help'})}</span>
+                <span>{t(intl, 'landing.help')}</span>
               </Col>
-              <Col className={styles.headerText}>
-                <SignIn forceLogin={true}
-                        closable={true}
-                        signInVisible={forceSignInVisible}
-                        setForceSignInVisible={setForceSignInVisible}
-                        className={styles.headerAuth}/>
-                {user ? (
-                    <div style={{ display: 'flex' }}>
-                      <div className={styles.actions}>
-                        <HeartTwoTone twoToneColor={'#ccc'}/>
-                        <NavLink to={`/admin/users/${user.id}/notifications`}>
-                          <BellTwoTone twoToneColor={'#ccc'}/>
-                        </NavLink>
-                        <NavLink to={`/admin/users/${user.id}/notifications`}
-                                 className={styles.ads}>
-                          <PlusOutlined/>
-                          {intl.formatMessage({id: 'landing.ads', defaultMessage: 'Advertise'})}
-                        </NavLink>
-                      </div>
-                      <Dropdown overlay={menu}
-                                trigger={['click']}
-                                placement={'bottomRight'}>
-                        <span>
-                          {intl.formatMessage({id: user.displayName, defaultMessage: ''})}
-                        </span>
-                      </Dropdown>
-                    </div>
-                ) : (
-                    <>
-                      <span onClick={handleSignIn}>{intl.formatMessage({id: 'auth.signIn', defaultMessage: 'Sign In'})}</span>
-                    </>
-                )}
+              <Col className={styles.col}>
+                <Language model={landingModel}
+                          onChangeLang={onChangeLang}/>
+              </Col>
+              <Col className={classnames(styles.headerText, styles.col)}>
+                <LandingActions {...actionProps}/>
               </Col>
             </Row>
           </Col>
         </Row>
+        {contextHolder}
       </header>
   );
 };
 
-export default landingHeader;
+export default LandingHeader;

@@ -5,8 +5,12 @@
 /** @type {Function} */
 import dvaModelExtend from 'dva-model-extend';
 
-import { commonModel } from 'models/common.model';
-import { menus } from 'services/menu.service';
+import { commonModel } from '@/models/common.model';
+
+import { menus } from '@/services/menu.service';
+
+import request from '@/utils/request';
+import { getSiderPanel } from '@/utils/panel';
 
 const appMeta = {
   name: '__TITLE__',
@@ -15,48 +19,57 @@ const appMeta = {
 
 const MODEL_NAME = 'appModel';
 
+const DEFAULT_STATE = {
+  dispatch: null,
+  is404: false,
+  interval: {
+    timeout: 3 * 60 * 1000,
+    enabled: true
+  },
+  layoutOpts: {
+    mainHeader: false,
+    pageBreadcrumbs: false,
+    pageHeader: false,
+    mainFooter: false,
+    mainMenu: false
+  },
+  activeTab: true,
+  collapsedMenu: true,
+  meta: { ...appMeta, ...{ title: '' } },
+  menus: [],
+  activeForm: {
+    form: null
+  },
+  activeModel: {
+    isEdit: false,
+    title: ''
+  },
+  waitBeforeLogin: 20000,
+  siderPanels: {}
+};
+
 /**
  * @export
  */
 export default dvaModelExtend(commonModel, {
   namespace: MODEL_NAME,
   state: {
-    is404: false,
-    isOnline: false,
-    interval: {
-      timeout: 60000,
-      enabled: true
-    },
-    layoutOpts: {
-      mainHeader: false,
-      pageBreadcrumbs: false,
-      pageHeader: false,
-      mainFooter: false,
-      mainMenu: false
-    },
-    activeTab: true,
-    collapsedMenu: true,
-    meta: { ...appMeta, ...{ title: '' } },
-    menus: [],
-    activeForm: {
-      form: null
-    },
-    activeModel: {
-      isEdit: false,
-      title: ''
-    },
-    waitBeforeLogin: 5000
+    ...DEFAULT_STATE
   },
   subscriptions: {
 
     setupHistory(setup) {
       const { dispatch, history } = setup;
 
-      return history.listen(data => {
+      dispatch(
+          { type: 'updateState', payload: { location: history.location } });
+
+      history.listen(data => {
         // In case of route replace
         const location = data.pathname ? { ...data } : { ...data.location };
 
         dispatch({ type: 'updateState', payload: { location } });
+        dispatch({ type: 'closeSiderPanel' });
       });
     },
 
@@ -90,39 +103,66 @@ export default dvaModelExtend(commonModel, {
 
     * updateDocumentMeta({ payload }, { put, select }) {
       const { meta } = yield select(state => state[MODEL_NAME]);
-      yield put({ type: 'updateState', payload: { meta: { ...meta, ...payload.meta } } });
-    },
-
-    * update404({ payload }, { put }) {
-      yield put({ type: 'updateState', payload: { is404: payload?.is404 } });
-    },
-
-    * updateReferrer({ payload }, { put }) {
-      yield put({ type: 'updateState', payload: { referrer: payload.referrer } });
+      yield put({
+        type: 'updateState',
+        payload: { meta: { ...meta, ...payload.meta } }
+      });
     },
 
     * toggleMenu({ payload }, { put }) {
-      yield put({ type: 'updateState', payload: { collapsedMenu: payload.collapse } });
+      const { collapse, model } = payload;
+
+      yield put({
+        type: model ? `${model}/updateState` : 'updateState',
+        payload: { collapsedMenu: collapse }
+      });
     },
 
-    * activeModel({ payload }, { put }) {
-      yield put({ type: 'updateState', payload: { activeModel: { ...payload } } });
-    },
+    * updateSiderPanel({ payload }, { put, select }) {
+      const { siderPanels } = yield select(state => state.appModel);
+      const { model } = payload;
 
-    * checkActiveTab({ payload }, { put }) {
-      yield put({ type: 'updateState', payload: { activeTab: payload } });
-    },
+      const { currentPanel, panel } = getSiderPanel(siderPanels, payload);
 
-    * notification(_, { call, put, select }) {
-      console.log('Notification');
+      const refModel = yield select(state => state[model]);
+      const _panel = {
+        ...panel,
+        ...refModel.siderPanelConfig
+      };
 
-      yield put({ type: 'notificationModel/getCount' });
-    },
-
-    * handleOnline({ payload }, { put }) {
-      yield put({ type: 'updateState', payload });
+      if (currentPanel) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            siderPanels: {
+              ...siderPanels,
+              currentPanel,
+              [currentPanel]: { ..._panel }
+            }
+          }
+        });
+      }
     }
   },
 
-  reducers: {}
+  reducers: {
+    update404(state, { payload }) {
+      return { ...state, is404: payload?.is404 };
+    },
+    updateReferrer(state, { payload }) {
+      return { ...state, referrer: payload?.referrer };
+    },
+    activeModel(state, { payload }) {
+      return { ...state, activeModel: { ...payload } };
+    },
+    checkActiveTab(state, { payload }) {
+      return { ...state, activeTab: payload };
+    },
+    handleMessageApi(state, { payload = {} }) {
+      const { intl, messageApi } = payload;
+
+      request.xhr.addMessageApi(messageApi, intl);
+      return { ...state, messageApi, intl };
+    }
+  }
 });

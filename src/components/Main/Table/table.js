@@ -1,7 +1,19 @@
+import React, { useState } from 'react';
 import { Table } from 'antd';
-import React from 'react';
-import { useIntl } from 'umi';
-import styles from '@/components/Main/Table/table.module.less';
+import { useIntl } from '@umijs/max';
+
+import { stub } from '@/utils/function';
+import { effectHook } from '@/utils/hooks';
+
+import { filterColumns } from './utils/filter.cell';
+import { sortColumns } from './utils/sort.cell';
+import { ResizableTitle } from './utils/resizable.cell';
+import {
+  dataSourceTransform, gridConfig, handlePagination, mergeColumns,
+  tFooter
+} from './utils/table.utils';
+
+import styles from './table.module.less';
 
 /**
  * @function
@@ -9,71 +21,62 @@ import styles from '@/components/Main/Table/table.module.less';
  * @param props
  * @return {JSX.Element}
  */
-function MainTable(props) {
+function MainTable(props = {}) {
   const intl = useIntl();
-  /**
-   * Add keys to dataSource
-   * @type {[]}
-   */
-  const dataSource = props?.data?.map((entity, idx) => ({ ...entity, ...{ key: idx } }));
 
-  /**
-   * @constant
-   * @param key
-   * @return {{text: *, value: *}[]}
-   */
-  const filterBy = key => {
-    const _filter = dataSource?.map(data => ({
-      text: data[key],
-      value: data[key]
-    }));
+  const {
+    data = [],
+    scroll,
+    columns,
+    pagination = null,
+    pageSize = 15,
+    footer = true,
+    onChange = stub,
+    ...rest
+  } = props;
 
-    return [
-      ...new Map(_filter.map(item =>
-          [item['value'], item])).values()
-    ];
-  };
+  const dataSource = dataSourceTransform(data);
+  const gridProps = gridConfig({ props, dataSource });
 
-  // specify the condition of filtering result
-  // here is that finding the name started with `value`
-  const onFilter = key => (value, record) => !record[key].indexOf(value);
-  const sorter = key => (a, b) => a[key].length - b[key].length;
+  const fColumns = filterColumns({ columns, dataSource });
+  const sColumns = sortColumns({ columns: [...fColumns] });
 
-  const columns = (props.columns || []).map(column => {
-    const _column = { ...column };
+  const [tablePageSize, setTablePageSize] = useState(pageSize);
+  const [tColumns, setColumns] = useState(sColumns);
 
-    if (column.filterable) {
-      _column.filters = filterBy(column.key);
-      _column.onFilter = onFilter(column.key);
-    }
-
-    if (column.sortable) {
-      _column.sorter = sorter(column.key);
-      _column.sortDirections = ['descend', 'ascend'];
-    }
-
-    delete _column.filterable;
-    delete _column.sortable;
-
-    return _column;
+  effectHook(() => {
+    setTablePageSize(pageSize);
   });
 
-  const gridProps = { ...props };
-  gridProps.dataSource = dataSource || [];
+  const PAGINATION = handlePagination({
+    dataSource,
+    tablePageSize,
+    pagination
+  });
 
-  const total = gridProps.data.length;
-
-  delete gridProps.t;
-  delete gridProps.data;
-  delete gridProps.columns;
+  const handleChange = pagination => {
+    setTablePageSize(pagination.pageSize);
+    onChange(pagination);
+  };
 
   return (
       <Table className={styles.grid}
-             scroll={props.scroll}
+             components={{
+               header: {
+                 cell: ResizableTitle
+               }
+             }}
+             scroll={scroll}
+             onChange={handleChange}
              expandable={gridProps.expandable}
-             footer={() => `${intl.formatMessage({id: 'table.total', defaultMessage: 'Total'})}: ${total}`}
-             columns={columns}
-             {...gridProps} />
+             footer={() => tFooter({ intl, footer, total: dataSource.length })}
+             columns={mergeColumns({
+               setColumns,
+               columns: tColumns
+             })}
+             {...PAGINATION}
+             {...gridProps}
+             {...rest}/>
   );
 }
 

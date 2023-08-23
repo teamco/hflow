@@ -1,9 +1,6 @@
-import signIn from './signIn.connect';
-import signUp from './signUp.connect';
-import strength from './strength';
+import signIn from './signedIn.connect';
+
 
 export default {
-  SignIn: signIn,
-  SignUp: signUp,
-  Strength: strength
+  SignIn: signIn
 };

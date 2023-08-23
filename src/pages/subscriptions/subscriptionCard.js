@@ -1,13 +1,16 @@
 import React from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import { useintl } from 'umi';
+import { useIntl } from '@umijs/max';
+import classnames from 'classnames';
+
 import { COLORS } from '@/utils/colors';
 import { currencyFormat } from '@/utils/currency';
 import { stub } from '@/utils/function';
 import { sortBy } from '@/utils/array';
+import { t } from '@/utils/i18n';
 
-import styles from 'pages/subscriptions/subscriptions.module.less';
+import styles from '@/pages/subscriptions/subscriptions.module.less';
 
 /**
  * @export
@@ -15,7 +18,8 @@ import styles from 'pages/subscriptions/subscriptions.module.less';
  * @return {JSX.Element}
  */
 const SubscriptionCard = (props) => {
-  const intl = useintl();
+  const intl = useIntl();
+
   const {
     actions,
     data = {},
@@ -24,32 +28,44 @@ const SubscriptionCard = (props) => {
     className,
     colorsToType,
     features,
+    canUpdate,
+    canDelete,
+    disabled = false,
+    selected = false,
     onSelectSubscription = stub
   } = props;
 
   const {
-    subscriptionType,
-    price,
-    discount,
-    discountType,
-    users
+    type,
+    paymentDuration,
+    price = {},
+    numberOfUsers,
+    featureType
   } = data;
 
-  const _price = discountType === '%' ?
-      price - (price * discount) / 100 :
-      price - discount;
+  const {
+    discount,
+    discounted,
+    discountedPrice,
+    originalPrice
+  } = price;
+
+  const _price = discounted ? discountedPrice : originalPrice;
 
   /**
    * @constant
    * @return {*}
    */
   const discountInfo = () => {
-    let _discount = `${discount}${discountType}`;
-    if (discountType !== '%') {
-      _discount = currencyFormat({ price: discount });
+    let _discount;
+
+    if (discount.type !== 'Percent') {
+      _discount = currencyFormat({ price: discount.type });
+    } else {
+      _discount = `${discount.value}%`;
     }
 
-    return intl.formatMessage({id: 'subscription.discountInfo', defaultMessage: 'Discount {discount}'}, { discount: _discount });
+    return t(intl, 'subscription.discountInfo', { discount: _discount });
   };
 
   /**
@@ -59,55 +75,72 @@ const SubscriptionCard = (props) => {
    */
   const isTrue = value => {
     return value ?
-        <CheckOutlined style={{ color: COLORS.success }} /> :
-        <CloseOutlined style={{ color: COLORS.danger }} />;
+        <CheckOutlined style={{ color: COLORS.success }}/> :
+        <CloseOutlined style={{ color: COLORS.danger }}/>;
+  };
+
+  const subscriptionFeatures = features?.error ? [] :
+      sortBy(
+          features?.selected?.filter(feature => feature.type === featureType),
+          'translateKeys.title', intl);
+
+  const isBusinessFeature = featureType === 'Business';
+
+  const handleSelect = e => {
+    e.preventDefault();
+    onSelectSubscription(data);
   };
 
   return (
       <div style={style}
-           className={className}>
+           className={classnames(className, {
+             [styles.editCard]: isEdit
+           })}>
         {isEdit && (
             <div className={styles.cardMenu}>
               {actions}
             </div>
         )}
-        <h1 style={
-          colorsToType ?
-              { color: colorsToType[subscriptionType?.toLowerCase()] } :
-              null
-        }>
-          {subscriptionType}
-        </h1>
-        <p>{intl.formatMessage({id: 'subscription.usersInfo', defaultMessage: 'Upto to {users} users'}, { users })}</p>
+        <div>
+          <h1 style={colorsToType ?
+              { color: colorsToType[type?.toLowerCase()] } :
+              null}>
+            {type}
+          </h1>
+          {isBusinessFeature ? (
+              <p>
+                {t(intl, 'subscription.usersInfo', { users: numberOfUsers })}
+              </p>
+          ) : (<p/>)}
+        </div>
         <ul>
-          {sortBy(features.all, 'translateKeys.title', t).map((_pref, idx) => {
-            const isActive = features.selected.includes(_pref.id);
-
-            const { title, helper, description, on, off } = _pref.translateKeys;
-            const icon = isTrue(isActive);
-            const simple = on.match(/yes/);
+          {subscriptionFeatures.map((feature, idx) => {
+            const { title, description } = feature.translateKeys;
+            const icon = isTrue(true);
 
             return (
                 <li key={idx}>
-                  {simple ? icon : isTrue(true)}
-                  <h3 className={simple ? (isActive ? styles.active : null) : styles.active}>
-                    {simple ? (
-                        <span>{intl.formatMessage({id: title, defaultMessage: ''})}</span>
-                    ) : (
-                        <div className={isActive ? styles.complex : null}>
-                          {intl.formatMessage({id: isActive ? on : off, defaultMessage: ''})}
-                          <span>{intl.formatMessage({id: title, defaultMessage: ''})}</span>
-                        </div>
-                    )}
+                  {icon}
+                  <h3 className={styles.active}>
+                    <span>{t(intl, title)}</span>
                   </h3>
                 </li>
             );
           })}
         </ul>
-        <h1>{currencyFormat({ price: _price })}</h1>
-        <h4>{data?.paymentDuration?.type}</h4>
-        <h2>{discountInfo(discount)}</h2>
-        <Button onClick={onSelectSubscription}>{intl.formatMessage({id: 'subscription.select', defaultMessage: 'Select'})}</Button>
+        <div>
+          <h1>{currencyFormat({ price: _price })}</h1>
+          <h4>{paymentDuration?.type}</h4>
+          {discounted && (<h2>{discountInfo()}</h2>)}
+        </div>
+        {isEdit ? null : (
+            <Button onClick={handleSelect}
+                    disabled={disabled || selected}>
+              {selected ?
+                  t(intl, 'subscription.selected') :
+                  t(intl, 'subscription.select')}
+            </Button>
+        )}
       </div>
   );
 };

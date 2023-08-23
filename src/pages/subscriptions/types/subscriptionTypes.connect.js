@@ -1,4 +1,4 @@
-import { connect } from 'umi';
+import { connect } from '@umijs/max';
 
 import { subscriptionTypes } from './subscriptionTypes';
 
@@ -14,8 +14,8 @@ export default connect(
         dispatch({
           type: `simpleModel/query`,
           payload: {
-            component: 'subscriptionTypes',
-            doc: 'subscriptionTypes'
+            component: 'subscription.types',
+            docName: 'subscriptionTypes'
           }
         });
       },
@@ -26,8 +26,8 @@ export default connect(
         dispatch({
           type: 'simpleModel/prepareToSave',
           payload: {
-            component: 'subscriptionTypes',
-            doc: 'subscriptionTypes'
+            component: 'subscription.types',
+            docName: 'subscriptionTypes'
           }
         });
       }

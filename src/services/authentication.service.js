@@ -1,10 +1,16 @@
-import { message } from 'antd';
+import * as request from '@/utils/request';
 
-import request from '@/utils/request';
-import { API } from '@/services/config/api.config';
-import { stub } from '@/utils/function';
+import { useDispatcher } from '@/services/common.service';
 
-const { METHOD, HEADER_TYPE, CONTENT_TYPE } = request;
+const { API } = require('@/services/config/api.config');
+const {
+  xhr,
+  config,
+  formData,
+  METHOD,
+  HEADER_TYPE,
+  CONTENT_TYPE
+} = request.default;
 
 /**
  * @constant
@@ -15,27 +21,30 @@ const isExpired = (expiredAt) => +(new Date) > expiredAt;
 
 /**
  * @constant
- * @param token
+ * @param {string} token
  * @return {`Bearer ${string}`}
  */
-const getBearer = token => `Bearer ${token.access_token}`;
+const getBearer = (token) => `Bearer ${token}`;
 
 /**
  * @async
  * @constant
  * @param error
  * @param notice
- * @return {Promise<void>}
+ * @return {Promise<{data}>}
  */
 const handleError = async (error, notice) => {
-  notice && (await message.error(error.message));
+  if (notice) {
+    console.error(error);
+  }
+  return { data: { error } };
 };
 
 /**
  * @export
  * @async
  * @param [props]
- * @return {GlobalConfig.Promise<*>|undefined}
+ * @return {Promise<{data}|{data: {credentials: {}}}>}
  */
 export const getXHRToken = async (props = {}) => {
   const {
@@ -47,41 +56,43 @@ export const getXHRToken = async (props = {}) => {
     guest,
     access_token,
     refresh_token,
-    expiredAt,
-    credentials: {
-      username = 'guest',
-      password = 'guest'
-    },
-    updateState = stub
+    expiredAt
   } = token;
+
+  const {
+    username = 'guest',
+    password = 'guest'
+  } = token?.credentials || {};
 
   /**
    * @function
    * @param {string} url
    * @param {boolean} [refresh]
-   * @return {Bluebird.Promise<*>|undefined}
+   * @return {Promise<T|{data: {error: *}, exists: boolean}>}
    * @private
    */
   function _handleToken(url, refresh = false) {
-    const opts = request.config({
+    const opts = config({
       url,
-      method: request.METHOD.post
+      method: METHOD.post
     });
+
+    let data = {};
 
     if (refresh) {
       opts.headers = {
         [HEADER_TYPE.authorization]: getBearer(refresh_token)
       };
+    } else {
+      data = formData({ username, password });
     }
 
-    const data = request.formData({ username, password });
-
-    return request.xhr({
+    return xhr({
           ...opts,
           ...{ data }
         },
         notice,
-        async (error) => await handleError(error, notice)
+        async (error) => handleError(error, notice)
     );
   }
 
@@ -91,14 +102,20 @@ export const getXHRToken = async (props = {}) => {
     if (isExpired(expiredAt)) {
       // Expired
       tokenData = await _handleToken(API.auth.refresh, true);
-      debugger
-      updateState({});
+
+      if (tokenData?.data?.error) {
+        return handleError(tokenData?.data?.error, notice);
+      }
     }
   } else if (guest?.access_token) {
     tokenData = { data: { access_token: guest.access_token } };
   } else {
     tokenData = await _handleToken(API.auth.token);
   }
+
+  const dispatch = useDispatcher();
+
+  dispatch({ type: 'authModel/updateState', payload: { token: { ...tokenData?.data } } });
 
   return tokenData;
 };
@@ -107,7 +124,6 @@ export const getXHRToken = async (props = {}) => {
  * @async
  * @export
  * @param props
- * @return {Promise<GlobalConfig.Promise<*>|undefined>}
  * @example
  * updateFeature = async ({ id, data }) => {
  *   return xhrRequest({
@@ -117,6 +133,7 @@ export const getXHRToken = async (props = {}) => {
  *     data
  *   });
  * };
+ * @return {Promise<T|{data: {error: *}, exists: boolean}>}
  */
 export const xhrRequest = async (props) => {
   let {
@@ -130,22 +147,22 @@ export const xhrRequest = async (props) => {
 
   const { data: { access_token } } = await getXHRToken({ token, notice });
 
-  const opts = request.config({
+  const opts = config({
     url,
     method,
     headers: {
-      [HEADER_TYPE.authorization]: getBearer({ access_token }),
+      [HEADER_TYPE.authorization]: getBearer(access_token),
       [HEADER_TYPE.contentType]: CONTENT_TYPE.json
     },
     ...args
   });
 
-  return request.xhr({
+  return xhr({
         ...opts,
         ...{ data }
       },
       notice,
-      async (error) => await handleError(error, notice)
+      async (error) => handleError(error, notice)
   );
 };
 
@@ -154,7 +171,7 @@ export const xhrRequest = async (props) => {
  * @async
  * @param {string} uid
  * @param {string} token
- * @return {Promise<GlobalConfig.Promise<*>|undefined>}
+ * @return {Promise<T|{data: {error: *}, exists: boolean}>}
  */
 export const createServerProfile = async ({ uid, token }) => {
   return xhrRequest({

@@ -1,6 +1,7 @@
-import { history, connect } from 'umi';
+import { history, connect } from '@umijs/max';
 
 import { featureEdit } from './featureEdit';
+import { onFieldsChangeHandler } from '@/services/common.service';
 
 const MODEL_NAME = 'featureModel';
 
@@ -17,14 +18,7 @@ export default connect(
     (dispatch) => ({
       dispatch,
       onFieldsChange(changedFields, allFields) {
-        dispatch({
-          type: `${MODEL_NAME}/updateFields`,
-          payload: {
-            changedFields,
-            allFields,
-            model: MODEL_NAME
-          }
-        });
+        onFieldsChangeHandler({ changedFields, allFields, MODEL_NAME, dispatch })
       },
       onSave(payload, params) {
         dispatch({ type: `${MODEL_NAME}/prepareToSave`, payload, params });

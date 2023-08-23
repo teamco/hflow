@@ -1,12 +1,12 @@
 import React from 'react';
-import { useIntl } from 'umi';
+import { useIntl } from '@umijs/max';
 import FormComponents from '@/components/Form';
+import { t } from '@/utils/i18n';
 
 const { GenericPanel, EditableTags } = FormComponents;
 
 /**
  * @export
- * @param t
  * @param formRef
  * @param tags
  * @param {boolean} disabled
@@ -14,21 +14,30 @@ const { GenericPanel, EditableTags } = FormComponents;
  * @return {JSX.Element}
  * @constructor
  */
-export const BusinessTags = ({
-  formRef,
-  tags,
-  disabled,
-  onUpdateTags
-}) => {
+export const BusinessTags = (props) => {
   const intl = useIntl();
+
+  const {
+    formRef,
+    tags,
+    disabled,
+    canDelete,
+    canUpdate,
+    canCreate,
+    onUpdateTags
+  } = props;
+
   return (
-      <GenericPanel header={intl.formatMessage({id: 'business.tags', defaultMessage: 'Tags'})}
+      <GenericPanel header={t(intl, 'business.tags')}
                     name={'tags'}>
         <div>
-          <EditableTags label={intl.formatMessage({id: 'form.tags', defaultMessage: 'Tags'})}
+          <EditableTags label={t(intl, 'form.tags')}
                         name={'tags'}
+                        formRef={formRef}
+                        canDelete={canDelete}
+                        canUpdate={canUpdate}
+                        canCreate={canCreate}
                         disabled={disabled}
-                        newTag={intl.formatMessage({id: 'actions.new', defaultMessage: 'New'})}
                         onChange={onUpdateTags}
                         tags={tags}/>
         </div>
