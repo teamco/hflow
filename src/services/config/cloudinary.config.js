@@ -1,6 +1,6 @@
 export const cloudinaryConfig = {
-  cloudName: 'teamco',
-  uploadPreset: 'zits64bf'
+  cloudName: process.env.cloudName,
+  uploadPreset: process.env.uploadPreset
 };
 
 export const cloudinaryAPI = {
